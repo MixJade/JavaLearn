@@ -17,7 +17,7 @@ git五连
 
 ```
 $ git init
-$ git remote add origin git@github.com:MixJade/MixJadeWarehouse.git
+$ git remote add origin git@github.com:MixJade/MixJadeWareHouse.git
 $ git add .
 $ git commit -m "MixJade"
 $ git push -u origin master
