@@ -15,7 +15,7 @@ public class SaveCode02 {
         String cite = "# Mybatis笔记\n>创建时间: 2022年9月16日21点 \n>第一个mybatis项目文件备份。\n---\n";
         String wrap = "\n---\n## Mybatis文件备份\n---\n";
         try {
-            String note = Files.readString(Path.of("README.md"));
+            String note = Files.readString(Path.of("Mybatis学习笔记.md"));
             FileWriter fileAttempt = new FileWriter(cloth);
             fileAttempt.write(cite + note + wrap);
             fileAttempt.close();
