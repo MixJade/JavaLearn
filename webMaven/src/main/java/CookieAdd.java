@@ -9,15 +9,16 @@ import java.io.IOException;
 @WebServlet("/cookieAdd")
 public class CookieAdd extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         System.out.println("======是添加cookie======");
         resp.getWriter().write("I add cookie");
-        Cookie cookie=new Cookie("MixJade","username");
+        Cookie cookie=new Cookie("username","MixJade");
+        cookie.setMaxAge(60*60);//存活一个小时,如果不设置，该cookie会在浏览器关闭后销毁
         resp.addCookie(cookie);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.doGet(req,resp);
     }
 }
