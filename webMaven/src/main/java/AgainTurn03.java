@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/againTurn03")// 重定向会导致地址的改变
+@WebServlet("/againTurn03")// 请求转发与重定向所指向的Servlet
 public class AgainTurn03 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/cookieGet")
+@WebServlet("/cookieGet")//获取浏览器的cookie
 public class CookieGet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -20,7 +20,7 @@ public class CookieGet extends HttpServlet {
             //写入网页，因为里面有中文，所有要以html的形式，不然中文变问号
             resp.setHeader("content-type", "text/html;charset=UTF-8");
             PrintWriter writer = resp.getWriter();
-            writer.write("<br>"+name + "  " + value );
+            writer.write("<br>" + name + "  " + value);
             if ("username".equals(name)) {
                 writer.write("<br>I get the cookie<br>");
                 writer.write("这就是散玉" + value);

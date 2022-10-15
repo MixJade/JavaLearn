@@ -3,10 +3,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebServlet("/at01")
+@WebServlet("/at01")//网页的尝试，在wen.xml里面同样配置了这个Servlet的url
 public class ServletAttempt implements Servlet {
     @Override
-    public void init(ServletConfig servletConfig) throws ServletException {
+    public void init(ServletConfig servletConfig) {
 
     }
 
@@ -16,14 +16,13 @@ public class ServletAttempt implements Servlet {
     }
 
     @Override
-    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException {
         HttpServletRequest hsr = (HttpServletRequest) servletRequest;
         String requestMode = hsr.getMethod();
         System.out.println(requestMode);
         if ("GET".equals(requestMode)) {
             System.out.println("是GET请求。。。。。。。。。。");
-        }
-        else if ("POST".equals(requestMode)) {
+        } else if ("POST".equals(requestMode)) {
             System.out.println("是POST请求。。。。。。。。。。");
         }
         servletResponse.getWriter().write("<h1>Yes_Sir_This_Page</h1>");

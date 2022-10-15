@@ -18,6 +18,10 @@
 <a href="./cookieAdd">给浏览器添加cookie</a>
 <br>
 <a href="./cookieGet">获取浏览器里面的cookie,并且得到自己想要的cookie</a>
+<br>
+<a href="./sessionAdd">给服务端添加session</a>
+<br>
+<a href="./sessionGet">获取服务端的session</a>
 
 <form action="./chaosSolution" method="post">
     <input name="username" type="text">

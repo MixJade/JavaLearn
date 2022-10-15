@@ -11,9 +11,12 @@ import java.util.Map;
 public class ParamGet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doPost(req,resp);
+        this.doPost(req, resp);
     }
 
+    /**
+     * 获得请求体的参数，post、get通用；
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");//设置读取的字符编码
@@ -28,7 +31,7 @@ public class ParamGet extends HttpServlet {
                 "<br>获取URL" + requestURL +
                 "<br>获取URI：" + requestURI;
         // 获取请求头
-        String str02=req.getHeader("user-agent")+"<br>";
+        String str02 = req.getHeader("user-agent") + "<br>";
         //关于请求体中参数，
         StringBuilder str03 = new StringBuilder(str01);
         str03.append(str02);
@@ -45,10 +48,10 @@ public class ParamGet extends HttpServlet {
         resp.setHeader("content-type", "text/html;charset=UTF-8");
         PrintWriter writer = resp.getWriter();
         writer.write("<h1>" + username + "你好鸭</h1>");
-        if ("GET".equals(method)){
+        if ("GET".equals(method)) {
             writer.write("<h2>是GET方法！</h2>");
             writer.write("<p>中文名字是乱码吗？</p>");
-            writer.write("<p>get方法的中文是通过16进制存储"+req.getQueryString()+"</p>");
+            writer.write("<p>get方法的中文是通过16进制存储" + req.getQueryString() + "</p>");
         }
         writer.write("<p>" + str03 + "</p>");
     }

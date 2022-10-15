@@ -10,13 +10,19 @@ import java.util.Map;
 
 @WebServlet("/chaosSolution")
 public class ChaosSolution extends HttpServlet {
+    /*
+     * 解决get方法的中文乱码，在tomcat8里面已优化;
+     * 只能在tomcat7及以前版本用，其他会乱码;
+     * 解决post方法的中文乱码,在tomcat8里面已优化;
+     * 可以在tomcat8用，不会乱码
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         System.out.println("\n===========是GET请求==========");
         String username = req.getParameter("username");
         /*
             get方法中文乱码原因是，以utf-8的方式从网页读取，以ISO_8859_1方式在tomcat读出
-            但是如果通过tomcat启动而非maven插件，下面这个操作，反而会乱码
+            但是如果通过tomcat启动而非maven-tomcat7插件，下面这个操作，反而会乱码
             byte[] bytes = username.getBytes(StandardCharsets.ISO_8859_1);// 先对从tomcat传出来的数据编码
             username = new String(bytes, StandardCharsets.UTF_8); // 再对解码的数组进行重新解码
          */
@@ -24,7 +30,7 @@ public class ChaosSolution extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         writer.write("<h1>" + username + "</h1>你好<br>");
         String queryString = req.getQueryString();
-        queryString = URLDecoder.decode(queryString,"utf-8"); // 对十六进制数进行解码
+        queryString = URLDecoder.decode(queryString, "utf-8"); // 对十六进制数进行解码
         writer.write(queryString);
         System.out.println("获取请求参数(get形式)：" + queryString);
     }
