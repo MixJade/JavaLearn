@@ -1,7 +1,7 @@
 package sqlDemo;
 
-import mixSQL.SqlUtil;
-import mixSQL.UserMapper;
+import mixUtils.SqlUtil;
+import mixUtils.UserMapper;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import pojo.StudentsTable;

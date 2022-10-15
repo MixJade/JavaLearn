@@ -17,6 +17,6 @@
     </environments>
 
     <mappers>
-        <mapper resource="mixSQL/UserMapper.xml"/>
+        <mapper resource="mixUtils/UserMapper.xml"/>
     </mappers>
 </configuration>

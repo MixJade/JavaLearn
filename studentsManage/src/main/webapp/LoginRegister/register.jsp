@@ -17,6 +17,7 @@
     <br>
     密码：<input type="password" name="password" id="password" required="required">
     <br>
+    <input type="checkbox" name="remember" id="remember" checked="checked"><label for="remember">记住密码</label>
     <input type="submit" value="注册">
 </form>
 </body>

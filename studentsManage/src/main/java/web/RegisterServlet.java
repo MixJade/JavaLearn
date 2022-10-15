@@ -1,5 +1,6 @@
 package web;
 
+import mixUtils.CookieAdd;
 import sqlDemo.UserDemo;
 
 import javax.servlet.ServletException;
@@ -16,14 +17,16 @@ public class RegisterServlet extends HttpServlet {
         req.setCharacterEncoding("utf-8");//设置读取的字符编码
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        System.out.println(username);
-        System.out.println(UserDemo.userSelectByName(username));
+        String remember = req.getParameter("remember");
         if (UserDemo.userSelectByName(username)) {
             UserDemo.addUser(username, password);
-            req.setAttribute("login_fail", "注册成功!");
-            req.getRequestDispatcher("userLogin.jsp").forward(req, resp);
+            if ("on".equals(remember)) {
+                //如果勾选了"记住密码"设置两个cookie
+                CookieAdd.addMyCookie(resp, username, password);
+            }
+            resp.sendRedirect("userLogin.jsp");
         } else {
-            req.setAttribute("register_fail","注册失败,用户名已存在");
+            req.setAttribute("register_fail", "注册失败,用户名已存在");
             req.getRequestDispatcher("register.jsp").forward(req, resp);
         }
     }

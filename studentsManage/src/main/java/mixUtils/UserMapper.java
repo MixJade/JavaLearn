@@ -1,4 +1,4 @@
-package mixSQL;
+package mixUtils;
 
 import org.apache.ibatis.annotations.Delete;
 import pojo.StudentsMessage;
