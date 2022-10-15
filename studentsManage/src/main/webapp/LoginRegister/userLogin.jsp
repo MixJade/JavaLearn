@@ -2,7 +2,7 @@
 <%@ page isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!DOCTYPE html>
+<html>
 <html lang="en">
 
 <head>
@@ -23,7 +23,7 @@
         <input type="submit" value="登录">
         <input type="reset" value="重新输入">
         <br>
-        <a href="Register.html">点击注册</a>
+        <a href="register.jsp">点击注册</a>
     </form>
 </body>
 

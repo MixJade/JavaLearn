@@ -1,7 +1,6 @@
 package web;
 
 import sqlDemo.UserDemo;
-import pojo.UserMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,20 +12,24 @@ import java.io.IOException;
 @WebServlet("/LoginRegister/register")
 public class RegisterServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.setCharacterEncoding("utf-8");//设置读取的字符编码
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        resp.setHeader("content-type", "text/html;charset=UTF-8");
+        System.out.println(username);
+        System.out.println(UserDemo.userSelectByName(username));
         if (UserDemo.userSelectByName(username)) {
-            resp.getWriter().write("<h2>注册成功</h2><br><a href=\"Login.html\">开始登录</a>");
             UserDemo.addUser(username, password);
+            req.setAttribute("login_fail", "注册成功!");
+            req.getRequestDispatcher("userLogin.jsp").forward(req, resp);
         } else {
-            resp.getWriter().write("<h2>你好!<br>注册失败，已经有这个名字了</h2>");
+            req.setAttribute("register_fail","注册失败,用户名已存在");
+            req.getRequestDispatcher("register.jsp").forward(req, resp);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        this.doGet(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        this.doPost(req, resp);
     }
 }

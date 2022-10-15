@@ -17,11 +17,15 @@ public class UserDemo {
     }
 
     public static boolean userSelectByName(String nameJade) {
+        if ("".equals(nameJade)) {
+            // 防止有人通过空字符串来进行注册
+            return false;
+        }
         SqlSession session = SqlUtil.getFactory().openSession();
         UserMapper mapper = session.getMapper(UserMapper.class);
         UserMessage userSelect = mapper.userSelectByName(nameJade);
         session.close();
-        return userSelect != null;
+        return userSelect == null;
     }
 
     public static void addUser(String nameJade, String passwordJade) {
