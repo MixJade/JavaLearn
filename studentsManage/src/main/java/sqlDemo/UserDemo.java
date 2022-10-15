@@ -16,12 +16,12 @@ public class UserDemo {
         return userSelect;
     }
 
-    public static UserMessage userSelectByName(String nameJade) {
+    public static boolean userSelectByName(String nameJade) {
         SqlSession session = SqlUtil.getFactory().openSession();
         UserMapper mapper = session.getMapper(UserMapper.class);
         UserMessage userSelect = mapper.userSelectByName(nameJade);
         session.close();
-        return userSelect;
+        return userSelect != null;
     }
 
     public static void addUser(String nameJade, String passwordJade) {
