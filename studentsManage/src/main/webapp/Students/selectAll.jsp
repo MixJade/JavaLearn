@@ -6,7 +6,8 @@
 <title>selectAll</title>
 </head>
 <body>
-    <h3>Circulation by JSTL</h3>
+    <h2>Circulation by JSTL</h2>
+    <h3>当前操作人：${user.nameJade}</h3>
 
     注意：调用对象的数据是通过调用该对象的get方法实现
     <br>

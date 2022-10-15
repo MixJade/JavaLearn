@@ -10,6 +10,10 @@ public class UserMessage {
         this.passwordJade = passwordJade;
     }
 
+    public String getNameJade() {
+        return nameJade;
+    }
+
     @Override
     public String toString() {
         return "UserMessage{" +

@@ -1,7 +1,7 @@
 <html>
 <body>
 <h2>What is an ocean but a multitude of drops!</h2>
-    <a href="LoginRegister/Login.html">Login</a>
+    <a href="LoginRegister/userLogin.jsp">Login</a>
     <br>
     <a href="LoginRegister/Register.html">Register</a>
     <br>
