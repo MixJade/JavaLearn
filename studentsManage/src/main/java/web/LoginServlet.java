@@ -5,21 +5,32 @@ import sqlDemo.UserDemo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/LoginRegister/Login")
+@WebServlet("/LoginRegister/login")
 public class LoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.setCharacterEncoding("utf-8");//设置读取的字符编码
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        String remember = req.getParameter("remember");
         UserMessage user = UserDemo.userSelect(username, password);
         resp.setHeader("content-type", "text/html;charset=UTF-8");
         if (user != null) {
+            // 用来验证的字符串放在前面，防止空指针
+            if ("on".equals(remember)) {
+                //如果勾选了"记住密码"设置两个cookie
+                Cookie cookieUsername = new Cookie("username", username);
+                Cookie cookiePassword = new Cookie("password", password);
+                //设置存活时间，半个小时
+                cookieUsername.setMaxAge(60 * 30);
+                cookiePassword.setMaxAge(60 * 30);
+                //给浏览器添加cookie
+                resp.addCookie(cookieUsername);
+                resp.addCookie(cookiePassword);
+            }
             //登录成功,建立一个session
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
@@ -34,7 +45,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        this.doGet(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        this.doPost(req, resp);
     }
 }

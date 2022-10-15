@@ -9,7 +9,8 @@
     <h2>Circulation by JSTL</h2>
     <h3>当前操作人：${user.nameJade}</h3>
 
-    注意：调用对象的数据是通过调用该对象的get方法实现
+
+    注意：调用对象的数据是通过调用该对象的get方法实现 =><a href="../">返回主界面</a><=
     <br>
     我可以重写java类中的get方法，但我偏要用jsp中的choose
     <br>

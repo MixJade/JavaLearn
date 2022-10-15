@@ -13,8 +13,7 @@ public class ChaosSolution extends HttpServlet {
     /*
      * 解决get方法的中文乱码，在tomcat8里面已优化;
      * 只能在tomcat7及以前版本用，其他会乱码;
-     * 解决post方法的中文乱码,在tomcat8里面已优化;
-     * 可以在tomcat8用，不会乱码
+     * 解决post方法的中文乱码,只需要指定读取编码就好
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
