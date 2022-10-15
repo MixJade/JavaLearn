@@ -14,12 +14,12 @@ import java.io.PrintWriter;
 @WebServlet("/Students/addStudent")
 public class AddStudentServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.doPost(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("utf-8");//设置读取的字符编码
         // 获取参数
         String studentName = req.getParameter("studentName");

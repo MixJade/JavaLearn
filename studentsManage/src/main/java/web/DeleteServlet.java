@@ -12,14 +12,14 @@ import java.io.IOException;
 @WebServlet("/Students/delete")
 public class DeleteServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         ByIdDemo.deleteOrigin(id);
         resp.sendRedirect("students");
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.doGet(req, resp);
     }
 }

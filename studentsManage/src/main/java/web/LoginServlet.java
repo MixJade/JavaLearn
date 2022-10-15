@@ -13,7 +13,7 @@ import java.io.IOException;
 @WebServlet("/LoginRegister/Login")
 public class LoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         UserMessage user=UserDemo.userSelect(username, password);
@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.doGet(req, resp);
     }
 }
