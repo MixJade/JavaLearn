@@ -4,12 +4,12 @@
 
 ---
 
-| 文件夹              | 简介                              |
-|:-----------------|:--------------------------------|
-| codeLearning     | 学习JavaSE时的代码                    |
-| mybatisMaven     | 关于mybatis框架的学习                  |
-| webMaven         | JavaWeb的学习，各种尝试，基于tomcat-8.5.83 |
-| LoginAndRegister | JavaWeb的具象,一个需要登录的学生管理系统        |
+| 文件夹            | 简介                              |
+|:---------------|:--------------------------------|
+| codeLearning   | 学习JavaSE时的代码                    |
+| mybatisMaven   | 关于mybatis框架的学习                  |
+| webMaven       | JavaWeb的学习，各种尝试，基于tomcat-8.5.83 |
+| studentsManage | JavaWeb的具象,一个需要登录的学生管理系统        |
 
 ---
 
