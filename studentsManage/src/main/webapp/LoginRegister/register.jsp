@@ -21,7 +21,7 @@
         验证码:
         <input name="checkCode" type="text" id="checkCode">
         <img src="./checkCode" id="checkCodeImg">
-        <a href="javascript:check_code()" id="changeImg">看不清？</a><label for="changeImg">记住密码</label>
+        <a href="javascript:check_code()" id="changeImg">看不清？</a>
         <br>
         <input type="checkbox" name="remember" id="remember" checked="checked"><label for="remember">记住密码</label>
         <input type="submit" value="注册">
