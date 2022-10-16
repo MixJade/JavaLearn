@@ -9,6 +9,9 @@
     <h3>Test by EL</h3>
     <a href="https://baijiahao.baidu.com/s?id=1745257873799929740&wfr=spider&for=pc">说明书</a>
     <br>
+    <%!int a=3;%>
+    <%="hello"+a%>
+    <br>
     ${brands}
     <h3>Circulation by JSTL</h3>
     注意：调用对象的数据是通过调用该对象的get方法实现

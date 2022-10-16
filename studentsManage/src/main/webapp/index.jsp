@@ -6,9 +6,6 @@
     <br>[Look Out!]:
     <a href="LoginRegister/register.jsp">Register</a>
     <br>
-    <%!int a=3;%>
-    <%="hello"+a%>
-    <br>
     <a href="brand">ElAttempt</a>
     <br>
     <a href="Students/students">selectAllStudents</a>
