@@ -3,28 +3,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>登录</title>
+    <link href="../css/myLogin.css" rel="stylesheet">
 </head>
 
 <body>
-    <h1>登录</h1>
-    <span id="login_fail" style="display:inline;color:red">${login_fail}</span>
-    <form action="./login" method="post">
-        用户名：<input name="username" type="text" id="username" value="${cookie.username.value}">
-        <br>
-        密码：<input name="password" type="password" id="password" value="${cookie.password.value}">
-        <br>
-        <input type="checkbox" name="remember" id="remember"><label for="remember">记住密码</label>
-        <br>
-        <input type="submit" value="登录">
-        <input type="reset" value="重新输入">
-        <br>
-        <a href="register.jsp">点击注册</a>
-    </form>
+    <div id="myLoginDiv">
+        <form action="./login" method="post">
+            <h1 id="login_title">登录</h1>
+            <div id="login_fail">${login_fail}</div>
+            <p>用户名:<input name="username" type="text" id="username" value="${cookie.username.value}"></p>
+            <p>密码:<input name="password" type="password" id="password" value="${cookie.password.value}"></p>
+            <p><input type="checkbox" name="remember" id="remember"><label for="remember">记住密码</label></p>
+            <div id="subDiv">
+                <input type="submit" id="sub_press" value="登录">
+                <a href="register.jsp">点击注册</a>
+            </div>
+        </form>
+    </div>
 </body>
 
 <script>
