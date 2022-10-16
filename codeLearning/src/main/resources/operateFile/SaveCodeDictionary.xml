@@ -238,4 +238,9 @@
         <FileChineseName>PlayFair加密</FileChineseName>
         <Introduce>替代字符为x，只能给字符加密</Introduce>
     </FileManager>
+    <FileManager>
+        <FileName>CheckCodeUtils.java</FileName>
+        <FileChineseName>生成验证码</FileChineseName>
+        <Introduce>从网上找到生成验证码的程序</Introduce>
+    </FileManager>
 </FileGather>
