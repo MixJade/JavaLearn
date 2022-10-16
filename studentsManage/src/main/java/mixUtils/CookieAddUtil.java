@@ -3,7 +3,7 @@ package mixUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-public class CookieAdd {
+public class CookieAddUtil {
     /**
      * 为登录与注册之中添加cookie的操作进行简化
      */

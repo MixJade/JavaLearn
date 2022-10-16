@@ -1,6 +1,6 @@
 package web;
 
-import mixUtils.CookieAdd;
+import mixUtils.CookieAddUtil;
 import pojo.UserMessage;
 import sqlDemo.UserDemo;
 
@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
             // 用来验证的字符串放在前面，防止空指针
             if ("on".equals(remember)) {
                 //如果勾选了"记住密码"设置两个cookie
-                CookieAdd.addMyCookie(resp, username, password);
+                CookieAddUtil.addMyCookie(resp, username, password);
             }
             //登录成功,建立一个session
             HttpSession session = req.getSession();
