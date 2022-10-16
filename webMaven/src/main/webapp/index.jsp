@@ -22,10 +22,7 @@
 <a href="./sessionAdd">给服务端添加session</a>
 <br>
 <a href="./sessionGet">获取服务端的session</a>
+<br>
 
-<form action="./chaosSolution" method="post">
-    <input name="username" type="text">
-    <input type="submit">
-</form>
 </body>
 </html>

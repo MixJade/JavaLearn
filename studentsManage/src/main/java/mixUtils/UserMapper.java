@@ -13,10 +13,10 @@ import java.util.List;
 
 public interface UserMapper {
 
-    @Select("select * from loginmixjade where nameJade= #{nameJade} and passwordJade= #{passwordJade};")
+    @Select("select nameJade from loginmixjade where nameJade= #{nameJade} and passwordJade= #{passwordJade};")
     UserMessage userSelect(@Param("nameJade") String nameJade, @Param("passwordJade") String passwordJade);
 
-    @Select("select * from loginmixjade where nameJade= #{nameJade};")
+    @Select("select nameJade from loginmixjade where nameJade= #{nameJade};")
     UserMessage userSelectByName(@Param("nameJade") String nameJade);
 
     @Insert("INSERT loginmixjade(nameJade,passwordJade) VALUES(#{nameJade},#{passwordJade})")

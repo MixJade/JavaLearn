@@ -50,3 +50,10 @@ CheckCodeServlet.java需要:
 
 1. 通过工具类`CheckCodeUtil.java`生成验证码与验证码图片
 2. 将验证码字符写入session
+
+## 过滤
+
+> 文件:LoginFilter01.java,LoginFilter02.java
+
+1. `LoginFilter01`对所有请求进行字符串编码，这样可以减少代码复用
+2. `LoginFilter02`对学生文件夹和`elAttempt.jsp`进行过滤，如果没有登录成功的session,就重定向到登录页面

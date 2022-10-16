@@ -24,7 +24,6 @@ public class UpdateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("utf-8");//设置读取的字符编码
         // 获取参数
         String id = req.getParameter("id");
         String studentName = req.getParameter("studentName");

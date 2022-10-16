@@ -20,7 +20,6 @@ public class AddStudentServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("utf-8");//设置读取的字符编码
         // 获取参数
         String studentName = req.getParameter("studentName");
         String sex = req.getParameter("sex");

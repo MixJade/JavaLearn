@@ -17,6 +17,7 @@ public class ServletAttempt implements Servlet {
 
     @Override
     public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException {
+        System.out.println("========Servlet开始执行=========");
         HttpServletRequest hsr = (HttpServletRequest) servletRequest;
         String requestMode = hsr.getMethod();
         System.out.println(requestMode);
@@ -35,7 +36,7 @@ public class ServletAttempt implements Servlet {
 
     @Override
     public void destroy() {
-        System.out.println("这个网页被销毁了");
+        System.out.println("这个网页(at01)被销毁了");
     }
 
 }
