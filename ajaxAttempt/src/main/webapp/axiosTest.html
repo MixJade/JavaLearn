@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script src="js/axios-0.18.0.js"></script>
+
+<script>
+    //1. get
+   /* axios({
+        method:"get",
+        url:"http://localhost:8080/ajaxAttempt/testResp?username=zhangsan"
+    }).then(function (resp) {
+        alert(resp.data);
+    })*/
+
+
+    //2. post
+    axios({
+        method:"post",
+        url:"http://localhost:8080/ajaxAttempt/testResp",
+        data:"username=zhangsan"
+    }).then(function (resp) {
+        alert(resp.data);
+    })
+
+
+
+
+</script>
+
+</body>
+</html>
