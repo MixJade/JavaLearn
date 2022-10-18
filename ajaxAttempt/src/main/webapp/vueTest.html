@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>VUE测试</title>
+    <style>
+        body {
+            background-color: rgb(36, 151, 107);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 模型绑定 -->
+        <input v-model="username">
+        <!--插值表达式-->
+        {{username}}
+    </div>
+    <br>
+    <div id="app02">
+        <a v-bind:href="url">点击跳转</a>
+        <!-- 模型绑定 -->
+        <input v-model="url">
+        <!--插值表达式-->
+        {{url}}
+    </div>
+</body>
+
+<script src="js/vue.js"></script>
+<script>
+    //1. 创建Vue核心对象
+    new Vue({
+        el: "#app",
+        data() {  // data() 是 ECMAScript 6 版本的新的写法
+            return {
+                username: "模型绑定与插值"
+            }
+        }
+        //被简化的写法
+        /*data: function () {
+            return {
+                username:""
+            }
+        }*/
+    });
+
+    new Vue({
+        el: "#app02",
+        data() {
+            return {
+                url: "http://www.baidu.com"
+            }
+        }
+    })
+</script>
+
+</html>

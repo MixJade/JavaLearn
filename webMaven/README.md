@@ -128,3 +128,11 @@
    ```
    ~~事后还是把名字改回去了~~
 
+## Listener笔记
+
+> * 作用尚不明确，似乎只是监听web应用?
+> * 但是它身为三大组件，应该有更多的操作
+> * javaSE的listener就特别重要
+
+1. 实现`ServletContextListener`接口
+2. 在类上添加`@WebListener`注解
