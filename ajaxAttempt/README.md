@@ -330,4 +330,17 @@ html使用：
 ### VUE生命周期
 > mounted ：挂载完成，VUE初始化成功，可以做一些ajax操作，mounted只会执行一次
 
-[说明链接](https://www.jianshu.com/p/672e967e201c)
+```html
+    new Vue({
+        el: "#app04",
+        data() {
+            return {
+                students: ["张三", "李四", "王五"]
+            }
+        },
+        mounted(){
+            alert("加载完成")
+        }
+    })
+```
+这是一个：[说明链接](https://www.jianshu.com/p/672e967e201c)
