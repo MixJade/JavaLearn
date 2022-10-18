@@ -344,3 +344,7 @@ html使用：
     })
 ```
 这是一个：[说明链接](https://www.jianshu.com/p/672e967e201c)
+
+## 案例展示
+> * 文件:queryStudent2.html，insertStudent2.html
+> * 关于:Vue+Axios的应用，查询所有学生，添加学生的前端代码优化
