@@ -15,9 +15,9 @@
 </body>
 <script>
     function myFunction() {
-        var username="王庆丰"
+        const username = "王庆丰";
         //2.1. 创建核心对象
-        var x_http;
+        let x_http;
         if (window.XMLHttpRequest) {
             x_http = new XMLHttpRequest();
         } else {
@@ -30,11 +30,11 @@
         x_http.send();
         //2.3. 获取响应
         x_http.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState === 4 && this.status === 200) {
                 //弹出后端响应数据
                 alert(this.responseText);
                 //判断
-                if (this.responseText == "NO") {
+                if (this.responseText === "NO") {
                     //用户名不存在，显示提示信息
                     document.getElementById("wqf").style.display = 'inline';
                     document.getElementById("wqf").innerHTML = "用户不存在";
