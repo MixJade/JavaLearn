@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/index_style.css" rel="stylesheet">
+</head>
+<body>
+<div id="myIndexDiv">
+    <p>
+        <button class="button_press" onclick="myFunction()">AXIOS回应</button>
+    </p>
+    <p id="wqf">是大V从</p>
+</div>
+</body>
+<script>
+    function myFunction() {
+        const username = "王庆丰";
+        //2.1. 创建核心对象
+        let x_http;
+        if (window.XMLHttpRequest) {
+            x_http = new XMLHttpRequest();
+        } else {
+            //适用于IE6, IE5
+            x_http = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        //2.2. 发送请求
+        x_http.open("GET", "http://localhost:8080/ajaxAttempt/ajaxRespServlet?"+username,true);
+        x_http.send();
+        //2.3. 获取响应
+        x_http.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                //弹出后端响应数据
+                alert(this.responseText);
+                //判断
+                if (this.responseText === "NO") {
+                    //用户名不存在，显示提示信息
+                    document.getElementById("wqf").style.display = 'inline';
+                    document.getElementById("wqf").innerHTML = "用户不存在";
+                } else {
+                    //用户名存在 ，清楚提示信息
+                    document.getElementById("wqf").style.display = 'none';
+                }
+            }
+        }
+    }
+
+
+</script>
+</html>
