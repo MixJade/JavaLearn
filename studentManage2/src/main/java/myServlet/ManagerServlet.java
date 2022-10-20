@@ -1,56 +1,22 @@
 package myServlet;
 
-import com.alibaba.fastjson.JSON;
-import myUtils.BaseServlet;
-import pojo.*;
-import sqlDemo.*;
+import pojo.PageBean;
+import pojo.PageBirth;
+import pojo.StudentsMessage;
+import pojo.StudentsTable;
+import sqlDemo.AddStuDemo;
+import sqlDemo.DeleteStuDemo;
+import sqlDemo.SelectStuDemo;
+import sqlDemo.UpdateStuDemo;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/manager/*")
-public class ManagerServlet extends BaseServlet {
-    /**
-     * 解析特定Json数据
-     *
-     * @param req 指定格式的数据
-     * @return 指定的对象
-     */
-    private <T> T parseReq(HttpServletRequest req, Class<T> objectClass) throws IOException {
-        BufferedReader reader = req.getReader();
-        String line = reader.readLine();
-        return JSON.parseObject(line, objectClass);
-    }
-
-    /**
-     * 根据status来进行不同的响应
-     *
-     * @param status SQL是否成功
-     */
-    private void writeStatus(int status, HttpServletResponse resp) throws IOException {
-        // 响应数据
-        if (status == 1) {
-            resp.getWriter().write("YES");
-        } else {
-            resp.getWriter().write("NO");
-        }
-    }
-
-    /**
-     * 通过不同的对象来写入JSON
-     */
-    private void writeJSON(Object object, HttpServletResponse resp) throws IOException {
-        // 写入JSON
-        String jsonString = JSON.toJSONString(object);
-        // 相应数据
-        resp.setContentType("text/json;charset=utf-8");
-        resp.getWriter().write(jsonString);
-    }
-
+public class ManagerServlet extends MyBaseServlet {
 
     /**
      * 通过反射的方式执行;
@@ -58,8 +24,9 @@ public class ManagerServlet extends BaseServlet {
      */
     public void selectAll(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<StudentsMessage> studentsMessages = SelectStuDemo.allStudent();
-        writeJSON(studentsMessages,resp);
+        writeJSON(studentsMessages, resp);
     }
+
     /**
      * 添加一个学生
      */
@@ -122,7 +89,7 @@ public class ManagerServlet extends BaseServlet {
     public void selectAStu(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int id = parseReq(req, int.class);
         StudentsTable studentsTable = SelectStuDemo.selectId(id);
-        writeJSON(studentsTable,resp);
+        writeJSON(studentsTable, resp);
     }
 
     /**

@@ -17,44 +17,22 @@ body {
     border-radius: 5px;
 }
 
-p {
-    margin-top: 20px;
-    margin-left: 20px;
-    color: rgb(219, 168, 30);
+h2{
+    color: #409EFF;
 }
 
 a {
     text-decoration: none;
 }
 
-#last_div {
-    margin-top: 30px;
-}
-
-
-.button_press {
+button {
+    margin-top: 20px;
     border-color: cornsilk;
-    background-color: rgb(199, 130, 2);
+    background-color: #409EFF;
     color: aliceblue;
     border-style: hidden;
     border-radius: 5px;
-    width: 100px;
+    width: 160px;
     height: 31px;
-    font-size: 16px;
-}
-
-li {
-    display: block;
-    margin-top: 10px;
-}
-
-.button_last{
-    border-color: cornsilk;
-    background-color: rgb(199, 2, 2);
-    color: aliceblue;
-    border-style: hidden;
-    border-radius: 5px;
-    width: 130px;
-    height: 28px;
     font-size: 16px;
 }
