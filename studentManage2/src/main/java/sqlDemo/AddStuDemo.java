@@ -7,8 +7,13 @@ import org.apache.ibatis.session.SqlSession;
 import pojo.StudentsTable;
 import sqlMapper.StudentsMapper;
 
-public class AddStudentDemo {
+public class AddStuDemo {
 
+    /**
+     * 添加学生
+     *
+     * @return 是否添加成功
+     */
     public static int addStudentTable(StudentsTable studentsTable) {
         SqlSession session = SqlUtil.getFactory().openSession();
         int stu = 0;

@@ -11,15 +11,16 @@
     <!-- 表单 -->
     <el-form :inline="true" :model="pageSeparate" class="demo-form-inline">
         <el-form-item label="学生">
-            <el-input v-model="pageSeparate.studentName" placeholder="学生姓名"></el-input>
+            <el-input v-model="pageSeparate.studentName" autocomplete="off" placeholder="学生姓名"></el-input>
         </el-form-item>
         <el-form-item label="社团">
-            <el-select v-model="pageSeparate.societyId" placeholder="社团">
-                <el-option label="散人" value="1"></el-option>
-                <el-option label="头文字D" value="2"></el-option>
-                <el-option label="轻音部" value="3"></el-option>
-                <el-option label="黄金之风" value="4"></el-option>
-                <el-option label="极东魔术昼寝结社" value="5"></el-option>
+            <el-select v-model="pageSeparate.societyId" clearable placeholder="社团">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
             </el-select>
         </el-form-item>
         <el-form-item>
@@ -28,9 +29,9 @@
     </el-form>
     <!-- 按钮 -->
     <el-button type="danger" @click="deleteByIds" plain>批量删除</el-button>
-    <el-button type="primary" @click="dialogFormVisible = true" plain>添加学生</el-button>
+    <el-button type="primary" @click="selectChoose(1)" plain>添加学生</el-button>
     <!-- 嵌套表单 -->
-    <el-dialog title="添加学生" :visible.sync="dialogFormVisible">
+    <el-dialog :title="selectTitle" :visible.sync="dialogFormVisible">
         <el-form :model="student" autocomplete="off" size="small">
             <el-form-item label="姓名" :label-width="formLabelWidth" style="width: 60%;">
                 <el-input v-model="student.studentName" maxlength="7" show-word-limit></el-input>
@@ -51,11 +52,12 @@
             </el-form-item>
             <el-form-item label="社团" :label-width="formLabelWidth">
                 <el-select v-model="student.societyId" placeholder="社团名称">
-                    <el-option label="散人" value="1"></el-option>
-                    <el-option label="头文字D" value="2"></el-option>
-                    <el-option label="轻音部" value="3"></el-option>
-                    <el-option label="黄金之风" value="4"></el-option>
-                    <el-option label="极东魔术昼寝结社" value="5"></el-option>
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="身高" :label-width="formLabelWidth">
@@ -72,12 +74,13 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addStudent">确 定</el-button>
+            <el-button type="primary" @click="selectMethod">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 表格 -->
     <template>
-        <el-table :data="students" Iteme style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table :data="students" Iteme style="width: 100%" highlight-current-row
+                  @selection-change="handleSelectionChange">
             <el-table-column type="selection">
             </el-table-column>
             <el-table-column prop="id" align="center" width="50px" label="学号">
@@ -100,14 +103,17 @@
             </el-table-column>
             <el-table-column type="index" width="40px">
             </el-table-column>
-            <el-table-column align="center" width="170px" label="操作">
-                <el-button type="primary" icon="el-icon-edit" circle></el-button>
-                <el-button type="danger" icon="el-icon-delete" circle></el-button>
+            <el-table-column align="center" width="170px" fixed="right" label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" circle></el-button>
+                    <el-button type="danger" icon="el-icon-delete" @click="handleDel(scope.row)" circle></el-button>
+                </template>
             </el-table-column>
         </el-table>
     </template>
     <!-- 分页工具条 -->
-    <el-pagination @size-change="handleSizeChange"
+    <el-pagination @size-change=" handleSizeChange
+                    "
                    @current-change="handleCurrentChange"
                    :current-page.sync="pageSeparate.currentPage1"
                    :page-sizes="[5, 7, 9, 12]"
@@ -124,20 +130,38 @@
     new Vue({
         el: "#app",
         mounted() {
-            // this.selectAll()
             this.selectByPage()
         },
         data() {
             return {
                 // 表格数据
                 students: [],
+                studentID: '',
+                //下拉列表
+                options: [{
+                    value: '1',
+                    label: '散人'
+                }, {
+                    value: '2',
+                    label: '头文字D'
+                }, {
+                    value: '3',
+                    label: '轻音部'
+                }, {
+                    value: '4',
+                    label: '黄金之风'
+                }, {
+                    value: '5',
+                    label: '极东魔术昼寝结社'
+                }],
                 // 复选框数据
                 multipleSelection: [],
                 selectIdGroup: [],
-                // 搜索表单数据
                 // 嵌套表单
+                selectTitle: "添加学生",
                 dialogFormVisible: false,
                 student: {
+                    id: '',
                     studentName: '',
                     sex: '',
                     englishGrade: '',
@@ -151,8 +175,8 @@
                 // 分页数据
                 totalItem: 50,
                 pageSeparate: {
-                    studentName:'',
-                    societyId:'',
+                    studentName: '',
+                    societyId: '',
                     currentPage1: 1,
                     pageItem: 7
                 }
@@ -163,49 +187,57 @@
                 this.multipleSelection = val;
             },
             onSubmit() {
+                this.pageSeparate.currentPage1 = 1
                 this.selectByPage();
                 console.log(this.pageSeparate);
             },
-            selectAll() {
-                // 页面加载完成后，发送异步请求，查询查询所有学生
-                const _this = this;
-                axios({
-                    method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/selectAll"
-                }).then(function (resp) {
-                    _this.students = resp.data;
-                })
+            selectChoose(val) {
+                const _this = this
+                if (val === 2) {
+                    _this.selectTitle = "修改学生"
+                } else if (val === 1) {
+                    _this.selectTitle = "添加学生"
+                }
+                _this.dialogFormVisible = true
+            },
+            selectMethod() {
+                const _this = this
+                if (_this.selectTitle === "修改学生") {
+                    _this.updateById()
+                } else if (_this.selectTitle === "添加学生") {
+                    _this.addStudent()
+                }
+                _this.dialogFormVisible = false
             },
             selectByPage() {
                 // 页面加载完成后，发送异步请求，查询查询部分学生
-                const _this = this;
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/selectPage",
-                    data: _this.pageSeparate
-                }).then(function (resp) {
-                    _this.students = resp.data.rows;
-                    _this.totalItem = resp.data.totalItem;
+                    data: this.pageSeparate
+                }).then(resp => {
+                    this.students = resp.data.rows;
+                    this.totalItem = resp.data.totalItem;
                 })
             },
             addStudent() {
                 // 发送ajax请求，添加
-                const _this = this;
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/addStudent",
-                    data: _this.student
-                }).then(function (resp) {
+                    data: this.student
+                }).then(resp => {
                     // 判断响应数据是否为 YES
                     if (resp.data === "YES") {
-                        _this.open2("添加成功")
-                        _this.selectAll()
+                        this.open2("添加成功")
+                        this.pageSeparate.currentPage1 = 1
+                        this.selectByPage()
                     } else if (resp.data === "NO") {
-                        _this.open4("插入失败")
+                        this.open4("插入失败")
                     }
-                    _this.dialogFormVisible = false
                 })
             },
+
             deleteByIds() {
                 const selectGroup = this.multipleSelection;
                 for (let i = 0; i < selectGroup.length; i++) {
@@ -213,20 +245,68 @@
                 }
                 console.log(this.selectIdGroup);
                 // 发送ajax请求，删除
-                const _this = this;
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/deleteByIds",
-                    data: _this.selectIdGroup
-                }).then(function (resp) {
+                    data: this.selectIdGroup
+                }).then(resp => {
                     // 判断响应数据是否为 YES
                     if (resp.data === "YES") {
-                        _this.open2("批量删除成功")
-                        _this.selectAll()
+                        this.open2("批量删除成功")
+                        this.selectByPage()
                     } else if (resp.data === "NO") {
-                        _this.open4("批量删除失败")
+                        this.open4("批量删除失败")
                     }
                 })
+            },
+            selectById() {
+                // 发送ajax请求，删除
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/studentManage2/manager/selectAStu",
+                    data: this.studentID
+                }).then(resp => {
+                    this.student = resp.data
+                })
+            },
+            updateById() {
+                // 发送ajax请求，删除
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/studentManage2/manager/updateStudent",
+                    data: this.student
+                }).then(resp => {
+                    if (resp.data === "YES") {
+                        this.open2("修改成功")
+                        this.selectByPage()
+                    } else if (resp.data === "NO") {
+                        this.open4("修改失败")
+                    }
+                })
+            },
+            deleteById() {
+                // 发送ajax请求，删除
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/studentManage2/manager/deleteAStu",
+                    data: this.studentID
+                }).then(resp => {
+                    if (resp.data === "YES") {
+                        this.open2("删除成功")
+                        this.selectByPage()
+                    } else if (resp.data === "NO") {
+                        this.open4("删除失败")
+                    }
+                })
+            },
+            handleEdit(row) {
+                this.studentID = row.id
+                this.selectById()
+                this.selectChoose(2)
+            },
+            handleDel(row) {
+                this.studentID = row.id
+                this.deleteById()
             },
             handleSizeChange(val) {
                 this.pageSeparate.pageItem = val

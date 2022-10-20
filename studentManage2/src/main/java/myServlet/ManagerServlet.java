@@ -2,14 +2,8 @@ package myServlet;
 
 import com.alibaba.fastjson.JSON;
 import myUtils.BaseServlet;
-import pojo.PageBean;
-import pojo.PageBirth;
-import pojo.StudentsMessage;
-import pojo.StudentsTable;
-import sqlDemo.AddStudentDemo;
-import sqlDemo.DeleteIdGroupDemo;
-import sqlDemo.SelectPageDemo;
-import sqlDemo.StudentsDemo;
+import pojo.*;
+import sqlDemo.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,31 +15,23 @@ import java.util.List;
 @WebServlet("/manager/*")
 public class ManagerServlet extends BaseServlet {
     /**
-     * 通过反射的方式执行;
-     * 查询所有学生;
+     * 解析特定Json数据
+     *
+     * @param req 指定格式的数据
+     * @return 指定的对象
      */
-    public void selectAll(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<StudentsMessage> studentsMessages = StudentsDemo.allStudent();
-        // 写入JSON
-        String jsonString = JSON.toJSONString(studentsMessages);
-        // 相应数据
-        resp.setContentType("text/json;charset=utf-8");
-        resp.getWriter().write(jsonString);
+    private <T> T parseReq(HttpServletRequest req, Class<T> objectClass) throws IOException {
+        BufferedReader reader = req.getReader();
+        String line = reader.readLine();
+        return JSON.parseObject(line, objectClass);
     }
 
     /**
-     * 添加一个学生
+     * 根据status来进行不同的响应
      *
-     * @param req  StudentsTable的对象
-     * @param resp 添加是否成功
+     * @param status SQL是否成功
      */
-    public void addStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // 获取参数
-        BufferedReader reader = req.getReader();
-        String line = reader.readLine();
-        //通过json解析字符串
-        StudentsTable studentsTable = JSON.parseObject(line, StudentsTable.class);
-        int status = AddStudentDemo.addStudentTable(studentsTable);
+    private void writeStatus(int status, HttpServletResponse resp) throws IOException {
         // 响应数据
         if (status == 1) {
             resp.getWriter().write("YES");
@@ -55,18 +41,52 @@ public class ManagerServlet extends BaseServlet {
     }
 
     /**
+     * 通过不同的对象来写入JSON
+     */
+    private void writeJSON(Object object, HttpServletResponse resp) throws IOException {
+        // 写入JSON
+        String jsonString = JSON.toJSONString(object);
+        // 相应数据
+        resp.setContentType("text/json;charset=utf-8");
+        resp.getWriter().write(jsonString);
+    }
+
+
+    /**
+     * 通过反射的方式执行;
+     * 查询所有学生;
+     */
+    public void selectAll(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        List<StudentsMessage> studentsMessages = SelectStuDemo.allStudent();
+        writeJSON(studentsMessages,resp);
+    }
+    /**
+     * 添加一个学生
+     */
+    public void addStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        StudentsTable studentsTable = parseReq(req, StudentsTable.class);
+        int status = AddStuDemo.addStudentTable(studentsTable);
+        writeStatus(status, resp);
+    }
+
+    /**
+     * 修改一个学生的数据
+     */
+    public void updateStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        StudentsTable studentsTable = parseReq(req, StudentsTable.class);
+        int status = UpdateStuDemo.updateStuTable(studentsTable);
+        writeStatus(status, resp);
+    }
+
+    /**
      * 删除一组学生
      *
      * @param req  学生id的数组
      * @param resp 删除是否成功
      */
     public void deleteByIds(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // 获取参数
-        BufferedReader reader = req.getReader();
-        String line = reader.readLine();
-        //通过json解析字符串
-        int[] ids = JSON.parseObject(line, int[].class);
-        String status = DeleteIdGroupDemo.deleteGroup(ids);
+        int[] ids = parseReq(req, int[].class);
+        String status = DeleteStuDemo.deleteGroup(ids);
         resp.getWriter().write(status);
     }
 
@@ -77,28 +97,44 @@ public class ManagerServlet extends BaseServlet {
      * @param resp 学生条目的总数和学生条目的实体对象
      */
     public void selectPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // 获取参数
-        BufferedReader reader = req.getReader();
-        String line = reader.readLine();
         // 获取索引开始位置,以及最大条目数
-        PageBirth pageBirth = JSON.parseObject(line, PageBirth.class);
+        PageBirth pageBirth = parseReq(req, PageBirth.class);
         // 解析参数
         int pageItem = pageBirth.getPageItem();
         int begin = (pageBirth.getCurrentPage1() - 1) * pageItem;
         String studentName = "%" + pageBirth.getStudentName() + "%";
         Integer societyId = pageBirth.getSocietyId();
         // 开始查询
-        List<StudentsMessage> studentsMessages = SelectPageDemo.selectPage(studentName, societyId, begin, pageItem);
-        int studentCount = SelectPageDemo.selectCount(studentName, societyId);
+        List<StudentsMessage> studentsMessages = SelectStuDemo.selectPage(studentName, societyId, begin, pageItem);
+        int studentCount = SelectStuDemo.selectCount(studentName, societyId);
         // 写入封装对象
         PageBean<StudentsMessage> pageBean = new PageBean<>();
         pageBean.setRows(studentsMessages);
         pageBean.setTotalItem(studentCount);
-        // 写入JSON
-        String jsonString = JSON.toJSONString(pageBean);
-        // 相应数据
-        resp.setContentType("text/json;charset=utf-8");
-        resp.getWriter().write(jsonString);
+        writeJSON(pageBean, resp);
+    }
+
+    /**
+     * 根据一个学生的id进行查询并返回结果
+     *
+     * @param resp 一个学生的信息
+     */
+    public void selectAStu(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = parseReq(req, int.class);
+        StudentsTable studentsTable = SelectStuDemo.selectId(id);
+        writeJSON(studentsTable,resp);
+    }
+
+    /**
+     * 根据一个学生的id进行查询并返回结果
+     *
+     * @param req  一个学生的id
+     * @param resp 一个学生的信息
+     */
+    public void deleteAStu(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = parseReq(req, int.class);
+        String status = DeleteStuDemo.deleteOrigin(id);
+        resp.getWriter().write(status);
     }
 }
 

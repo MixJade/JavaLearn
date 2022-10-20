@@ -16,19 +16,6 @@
                 #{money})
     </insert>
 
-    <update id="updateOrigin">
-        update students
-        set studentName=#{studentName},
-            sex=#{sex},
-            englishGrade=#{englishGrade},
-            mathGrade=#{mathGrade},
-            societyId=#{societyId},
-            height=#{height},
-            birthday=#{birthday},
-            money=#{money}
-        where id = #{id};
-    </update>
-
     <!-- 批量删除，注意在接口中重写array(默认组名)-->
     <delete id="deleteIdGroup">
         delete from students
@@ -39,6 +26,7 @@
         </foreach>
     </delete>
 
+    <!--查询分页的学生信息-->
     <select id="selectByPage" resultType="pojo.StudentsMessage">
         select
         *
@@ -52,6 +40,8 @@
         </if>
         limit #{begin},#{pageItem};
     </select>
+
+    <!--查询分页的条目数-->
     <select id="selectCount" resultType="int">
         select
         count(*)
@@ -65,4 +55,18 @@
             </if>
         </where>
     </select>
+
+    <update id="updateOrigin">
+        update students
+        set studentName=#{studentName},
+            sex=#{sex},
+            englishGrade=#{englishGrade},
+            mathGrade=#{mathGrade},
+            societyId=#{societyId},
+            height=#{height},
+            birthday=#{birthday},
+            money=#{money}
+        where id = #{id};
+    </update>
+
 </mapper>

@@ -27,7 +27,8 @@ public class BaseServlet extends HttpServlet {
             Method method = cls.getMethod(needMethod, HttpServletRequest.class, HttpServletResponse.class);
             method.invoke(this, req, resp);
         } catch (Exception e) {
-            System.out.println("\n产生了异常，可能没有找到对应的类或者方法:\n" + e);
+            System.out.println("\n反射产生了异常，可能没有找到:" + needMethod +"\n"+ e);
+            e.printStackTrace();
         }
     }
 }

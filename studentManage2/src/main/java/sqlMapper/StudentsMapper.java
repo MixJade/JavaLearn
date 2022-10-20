@@ -1,5 +1,6 @@
 package sqlMapper;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import pojo.StudentsMessage;
 import org.apache.ibatis.annotations.Select;
@@ -21,5 +22,11 @@ public interface StudentsMapper {
 
     int selectCount(@Param("studentName") String studentName, @Param("societyId") Integer societyId);
 
-    List<StudentsMessage> selectLack(StudentsTable studentsTable);
+    @Select("select * from students where id= #{id};")
+    StudentsTable selectById(@Param("id") int id);
+
+    int updateOrigin(StudentsTable studentsTable);
+
+    @Delete("delete from students where id = #{id};")
+    void deleteOrigin(int id);
 }
