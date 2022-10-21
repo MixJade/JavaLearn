@@ -1,0 +1,110 @@
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link href="../css/myRegister.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="myLoginDiv">
+    <a href="../index.html">返回首页</a>
+    <h1 id="login_title">注册</h1>
+    <p class="input"><label for="username">用户名:</label><input type="text" id="username" v-model="user.nameJade"
+                                                                 placeholder="用户名"></p>
+    <p class="input"><label for="password">密码:</label><input type="password" id="password" v-model="user.passwordJade"
+                                                               placeholder="密码"></p>
+    <p style="margin-top: 20px;margin-left: 290px">
+        <el-switch v-model="user.remember" active-text="记住密码">
+        </el-switch>
+    </p>
+    <p class="input"><label for="checkCode">验证码: </label><input type="text" name="checkCode" id="checkCode"
+                                                                   v-model="checkCode">
+        <img src="http://localhost:8080/studentManage2/login/checkCode" id="checkCodeImg" alt="验证码">
+        <a href="javascript:check_code()" id="changeImg">看不清？</a>
+    </p>
+    <div id="subDiv">
+        <el-button type="primary" @click="checkSend">注册</el-button>
+        <a href="userLogin.html">登录</a>
+    </div>
+</div>
+</body>
+
+<script src="../js/axios-0.18.0.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        el: "#myLoginDiv",
+        data() {
+            return {
+                user: {
+                    nameJade: '',
+                    passwordJade: '',
+                    remember: true
+                },
+                checkCode: ''
+            }
+        },
+        methods: {
+            checkSend() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/studentManage2/login/checkSendCode",
+                    data: this.checkCode
+                }).then(resp => {
+                    if (resp.data === "YesCheck") {
+                        this.registerMean()
+                    } else if (resp.data === "NoCheck") {
+                        this.open4("验证码不能为空")
+                    } else {
+                        this.open4("验证码错误")
+                    }
+                })
+            },
+            registerMean() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/studentManage2/login/register",
+                    data: this.user
+                }).then(resp => {
+                    switch (resp.data) {
+                        case "YES":
+                            this.open2("注册成功")
+                            break
+                        case "NO":
+                            this.open4("注册失败")
+                            break
+                        case "Already":
+                            this.open4("用户名已存在")
+                            break
+                        case "NoText":
+                            this.open4("用户名和密码不能为空")
+                            break
+                        default:
+                            this.open4("服务器未响应")
+                    }
+                })
+            },
+            open2(val) {
+                this.$message({
+                    message: val,
+                    type: 'success'
+                });
+            },
+            open4(val) {
+                this.$message.error(val);
+                check_code()
+            }
+        }
+    })
+</script>
+<script>
+    // 刷新验证码
+    document.getElementById("checkCodeImg").onclick = check_code
+
+    function check_code() {
+        document.getElementById("checkCodeImg").src = "http://localhost:8080/studentManage2/login/checkCode?" + new Date().getMilliseconds();
+    }</script>
+</html>

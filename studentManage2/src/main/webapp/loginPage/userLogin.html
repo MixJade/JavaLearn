@@ -1,0 +1,74 @@
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link href="../css/myLogin.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="myLoginDiv">
+    <a href="../index.html">返回首页</a>
+    <h1 id="login_title">登录</h1>
+    <p class="input"><label for="username">用户名:</label><input type="text" id="username" v-model="user.nameJade"
+                                                                 placeholder="用户名"></p>
+    <p class="input"><label for="password">密码:</label><input type="password" id="password" v-model="user.passwordJade"
+                                                               placeholder="密码"></p>
+    <p style="margin-top: 20px;margin-left: 290px">
+        <el-switch v-model="user.remember" active-text="记住密码">
+        </el-switch>
+    </p>
+    <div id="subDiv">
+        <el-button type="primary" @click="loginMean">登录</el-button>
+        <a href="register.html">点击注册</a>
+    </div>
+</div>
+</body>
+
+<script src="../js/axios-0.18.0.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        el: "#myLoginDiv",
+        data() {
+            return {
+                user: {
+                    nameJade: '',
+                    passwordJade: '',
+                    remember: false
+                }
+            }
+        },
+        methods: {
+            loginMean() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/studentManage2/login/login",
+                    data: this.user
+                }).then(resp => {
+                    if (resp.data === "YES") {
+                        this.open2("登录成功")
+                    }
+                    if (resp.data === "NO") {
+                        this.open4("登录失败")
+                    } else {
+                        this.open4("用户名和密码不能为空")
+                    }
+                })
+            },
+            open2(val) {
+                this.$message({
+                    message: val,
+                    type: 'success'
+                });
+            },
+            open4(val) {
+                this.$message.error(val);
+            }
+        }
+    })
+</script>
+
+</html>
