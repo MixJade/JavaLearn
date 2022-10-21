@@ -33,7 +33,7 @@ Ajax尝试:
 </body>
 <script>
     function myFunction() {
-        var username="王庆丰"
+        var username = "王庆丰"
         //2.1. 创建核心对象
         var x_http;
         if (window.XMLHttpRequest) {
@@ -44,7 +44,7 @@ Ajax尝试:
         }
 
         //2.2. 发送请求
-        x_http.open("GET", "http://localhost:8080/ajaxAttempt/ajaxRespServlet?"+username,true);
+        x_http.open("GET", "http://localhost:8080/ajaxAttempt/ajaxRespServlet?" + username, true);
         x_http.send();
         //2.3. 获取响应
         x_http.onreadystatechange = function () {
@@ -63,11 +63,6 @@ Ajax尝试:
             }
         }
     }
-
-
-
-
-
 
 
 </script>
@@ -119,8 +114,8 @@ public class AjaxRespServlet extends HttpServlet {
 <script>
     //1. get
     axios({
-        method:"get",
-        url:"http://localhost:8080/ajaxAttempt/testResp?username=zhangsan"
+        method: "get",
+        url: "http://localhost:8080/ajaxAttempt/testResp?username=zhangsan"
     }).then(function (resp) {
         alert(resp.data);
     })
@@ -128,9 +123,9 @@ public class AjaxRespServlet extends HttpServlet {
 
     //2. post
     axios({
-        method:"post",
-        url:"http://localhost:8080/ajaxAttempt/testResp",
-        data:"username=zhangsan"
+        method: "post",
+        url: "http://localhost:8080/ajaxAttempt/testResp",
+        data: "username=zhangsan"
     }).then(function (resp) {
         alert(resp.data);
     })
@@ -193,7 +188,7 @@ resp.setContentType("text/json;charset=utf-8");
 resp.getWriter().write(jsonString);
 ```
 
-而后端如此解析:
+而前端如此解析:
 
 ```
 let studentMessages = resp.data;
@@ -222,6 +217,7 @@ for (let i = 0; i < studentMessages.length; i++) {
 ```<script src="js/vue.js"></script>```
 
 ### VUE指令
+
 **指令** ：HTML 标签上带有 v- 前缀的特殊属性
 
 常用的指令有：
@@ -328,23 +324,54 @@ html使用：
 ```
 
 ### VUE生命周期
+
 > mounted ：挂载完成，VUE初始化成功，可以做一些ajax操作，mounted只会执行一次
 
 ```html
     new Vue({
-        el: "#app04",
-        data() {
-            return {
-                students: ["张三", "李四", "王五"]
-            }
-        },
-        mounted(){
-            alert("加载完成")
-        }
-    })
+el: "#app04",
+data() {
+return {
+students: ["张三", "李四", "王五"]
+}
+},
+mounted(){
+alert("加载完成")
+}
+})
 ```
+
 这是一个：[说明链接](https://www.jianshu.com/p/672e967e201c)
 
 ## 案例展示
+
 > * 文件:queryStudent2.html，insertStudent2.html
 > * 关于:Vue+Axios的应用，查询所有学生，添加学生的前端代码优化
+
+## 代码优化
+
+> * ajax获取resp的数据时要定义一个_this=this，以及每次都要写一个function
+> * 可以简化，类似lambda的形式
+
+原形式
+
+```
+const _this = this;
+axios({
+        method:"post",
+        url:"http://localhost:8080/ajaxAttempt/Students/students"
+    }).then(function (resp) {
+        _this.students = resp.data;
+    })
+```
+
+新形式
+
+```
+axios({
+method:"post",
+url:"http://localhost:8080/ajaxAttempt/Students/students"
+}).then(resp=>{
+this.students = resp.data;
+})
+```
