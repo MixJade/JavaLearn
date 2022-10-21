@@ -21,15 +21,15 @@ public class LoginServlet extends MyBaseServlet {
         //获取参数
         String nameJade = userMessage.getNameJade();
         String passwordJade = userMessage.getPasswordJade();
-        String remember = userMessage.getRemember();
+        boolean remember = userMessage.isRemember();
         if ("".equals(nameJade) || "".equals(passwordJade)) {
             resp.getWriter().write("NoText");
         } else {
             int status = UserDemo.userSelect(nameJade, passwordJade);
-            if ("true".equals(remember)) addMyCookie(resp, nameJade, passwordJade);
-//            //登录成功,建立一个session
-//            HttpSession session = req.getSession();
-//            session.setAttribute("user", user);
+            if (remember) addMyCookie(resp, nameJade, passwordJade);
+            //登录成功,建立一个session
+            HttpSession session = req.getSession();
+            session.setAttribute("user", nameJade);
             writeStatus(status, resp);
         }
 
@@ -40,12 +40,12 @@ public class LoginServlet extends MyBaseServlet {
         //获取参数
         String nameJade = userMessage.getNameJade();
         String passwordJade = userMessage.getPasswordJade();
-        String remember = userMessage.getRemember();
+        boolean remember = userMessage.isRemember();
         if ("".equals(nameJade) || "".equals(passwordJade)) {
             resp.getWriter().write("NoText");
         } else {
             if (UserDemo.userSelectByName(nameJade)) {
-                if ("true".equals(remember)) addMyCookie(resp, nameJade, passwordJade);
+                if (remember) addMyCookie(resp, nameJade, passwordJade);
                 int status = UserDemo.addUser(nameJade, passwordJade);
                 writeStatus(status, resp);
             } else {
@@ -57,7 +57,7 @@ public class LoginServlet extends MyBaseServlet {
     public void checkSendCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         BufferedReader reader = req.getReader();
         String line = reader.readLine();
-        if (line == null){
+        if (line == null) {
             resp.getWriter().write("NoCheck");
             return;
         }
@@ -84,13 +84,33 @@ public class LoginServlet extends MyBaseServlet {
      */
     private void addMyCookie(HttpServletResponse resp, String username, String password) {
         //如果勾选了"记住密码"设置两个cookie
-        Cookie cookieUsername = new Cookie("username", username);
-        Cookie cookiePassword = new Cookie("password", password);
+        Cookie cookieUsername = new Cookie("username_Jade", username);
+        Cookie cookiePassword = new Cookie("password_Jade", password);
         //设置存活时间，半个小时
         cookieUsername.setMaxAge(60 * 30);
         cookiePassword.setMaxAge(60 * 30);
         //给浏览器添加cookie
         resp.addCookie(cookieUsername);
         resp.addCookie(cookiePassword);
+    }
+
+    public void getMyCookie(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        UserMessage userMessage = new UserMessage();
+        userMessage.setRemember(true);
+        userMessage.setNameJade(getACookie(req, "username_Jade"));
+        userMessage.setPasswordJade(getACookie(req, "password_Jade"));
+        writeJSON(userMessage, resp);
+    }
+
+    private String getACookie(HttpServletRequest req, String nameNeed) {
+        Cookie[] cookies = req.getCookies();
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            String value = cookie.getValue();
+            if (nameNeed.equals(name)) {
+                return value;
+            }
+        }
+        return "";
     }
 }

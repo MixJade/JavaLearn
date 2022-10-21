@@ -72,6 +72,7 @@
                     switch (resp.data) {
                         case "YES":
                             this.open2("注册成功")
+                            goLogin()
                             break
                         case "NO":
                             this.open4("注册失败")
@@ -106,5 +107,12 @@
 
     function check_code() {
         document.getElementById("checkCodeImg").src = "http://localhost:8080/studentManage2/login/checkCode?" + new Date().getMilliseconds();
-    }</script>
+    }
+
+    function goLogin() {
+        setTimeout(function () {
+            window.location.href = "userLogin.html"
+        }, 2000)
+    }
+</script>
 </html>

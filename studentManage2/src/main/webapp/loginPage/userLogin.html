@@ -37,9 +37,17 @@
                 user: {
                     nameJade: '',
                     passwordJade: '',
-                    remember: false
+                    remember: true
                 }
             }
+        },
+        mounted() {
+            axios({
+                method: "get",
+                url: "http://localhost:8080/studentManage2/login/getMyCookie",
+            }).then(resp => {
+                this.user = resp.data
+            })
         },
         methods: {
             loginMean() {
@@ -48,13 +56,19 @@
                     url: "http://localhost:8080/studentManage2/login/login",
                     data: this.user
                 }).then(resp => {
-                    if (resp.data === "YES") {
-                        this.open2("登录成功")
-                    }
-                    if (resp.data === "NO") {
-                        this.open4("登录失败")
-                    } else {
-                        this.open4("用户名和密码不能为空")
+                    switch (resp.data) {
+                        case "YES":
+                            this.open2("登录成功")
+                            goManager()
+                            break
+                        case "NO":
+                            this.open4("登录失败")
+                            break
+                        case "NoText":
+                            this.open4("用户名和密码不能为空")
+                            break
+                        default:
+                            this.open4("服务器未响应")
                     }
                 })
             },
@@ -70,5 +84,11 @@
         }
     })
 </script>
-
+<script>
+    function goManager() {
+        setTimeout(function () {
+            window.location.href = "../plentiful/operate.html"
+        }, 2000)
+    }
+</script>
 </html>

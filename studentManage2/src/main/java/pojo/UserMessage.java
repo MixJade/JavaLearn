@@ -3,7 +3,7 @@ package pojo;
 public class UserMessage {
     String nameJade;
     String passwordJade;
-    String remember;
+    boolean remember;
 
     public String getNameJade() {
         return nameJade;
@@ -21,11 +21,11 @@ public class UserMessage {
         this.passwordJade = passwordJade;
     }
 
-    public String getRemember() {
+    public boolean isRemember() {
         return remember;
     }
 
-    public void setRemember(String remember) {
+    public void setRemember(boolean remember) {
         this.remember = remember;
     }
 
