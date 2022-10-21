@@ -12,6 +12,7 @@ public class LoginFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
+        System.out.println("学生管理系统2.0启动");
     }
 
     /**
@@ -31,12 +32,12 @@ public class LoginFilter implements Filter {
             filterChain.doFilter(request, response);
         } else {
             String contextPath = req.getContextPath();
-            resp.sendRedirect(contextPath + "/loginPage/userLogin.html");
+            resp.sendRedirect(contextPath + "/gate.html");
         }
     }
 
     @Override
     public void destroy() {
-
+        System.out.println("学生管理系统2.0已停止运行");
     }
 }

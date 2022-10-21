@@ -57,7 +57,7 @@ public class LoginServlet extends MyBaseServlet {
     public void checkSendCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         BufferedReader reader = req.getReader();
         String line = reader.readLine();
-        if (line == null) {
+        if (line == null || "".equals(line)) {
             resp.getWriter().write("NoCheck");
             return;
         }
@@ -70,13 +70,17 @@ public class LoginServlet extends MyBaseServlet {
         }
     }
 
-    public void checkCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // 通过工具类生成验证码与验证码图片
-        ServletOutputStream os = resp.getOutputStream();
-        String checkCode = CheckCodeUtil.outputVerifyImage(100, 50, os, 4);
-        // 将验证码字符写入session
-        HttpSession session = req.getSession();
-        session.setAttribute("checkCode", checkCode);
+    public void checkCode(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            // 通过工具类生成验证码与验证码图片
+            ServletOutputStream os = resp.getOutputStream();
+            String checkCode = CheckCodeUtil.outputVerifyImage(100, 50, os, 4);
+            // 将验证码字符写入session
+            HttpSession session = req.getSession();
+            session.setAttribute("checkCode", checkCode);
+        } catch (IOException e) {
+            System.out.println("验证码生成错误" + e);
+        }
     }
 
     /**
