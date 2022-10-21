@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class SaveCode {
     public static void main(String[] args) {
-        SaveCode saveCode = new SaveCode("C:\\Users\\11141\\Documents\\MarkMixJade\\代码保存结果.md");
+        SaveCode saveCode = new SaveCode("C:\\MixJade\\zooMarkdown\\代码保存结果.md");
         saveCode.saveMixJadeCode("src");
     }
 

@@ -12,7 +12,7 @@ public class AttemptRegex {
         checkTelephone("13882244623");
         checkTelephone("123456789");
         System.out.println("----------");
-        checkEmail("1140443155@qq.com");
+        checkEmail("1940443155@qq.com");
         checkEmail("iLikeMixJade@163.com");
         checkEmail("123456789");
         System.out.println("----------");
@@ -42,7 +42,7 @@ public class AttemptRegex {
 
     private static void checkEmail(String email) {
         System.out.print("输入邮箱：" + email + " ,");
-        //正确格式: 1140443155@qq.com
+        //正确格式: 1940443155@qq.com
         //matches 是看能否完全将字符串与正则表达式匹配，能完全匹配返回true，正如下方把com改成co会导致返回false
         if (email.matches("\\w{5,30}@[a-zA-z\\d]{2,5}\\.com")) {
             System.out.println(" You are right!");

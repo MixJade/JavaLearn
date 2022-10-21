@@ -6,14 +6,14 @@ import java.util.Objects;
 
 public class JpgToBase64 {
     public static void main(String[] args) {
-        String pathStr = "C:\\Users\\11141\\Desktop\\星星.png";
+        String pathStr = "C:\\MixJade\\zooMarkdown\\星星.png";
         imageToBase64(pathStr);
     }
 
     private static void imageToBase64(String pathStr) {
         byte[] data = readImage(pathStr);
         String resultFileName = (pathStr.replaceAll(".+\\\\", "")).replaceAll("\\..+", "");
-        String resultFilePath = "C:\\Users\\11141\\Desktop\\" + resultFileName + "（图片）的base64.txt";
+        String resultFilePath = "C:\\MixJade\\zooMarkdown" + resultFileName + "（图片）的base64.txt";
         // 对字节数组Base64编码
         Base64.Encoder encoder = Base64.getEncoder();
         // 返回Base64编码过的字节数组字符串
