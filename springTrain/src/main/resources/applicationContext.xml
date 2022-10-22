@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--直接通过无参构造实例化bean，给bean起别名，起多个别名-->
+    <!--<bean id="bookDaoReality" name="firstDao secondDao" class="dao.BookDaoImpl"/>-->
+
+    <!--调用bean-->
+    <bean id="bookServiceReality" name="service" class="service.BookServiceImpl">
+        <property name="bookDao" ref="bookDaoFactoryBean"/>
+    </bean>
+    <!--通过静态工厂实例化bean-->
+    <!--<bean id="bookDaoFactory" class="dao.BookDaoFactory" factory-method="getBookDao"/>-->
+
+    <!--通过实例工厂实例化bean-->
+    <!--<bean id="bookDaoFactory" class="dao.BookDaoFactory"/>-->
+    <!--<bean id="bookDaoUser" factory-method="getBookDao" factory-bean="bookDaoFactory"/>-->
+
+    <!--使用FactoryBean实例化bean-->
+    <bean id="bookDaoFactoryBean" class="dao.BookDaoFactoryBean"/>
+</beans>
