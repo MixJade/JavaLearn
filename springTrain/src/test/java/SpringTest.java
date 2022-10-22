@@ -11,10 +11,13 @@ public class SpringTest {
     @Test
     public void testIoC() {
         //加载xml文件，获取容器对象
-        ApplicationContext acx = new ClassPathXmlApplicationContext("applicationContext.xml");
-//        // 获取资源
-//        BookService bookService = (BookService) acx.getBean("service");
-//        bookService.deposit();
+        ClassPathXmlApplicationContext acx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        // 获取资源
+        BookService bookService = (BookService) acx.getBean("service");
+        bookService.deposit();
+        //关闭容器以执行销毁方法
+        //acx.close();
+        acx.registerShutdownHook();
     }
 
     /**
@@ -23,9 +26,9 @@ public class SpringTest {
     @Test
     public void testBeanScope() {
         ApplicationContext acx = new ClassPathXmlApplicationContext("applicationContext.xml");
-//        BookDao bookDao1 = (BookDao) acx.getBean("secondDao");
-//        BookDao bookDao2 = (BookDao) acx.getBean("secondDao");
-//        System.out.println(bookDao1);
-//        System.out.println(bookDao2);
+        BookDao bookDao1 = (BookDao) acx.getBean("secondDao");
+        BookDao bookDao2 = (BookDao) acx.getBean("secondDao");
+        System.out.println(bookDao1);
+        System.out.println(bookDao2);
     }
 }

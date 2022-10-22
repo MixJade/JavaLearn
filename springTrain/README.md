@@ -249,12 +249,14 @@
     * 一样的，在每次加载配置文件时都会执行一遍
 
 ### 使用FactoryBean实例化bean
+
 > * 通过实例工厂实例化bean有缺点
 > * 一是两条xml语句配合使用没有意义
 > * 二是方法名不固定，每次都需要重新配置
 > * 后来spring整了一个接口，叫FactoryBean
 
 * 实现FactoryBean接口,重写部分方法
+
 ```java
 public class BookDaoFactoryBean implements FactoryBean<BookDao> {
 
@@ -277,15 +279,159 @@ public class BookDaoFactoryBean implements FactoryBean<BookDao> {
 }
 
 ```
+
 * 注意`isSingleton`方法是设置实例化的bean是单例还是实例
 * 默认为true,即单例；可以设置成false，即原型
 * 配置文件：
+
 ```
 <bean id="bookDaoFactoryBean" class="dao.BookDaoFactoryBean"/>
 ```
+
 * 加载配置文件会这样输出
+
 ```
 得到对象
 This is a constructor
 返回类型
 ```
+
+## bean的生命周期
+
+> * 重点
+
+### 生命周期阶段简述
+
+> * 一、初始化容器
+
+1. 创建对象（即内存分配）
+2. 执行构造方法  
+   这就是为什么前面会出现一加载配置文件会自动执行构造方法~~
+3. 执行属性注入(set操作)
+4. 执行bean初始化方法
+
+> * 二、使用bean
+
+* 执行业务操作
+
+> * 三、关闭/销毁容器
+
+* 执行bean的销毁方法
+
+## 操作，关于生命周期
+
+> * 自己提供生命周期方法，并去容器里面声明
+> * 通过实现特定接口来设置生命周期方法
+
+### 关于通过在容器中声明来执行初始化和销毁方法
+
+> * 了解即可，不常用，因为要在容器中声明
+
+* 在实现类中定义初始化和销毁方法，
+* 注意这个方法名字是自定义的，这样只是为了规范
+* BookDaoImpl.java
+
+```java
+public class BookDaoImpl implements BookDao {
+    public BookDaoImpl() {
+        System.out.println("This is a constructor");
+    }
+
+    @Override
+    public void store() {
+        System.out.println("The book is stored on the shelf");
+    }
+
+    public void init() {
+        System.out.println("Impl init==");
+    }
+
+    public void destroy() {
+        System.out.println("Impl destroy==");
+    }
+}
+```
+
+* 在配置文件中定义初始化和销毁方法
+
+```
+<bean id="bookDaoReality" name="firstDao secondDao" class="dao.BookDaoImpl" init-method="init" destroy-method="destroy"/>
+```
+
+* 输出结果:
+
+```
+This is a constructor
+Impl init==
+```
+
+* 可以看到销毁方法没有被执行，因为java虚拟机在执行销毁方法前就自动关闭了
+
+> * 关于通过在容器中声明来执行销毁方法，却没有执行，
+> * 只能在引用的方法中手动关闭，以执行销毁方法
+
+* 因为`ApplicationContext`中没有close方法，只能将它换成`ClassPathXmlApplicationContext`
+* 方式如下:
+
+```
+public void testIoC() {
+    //加载xml文件，获取容器对象
+    ClassPathXmlApplicationContext acx = new ClassPathXmlApplicationContext("applicationContext.xml");
+    // 获取资源
+    BookService bookService = (BookService) acx.getBean("service");
+    bookService.deposit();
+    //关闭容器以执行销毁方法
+    acx.close();
+}
+```
+
+* 可以发现销毁方法被执行了
+* 但是直接close会很暴力，因为关闭的是整个容器，
+* 如果后面还有操作，会导致无法执行
+
+> * 使用`registerShutdownHook()`来注册销毁钩子
+> * 向容器声明，在虚拟机关闭前执行销毁方法
+> * `acx.registerShutdownHook()`可以放在方法的任何地方，不会导致后面的操作无法进行
+
+```
+public void testIoC() {
+    //加载xml文件，获取容器对象
+    ClassPathXmlApplicationContext acx = new ClassPathXmlApplicationContext("applicationContext.xml");
+    // 获取资源
+    BookService bookService = (BookService) acx.getBean("service");
+    bookService.deposit();
+    //关闭容器以执行销毁方法
+    acx.registerShutdownHook();
+}
+```
+
+### 通过实现接口来执行初始化与销毁
+
+> * 通过实现InitializingBean与DisposableBean接口
+> * 来自动执行初始化与销毁
+> * 这样就不用在容器里面定义
+
+* 实现类
+
+```java
+public class BookDaoImpl implements BookDao, InitializingBean, DisposableBean {
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("InitializingBean==接口");
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("DisposableBean==接口");
+    }
+}
+```
+
+* 配置文件(很正常的方式)
+
+```
+<bean id="bookDaoReality" name="firstDao secondDao" class="dao.BookDaoImpl"/>
+```
+
+* 可以看到执行效果并没有什么差别，
+* 但是不用去容器里面配置
