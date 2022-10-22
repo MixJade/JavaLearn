@@ -412,6 +412,8 @@ public void testIoC() {
 > * 这样就不用在容器里面定义
 
 * 实现类
+* 小细节:初始化方法叫afterPropertiesSet
+* 意为在实例化->生成对象->属性填充之后执行
 
 ```java
 public class BookDaoImpl implements BookDao, InitializingBean, DisposableBean {
