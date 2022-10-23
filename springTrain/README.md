@@ -15,6 +15,12 @@
 * 依赖注入的基本原则是：应用组件不应该负责查找资源或者其他依赖的协作对象。
 * 配置对象的工作应该由IoC容器负责，“查找资源”的逻辑应该从应用组件的代码中抽取出来，交给IoC容器负责。
 
+* javaBean(来自javaSE,好像不是这里的bean):
+    * 也可称为实体类，其对象可用于封装数据
+    * 为了规范，成员变量需使用private修饰
+    * 提供成员变量对应的set、get方法
+    * 必须有一个无参构造器，有参构造器可以写
+
 ## IoC上手
 
 > * 管理什么?"Service和Dao"
@@ -605,5 +611,106 @@ public class BookServiceImpl implements BookService {
     public void setBookDao(BookDao bookDao) {
         this.bookDao = bookDao;
     }
+}
+```
+
+## 集合注入
+> * 在bean里面设置集合及setter,在容器注入集合元素
+> * value可以变成`bean ref=`，但是很麻烦，只是了解
+
+* BookGather.java
+```java
+public class BookGather implements BookDao {
+    private int[] array;
+    private List<String> list;
+    private Set<String> set;
+    private Map<String, String> map;
+    private Properties properties;
+
+    public void setArray(int[] array) {
+        this.array = array;
+    }
+
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
+    public void setSet(Set<String> set) {
+        this.set = set;
+    }
+
+    public void setMap(Map<String, String> map) {
+        this.map = map;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
+
+    public void store() {
+        System.out.println("book dao save ...");
+        System.out.println("遍历数组:" + Arrays.toString(array));
+        System.out.println("遍历List" + list);
+        System.out.println("遍历Set" + set);
+        System.out.println("遍历Map" + map);
+        System.out.println("遍历Properties" + properties);
+    }
+}
+```
+
+* 配置文件写法：
+```
+<bean id="bookDao" class="testGather.BookGather">
+    <!--数组注入-->
+    <property name="array">
+        <array>
+            <value>100</value>
+            <value>200</value>
+            <value>300</value>
+        </array>
+    </property>
+    <!--list集合注入-->
+    <property name="list">
+        <list>
+            <value>first</value>
+            <value>second</value>
+            <value>third</value>
+            <value>fourth</value>
+        </list>
+    </property>
+    <!--set集合注入-->
+    <property name="set">
+        <set>
+            <value>first</value>
+            <value>second</value>
+            <value>third</value>
+            <value>fourth</value>
+        </set>
+    </property>
+    <!--map集合注入-->
+    <property name="map">
+        <map>
+            <entry key="country" value="china"/>
+            <entry key="province" value="henan"/>
+            <entry key="city" value="kaifeng"/>
+        </map>
+    </property>
+    <!--Properties注入-->
+    <property name="properties">
+        <props>
+            <prop key="country">china</prop>
+            <prop key="province">henan</prop>
+            <prop key="city">kaifeng</prop>
+        </props>
+    </property>
+</bean>
+```
+* 最后输出:
+```
+@Test
+public void testGather(){
+    ClassPathXmlApplicationContext acx=new ClassPathXmlApplicationContext("applicationContext.xml");
+    BookDao bookDao= (BookDao) acx.getBean("bookDao");
+    bookDao.store();
 }
 ```

@@ -54,7 +54,9 @@
             </el-tab-pane>
             <el-tab-pane label="链接跳转" name="third">
                 <div class="subDiv">
-                    <a href="index.html"><el-button type="primary">返回首页</el-button></a>
+                    <a href="index.html">
+                        <el-button type="primary">返回首页</el-button>
+                    </a>
                 </div>
             </el-tab-pane>
         </el-tabs>
@@ -154,9 +156,7 @@
                     switch (resp.data) {
                         case "YES":
                             this.open2("注册成功")
-                            this.user = this.user01
-                            this.activeName = 'first'
-                            this.user01 = ''
+                            refresh()
                             break
                         case "NO":
                             this.open4("注册失败")
@@ -197,6 +197,12 @@
 
     function check_code() {
         document.getElementById("checkCodeImg").src = "http://localhost:8080/studentManage2/login/checkCode?" + new Date().getMilliseconds();
+    }
+
+    function refresh() {
+        setTimeout(function () {
+            location.reload();
+        },1500)
     }
 </script>
 </html>

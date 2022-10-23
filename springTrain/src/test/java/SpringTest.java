@@ -31,4 +31,13 @@ public class SpringTest {
         System.out.println(bookDao1);
         System.out.println(bookDao2);
     }
+    /**
+     * 测试集合注入
+     */
+    @Test
+    public void testGather(){
+        ClassPathXmlApplicationContext acx=new ClassPathXmlApplicationContext("applicationContext.xml");
+        BookDao bookDao= (BookDao) acx.getBean("bookDao");
+        bookDao.store();
+    }
 }

@@ -63,6 +63,7 @@ public class LoginServlet extends MyBaseServlet {
         }
         HttpSession session = req.getSession();
         String checkCode = (String) session.getAttribute("checkCode");
+        System.out.println("验证码"+checkCode+" 输入:"+line);
         if (checkCode.equalsIgnoreCase(line)) {
             resp.getWriter().write("YesCheck");
         } else {

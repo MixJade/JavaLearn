@@ -8,9 +8,9 @@
     <!--直接通过无参构造实例化bean，给bean起别名，起多个别名   -->
     <!--<bean id="bookDaoReality" name="firstDao secondDao" class="dao.BookDaoImpl"/>-->
 
-    <bean id="book00Dao" name="bookDa0o" class="dao.BookDaoImpl"/>
+<!--    <bean id="book00Dao" name="bookDa0o" class="dao.BookDaoImpl"/>-->
     <!--调用bean-->
-    <bean id="bookServiceReality" name="service" class="service.BookServiceImpl" autowire="byType"/>
+<!--    <bean id="bookServiceReality" name="service" class="service.BookServiceImpl" autowire="byType"/>-->
     <!--通过静态工厂实例化bean-->
     <!--<bean id="bookDaoFactory" class="dao.BookDaoFactory" factory-method="getBookDao"/>-->
 
@@ -20,4 +20,48 @@
 
     <!--使用FactoryBean实例化bean-->
     <!--<bean id="bookDaoFactoryBean" class="dao.BookDaoFactoryBean"/>-->
+    <bean id="bookDao" class="testGather.BookGather">
+        <!--数组注入-->
+        <property name="array">
+            <array>
+                <value>100</value>
+                <value>200</value>
+                <value>300</value>
+            </array>
+        </property>
+        <!--list集合注入-->
+        <property name="list">
+            <list>
+                <value>first</value>
+                <value>second</value>
+                <value>third</value>
+                <value>fourth</value>
+            </list>
+        </property>
+        <!--set集合注入-->
+        <property name="set">
+            <set>
+                <value>first</value>
+                <value>second</value>
+                <value>third</value>
+                <value>fourth</value>
+            </set>
+        </property>
+        <!--map集合注入-->
+        <property name="map">
+            <map>
+                <entry key="country" value="china"/>
+                <entry key="province" value="henan"/>
+                <entry key="city" value="kaifeng"/>
+            </map>
+        </property>
+        <!--Properties注入-->
+        <property name="properties">
+            <props>
+                <prop key="country">china</prop>
+                <prop key="province">henan</prop>
+                <prop key="city">kaifeng</prop>
+            </props>
+        </property>
+    </bean>
 </beans>
