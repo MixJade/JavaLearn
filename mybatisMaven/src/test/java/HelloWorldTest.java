@@ -132,7 +132,7 @@ public class HelloWorldTest {
     @Test
     public void saveCodeTest() {
         // 保存来自不易的代码
-        SaveCode02 c02 = new SaveCode02("C:\\Users\\11141\\Documents\\MarkMixJade\\Mybatis笔记.md");
+        SaveCode02 c02 = new SaveCode02("C:\\MixJade\\zooMarkdown\\Mybatis笔记.md");
         System.out.println(c02.prospective());
     }
 }

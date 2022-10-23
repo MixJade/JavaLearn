@@ -261,7 +261,7 @@
 public class BookDaoFactoryBean implements FactoryBean<BookDao> {
 
     @Override
-    public BookDao getObject() throws Exception {
+    public BookDao getObject() {
         System.out.println("得到对象");
         return new BookDaoImpl();
     }
@@ -418,12 +418,12 @@ public void testIoC() {
 ```java
 public class BookDaoImpl implements BookDao, InitializingBean, DisposableBean {
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         System.out.println("InitializingBean==接口");
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
         System.out.println("DisposableBean==接口");
     }
 }
@@ -437,3 +437,173 @@ public class BookDaoImpl implements BookDao, InitializingBean, DisposableBean {
 
 * 可以看到执行效果并没有什么差别，
 * 但是不用去容器里面配置
+
+## 依赖注入
+
+> 通过set方法、构造函数、容器自动装配的方式向类中传递参数
+
+### 前言
+
+> 只关于set方法、构造函数
+
+* 向一个类中传递参数有两种方法:
+    * setter方法
+    * 构造函数
+* 依赖注入描述了在容器中建立bean与bean之间的关系的过程
+* 依赖注入的两种类型：
+    * 引用类型(其他的bean)
+    * 简单类型(基本数据类型与String)
+
+### 实操
+
+> 分为setter方法、构造器方法
+
+#### setter方法
+
+> * 通过name进行调用相应的setter方法
+> * 注意这个name是setter方法的形参名,如果形参名不一样会找不到
+> * 通过value进行赋值(只限简单类型)
+> * 或者通过ref进行赋值(引用类型)
+> * ref的引用类型---就是一开始的依赖注入
+
+* 先设置setter方法
+
+```java
+public class BookDaoImpl implements BookDao {
+    private String bookName;
+    private int bookPrice;
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    public void setBookPrice(int bookPrice) {
+        this.bookPrice = bookPrice;
+    }
+
+    @Override
+    public void store() {
+        System.out.println("The book is stored on the shelf");
+        System.out.println(bookName + ":" + bookPrice);
+    }
+}
+```
+
+* 再在容器中配置
+
+```
+<!--通过setter注入依赖-->
+<bean id="firstDao" class="dao.BookDaoImpl">
+    <property name="bookName" value="MyBook"/>
+    <property name="bookPrice" value="3"/>
+</bean>
+```
+
+#### 构造器依赖注入方法
+
+> * 比setter严谨，因为不能注入空值
+> * 官方推荐，但平时还是用setter
+> * 因为setter灵活
+> * 一样的，简单类型用value，引用类型用ref
+
+```java
+public class BookDaoImpl implements BookDao {
+    private final String bookName;
+    private final int bookPrice;
+
+
+    public BookDaoImpl(String bookName, int bookPrice) {
+        this.bookName = bookName;
+        this.bookPrice = bookPrice;
+    }
+
+    @Override
+    public void store() {
+        System.out.println("The book is stored on the shelf");
+        System.out.println(bookName + ":" + bookPrice);
+    }
+}
+```
+
+```
+<bean id="firstDao" class="dao.BookDaoImpl">
+    <constructor-arg name="bookName" value="A Book"/>
+    <constructor-arg name="bookPrice" value="900"/>
+</bean>
+<!--调用bean-->
+<bean id="bookServiceReality" name="service" class="service.BookServiceImpl">
+    <property name="bookDao" ref="firstDao"/>
+</bean>
+```
+
+> * 除了通过name来声明是哪个参数，
+> * 还可以通过type声明类型、index声明位置
+> * 如果不进行声明，或者通过type声明但相应的类型不唯一，就会按容器的配置顺序
+
+通过type声明类型
+
+```
+<bean id="firstDao" class="dao.BookDaoImpl">
+    <constructor-arg type="java.lang.String" value="A Book"/>
+    <constructor-arg type="int" value="900"/>
+</bean>
+```
+
+index声明位置
+
+```
+<bean id="firstDao" class="dao.BookDaoImpl">
+    <constructor-arg index="0" value="A Book"/>
+    <constructor-arg index="1" value="900"/>
+</bean>
+```
+
+不进行声明
+
+```
+<bean id="firstDao" class="dao.BookDaoImpl">
+    <constructor-arg value="A Book"/>
+    <constructor-arg value="900"/>
+</bean>
+```
+
+#### 容器自动装配
+
+> * 加入参数autowire
+> * 当然还是要相应的setter方法
+> * 有byName，通过相应的setter方法参数的ID或名字来在容器中查找相符合的bean
+> * 有byType，通过相应setter方法在容器中查找相符合的类型
+> * 有constructor，通过构造器，原理差不多
+
+byName
+
+```
+<bean id="bookDao" name="firstDao" class="dao.BookDaoImpl"/>
+<!--调用bean-->
+<bean id="bookServiceReality" name="service" class="service.BookServiceImpl" autowire="byName"/>
+```
+
+byType,实现了对应接口的类也算
+
+```
+<bean id="book00Dao" name="bookDa0o" class="dao.BookDaoImpl"/>
+<!--调用bean-->
+<bean id="bookServiceReality" name="service" class="service.BookServiceImpl" autowire="byType"/>
+```
+
+附:对应的setter方法
+
+```
+public class BookServiceImpl implements BookService {
+    private BookDao bookDao;
+    @Override
+    public void deposit() {
+        System.out.println("You are saving a book");
+        bookDao.store();
+    }
+
+    public void setBookDao(BookDao bookDao) {
+        this.bookDao = bookDao;
+    }
+}
+```
