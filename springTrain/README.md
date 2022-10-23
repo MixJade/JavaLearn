@@ -739,10 +739,18 @@ public void testGather(){
 
 ```
 <!--    管理DruidDataSource对象-->
-<bean class="com.alibaba.druid.pool.DruidDataSource">
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
     <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
     <property name="url" value="jdbc:mysql://localhost:3306/spring_db"/>
     <property name="username" value="root"/>
     <property name="password" value="root"/>
 </bean>
+```
+
+* 直接输出参数
+
+```
+ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+DataSource dataSource = (DataSource) ctx.getBean("dataSource");
+System.out.println(dataSource);
 ```
