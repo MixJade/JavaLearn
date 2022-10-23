@@ -73,7 +73,7 @@
     <!--    3.使用属性占位符${}读取properties文件中的属性-->
     <!--    说明：idea自动识别${}加载的属性值，需要手工点击才可以查阅原始书写格式-->
     <!--classpath*:*.properties  ：  设置加载当前工程类路径和当前工程所依赖的所有jar包中的所有properties文件-->
-    <context:property-placeholder location="classpath*:*.properties" system-properties-mode="NEVER"/>
+    <context:property-placeholder location="classpath*:*.properties" />
     <bean class="com.alibaba.druid.pool.DruidDataSource">
         <property name="driverClassName" value="${jdbc.driver}"/>
         <property name="url" value="${jdbc.url}"/>

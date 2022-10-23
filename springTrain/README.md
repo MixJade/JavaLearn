@@ -796,6 +796,8 @@ jdbc.password=root
 ```
 
 * 然后再引入properties文件
+* `system-properties-mode="NEVER"`意思是，不加载系统环境属性,其实去掉比较好
+* 加上，只是为了方便获取在配置文件中设定的值
 
 ```
 <!--classpath*:*.properties  ：  设置加载当前工程类路径和当前工程所依赖的所有jar包中的所有properties文件-->
