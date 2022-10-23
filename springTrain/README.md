@@ -720,7 +720,7 @@ public void testGather(){
 }
 ```
 
-## 注入第三方数据源
+## 数据源对象管理
 
 > * 先找到包里的datasource文件
 > * 引入容器，注入相应值
@@ -753,4 +753,71 @@ public void testGather(){
 ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
 DataSource dataSource = (DataSource) ctx.getBean("dataSource");
 System.out.println(dataSource);
+```
+
+## 加载properties文件
+
+* 首先要引入druid包，并配置jdbc.properties文件
+* pom.xml
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.2.13-SNSAPSHOT</version>
+</dependency>
+```
+
+* jdbc.properties
+
+```
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://127.0.0.1:3306/spring_db
+jdbc.username=root
+jdbc.password=root
+```
+
+* 随后在容器内配置命名空间context
+* 先是开头
+* 将beans的相关内容都复制一份,
+* 在声明处的冒号后面加上context,并将复制内容里的beans改成context
+* 如下：
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+">
+```
+
+* 然后再引入properties文件
+
+```
+<!--classpath*:*.properties  ：  设置加载当前工程类路径和当前工程所依赖的所有jar包中的所有properties文件-->
+<context:property-placeholder location="classpath*:*.properties" system-properties-mode="NEVER"/>
+```
+
+* 接着如此加载properties文件，
+* 这里不使用德鲁伊，只是获取相应的配置文件中的值
+
+```
+<!--使用属性占位符${}读取properties文件中的属性-->
+<!--说明：idea自动识别${}加载的属性值，需要手工点击才可以查阅原始书写格式-->
+<!--classpath*:*.properties  ：  设置加载当前工程类路径和当前工程所依赖的所有jar包中的所有properties文件-->
+<context:property-placeholder location="classpath*:*.properties" system-properties-mode="NEVER"/>
+<bean class="com.alibaba.druid.pool.DruidDataSource">
+    <property name="driverClassName" value="${jdbc.driver}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+</bean>
+
+<bean id="bookDao" class="dao.BookDaoImpl">
+    <property name="bookName" value="${jdbc.driver}"/>
+</bean>
 ```
