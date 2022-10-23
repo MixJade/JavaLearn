@@ -615,10 +615,12 @@ public class BookServiceImpl implements BookService {
 ```
 
 ## 集合注入
+
 > * 在bean里面设置集合及setter,在容器注入集合元素
 > * value可以变成`bean ref=`，但是很麻烦，只是了解
 
 * BookGather.java
+
 ```java
 public class BookGather implements BookDao {
     private int[] array;
@@ -659,6 +661,7 @@ public class BookGather implements BookDao {
 ```
 
 * 配置文件写法：
+
 ```
 <bean id="bookDao" class="testGather.BookGather">
     <!--数组注入-->
@@ -705,7 +708,9 @@ public class BookGather implements BookDao {
     </property>
 </bean>
 ```
+
 * 最后输出:
+
 ```
 @Test
 public void testGather(){
@@ -713,4 +718,31 @@ public void testGather(){
     BookDao bookDao= (BookDao) acx.getBean("bookDao");
     bookDao.store();
 }
+```
+
+## 注入第三方数据源
+
+> * 先找到包里的datasource文件
+> * 引入容器，注入相应值
+
+* 在pom.xml引入坐标
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.1.16</version>
+</dependency>
+```
+
+* 在容器内注入
+
+```
+<!--    管理DruidDataSource对象-->
+<bean class="com.alibaba.druid.pool.DruidDataSource">
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost:3306/spring_db"/>
+    <property name="username" value="root"/>
+    <property name="password" value="root"/>
+</bean>
 ```
