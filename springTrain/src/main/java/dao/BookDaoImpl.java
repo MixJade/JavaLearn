@@ -1,5 +1,8 @@
 package dao;
 
+import org.springframework.stereotype.Repository;
+
+@Repository("bookDaoImpl")
 public class BookDaoImpl implements BookDao {
     private String bookName;
     private int bookPrice;
