@@ -72,36 +72,43 @@ ApplicationContext acx=new AnnotationConfigApplicationContext(SpringConfig.class
 > * 现在使用需要引入一个包
 
 ```html
+
 <dependency>
     <groupId>javax.annotation</groupId>
     <artifactId>javax.annotation-api</artifactId>
     <version>1.3.2</version>
 </dependency>
 ```
+
 * 代码示例如下
+
 ```java
+
 @Service()
 @Scope("singleton")
 public class BookServiceImpl implements BookService {
-  public BookServiceImpl() {
-    System.out.println("hhhhhhhhhhh");
-  }
-  @Override
-  public void deposit() {
-    System.out.println("You are saving a book");
-  }
+    public BookServiceImpl() {
+        System.out.println("hhhhhhhhhhh");
+    }
 
-  @PostConstruct
-  public void init(){
-    System.out.println("这是在构造方法之后");
-  }
-  @PreDestroy
-  public void destroy(){
-    System.out.println("只有单例作用域才会执行销毁方法");
-    System.out.println("这是在调用关闭钩子后，在销毁之前");
-  }
+    @Override
+    public void deposit() {
+        System.out.println("You are saving a book");
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("这是在构造方法之后");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("只有单例作用域才会执行销毁方法");
+        System.out.println("这是在调用关闭钩子后，在销毁之前");
+    }
 }
 ```
+
 ```
 public void testIoC() {
     AnnotationConfigApplicationContext acx = new AnnotationConfigApplicationContext(SpringConfig.class);
@@ -111,5 +118,80 @@ public void testIoC() {
     System.out.println(bookService);
     bookService.deposit();
     acx.close();
+}
+```
+
+## 依赖注入
+
+* 自动装配，像这样
+* 是通过暴力反射进行注入，所以可以不用setter方法
+
+```
+@Autowired
+private BookDao bookDao;
+```
+
+* 也可以指定名字
+
+```
+@Autowired
+@Qualifier("bookDaoImpl")
+private BookDao bookDao;
+```
+
+* 注解除了放在值上面，也可以放在set方法上面，但是set方法被我干掉了
+* 通过value注解来设置简单类型的值
+
+```
+@Value("zhangSan")
+private String bookName;
+@Value("900")
+private int bookPrice;
+```
+
+* 这个value可以去引入配置文件里的参数
+* 操作流程如下
+* 先将`SpringConfig.java`提出来，放在java文件夹下，
+* 这是为了好好解析resources文件夹里的文件，不然idea会警告(虽然照样用就是了)
+* 通过`@PropertySource`注解，加入读取的`properties`文件名
+* 在`properties`文件中写键值对
+* 在实现类的相应value中，使用占位符
+
+流程展示
+
+* SpringConfig.java
+
+```java
+
+@Configuration
+@ComponentScan({"dao", "service"})
+@PropertySource("mySelf.properties")
+public class SpringConfig {
+}
+```
+
+* mySelf.properties
+
+```
+myBookName=OceanCity
+myMoney=800
+```
+
+* BookDaoImpl.java
+
+```java
+
+@Repository("bookDaoImpl")
+public class BookDaoImpl implements BookDao {
+    @Value("${myBookName}")
+    private String bookName;
+    @Value("${myMoney}")
+    private int bookPrice;
+
+    @Override
+    public void store() {
+        System.out.println("The book is stored on the shelf");
+        System.out.println(bookName + ":" + bookPrice);
+    }
 }
 ```

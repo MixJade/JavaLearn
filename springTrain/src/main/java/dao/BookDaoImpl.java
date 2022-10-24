@@ -1,19 +1,14 @@
 package dao;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository("bookDaoImpl")
 public class BookDaoImpl implements BookDao {
+    @Value("${myBookName}")
     private String bookName;
+    @Value("${myMoney}")
     private int bookPrice;
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public void setBookPrice(int bookPrice) {
-        this.bookPrice = bookPrice;
-    }
 
     @Override
     public void store() {
