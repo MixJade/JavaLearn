@@ -3,6 +3,10 @@ package service;
 import dao.BookDao;
 
 public class BookServiceImpl implements BookService {
+    public BookServiceImpl() {
+        System.out.println("hhhhhhhhhhh");
+    }
+
     private BookDao bookDao;
     @Override
     public void deposit() {

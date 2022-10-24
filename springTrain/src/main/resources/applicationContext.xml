@@ -84,4 +84,7 @@
     <bean id="bookDao" class="dao.BookDaoImpl">
         <property name="bookName" value="${jdbc.driver}"/>
     </bean>
+    <bean id="service" class="service.BookServiceImpl" lazy-init="true">
+        <property name="bookDao" ref="bookDao"/>
+    </bean>
 </beans>

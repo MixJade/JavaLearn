@@ -1,7 +1,10 @@
 import dao.BookDao;
 import org.junit.Test;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import service.BookService;
 
 public class SpringTest {
@@ -10,14 +13,15 @@ public class SpringTest {
      */
     @Test
     public void testIoC() {
-        //加载xml文件，获取容器对象
-        ClassPathXmlApplicationContext acx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ClassPathResource resource = new ClassPathResource("applicationContext.xml");
+        BeanFactory bf=new XmlBeanFactory(resource);
+//        BeanFactory acx = new ClassPathXmlApplicationContext();
         // 获取资源
-        BookService bookService = (BookService) acx.getBean("service");
-        bookService.deposit();
-        //关闭容器以执行销毁方法
-        //acx.close();
-        acx.registerShutdownHook();
+//        BookService bookService = (BookService) acx.getBean("service");
+//        bookService.deposit();
+//        //关闭容器以执行销毁方法
+//        //acx.close();
+//        acx.registerShutdownHook();
     }
 
     /**
@@ -36,8 +40,8 @@ public class SpringTest {
      */
     @Test
     public void testGather(){
-        ClassPathXmlApplicationContext acx=new ClassPathXmlApplicationContext("applicationContext.xml");
-        BookDao bookDao= (BookDao) acx.getBean("bookDao");
+        ApplicationContext acx=new ClassPathXmlApplicationContext("applicationContext.xml");
+        BookDao bookDao= acx.getBean(BookDao.class);
         bookDao.store();
     }
 }

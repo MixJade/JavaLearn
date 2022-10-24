@@ -1,3 +1,35 @@
+<!-- TOC -->
+* [Spring学习开始](#spring)
+  * [控制反转IoC (Inversion of Control)，](#ioc--inversion-of-control--)
+  * [依赖注入DI（Dependency Injection）](#didependency-injection)
+  * [IoC上手](#ioc)
+  * [DI上手](#di)
+  * [Spring配置文件](#spring)
+    * [关于单例与原型的区别](#)
+    * [为什么bean默认设计成单例？](#bean)
+  * [生成bean的三种方式](#bean)
+    * [使用FactoryBean实例化bean](#factorybeanbean)
+  * [bean的生命周期](#bean)
+    * [生命周期阶段简述](#)
+  * [操作，关于生命周期](#)
+    * [关于通过在容器中声明来执行初始化和销毁方法](#)
+    * [通过实现接口来执行初始化与销毁](#)
+  * [依赖注入](#)
+    * [前言](#)
+    * [实操](#)
+      * [setter方法](#setter)
+      * [构造器依赖注入方法](#)
+      * [容器自动装配](#)
+  * [集合注入](#)
+  * [数据源对象管理](#)
+  * [加载properties文件](#properties)
+  * [总结:加载properties文件](#--properties)
+  * [获取bean](#bean)
+  * [创建容器](#)
+  * [附:bean的延迟加载](#--bean)
+* [总结](#)
+<!-- TOC -->
+
 # Spring学习开始
 
 > * spring framework是一个bean容器、优秀的开源框架，
@@ -823,3 +855,116 @@ jdbc.password=root
     <property name="bookName" value="${jdbc.driver}"/>
 </bean>
 ```
+
+## 总结:加载properties文件
+
+* 不加载系统属性
+
+```
+<context:property-placeholder location="jdbc.properties" system-properties-mode="NEVER"/>
+```
+
+* 加载多个properties文件
+
+```
+<context:property-placeholder location="jdbc.properties,msg.properties" />
+```
+
+* 加载所有properties文件(只是说明，不可用)
+
+```
+<context:property-placeholder location="*.properties" />
+```
+
+* 加载properties文件标准形式(只是说明，不可用)
+
+```
+<context:property-placeholder location="classpath:*.properties" />
+```
+
+* 从类路径或jar中搜索并加载properties文件
+
+```
+<context:property-placeholder location="classpath*:*.properties" />
+```
+
+## 获取bean
+
+* 方式一:使用bean名称获取
+
+```
+BookDao bookDao= (BookDao) acx.getBean("bookDao");
+```
+
+* 方式二:使用bean名称并指定类型
+
+```
+BookDao bookDao= acx.getBean("bookDao",BookDao.class);
+```
+
+* 方式三:指定类型(必须要类型唯一)
+
+```
+BookDao bookDao= acx.getBean(BookDao.class);
+```
+
+## 创建容器
+
+* 方式一:类路径加载配置文件
+
+```
+ApplicationContext acx=new ClassPathXmlApplicationContext("applicationContext.xml");
+```
+
+* 方式二:文件路径加载配置文件
+* (默认从源根开始找)
+
+```
+ApplicationContext acx=new FileSystemXmlApplicationContext("src/main/resources/applicationContext.xml");
+```
+
+* 加载多个配置文件
+
+```
+ApplicationContext acx=new ClassPathXmlApplicationContext("applicationContext.xml","b.xml");
+```
+
+## 附:bean的延迟加载
+
+> * 在创建容器时会默认将里面的构造方法执行一遍
+> * 有两种方法可以避免
+> * 一是在配置文件中设置lazy-init="true"
+> * 二是通过顶层接口BeanFactory加载
+
+* 配置文件中设置lazy-init="true"
+
+```
+<bean id="service" class="service.BookServiceImpl" lazy-init="true">
+    <property name="bookDao" ref="bookDao"/>
+</bean>
+```
+
+* 通过顶层容器创建，所有bean均为延迟加载
+
+```
+ClassPathResource resource = new ClassPathResource("applicationContext.xml");
+BeanFactory bf=new XmlBeanFactory(resource);
+```
+
+# 总结
+
+> * 容器相关
+
+![](/noteJPG/容器相关.jpg "容器相关")
+
+> * 容器层次图
+
+![](/noteJPG/容器层次图.jpg "容器层次图")
+
+> * bean相关
+
+![](/noteJPG/bean相关.jpg "bean相关")
+
+> * 依赖注入相关
+
+![](/noteJPG/依赖注入相关.jpg "依赖注入相关")
