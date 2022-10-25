@@ -195,3 +195,75 @@ public class BookDaoImpl implements BookDao {
     }
 }
 ```
+
+## 通过注解给第三方bean赋值
+
+* 直接写在配置类里
+* 通过bean注解进行声明
+
+```java
+
+@Configuration
+@ComponentScan({"dao", "service"})
+@PropertySource("mySelf.properties")
+public class SpringConfig {
+
+    @Bean
+    public DataSource dataSource() {
+        DruidDataSource dds = new DruidDataSource();
+        dds.setDriverClassName("com.mysql.jdbc.Driver");
+        dds.setUrl("jdbc:mysql://localhost:3306/spring_db");
+        dds.setUsername("root");
+        dds.setPassword("root");
+        return dds;
+    }
+}
+```
+
+* 还有一种方法
+* 另外开一个配置类(可以放在其他文件夹)，在里面写配置
+* 然后在主配置类里通过import注解导入
+* 注意:import注解只能有一个，如果想导多个其他配置类，需要通过数组的形式导入
+* 另外，bean下的形参会通过类型进行自动装配
+
+```java
+
+@Configuration
+public class JdbcConfig {
+    //1.定义一个方法获得要管理的对象
+    @Value("com.mysql.jdbc.Driver")
+    private String driver;
+    @Value("jdbc:mysql://localhost:3306/spring_db")
+    private String url;
+    @Value("root")
+    private String userName;
+    @Value("root")
+    private String password;
+
+    //2.添加@Bean，表示当前方法的返回值是一个bean
+    //@Bean修饰的方法，形参根据类型自动装配
+    @Bean
+    public DataSource dataSource(BookDao bookDao) {
+        System.out.println(bookDao);
+        DruidDataSource ds = new DruidDataSource();
+        ds.setDriverClassName(driver);
+        ds.setUrl(url);
+        ds.setUsername(userName);
+        ds.setPassword(password);
+        return ds;
+    }
+}
+
+```
+
+* 在主配置类中通过Import注解导入
+
+```java
+
+@Configuration
+@ComponentScan({"dao", "service"})
+@PropertySource("mySelf.properties")
+@Import(JdbcConfig.class)
+public class SpringConfig {
+}
+```
