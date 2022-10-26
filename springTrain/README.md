@@ -267,3 +267,7 @@ public class JdbcConfig {
 public class SpringConfig {
 }
 ```
+
+## XML与注解的区别
+
+* ![XML与注解的区别](noteJPG/XML与注解区别.jpg)
