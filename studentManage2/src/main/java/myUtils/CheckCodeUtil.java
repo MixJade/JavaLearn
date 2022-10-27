@@ -4,8 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
@@ -26,12 +24,16 @@ public class CheckCodeUtil {
      * @param os         输出流
      * @param verifySize 验证码长度
      * @return 验证码字符
-     * @throws IOException IO流异常
      */
-    public static String outputVerifyImage(int w, int h, OutputStream os, int verifySize) throws IOException {
-        String verifyCode = generateVerifyCode(verifySize);
-        outputImage(w, h, os, verifyCode);
-        return verifyCode;
+    public static String outputVerifyImage(int w, int h, OutputStream os, int verifySize) {
+        try {
+            String verifyCode = generateVerifyCode(verifySize);
+            outputImage(w, h, os, verifyCode);
+            return verifyCode;
+        } catch (IOException e) {
+            System.out.println("验证码生成错误" + e);
+        }
+        return "1234";
     }
 
     /**
@@ -53,49 +55,6 @@ public class CheckCodeUtil {
         return verifyCode.toString();
     }
 
-    /**
-     * 生成随机验证码文件,并返回验证码值 (生成图片形式，用的较少)
-     *
-     * @param w          宽度
-     * @param h          高度
-     * @param outputFile 输出
-     * @param verifySize 验证码长度
-     * @return 验证码字符
-     */
-    public static String outputVerifyImage(int w, int h, File outputFile, int verifySize) {
-        String verifyCode = generateVerifyCode(verifySize);
-        outputImage(w, h, outputFile, verifyCode);
-        return verifyCode;
-    }
-
-
-    /**
-     * 生成指定验证码图像文件
-     *
-     * @param w          宽度
-     * @param h          高度
-     * @param outputFile 输出流
-     * @param code       验证码字符
-     */
-    public static void outputImage(int w, int h, File outputFile, String code) {
-        if (outputFile == null) {
-            return;
-        }
-        File dir = outputFile.getParentFile();
-        //文件不存在
-        if (!dir.exists()) {
-            //创建
-            dir.mkdirs();
-        }
-        try {
-            outputFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(outputFile);
-            outputImage(w, h, fos, code);
-            fos.close();
-        } catch (IOException e) {
-            System.out.println("验证码图片生成出现问题:\n" + e);
-        }
-    }
 
     /**
      * 输出指定验证码图片流

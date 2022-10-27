@@ -13,7 +13,7 @@ public class JdbcConfig {
     //1.定义一个方法获得要管理的对象
     @Value("com.mysql.jdbc.Driver")
     private String driver;
-    @Value("jdbc:mysql://localhost:3306/spring_db")
+    @Value("jdbc:mysql://localhost:3306/shixun0515?useSSL=true")
     private String url;
     @Value("root")
     private String userName;
