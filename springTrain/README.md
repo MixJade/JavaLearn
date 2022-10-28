@@ -11,12 +11,6 @@
         <version>5.3.23</version>
     </dependency>
     <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.13.2</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>druid</artifactId>
         <version>1.2.13-SNSAPSHOT</version>
@@ -40,6 +34,17 @@
         <groupId>org.mybatis</groupId>
         <artifactId>mybatis-spring</artifactId>
         <version>2.0.7</version>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.2</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>5.3.23</version>
     </dependency>
 </dependencies>
 ```
@@ -172,3 +177,43 @@ public void testMybatis(){
 * 文件夹整体是这样的
 
 ![文件夹长相](noteJPG/Spring整合Mybatis.jpg)
+
+# 整合Junit
+
+* 先导入坐标(前面已经导入过)
+
+```html
+
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.13.2</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-test</artifactId>
+    <version>5.3.23</version>
+</dependency>
+```
+
+* 再写一个测试类
+* 注意开头两个注解(第二个导入自己的配置类)
+
+```java
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = SpringConfig.class)
+public class SpringTest {
+    @Autowired
+    private StudentService service;
+
+    @Test
+    public void testMybatis() {
+        List<StudentsTable> studentsTables = service.selectAll();
+        for (StudentsTable studentsTable : studentsTables) {
+            System.out.println(studentsTable);
+        }
+    }
+}
+```
