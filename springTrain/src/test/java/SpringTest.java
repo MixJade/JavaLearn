@@ -1,15 +1,19 @@
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import service.BookService;
+import pojo.StudentsTable;
+import service.StudentService;
+
+import java.util.List;
 
 public class SpringTest {
-    /**
-     * IoC的尝试
-     */
     @Test
-    public void testIoC() {
+    public void testMybatis(){
         AnnotationConfigApplicationContext acx = new AnnotationConfigApplicationContext(SpringConfig.class);
-        BookService bookService = acx.getBean(BookService.class);
-        bookService.deposit();
+        StudentService service=acx.getBean(StudentService.class);
+        List<StudentsTable> studentsTables=service.selectAll();
+        for (StudentsTable studentsTable:studentsTables){
+            System.out.println(studentsTable);
+        }
     }
+
 }

@@ -1,29 +1,22 @@
 package myConfig;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import dao.BookDao;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Configuration
 public class JdbcConfig {
-    //1.定义一个方法获得要管理的对象
-    @Value("com.mysql.jdbc.Driver")
+    @Value("${jdbc.driver}")
     private String driver;
-    @Value("jdbc:mysql://localhost:3306/shixun0515?useSSL=true")
+    @Value("${jdbc.url}")
     private String url;
-    @Value("root")
+    @Value("${jdbc.username}")
     private String userName;
-    @Value("root")
+    @Value("${jdbc.password}")
     private String password;
-    //2.添加@Bean，表示当前方法的返回值是一个bean
-    //@Bean修饰的方法，形参根据类型自动装配
     @Bean
-    public DataSource dataSource(BookDao bookDao){
-        System.out.println(bookDao);
+    public DataSource dataSource(){
         DruidDataSource ds = new DruidDataSource();
         ds.setDriverClassName(driver);
         ds.setUrl(url);
