@@ -1,8 +1,10 @@
 # 关于AOP编程
+
 > * SpringAOP本质是代理模式
 > * AOP核心概念有两个:目标对象和代理
 
 ## AOP概念
+
 ![AOP概念](noteJPG/AOP概念.jpg)
 ![AOP核心概念](noteJPG/AOP核心概念.jpg)
 ![AOP图解](noteJPG/AOP图解.jpg)
@@ -96,3 +98,41 @@ public class MyAdvice {
 public class SpringConfig {
 }
 ```
+
+# 关于around的注解
+
+* 把配置类这样改就行，完全就是大改
+* 因为这位注解有严格的格式
+* 这个格式给其他的注解通用
+
+```java
+
+@Component
+@Aspect
+public class MyAdvice {
+    @Pointcut("execution(void testAOP.AOPTest.*Method())")//芝士匹配所有以Method的方法
+    private void needMethod() {
+    }
+
+    @Around("needMethod()")
+    public Object adviceMethod(ProceedingJoinPoint pjp) throws Throwable {
+        System.out.println("这是切片");
+        long beginTime = System.currentTimeMillis();
+        Object obj = pjp.proceed();
+        Thread.sleep(200);
+        long endTime = System.currentTimeMillis();
+        long spendTime = endTime - beginTime;
+        System.out.println("所耗费的时间为" + spendTime);
+        return obj;
+    }
+}
+```
+* 注意事项
+![环绕通知注意事项](noteJPG/环绕通知注意事项.jpg)
+* 其实AOP的通知一共五种类型
+![AOP五种通知类型](noteJPG/AOP五种通知类型.jpg)
+
+# 切入点表达式书写技巧及规范
+![使用通配符描述表达式](noteJPG/使用通配符描述表达式.jpg)
+![切入点表达式格式](noteJPG/切入点表达式格式.jpg)
+![表达式书写规范](noteJPG/表达式书写规范.jpg)
