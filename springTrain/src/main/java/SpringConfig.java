@@ -1,12 +1,10 @@
 import myConfig.JdbcConfig;
 import myConfig.MybatisConfig;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 
 @Configuration
-@ComponentScan({"service","dao"})
+@ComponentScan({"service","dao","testAOP"})
+@EnableAspectJAutoProxy
 @PropertySource("classpath:jdbc.properties")
 @Import({JdbcConfig.class, MybatisConfig.class})
 public class SpringConfig {
