@@ -127,12 +127,34 @@ public class MyAdvice {
     }
 }
 ```
+
 * 注意事项
-![环绕通知注意事项](noteJPG/环绕通知注意事项.jpg)
+  ![环绕通知注意事项](noteJPG/环绕通知注意事项.jpg)
 * 其实AOP的通知一共五种类型
-![AOP五种通知类型](noteJPG/AOP五种通知类型.jpg)
+  ![AOP五种通知类型](noteJPG/AOP五种通知类型.jpg)
 
 # 切入点表达式书写技巧及规范
+
 ![使用通配符描述表达式](noteJPG/使用通配符描述表达式.jpg)
 ![切入点表达式格式](noteJPG/切入点表达式格式.jpg)
 ![表达式书写规范](noteJPG/表达式书写规范.jpg)
+
+# 关于切入点的信息
+
+> * 通过pjp.getSignature获取切入点的签名对象
+> * 通过切入点的签名对象来获取相应的信息
+
+```
+Signature signature = pjp.getSignature();//获取切入点签名
+System.out.println("所引用类型为:" + signature.getDeclaringType());
+System.out.println("所引用的类为:" + signature.getDeclaringTypeName());
+System.out.println("切入点名为:" + signature.getName());
+```
+
+* 输出结果如下
+
+```
+所引用类型为:interface testAOP.AOPTest
+所引用的类为:testAOP.AOPTest
+切入点名为:firstMethod
+```
