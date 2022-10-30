@@ -1,6 +1,9 @@
+import baiduCheck.ResourcesService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import pojo.StudentsTable;
@@ -46,5 +49,13 @@ public class SpringTest {
     public void testAOPThrow() {
         String s = aopTest.fourthMethod();
         System.out.println(s);
+    }
+
+    @Test
+    public void baiduCheck(){
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+        ResourcesService resourcesService = ctx.getBean(ResourcesService.class);
+        boolean flag = resourcesService.openURL("https://pan.baidu.com/haha", "root ");
+        System.out.println(flag);
     }
 }

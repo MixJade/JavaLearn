@@ -330,3 +330,87 @@ public class MyAdvice {
 ![JoinPoint的用法](noteJPG/JoinPoint的用法.jpg)
 ![两种获取返回值的方法](noteJPG/两种获取返回值的方法.jpg)
 ![两种方法获取异常](noteJPG/两种方法获取异常.jpg)
+
+# 案例:验证密码
+
+> * 当然不会真的验证
+> * 百度网盘的密钥是跟URL绑定的，两个一起验证
+> * 这个逻辑是展示通过spring验证密钥是否正确
+
+* 两个接口不言而喻
+* Dao接口的实现类
+
+```java
+
+@Repository
+public class ResourcesDaoImpl implements ResourcesDao {
+    @Override
+    public boolean readResources(String url, String password) {
+        System.out.println(password.length());
+        //模拟校验
+        return password.equals("root");
+    }
+}
+```
+
+* Service接口实现类
+
+```java
+
+@Service
+public class ResourcesServiceImpl implements ResourcesService {
+    @Autowired
+    private ResourcesDao resourcesDao;
+
+    @Override
+    public boolean openURL(String url, String password) {
+        return resourcesDao.readResources(url, password);
+    }
+}
+```
+
+* 通知类
+* 注意里面的判断参数是不是字符串的代码
+
+```java
+
+@Component
+@Aspect
+public class DataAdvice {
+    @Pointcut("execution(boolean baiduCheck.*Service.*(*,*))")
+    private void servicePt() {
+    }
+
+    @Around("DataAdvice.servicePt()")
+    public Object trimStr(ProceedingJoinPoint pjp) throws Throwable {
+        Object[] args = pjp.getArgs();
+        for (int i = 0; i < args.length; i++) {
+            //判断参数是不是字符串
+            if (args[i].getClass().equals(String.class)) {
+                args[i] = args[i].toString().trim();
+            }
+        }
+        return pjp.proceed(args);
+    }
+}
+```
+
+* 测试方法
+
+```
+@Test
+public void baiduCheck(){
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+    ResourcesService resourcesService = ctx.getBean(ResourcesService.class);
+    boolean flag = resourcesService.openURL("https://pan.baidu.com/haha", "root ");
+    System.out.println(flag);
+}
+```
+
+# AOP总结
+
+![AOP总结](noteJPG/AOP总结.jpg)
+![AOP的通知总结](noteJPG/AOP的通知总结.jpg)
+![AOP表达式总结](noteJPG/AOP表达式总结.jpg)
+![切入点表达式书写规范](noteJPG/切入点表达式书写规范.jpg)
+![获取切入点数据总结](noteJPG/获取切入点数据总结.jpg)
