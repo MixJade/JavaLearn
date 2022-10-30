@@ -28,4 +28,9 @@ public class SpringTest {
     public void testAOP(){
         aopTest.firstMethod();
     }
+
+    @Test
+    public void testAOPParam(){
+        aopTest.secondMethod(2000);
+    }
 }

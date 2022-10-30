@@ -144,6 +144,8 @@ public class MyAdvice {
 > * 通过pjp.getSignature获取切入点的签名对象
 > * 通过切入点的签名对象来获取相应的信息
 
+## 获取切入点的类路径、类名、方法名
+
 ```
 Signature signature = pjp.getSignature();//获取切入点签名
 System.out.println("所引用类型为:" + signature.getDeclaringType());
@@ -157,4 +159,69 @@ System.out.println("切入点名为:" + signature.getName());
 所引用类型为:interface testAOP.AOPTest
 所引用的类为:testAOP.AOPTest
 切入点名为:firstMethod
+```
+
+## 获取切入点的方法参数
+
+> 当然也可以修改
+
+* 首先修改通知类让它可以匹配任意参数值的方法(就是在方法参数描述那里加两个点)
+* 然后通过切入点签名来获取参数(是一个数组)
+
+```java
+
+@Component
+@Aspect
+public class MyAdvice {
+    @Pointcut("execution(void testAOP.AOPTest.*Method(..))")//芝士匹配所有以Method的方法
+    private void needMethod() {
+    }
+
+    @Around("needMethod()")
+    public Object adviceMethod(ProceedingJoinPoint pjp) throws Throwable {
+        Signature signature = pjp.getSignature();//获取切入点签名
+        System.out.println("切入点名为:" + signature.getDeclaringTypeName() + "." + signature.getName());
+        long beginTime = System.currentTimeMillis();
+        Object[] args = pjp.getArgs();// 获取方法参数
+        args[0] = 890;// 改变参数
+        Object obj = pjp.proceed();// 执行方法
+        System.out.println("该方法的参数是" + Arrays.toString(args));//输出参数
+        Thread.sleep(200);
+        long endTime = System.currentTimeMillis();
+        long spendTime = endTime - beginTime;
+        System.out.println("所耗费的时间为" + spendTime);
+        return obj;
+    }
+}
+```
+
+* 接着配置相应的方法让它可以有参数
+
+```
+@Override
+public void secondMethod(int number) {
+    System.out.println("This is a second method,and the param is "+number);
+}
+```
+
+* 还有测试方法
+
+```
+@Test
+public void testAOPParam(){
+    aopTest.secondMethod(2000);
+}
+```
+
+* 当然获取参数并非什么都不做，还可以改变它的参数
+* 可以在以后通过这种方法来改变错误的传参，或者设置默认的参数
+* 可以像这样改变输入的参数`args[0] = 890;// 改变参数`
+
+* 最后输出
+
+```
+切入点名为:testAOP.AOPTest.secondMethod
+This is a second method,and the param is 2000
+该方法的参数是[890]
+所耗费的时间为208
 ```

@@ -10,8 +10,8 @@ public class AOPTestImpl implements AOPTest {
     }
 
     @Override
-    public void secondMethod() {
-        System.out.println("This is a second method");
+    public void secondMethod(int number) {
+        System.out.println("This is a second method,and the param is "+number);
     }
 
     @Override
