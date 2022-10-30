@@ -225,3 +225,101 @@ This is a second method,and the param is 2000
 该方法的参数是[890]
 所耗费的时间为208
 ```
+
+## 获取切入点的返回值
+
+* 首先改变关于切入点的描述
+* 让它可以匹配任意的返回值，注意这里不能省略Public了，或者打两个星
+* 然后用AfterReturning注解，注意要设置value的代理方法和returning的参数名
+* 通知的形参要与returning的名字一样
+
+```java
+
+@Component
+@Aspect
+public class MyAdvice {
+    @Pointcut("execution(public * testAOP.AOPTest.*Method(..))")//芝士匹配所有以Method的方法
+    private void needMethod() {
+    }
+
+    @AfterReturning(value = "needMethod()", returning = "obj")
+    public void adviceMethod(Object obj) {
+        System.out.println("这是返回之后的通知:" + obj);
+    }
+}
+```
+
+* 然后是相应方法
+
+```
+@Override
+public String thirdMethod() {
+    System.out.println("第三个方法");
+    return "我要发动一次第三方法";
+}
+```
+
+* 与测试方法
+
+```
+@Test
+public void testAOPReturn(){
+    String s = aopTest.thirdMethod();
+    System.out.println(s);
+}
+```
+
+* 最后输出
+
+```
+第三个方法
+这是返回之后的通知:我要发动一次第三方法
+我要发动一次第三方法
+```
+
+## 关于切入点抛出的异常
+
+* 我们先定义一个一定会抛出异常的方法
+* 注意：因为它有返回值，所以要在抛出方法前面加一个永远为真的判断
+* 不然编译器会报错，因为return语句永远到达不了
+
+```
+@Override
+public String fourthMethod() {
+    System.out.println("这是第四个方法");
+    if (true) throw new NullPointerException();
+    return "第四个方法";
+    }
+```
+
+* 然后通过注解AfterThrowing定义一个抛出异常后的通知方法
+* 这个不用注释前面的，事实上前面那个AfterReturning也不用注释之前的
+
+```java
+
+@Component
+@Aspect
+public class MyAdvice {
+    @Pointcut("execution(public * testAOP.AOPTest.*Method(..))")//芝士匹配所有以Method的方法
+    private void needMethod() {
+    }
+
+    @AfterReturning(value = "needMethod()", returning = "obj")
+    public void adviceMethod(Object obj) {
+        System.out.println("这是返回之后的通知:" + obj);
+    }
+
+    @AfterThrowing(value = "needMethod()", throwing = "e")
+    public void adviceMethod03(Throwable e) {
+        System.out.println("这是它抛出的异常" + e);
+    }
+}
+```
+
+* 这是输出
+* 后面还跟着与异常相应的一大堆报错
+
+```
+这是第四个方法
+这是它抛出的异常java.lang.NullPointerException
+```

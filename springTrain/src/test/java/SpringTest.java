@@ -16,21 +16,35 @@ public class SpringTest {
     private StudentService service;
 
     @Test
-    public void testMybatis(){
-        List<StudentsTable> studentsTables=service.selectAll();
-        for (StudentsTable studentsTable:studentsTables){
+    public void testMybatis() {
+        List<StudentsTable> studentsTables = service.selectAll();
+        for (StudentsTable studentsTable : studentsTables) {
             System.out.println(studentsTable);
         }
     }
+
     @Autowired
     private AOPTest aopTest;
+
     @Test
-    public void testAOP(){
+    public void testAOP() {
         aopTest.firstMethod();
     }
 
     @Test
-    public void testAOPParam(){
+    public void testAOPParam() {
         aopTest.secondMethod(2000);
+    }
+
+    @Test
+    public void testAOPReturn() {
+        String s = aopTest.thirdMethod();
+        System.out.println(s);
+    }
+
+    @Test
+    public void testAOPThrow() {
+        String s = aopTest.fourthMethod();
+        System.out.println(s);
     }
 }
