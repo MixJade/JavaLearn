@@ -323,3 +323,10 @@ public class MyAdvice {
 这是第四个方法
 这是它抛出的异常java.lang.NullPointerException
 ```
+
+## 还有其它的方式
+
+![AOP三种获取](noteJPG/AOP三种获取.jpg)
+![JoinPoint的用法](noteJPG/JoinPoint的用法.jpg)
+![两种获取返回值的方法](noteJPG/两种获取返回值的方法.jpg)
+![两种方法获取异常](noteJPG/两种方法获取异常.jpg)
