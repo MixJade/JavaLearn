@@ -180,3 +180,114 @@ public void testTransfer(){
 }
 ```
 
+## 添加转账日志
+
+> * 在数据库定义一个日志表
+> * 这个日志要能记录每次操作，无论成功或失败
+> * 这里是事务传播的知识
+
+* 首先建一个表
+
+```sql
+DROP TABLE IF EXISTS account_log;
+create table account_log
+(
+    id         int primary key auto_increment,
+    info       varchar(255),
+    createDate datetime
+)
+```
+
+* 再定义一个接口
+
+```java
+
+@Repository
+public interface LogDao {
+    @Insert("insert into account_log (info,createDate) values(#{info},now())")
+    void log(String info);
+}
+```
+
+* 再定义一个接口及它实现类
+
+```java
+public interface LogService {
+    void log(String out, String in, Double money);
+}
+```
+
+* 实现类
+* 这次Transactional设置在实现类
+
+```java
+
+@Service
+public class LogServiceImpl implements LogService {
+    @Autowired
+    private LogDao logDao;
+
+    @Transactional
+    public void log(String out, String in, Double money) {
+        logDao.log("转账操作由" + out + "到" + in + ",金额：" + money);
+    }
+}
+```
+
+* 接着使用try-finally结构把日志方法放进去
+
+```java
+
+@Service
+public class AccountServiceImpl implements AccountService {
+    @Autowired
+    private AccountDao accountDao;
+    @Autowired
+    private LogService logService;
+
+    @Override
+    public void transfer(String out, String in, Double money) {
+        // 存在结构try-finally
+        try {
+            accountDao.reduce(money, out);
+//        int i=9/0;
+            accountDao.add(money, in);
+        } finally {
+            logService.log(out, in, money);
+        }
+    }
+}
+```
+
+* 其他方法不变(包括测试方法)
+
+## 事务传播
+
+> * 上面的操作定义了一个插入日志的操作
+> * 我们要无论成功失败都要插入，但是很明显失败没有插入
+> * 这就是事务传播，三个事务协调被加入了事务管理之中，然后失败就一起回滚
+> * 似乎无视了try-finally
+> * 需要用到事务传播行为
+> * 事务传播行为：事务协调员对事务管理员所携带事务的处理态度`propagation属性`。
+
+* 在Transactional里面设置propagation = Propagation.REQUIRES_NEW
+* 表示传播行为设置为当前操作需要新事务
+* 这样就行
+
+```java
+
+@Service
+public class LogServiceImpl implements LogService {
+    @Autowired
+    private LogDao logDao;
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void log(String out, String in, Double money) {
+        logDao.log("转账操作由" + out + "到" + in + ",金额：" + money);
+    }
+}
+```
+
+## 属性设置说明
+![Transactional属性设置](noteJPG/Transactional属性设置.jpg)
+![传播属性设置](noteJPG/传播属性设置.jpg)
