@@ -63,7 +63,7 @@ public class LoginServlet extends MyBaseServlet {
         }
         HttpSession session = req.getSession();
         String checkCode = (String) session.getAttribute("checkCode");
-        System.out.println("验证码"+checkCode+" 输入:"+line);
+        System.out.println("验证码" + checkCode + " 输入:" + line);
         if (checkCode.equalsIgnoreCase(line)) {
             resp.getWriter().write("YesCheck");
         } else {
@@ -72,12 +72,13 @@ public class LoginServlet extends MyBaseServlet {
     }
 
     public void checkCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-            // 通过工具类生成验证码与验证码图片
-            ServletOutputStream os = resp.getOutputStream();
-            String checkCode = CheckCodeUtil.outputVerifyImage(100, 50, os, 4);
-            // 将验证码字符写入session
-            HttpSession session = req.getSession(true);
-            session.setAttribute("checkCode", checkCode);
+        // 响应放在请求前面，会出现无法建立会话
+        HttpSession session = req.getSession(true);
+        // 通过工具类生成验证码与验证码图片
+        ServletOutputStream os = resp.getOutputStream();
+        String checkCode = CheckCodeUtil.outputVerifyImage(100, 50, os, 4);
+        // 将验证码字符写入session
+        session.setAttribute("checkCode", checkCode);
     }
 
     /**
