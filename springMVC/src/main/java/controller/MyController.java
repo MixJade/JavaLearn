@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class MyController {
     @RequestMapping("/first")
-    @ResponseBody//设置返回值即为响应
+    @ResponseBody//设置返回值为json数据,不然会认为返回的是路径，从而报404
     public String first() {
         System.out.println("This is a first");
         return "{'info','springMVC'}";

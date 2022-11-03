@@ -46,7 +46,7 @@
 @Controller
 public class MyController {
     @RequestMapping("/first")
-    @ResponseBody//设置返回值即为响应
+    @ResponseBody//设置返回值为json数据,不然会认为返回的是路径，从而报404
     public String first() {
         System.out.println("This is a first");
         return "{'info','springMVC'}";
@@ -71,22 +71,26 @@ public class SpringMvcConfig {
 
 ```java
 public class ServletContainerInitConfig extends AbstractDispatcherServletInitializer {
-    @Override
-    protected WebApplicationContext createServletApplicationContext() {
-        AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(SpringMvcConfig.class);
-        return ctx;
-    }
+  @Override
+  protected WebApplicationContext createServletApplicationContext() {
+    //初始化WebApplicationContext对象
+    AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+    //加载指定配置类
+    ctx.register(SpringMvcConfig.class);
+    return ctx;
+  }
 
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/"};
-    }
+  @Override
+  protected String[] getServletMappings() {
+    //设置由springmvc控制器处理的请求映射路径
+    return new String[]{"/"};
+  }
 
-    @Override
-    protected WebApplicationContext createRootApplicationContext() {
-        return null;
-    }
+  @Override
+  protected WebApplicationContext createRootApplicationContext() {
+    //加载spring配置类
+    return null;
+  }
 }
 ```
 
