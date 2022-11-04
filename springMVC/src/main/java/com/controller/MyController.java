@@ -12,4 +12,10 @@ public class MyController {
         System.out.println("This is a first");
         return "{'info','springMVC'}";
     }
+    @RequestMapping("/second")
+    @ResponseBody//设置返回值为相应内容,不然会认为返回的是路径，从而报404
+    public String second() {
+        System.out.println("This is a second");
+        return "{'info','second'}";
+    }
 }
