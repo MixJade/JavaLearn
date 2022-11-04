@@ -1,4 +1,4 @@
-package config;
+package com.config;
 
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -23,6 +23,8 @@ public class ServletContainerInitConfig extends AbstractDispatcherServletInitial
     @Override
     protected WebApplicationContext createRootApplicationContext() {
         //加载spring配置类
-        return null;
+        AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+        ctx.register(SpringConfig.class);
+        return ctx;
     }
 }
