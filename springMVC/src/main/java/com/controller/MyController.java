@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("/myController")
 public class MyController {
     @RequestMapping("/first")
     @ResponseBody//设置返回值为相应内容,不然会认为返回的是路径，从而报404

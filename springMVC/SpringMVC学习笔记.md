@@ -196,3 +196,27 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
     }
 }
 ```
+
+## 总的路径映射
+> * 有的时候希望按照文件区分service路径
+> * 只需要在类的开头加上RequestMapping
+> * 这样访问即可
+> * http://localhost:8080/springMVC/myController/first
+```java
+@Controller
+@RequestMapping("/myController")
+public class MyController {
+    @RequestMapping("/first")
+    @ResponseBody//设置返回值为相应内容,不然会认为返回的是路径，从而报404
+    public String first() {
+        System.out.println("This is a first");
+        return "{'info','springMVC'}";
+    }
+    @RequestMapping("/second")
+    @ResponseBody//设置返回值为相应内容,不然会认为返回的是路径，从而报404
+    public String second() {
+        System.out.println("This is a second");
+        return "{'info','second'}";
+    }
+}
+```
