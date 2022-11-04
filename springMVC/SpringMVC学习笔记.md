@@ -98,7 +98,9 @@ public class ServletContainerInitConfig extends AbstractDispatcherServletInitial
 * 只能手动输路径
 
 ## SpringMVC执行流程
+共分两个阶段来分析，分别是`启动服务器初始化过程`和`单次请求过程`
 
+web容器 --~~包含~~-- ServletContext --~~包含~~-- WebApplicationContext --~~包含~~-- MyController -- ~~包含~~-- /first --~~包含~~-- first方法
 ### 启动服务器初始化过程
 
 1. 服务器启动，执行ServletContainersInitConfig类，初始化web容器
