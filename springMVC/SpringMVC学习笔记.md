@@ -278,6 +278,7 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
 * 然后在mvc的配置类中添加注解EnableWebMvc
 
 ```java
+
 @ComponentScan("com.controller")
 //开启json数据类型自动转换
 @EnableWebMvc
@@ -286,7 +287,10 @@ public class SpringMvcConfig {
 ```
 
 * 然后是关于各参数的处理
+* 在postman中可以设置传递json数据
+
 ```java
+
 @Controller
 @RequestMapping("/param")
 public class ParamTest {
@@ -393,3 +397,13 @@ public class ParamTest {
     }
 }
 ```
+
+### @RequestBody与@RequestParam区别
+
+* 区别
+    * @RequestParam用于接收url地址传参，表单传参【application/x-www-form-urlencoded】
+    * @RequestBody用于接收json数据【application/json】
+
+* 应用
+    * 后期开发中，发送json格式数据为主，@RequestBody应用较广
+    * 如果发送非json格式数据，选用@RequestParam接收请求参数
