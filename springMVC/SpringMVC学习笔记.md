@@ -385,6 +385,7 @@ public class ParamTest {
 
     //日期参数
     //使用@DateTimeFormat注解设置日期类型数据格式，默认格式yyyy/MM/dd
+    //仅能读取客户端的格式，读取到后端还是一样的
     @RequestMapping("/dataParam")
     @ResponseBody
     public String dataParam(Date date,
