@@ -19,4 +19,12 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+    /*
+    乱码处理
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        return new Filter[]{filter};
+    }*/
 }

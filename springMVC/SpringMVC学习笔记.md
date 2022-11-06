@@ -98,9 +98,12 @@ public class ServletContainerInitConfig extends AbstractDispatcherServletInitial
 * 只能手动输路径
 
 ## SpringMVC执行流程
+
 共分两个阶段来分析，分别是`启动服务器初始化过程`和`单次请求过程`
 
-web容器 --~~包含~~-- ServletContext --~~包含~~-- WebApplicationContext --~~包含~~-- MyController -- ~~包含~~-- /first --~~包含~~-- first方法
+web容器 --~~包含~~-- ServletContext --~~包含~~-- WebApplicationContext --~~包含~~-- MyController -- ~~包含~~-- /first
+--~~包含~~-- first方法
+
 ### 启动服务器初始化过程
 
 1. 服务器启动，执行ServletContainersInitConfig类，初始化web容器
@@ -198,11 +201,14 @@ public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatc
 ```
 
 ## 总的路径映射
+
 > * 有的时候希望按照文件区分service路径
 > * 只需要在类的开头加上RequestMapping
 > * 这样访问即可
 > * http://localhost:8080/springMVC/myController/first
+
 ```java
+
 @Controller
 @RequestMapping("/myController")
 public class MyController {
@@ -212,11 +218,178 @@ public class MyController {
         System.out.println("This is a first");
         return "{'info','springMVC'}";
     }
+
     @RequestMapping("/second")
     @ResponseBody//设置返回值为相应内容,不然会认为返回的是路径，从而报404
     public String second() {
         System.out.println("This is a second");
         return "{'info','second'}";
+    }
+}
+```
+
+## 乱码处理
+
+> * tomcat8之后默认编码都是utf-8
+> * 如果中文乱码，可以在配置类里进行重写过滤器方法，设置utf-8
+> * 仅对post请求有效,get不行
+
+```java
+public class ServletContainersInitConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[]{SpringConfig.class};
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[]{SpringMvcConfig.class};
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+    /*
+    乱码处理
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        return new Filter[]{filter};
+    }*/
+}
+```
+
+## 参数传递
+
+* 关于json数据，需要引入坐标
+
+```html
+
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.13.4.2</version>
+</dependency>
+```
+
+* 然后在mvc的配置类中添加注解EnableWebMvc
+
+```java
+@ComponentScan("com.controller")
+//开启json数据类型自动转换
+@EnableWebMvc
+public class SpringMvcConfig {
+}
+```
+
+* 然后是关于各参数的处理
+```java
+@Controller
+@RequestMapping("/param")
+public class ParamTest {
+    //普通参数：请求参数与形参名称对应即可完成参数传递
+    //common?name=张铁蛋&age=22
+    @RequestMapping("/common")
+    @ResponseBody
+    public String commonParam(String name, int age) {
+        System.out.println("普通参数传递 name ==> " + name);
+        System.out.println("普通参数传递 age ==> " + age);
+        return "{'module':'common param'}";
+    }
+
+    //普通参数：请求参数名与形参名不同时，使用@RequestParam注解关联请求参数名称与形参名称之间的关系
+    //commonOtherName?name=李铁军&age=89
+    @RequestMapping("/commonOtherName")
+    @ResponseBody
+    public String commonParamDifferentName(@RequestParam("name") String userName, int age) {
+        System.out.println("普通参数传递 userName ==> " + userName);
+        System.out.println("普通参数传递 age ==> " + age);
+        return "{'module':'common param different name'}";
+    }
+
+    //POJO参数：请求参数与形参对象中的属性对应即可完成参数传递
+    //pojo?name=葛二蛋&age=80
+    @RequestMapping("/pojo")
+    @ResponseBody
+    public String pojoParam(User user) {
+        System.out.println("pojo参数传递 user ==> " + user);
+        return "{'module':'pojo param'}";
+    }
+
+    //嵌套POJO参数：嵌套属性按照层次结构设定名称即可完成参数传递
+    //pojoContain?name=股市场&age=78&address.province=四川&address.city=成都
+    @RequestMapping("/pojoContain")
+    @ResponseBody
+    public String pojoContainPojoParam(User user) {
+        System.out.println("pojo嵌套pojo参数传递 user ==> " + user);
+        return "{'module':'pojo contain pojo param'}";
+    }
+
+    //数组参数：同名请求参数可以直接映射到对应名称的形参数组对象中
+    //array?likes=吃饭&likes=睡觉&likes=打豆豆
+    @RequestMapping("/array")
+    @ResponseBody
+    public String arrayParam(String[] likes) {
+        System.out.println("数组参数传递 likes ==> " + Arrays.toString(likes));
+        return "{'module':'array param'}";
+    }
+
+    //集合参数：同名请求参数可以使用@RequestParam注解映射到对应名称的集合对象中作为数据
+    //list?likes=吃饭&likes=睡觉&likes=打豆豆
+    @RequestMapping("/list")
+    @ResponseBody
+    public String listParam(@RequestParam List<String> likes) {
+        System.out.println("集合参数传递 likes ==> " + likes);
+        return "{'module':'list param'}";
+    }
+
+
+    //集合参数：json格式
+    //1.开启json数据格式的自动转换，在配置类中开启@EnableWebMvc
+    //2.使用@RequestBody注解将外部传递的json数组数据映射到形参的集合对象中作为数据
+    //在postMan中设置json数据： - Body - raw -JSON
+    //["吃饭","碎觉","扣豆豆"]
+    @RequestMapping("/listParamForJson")
+    @ResponseBody
+    public String listParamForJson(@RequestBody List<String> likes) {
+        System.out.println("list common(json)参数传递 list ==> " + likes);
+        return "{'module':'list common for json param'}";
+    }
+
+    //POJO参数：json格式
+    //1.开启json数据格式的自动转换，在配置类中开启@EnableWebMvc
+    //2.使用@RequestBody注解将外部传递的json数据映射到形参的实体类对象中，要求属性名称一一对应
+    //{"name":"额尔丹","age":80}
+    @RequestMapping("/pojoParamForJson")
+    @ResponseBody
+    public String pojoParamForJson(@RequestBody User user) {
+        System.out.println("pojo(json)参数传递 user ==> " + user);
+        return "{'module':'pojo for json param'}";
+    }
+
+    //集合参数：json格式
+    //[{"name":"额尔丹","age":80},{"name":"王久丹","age":34}]
+    @RequestMapping("/listPojoParamForJson")
+    @ResponseBody
+    public String listPojoParamForJson(@RequestBody List<User> list) {
+        System.out.println("list pojo(json)参数传递 list ==> " + list);
+        return "{'module':'list pojo for json param'}";
+    }
+
+    //日期参数
+    //使用@DateTimeFormat注解设置日期类型数据格式，默认格式yyyy/MM/dd
+    @RequestMapping("/dataParam")
+    @ResponseBody
+    public String dataParam(Date date,
+                            @DateTimeFormat(pattern = "yyyy-MM-dd") Date date1,
+                            @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss") Date date2) {
+        System.out.println("参数传递 date ==> " + date);
+        System.out.println("参数传递 date1(yyyy-MM-dd) ==> " + date1);
+        System.out.println("参数传递 date2(yyyy/MM/dd HH:mm:ss) ==> " + date2);
+        return "{'module':'data param'}";
     }
 }
 ```
