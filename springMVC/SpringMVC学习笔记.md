@@ -408,3 +408,30 @@ public class ParamTest {
 * 应用
     * 后期开发中，发送json格式数据为主，@RequestBody应用较广
     * 如果发送非json格式数据，选用@RequestParam接收请求参数
+
+## 关于SpringMvc数据转化的部分原理
+
+* (1)通过Converter接口
+
+```java
+public interface Converter<S, T> {
+    @Nullable
+        //该方法就是将从页面上接收的数据(S)转换成我们想要的数据类型(T)返回
+    T convert(S source);
+}
+```
+
+**注意:Converter所属的包为`org.springframework.core.convert.converter`**
+
+* 框架中有提供很多对应Converter接口的实现类，用来实现不同数据类型之间的转换,如:
+* 请求参数年龄数据（String→Integer）
+* 日期格式转换（String → Date）
+
+* (2)HttpMessageConverter接口
+
+该接口是实现对象与JSON之间的转换工作
+
+**注意:SpringMVC的配置类把@EnableWebMvc当做标配配置上去，不要省略**
+
+* (3)关于返回值
+* 返回值为实体类对象，设置返回值为实体类类型，即可实现返回对应对象的json数据，需要依赖==@ResponseBody==注解和==@EnableWebMvc==注解
