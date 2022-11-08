@@ -72,7 +72,22 @@ public class Displace extends JFrame implements ActionListener {
     public String addOne(String plain, int key) {
         char[] chars = plain.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            chars[i] += key;
+            if ('a' <= chars[i] && chars[i] <= 'z') {
+                chars[i] += key;
+                while (chars[i] > 'z') {
+                    chars[i] = (char) (chars[i] - 'z' - 1 + 'a');
+                }
+            } else if ('A' <= chars[i] && chars[i] <= 'Z') {
+                chars[i] += key;
+                while (chars[i] > 'Z') {
+                    chars[i] = (char) (chars[i] - 'Z' - 1 + 'A');
+                }
+            } else if ('0' <= chars[i] && chars[i] <= '9') {
+                chars[i] += key;
+                while (chars[i] > '9') {
+                    chars[i] = (char) (chars[i] - '9' - 1 + '0');
+                }
+            }
         }
         return String.valueOf(chars);
     }
@@ -80,7 +95,22 @@ public class Displace extends JFrame implements ActionListener {
     public String reduce(String plain, int key) {
         char[] chars = plain.toCharArray();
         for (int i = 0; i < chars.length; i++) {
-            chars[i] -= key;
+            if ('a' <= chars[i] && chars[i] <= 'z') {
+                chars[i] -= key;
+                while (chars[i] < 'a') {
+                    chars[i] = (char) (chars[i] + 'z' + 1 - 'a');
+                }
+            } else if ('A' <= chars[i] && chars[i] <= 'Z') {
+                chars[i] -= key;
+                while (chars[i] < 'A') {
+                    chars[i] = (char) (chars[i] + 'Z' + 1 - 'A');
+                }
+            } else if ('0' <= chars[i] && chars[i] <= '9') {
+                chars[i] -= key;
+                while (chars[i] < '0') {
+                    chars[i] = (char) (chars[i] + '9' + 1 - '0');
+                }
+            }
         }
         return String.valueOf(chars);
     }
