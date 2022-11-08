@@ -56,11 +56,16 @@ public class Displace extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String plain = plainText.getText();
-        int key = Integer.parseInt(keyText.getText().trim());
+        int key;
+        try {
+            key = Integer.parseInt(keyText.getText().trim());
+        } catch (NumberFormatException nfe) {
+            key = 1;
+        }
         if (e.getSource() == addBtn) {
-            cipherText.setText(addOne(plain,key));
+            cipherText.setText(addOne(plain, key));
         } else {
-            cipherText.setText(reduce(plain,key));
+            cipherText.setText(reduce(plain, key));
         }
     }
 
