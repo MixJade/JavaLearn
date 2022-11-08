@@ -1,4 +1,4 @@
-package helloWorld;
+package someUtils;
 
 import java.nio.CharBuffer;
 

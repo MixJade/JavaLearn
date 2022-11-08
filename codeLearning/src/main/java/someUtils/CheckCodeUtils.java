@@ -1,4 +1,4 @@
-package helloWorld;
+package someUtils;
 
 import java.awt.Color;
 import java.awt.Font;
