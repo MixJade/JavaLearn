@@ -1,6 +1,6 @@
 package com.domain;
 
-public class StudentsTable {
+public class Students {
     String studentName, birthday;
     Integer id, sex, englishGrade, mathGrade, societyId, money;
     double height;
@@ -90,15 +90,16 @@ public class StudentsTable {
 
     @Override
     public String toString() {
-        return "StudentsTable{" + id +
-                "name='" + studentName + '\'' +
+        return "Students{" +
+                "studentName='" + studentName + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", id=" + id +
                 ", sex=" + sex +
                 ", englishGrade=" + englishGrade +
                 ", mathGrade=" + mathGrade +
                 ", societyId=" + societyId +
-                ", height=" + height +
-                ", birthday='" + birthday + '\'' +
                 ", money=" + money +
+                ", height=" + height +
                 '}';
     }
 }
