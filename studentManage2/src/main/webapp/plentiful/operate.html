@@ -211,6 +211,17 @@
                 if (val === 2) {
                     _this.selectTitle = "修改学生"
                 } else if (val === 1) {
+                    _this.student = {
+                        id: '',
+                        studentName: '',
+                        sex: '',
+                        englishGrade: '',
+                        mathGrade: '',
+                        societyId: '',
+                        height: '',
+                        birthday: '',
+                        money: ''
+                    }
                     _this.selectTitle = "添加学生"
                 }
                 _this.dialogFormVisible = true
@@ -259,7 +270,6 @@
                     this.selectIdGroup[i] = selectGroup[i].id;
                 }
                 console.log(this.selectIdGroup);
-                // 发送ajax请求，删除
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/deleteByIds",
@@ -275,7 +285,6 @@
                 })
             },
             selectById() {
-                // 发送ajax请求，删除
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/selectAStu",
@@ -285,7 +294,6 @@
                 })
             },
             updateById() {
-                // 发送ajax请求，删除
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/updateStudent",
@@ -300,7 +308,6 @@
                 })
             },
             deleteById() {
-                // 发送ajax请求，删除
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentManage2/manager/deleteAStu",

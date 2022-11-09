@@ -5,19 +5,12 @@
 > * 新增了分页查询、条件查询。丰富了消息弹出框、界面ui
 > * 新增类`MyBaseServlet.java`，通过反射来执行servlet
 
-* 修复了bug:偶尔生成验证码时会出现无法建立session
+* **_修复bug_**:偶尔生成验证码时会出现无法建立session
 
-- bug原因:原来生成验证码的servlet是先通过响应来输出再通过请求建立session
-- 修复方法:将请求生成session放在响应之前，该bug成功修复
+- _bug原因_:原来生成验证码的servlet是先通过响应来输出再通过请求建立session
+- _修复方法_:将请求生成session放在响应之前，该bug成功修复
 
-```
-public void checkCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    // 响应放在请求前面，会出现无法建立会话
-    HttpSession session = req.getSession(true);
-    // 通过工具类生成验证码与验证码图片
-    ServletOutputStream os = resp.getOutputStream();
-    String checkCode = CheckCodeUtil.outputVerifyImage(100, 50, os, 4);
-    // 将验证码字符写入session
-    session.setAttribute("checkCode", checkCode);
-}
-```
+* **_修复bug_**:先点开修改页面再点开添加页面,会出现添加页面的默认信息为上一个修改对象
+
+- _bug原因_:添加学生与修改学生使用同一个数据对象
+- _修复方法_: 在打开添加学生页面的时候手动初始化,即,将最初定义(只有key无value)复制过来
