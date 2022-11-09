@@ -94,7 +94,7 @@ public class MybatisConfig {
 }
 ```
 
-* SpringConfig.java
+* myConfig.SpringConfig.java
 * 通过EnableTransactionManagement注解来开启事务
 
 ```java
@@ -105,7 +105,7 @@ public class MybatisConfig {
 @PropertySource("classpath:jdbc.properties")
 @Import({JdbcConfig.class, MybatisConfig.class})
 @EnableTransactionManagement//开启注解式事务驱动
-public class SpringConfig {
+public class myConfig.SpringConfig {
 }
 ```
 

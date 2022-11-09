@@ -1,5 +1,5 @@
-import myConfig.JdbcConfig;
-import myConfig.MybatisConfig;
+package myConfig;
+
 import org.springframework.context.annotation.*;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 

@@ -117,7 +117,7 @@ public class MybatisConfig {
 @ComponentScan({"service", "dao"})
 @PropertySource("classpath:jdbc.properties")
 @Import({JdbcConfig.class, MybatisConfig.class})
-public class SpringConfig {
+public class myConfig.SpringConfig {
 }
 ```
 
@@ -165,7 +165,7 @@ public class StudentServiceImpl implements StudentService {
 ```
 @Test
 public void testMybatis(){
-    AnnotationConfigApplicationContext acx = new AnnotationConfigApplicationContext(SpringConfig.class);
+    AnnotationConfigApplicationContext acx = new AnnotationConfigApplicationContext(myConfig.SpringConfig.class);
     StudentService service=acx.getBean(StudentService.class);
     List<StudentsTable> studentsTables=service.selectAll();
     for (StudentsTable studentsTable:studentsTables){
@@ -203,7 +203,7 @@ public void testMybatis(){
 ```java
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SpringConfig.class)
+@ContextConfiguration(classes = myConfig.SpringConfig.class)
 public class SpringTest {
     @Autowired
     private StudentService service;

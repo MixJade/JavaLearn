@@ -11,7 +11,7 @@ public class MybatisConfig {
     @Bean
     public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource){
         SqlSessionFactoryBean sfb = new SqlSessionFactoryBean();
-        sfb.setTypeAliasesPackage("domain");
+        sfb.setTypeAliasesPackage("com.domain");
         sfb.setDataSource(dataSource);
         return sfb;
     }
@@ -19,7 +19,7 @@ public class MybatisConfig {
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer(){
         MapperScannerConfigurer msc = new MapperScannerConfigurer();
-        msc.setBasePackage("dao");
+        msc.setBasePackage("com.dao");
         return msc;
     }
 }

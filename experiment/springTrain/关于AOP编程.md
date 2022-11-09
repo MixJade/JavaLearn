@@ -95,7 +95,7 @@ public class MyAdvice {
 @EnableAspectJAutoProxy
 @PropertySource("classpath:jdbc.properties")
 @Import({JdbcConfig.class, MybatisConfig.class})
-public class SpringConfig {
+public class myConfig.SpringConfig {
 }
 ```
 
@@ -400,7 +400,7 @@ public class DataAdvice {
 ```
 @Test
 public void baiduCheck(){
-    ApplicationContext ctx = new AnnotationConfigApplicationContext(SpringConfig.class);
+    ApplicationContext ctx = new AnnotationConfigApplicationContext(myConfig.SpringConfig.class);
     ResourcesService resourcesService = ctx.getBean(ResourcesService.class);
     boolean flag = resourcesService.openURL("https://pan.baidu.com/haha", "root ");
     System.out.println(flag);
