@@ -1,4 +1,4 @@
-package com.controller;
+package controller;
 
 public class Result {
     private Object data;

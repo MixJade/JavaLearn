@@ -1,7 +1,7 @@
-package com.service;
+package service;
 
-import com.dao.StudentsDao;
-import com.domain.Students;
+import dao.StudentsDao;
+import domain.Students;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

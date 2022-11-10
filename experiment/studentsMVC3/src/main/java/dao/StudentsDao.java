@@ -1,6 +1,6 @@
-package com.dao;
+package dao;
 
-import com.domain.Students;
+import domain.Students;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

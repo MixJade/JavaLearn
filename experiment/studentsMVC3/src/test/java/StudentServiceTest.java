@@ -1,7 +1,6 @@
-
-import com.config.SpringConfig;
-import com.domain.Book;
-import com.service.BookService;
+import config.SpringConfig;
+import domain.Students;
+import service.StudentsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +11,15 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SpringConfig.class)
-public class BookServiceTest {
-
+public class StudentServiceTest {
     @Autowired
-    private BookService bookService;
+    private StudentsService service;
 
     @Test
-    public void testGetById(){
-        Book book = bookService.getById(1);
-        System.out.println(book);
+    public void testMybatis() {
+        List<Students> students = service.getAll();
+        for (Students student : students) {
+            System.out.println(student);
+        }
     }
-
-    @Test
-    public void testGetAll(){
-        List<Book> all = bookService.getAll();
-        System.out.println(all);
-    }
-
 }

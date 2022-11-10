@@ -1,4 +1,4 @@
-package com.exception;
+package exception;
 
 public class SystemException extends RuntimeException{
     private Integer code;

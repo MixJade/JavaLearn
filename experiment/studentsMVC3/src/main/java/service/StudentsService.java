@@ -1,6 +1,6 @@
-package com.service;
+package service;
 
-import com.domain.Students;
+import domain.Students;
 
 import java.util.List;
 

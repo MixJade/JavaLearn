@@ -1,4 +1,4 @@
-package com.domain;
+package domain;
 
 public class Students {
     String studentName, birthday;

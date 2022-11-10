@@ -1,4 +1,4 @@
-package com.exception;
+package exception;
 
 public class BusinessException extends RuntimeException{
     private Integer code;

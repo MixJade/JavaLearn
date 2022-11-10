@@ -1,4 +1,4 @@
-package com.config;
+package config;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -11,7 +11,7 @@ public class MybatisConfig {
     @Bean
     public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource){
         SqlSessionFactoryBean sfb = new SqlSessionFactoryBean();
-        sfb.setTypeAliasesPackage("com.domain");
+        sfb.setTypeAliasesPackage("domain");
         sfb.setDataSource(dataSource);
         return sfb;
     }
@@ -19,7 +19,7 @@ public class MybatisConfig {
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer(){
         MapperScannerConfigurer msc = new MapperScannerConfigurer();
-        msc.setBasePackage("com.dao");
+        msc.setBasePackage("dao");
         return msc;
     }
 }

@@ -1,7 +1,7 @@
-package com.controller;
+package controller;
 
-import com.domain.Students;
-import com.service.StudentsService;
+import domain.Students;
+import service.StudentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +16,7 @@ public class StudentsController {
     @PostMapping
     public String addStu(@RequestBody Students students) {
         System.out.println(students);
-        service.addStu(students);
-        return "{'module':'book save success'}";
+        return service.addStu(students)?"{'module':'book save success'}":"{'module':'book save fault'}";
     }
 
     @DeleteMapping("/{id}")
@@ -40,7 +39,7 @@ public class StudentsController {
     }
 
     @GetMapping("/{id}")
-    public Students getById(@PathVariable Integer id) {
-        return service.getById(id);
+    public Result getById(@PathVariable Integer id) {
+        return new Result((Code.GET_OK),service.getById(id),"查询成功");
     }
 }

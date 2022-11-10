@@ -1,16 +1,11 @@
-package com.config;
+package config;
 
 
 import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(value = "com",
-        excludeFilters = @ComponentScan.Filter(
-                type = FilterType.ANNOTATION,
-                classes = Controller.class
-        ))
+@ComponentScan({"dao","service"})
 @PropertySource("classpath:jdbc.properties")
 @Import({JdbcConfig.class, MybatisConfig.class})
 @EnableTransactionManagement//开启注解式事务驱动

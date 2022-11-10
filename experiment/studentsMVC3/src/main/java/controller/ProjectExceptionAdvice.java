@@ -1,7 +1,7 @@
-package com.controller;
+package controller;
 
-import com.exception.BusinessException;
-import com.exception.SystemException;
+import exception.BusinessException;
+import exception.SystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 public class ProjectExceptionAdvice {
