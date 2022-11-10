@@ -3,7 +3,10 @@ package controller;
 import exception.BusinessException;
 import exception.SystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+//@RestControllerAdvice用于标识当前类为REST风格对应的异常处理器
+@RestControllerAdvice
 public class ProjectExceptionAdvice {
     @ExceptionHandler(SystemException.class)
     public Result doSystemException(SystemException ex){

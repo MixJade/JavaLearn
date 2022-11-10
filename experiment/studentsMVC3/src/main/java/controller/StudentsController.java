@@ -1,9 +1,9 @@
 package controller;
 
 import domain.Students;
-import service.StudentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import service.StudentsService;
 
 import java.util.List;
 
@@ -14,32 +14,46 @@ public class StudentsController {
     StudentsService service;
 
     @PostMapping
-    public String addStu(@RequestBody Students students) {
+    public Result addStu(@RequestBody Students students) {
         System.out.println(students);
-        return service.addStu(students)?"{'module':'book save success'}":"{'module':'book save fault'}";
+        boolean addRes = service.addStu(students);
+        if (addRes){
+            return new Result(Code.SAVE_OK, true,"添加成功");
+        }else {
+            return new Result(Code.SAVE_ERR, false,"添加失败");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Integer id) {
+    public Result delete(@PathVariable Integer id) {
         System.out.println(id);
-        service.deleteId(id);
-        return "{'module':'book delete'}";
+        boolean deleteRes = service.deleteId(id);
+        return new Result(deleteRes ? Code.DELETE_OK : Code.DELETE_ERR, deleteRes);
     }
 
     @PutMapping
-    public String update(@RequestBody Students students){
+    public Result update(@RequestBody Students students) {
         System.out.println(students);
-        service.update(students);
-        return "{'module':'book update'}";
+        boolean updateRes = service.update(students);
+        return new Result(updateRes ? Code.UPDATE_OK : Code.UPDATE_ERR, updateRes);
     }
 
-    @GetMapping
-    public List<Students> getAll() {
-        return service.getAll();
+    @GetMapping()
+    public Result getAll() {
+        List<Students> students = service.getAll();
+        if (students != null) {
+            return new Result(Code.GET_OK, students,"查询成功");
+        } else {
+            return new Result(Code.GET_ERR, null, "查询失败");
+        }
     }
-
     @GetMapping("/{id}")
     public Result getById(@PathVariable Integer id) {
-        return new Result((Code.GET_OK),service.getById(id),"查询成功");
+        Students student = service.getById(id);
+        if (student != null) {
+            return new Result(Code.GET_OK, student,"查询成功");
+        } else {
+            return new Result(Code.GET_ERR, null, "查询失败，此人不存在");
+        }
     }
 }

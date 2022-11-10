@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-<a href="pages/books.html">功能页面</a>
+<a href="./page/student.html">功能页面</a>
 </body>
 </html>
