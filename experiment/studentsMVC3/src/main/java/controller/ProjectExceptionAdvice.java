@@ -24,12 +24,12 @@ public class ProjectExceptionAdvice {
 
     @ExceptionHandler(DuplicateKeyException.class)//关于添加学生重复插入
     public Result doDuplicateKeyException() {
-        return new Result(Code.SAVE_ERR, null, "不能重复插入");
+        return new Result(Code.BUSINESS_ERR, null, "不能重复插入");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)//关于空值插入
     public Result doDataIntegrityViolationException() {
-        return new Result(Code.SAVE_ERR, null, "表单不能有空值");
+        return new Result(Code.BUSINESS_ERR, null, "表单不能有空值");
     }
 
     @ExceptionHandler(Exception.class)
