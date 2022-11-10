@@ -15,8 +15,9 @@ public class StudentsController {
 
     @PostMapping
     public Result addStu(@RequestBody Students students) {
-        System.out.println(students);
         boolean addRes = service.addStu(students);
+        System.out.println("ghgb");
+        System.out.println(addRes);
         if (addRes){
             return new Result(Code.SAVE_OK, true,"添加成功");
         }else {
@@ -35,7 +36,7 @@ public class StudentsController {
     public Result update(@RequestBody Students students) {
         System.out.println(students);
         boolean updateRes = service.update(students);
-        return new Result(updateRes ? Code.UPDATE_OK : Code.UPDATE_ERR, updateRes);
+        return new Result(updateRes ? Code.UPDATE_OK : Code.UPDATE_ERR, updateRes,"修改");
     }
 
     @GetMapping()

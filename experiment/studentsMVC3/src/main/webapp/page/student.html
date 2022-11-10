@@ -192,25 +192,20 @@
                 _this.dialogFormVisible = false
             },
             addStudent() {
-                // 发送ajax请求，添加
                 axios({
                     method: "post",
                     url: "http://localhost:8080/studentsMVC3/students",
                     data: this.student
                 }).then(resp => {
-                    // 判断响应数据是否为 YES
                     if (resp.data.code === 20011) {
                         this.open2(resp.data.msg)
                         this.selectAll()
-                    } else if (resp.data.code === 20010) {
-                        this.open4(resp.data.msg)
                     } else {
-                        this.open("服务器未响应")
+                        this.open4(resp.data.msg)
                     }
                 })
             },
             deleteById() {
-                // 发送ajax请求，删除
                 axios({
                     method: "delete",
                     url: "http://localhost:8080/studentsMVC3/students/" + this.studentID
@@ -224,7 +219,6 @@
                 })
             },
             updateById() {
-                // 发送ajax请求，删除
                 axios({
                     method: "put",
                     url: "http://localhost:8080/studentsMVC3/students",
@@ -234,12 +228,11 @@
                         this.open2("修改成功")
                         this.selectAll()
                     }else {
-                        this.open4("修改失败")
+                        this.open4(resp.data.msg)
                     }
                 })
             },
             selectAll() {
-                // 页面加载完成后，发送异步请求，查询查询部分学生
                 axios({
                     method: "get",
                     url: "http://localhost:8080/studentsMVC3/students",
@@ -249,7 +242,6 @@
                 })
             },
             selectById() {
-                // 发送ajax请求，删除
                 axios({
                     method: "get",
                     url: "http://localhost:8080/studentsMVC3/students/"+this.studentID
