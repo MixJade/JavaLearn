@@ -9,23 +9,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ProjectExceptionAdvice {
     @ExceptionHandler(SystemException.class)
-    public Result doSystemException(SystemException ex){
-        //记录日志
-        //发送消息给运维
-        //发送邮件给开发人员,ex对象发送给开发人员
-        return new Result(ex.getCode(),null,ex.getMessage());
+    public Result doSystemException(SystemException ex) {
+        // 系统异常，可预计而无法避免的异常，发送固定消息，安抚客户
+        return new Result(ex.getCode(), null, ex.getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
-    public Result doBusinessException(BusinessException ex){
-        return new Result(ex.getCode(),null,ex.getMessage());
+    public Result doBusinessException(BusinessException ex) {
+        // 业务异常，发送消息给客户，提醒规范操作
+        return new Result(ex.getCode(), null, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public Result doOtherException(Exception ex){
-        //记录日志
-        //发送消息给运维
-        //发送邮件给开发人员,ex对象发送给开发人员
-        return new Result(Code.SYSTEM_UNKNOWN_ERR,null,"系统繁忙，请稍后再试！");
+    public Result doOtherException(Exception ex) {
+        // 其他异常，没有预计的异常，发送固定消息，安抚客户
+        return new Result(Code.SYSTEM_UNKNOWN_ERR, null, "系统繁忙，请稍后再试！");
     }
 }
