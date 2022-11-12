@@ -1,6 +1,78 @@
 # 搭建中的学生管理系统
+
 > * 通过SpringMvc整合mybatis,junit
 > * 自定义异常类
 > * 通过给前端发送带状态的信息(详见表现层Code,Result类)，使前端便于区分报错信息
 > * 通过切片处理异常(也在表现层)(@RestControllerAdvice注解)
 > * 当然还有restful风格
+
+## 关于拦截器
+
+* 首先在表现层定义拦截器
+* 注意:拦截器与过滤器不同点在于，拦截器只对表现层过滤
+* 注意:preHandle方法，如果返回是false，那它不会执行，同时它之后的拦截器都不会执行,但它前面会。
+* 同时，如果拦截器资源有一个返回false,所请求的方法也不会执行(检查不通过)
+
+```java
+
+@Component
+//定义拦截器类，实现HandlerInterceptor接口
+//注意当前类必须受Spring容器控制
+public class ProjectInterceptor01 implements HandlerInterceptor {
+    @Override
+    //原始方法调用前执行的内容
+    //返回值类型可以拦截控制的执行，true放行，false终止
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String contentType = request.getHeader("Content-Type");
+        HandlerMethod hm = (HandlerMethod) handler;
+        System.out.println("请求数据类型为" + contentType);
+        System.out.println("调用的方法是" + hm);
+        return true;
+    }
+
+    @Override
+    //原始方法调用后执行的内容
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        System.out.println("postHandle...");
+    }
+
+    @Override
+    //原始方法调用完成后执行的内容
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        System.out.println("afterCompletion...");
+    }
+}
+```
+
+* 定义完了以后，在SpringMvcSupport之中进行引入
+* 注意：拦截器的执行顺序是配置的顺序
+* 比如，我这里让第二个先执行
+
+```java
+
+@Configuration
+public class SpringMvcSupport extends WebMvcConfigurationSupport {
+    //添加拦截器
+    @Autowired
+    ProjectInterceptor01 projectInterceptor01;
+    @Autowired
+    ProjectInterceptor02 projectInterceptor02;
+
+
+    //设置静态资源访问过滤，当前类需要设置为配置类，并被扫描加载
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        //当访问/pages/????时候，从/pages目录下查找内容
+        registry.addResourceHandler("/page/**").addResourceLocations("/page/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+        registry.addResourceHandler("/element-ui/**").addResourceLocations("/element-ui/");
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        //拦截器的执行顺序在这里定义
+        registry.addInterceptor(projectInterceptor02).addPathPatterns("/students", "/students/*");
+        registry.addInterceptor(projectInterceptor01).addPathPatterns("/students", "/students/*");
+    }
+}
+```
