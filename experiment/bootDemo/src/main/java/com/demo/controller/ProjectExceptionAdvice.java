@@ -15,7 +15,8 @@ public class ProjectExceptionAdvice {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)//关于空值插入
-    public Result doDataIntegrityViolationException() {
+    public Result doDataIntegrityViolationException(DataIntegrityViolationException e) {
+        e.printStackTrace();
         return new Result(Code.BUSINESS_ERR, null, "表单不能有空值");
     }
 

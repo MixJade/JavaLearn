@@ -1,4 +1,3 @@
-# TODO 数据库相关配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -6,3 +5,9 @@ spring:
     url: jdbc:mysql://localhost:3306/shixun0515?useSSL=true
     username: root
     password: root
+  main:
+    banner-mode: off
+
+mybatis-plus:
+  global-config:
+    banner: false
