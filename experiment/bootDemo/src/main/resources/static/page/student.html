@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>查询所有</title>
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <!-- 按钮 -->
+    <el-button type="primary" @click="selectChoose(1)" plain>添加学生</el-button>
+    <!-- 嵌套表单 -->
+    <el-dialog :title="selectTitle" :visible.sync="dialogFormVisible">
+        <el-form :model="student" autocomplete="off" size="small">
+            <el-form-item label="姓名" :label-width="formLabelWidth" style="width: 60%;">
+                <el-input v-model="student.studentName" maxlength="7" show-word-limit></el-input>
+            </el-form-item>
+            <el-form-item label="性别" :label-width="formLabelWidth">
+                <el-radio-group v-model="student.sex">
+                    <el-radio-button label="1">男</el-radio-button>
+                    <el-radio-button label="0">女</el-radio-button>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="英语" :label-width="formLabelWidth">
+                <el-input-number v-model="student.englishGrade" :step="5" :min="1" :max="100">
+                </el-input-number>
+            </el-form-item>
+            <el-form-item label="数学" :label-width="formLabelWidth">
+                <el-input-number v-model="student.mathGrade" :step="5" :min="1" :max="100">
+                </el-input-number>
+            </el-form-item>
+            <el-form-item label="社团" :label-width="formLabelWidth">
+                <el-select v-model="student.societyId" placeholder="社团名称">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="身高" :label-width="formLabelWidth">
+                <el-input-number v-model="student.height" :precision="2" :step="0.1" :min="1" :max="2">
+                </el-input-number>
+            </el-form-item>
+            <el-form-item label="生日" :label-width="formLabelWidth">
+                <el-date-picker v-model="student.birthday" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item label="钱" :label-width="formLabelWidth" style="width: 50%;">
+                <el-input-number v-model="student.money" :step="100" :min="0"></el-input-number>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="selectMethod">确 定</el-button>
+        </div>
+    </el-dialog>
+    <!-- 表格 -->
+    <template>
+        <el-table :data="students" Iteme height="500" style="width: 100%" highlight-current-row
+                  @selection-change="handleSelectionChange" :row-class-name="tableRowClassName">
+            <el-table-column prop="id" align="center" width="50px" label="学号">
+            </el-table-column>
+            <el-table-column prop="studentName" align="center" label="姓名">
+            </el-table-column>
+            <el-table-column prop="sex" align="center" label="性别">
+            </el-table-column>
+            <el-table-column prop="englishGrade" align="center" label="英语">
+            </el-table-column>
+            <el-table-column prop="mathGrade" align="center" label="数学">
+            </el-table-column>
+            <el-table-column prop="societyId" align="center" label="社团">
+            </el-table-column>
+            <el-table-column prop="height" align="center" label="身高">
+            </el-table-column>
+            <el-table-column prop="birthday" align="center" label="生日">
+            </el-table-column>
+            <el-table-column prop="money" align="center" label="钱">
+            </el-table-column>
+            <el-table-column type="index" width="40px">
+            </el-table-column>
+            <el-table-column align="center" width="170px" fixed="right" label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" circle></el-button>
+                    <el-button type="danger" icon="el-icon-delete" @click="handleDel(scope.row)" circle></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+</div>
+
+<script src="../js/axios-0.18.0.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
+<script>
+    new Vue({
+        el: "#app",
+        mounted() {
+            this.selectAll()
+        },
+        data() {
+            return {
+                // 表格数据
+                students: [],
+                studentID: '',
+                //下拉列表
+                options: [{
+                    value: '1',
+                    label: '散人'
+                }, {
+                    value: '2',
+                    label: '头文字D'
+                }, {
+                    value: '3',
+                    label: '轻音部'
+                }, {
+                    value: '4',
+                    label: '黄金之风'
+                }, {
+                    value: '5',
+                    label: '极东魔术昼寝结社'
+                }],
+                // 嵌套表单
+                selectTitle: "添加学生",
+                dialogFormVisible: false,
+                student: {
+                    id: '',
+                    studentName: '',
+                    sex: '',
+                    englishGrade: '',
+                    mathGrade: '',
+                    societyId: '',
+                    height: '',
+                    birthday: '',
+                    money: ''
+                },
+                formLabelWidth: '120px',
+            };
+        },
+        methods: {
+            tableRowClassName({rowIndex}) {
+                if (rowIndex % 4 === 1) {
+                    return 'warning-row';
+                } else if (rowIndex % 4 === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            selectChoose(val) {
+                const _this = this
+                if (val === 2) {
+                    _this.selectTitle = "修改学生"
+                } else if (val === 1) {
+                    _this.student={
+                        id: '',
+                            studentName: '',
+                            sex: '',
+                            englishGrade: '',
+                            mathGrade: '',
+                            societyId: '',
+                            height: '',
+                            birthday: '',
+                            money: ''
+                    }
+                    _this.selectTitle = "添加学生"
+                }
+                _this.dialogFormVisible = true
+            },
+            selectMethod() {
+                const _this = this
+                if (_this.selectTitle === "修改学生") {
+                    _this.updateById()
+                } else if (_this.selectTitle === "添加学生") {
+                    _this.addStudent()
+                }
+                _this.dialogFormVisible = false
+            },
+            addStudent() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/students",
+                    data: this.student
+                }).then(resp => {
+                    if (resp.data.code === 20011) {
+                        this.open2(resp.data.msg)
+                        this.selectAll()
+                    } else {
+                        this.open4(resp.data.msg)
+                    }
+                })
+            },
+            deleteById() {
+                axios({
+                    method: "delete",
+                    url: "http://localhost:8080/students/" + this.studentID
+                }).then(resp => {
+                    if (resp.data.data) {
+                        this.open2("删除成功")
+                        this.selectAll()
+                    } else {
+                        this.open4("删除失败")
+                    }
+                })
+            },
+            updateById() {
+                axios({
+                    method: "put",
+                    url: "http://localhost:8080/students",
+                    data: this.student
+                }).then(resp => {
+                    if (resp.data.data) {
+                        this.open2("修改成功")
+                        this.selectAll()
+                    }else {
+                        this.open4(resp.data.msg)
+                    }
+                })
+            },
+            selectAll() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/students",
+                    data: this.students
+                }).then(resp => {
+                    this.students = resp.data.data;
+                })
+            },
+            selectById() {
+                axios({
+                    method: "get",
+                    url: "http://localhost:8080/students/"+this.studentID
+                }).then(resp => {
+                    this.student = resp.data.data
+                })
+            },
+
+
+            handleEdit(row) {
+                this.studentID = row.id
+                this.selectById()
+                this.selectChoose(2)
+            },
+            handleDel(row) {
+                this.studentID = row.id
+                this.deleteById()
+            },
+            open2(val) {
+                this.$message({
+                    message: val,
+                    type: 'success'
+                });
+            },
+            open4(val) {
+                this.$message.error(val);
+            }
+        }
+    })
+</script>
+</body>
+</html>
