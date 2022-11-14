@@ -30,7 +30,7 @@ public class HandleInsertData {
     }
 
     public void writeRegisterModel(Register register) {
-        String sqlStr = "insert into loginmixjade values(?,?)";
+        String sqlStr = "insert into loginmixjade(nameJade,passwordJade) values(?,?)";
         int ok = 0;
         try {
             preSql = con.prepareStatement(sqlStr);
@@ -39,6 +39,7 @@ public class HandleInsertData {
             ok = preSql.executeUpdate();
             con.close();
         } catch (SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "没有在数据库找到表", "散玉说", JOptionPane.ERROR_MESSAGE);
         }
         if (ok != 0) {
