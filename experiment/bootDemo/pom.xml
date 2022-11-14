@@ -26,6 +26,11 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.13-SNSAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>com.mysql</groupId>
@@ -38,14 +43,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

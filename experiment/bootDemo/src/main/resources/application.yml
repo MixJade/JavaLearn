@@ -1,6 +1,7 @@
 # TODO 数据库相关配置
 spring:
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shixun0515?useSSL=true
     username: root
