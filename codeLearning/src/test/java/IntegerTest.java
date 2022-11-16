@@ -40,9 +40,11 @@ public class IntegerTest {
         String str04 = "hhh相同值";
         String str05 = "，相同的地址";
         String str06 = str04 + str05;
+        String str07=new String("hhh相同值，相同的地址");
         System.out.println(str01 == str02);
         System.out.println(str03 == str01);
         System.out.println(str06 == str01);
         System.out.println(str06.equals(str01));
+        System.out.println(str07==str01);
     }
 }
