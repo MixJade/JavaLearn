@@ -1,4 +1,4 @@
-package com.demo.controller;
+package com.demo.common;
 
 public class Code {
     public static final Integer SAVE_OK = 20011;

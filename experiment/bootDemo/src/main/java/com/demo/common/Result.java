@@ -1,4 +1,4 @@
-package com.demo.controller;
+package com.demo.common;
 
 public class Result {
     private Object data;
