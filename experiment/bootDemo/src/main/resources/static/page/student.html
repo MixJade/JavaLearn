@@ -88,12 +88,12 @@
             <el-table-column prop="mathGrade" align="center" label="数学">
             </el-table-column>
             <el-table-column align="center" label="社团">
-                <template slot-scope="scope">
-                    {{(scope.row.societyId === 1) ? '散人'
-                        : (scope.row.societyId === 2) ? '头文字D'
-                                : (scope.row.societyId === 3) ? '轻音部'
-                                        : (scope.row.societyId === 4) ? '黄金之风'
-                                                : (scope.row.societyId === 5) ? '极东魔术昼寝结社'
+                <template slot-scope="society">
+                    {{society.row.societyId === 1 ? '散人'
+                        : society.row.societyId === 2 ? '头文字D'
+                                : society.row.societyId === 3 ? '轻音部'
+                                        : society.row.societyId === 4 ? '黄金之风'
+                                                : society.row.societyId === 5 ? '极东魔术昼寝结社'
                                                         : '其它'
                     }}
                 </template>
@@ -118,6 +118,7 @@
 
 <script src="../js/axios-0.18.0.js"></script>
 <script src="../js/vue.js"></script>
+<script src="../js/studentsJS.js"></script>
 <script src="../element-ui/lib/index.js"></script>
 <link rel="stylesheet" href="../element-ui/lib/theme-chalk/index.css">
 <script>
@@ -283,6 +284,11 @@
             }
         }
     })
+</script>
+<script>
+    function societyName(societyId) {
+        return '通道'
+    }
 </script>
 </body>
 </html>
