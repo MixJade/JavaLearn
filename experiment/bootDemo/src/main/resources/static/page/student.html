@@ -89,13 +89,7 @@
             </el-table-column>
             <el-table-column align="center" label="社团">
                 <template slot-scope="society">
-                    {{society.row.societyId === 1 ? '散人'
-                        : society.row.societyId === 2 ? '头文字D'
-                                : society.row.societyId === 3 ? '轻音部'
-                                        : society.row.societyId === 4 ? '黄金之风'
-                                                : society.row.societyId === 5 ? '极东魔术昼寝结社'
-                                                        : '其它'
-                    }}
+                    {{societyName(society.row.societyId)}}
                 </template>
             </el-table-column>
             <el-table-column prop="height" align="center" label="身高">
@@ -163,9 +157,26 @@
                     money: ''
                 },
                 formLabelWidth: '120px',
+                rowNum: 3
             };
         },
         methods: {
+            societyName(societyId) {
+                switch (societyId) {
+                    case 1:
+                        return '散人'
+                    case 2:
+                        return '头文字D'
+                    case 3:
+                        return '轻音部'
+                    case 4:
+                        return '黄金之风'
+                    case 5:
+                        return '极东魔术昼寝结社'
+                    default:
+                        return '其它'
+                }
+            },
             tableRowClassName({rowIndex}) {
                 if (rowIndex % 4 === 1) {
                     return 'warning-row';
