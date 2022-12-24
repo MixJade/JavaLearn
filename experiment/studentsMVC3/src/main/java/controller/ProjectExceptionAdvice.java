@@ -13,29 +13,29 @@ public class ProjectExceptionAdvice {
     @ExceptionHandler(SystemException.class)
     public Result doSystemException(SystemException ex) {
         // 系统异常，可预计而无法避免的异常，发送固定消息，安抚客户
-        return new Result(ex.getCode(), null, ex.getMessage());
+        return Result.error(ex.getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
     public Result doBusinessException(BusinessException ex) {
         // 业务异常，发送消息给客户，提醒规范操作
-        return new Result(ex.getCode(), null, ex.getMessage());
+        return Result.error(ex.getMessage());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)//关于添加学生重复插入
     public Result doDuplicateKeyException() {
-        return new Result(Code.BUSINESS_ERR, null, "不能重复插入");
+        return Result.error("不能重复插入");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)//关于空值插入
     public Result doDataIntegrityViolationException() {
-        return new Result(Code.BUSINESS_ERR, null, "表单不能有空值");
+        return Result.error("表单不能有空值");
     }
 
     @ExceptionHandler(Exception.class)
     public Result doOtherException(Exception ex) {
         System.out.println("出现了异常:\n" + ex);
         // 其他异常，没有预计的异常，发送固定消息，安抚客户
-        return new Result(Code.SYSTEM_UNKNOWN_ERR, null, "系统繁忙，请稍后再试！");
+        return Result.error("系统繁忙，请稍后再试！");
     }
 }

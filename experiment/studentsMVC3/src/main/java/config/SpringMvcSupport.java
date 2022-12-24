@@ -11,11 +11,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 @Configuration
 public class SpringMvcSupport extends WebMvcConfigurationSupport {
     //添加拦截器
-    @Autowired
-    ProjectInterceptor01 projectInterceptor01;
-    @Autowired
-    ProjectInterceptor02 projectInterceptor02;
+    private ProjectInterceptor01 projectInterceptor01;
+    private ProjectInterceptor02 projectInterceptor02;
 
+    @Autowired
+    public void setProjectInterceptor01(ProjectInterceptor01 projectInterceptor01) {
+        this.projectInterceptor01 = projectInterceptor01;
+    }
+
+    @Autowired
+    public void setProjectInterceptor02(ProjectInterceptor02 projectInterceptor02) {
+        this.projectInterceptor02 = projectInterceptor02;
+    }
 
     //设置静态资源访问过滤，当前类需要设置为配置类，并被扫描加载
     @Override
@@ -23,6 +30,7 @@ public class SpringMvcSupport extends WebMvcConfigurationSupport {
         //当访问/pages/????时候，从/pages目录下查找内容
         registry.addResourceHandler("/page/**").addResourceLocations("/page/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+        registry.addResourceHandler("/assets/**").addResourceLocations("/assets/");
         registry.addResourceHandler("/element-ui/**").addResourceLocations("/element-ui/");
     }
 

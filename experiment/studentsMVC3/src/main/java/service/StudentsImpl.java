@@ -9,8 +9,12 @@ import java.util.List;
 
 @Service
 public class StudentsImpl implements StudentsService {
-    @Autowired
     private StudentsDao studentsDao;
+
+    @Autowired
+    public void setStudentsDao(StudentsDao studentsDao) {
+        this.studentsDao = studentsDao;
+    }
 
     @Override
     public boolean addStu(Students students) {
