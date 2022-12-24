@@ -1,18 +1,19 @@
 package com.demo.controller;
 
-import com.demo.common.Code;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.demo.common.Result;
 import com.demo.dao.StudentsDao;
 import com.demo.domain.Students;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/students")
 public class StudentsController {
-    StudentsDao studentsDao;
+    private StudentsDao studentsDao;
 
     @Autowired
     public void setStudentsDao(StudentsDao studentsDao) {
@@ -22,42 +23,41 @@ public class StudentsController {
     @PostMapping
     public Result addStu(@RequestBody Students students) {
         int addRes = studentsDao.insert(students);
-        if (addRes > 0) {
-            return new Result(Code.SAVE_OK, true, "添加成功");
-        } else {
-            return new Result(Code.SAVE_ERR, false, "添加失败");
-        }
+        return Result.choice("添加", addRes > 0);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         int deleteRes = studentsDao.deleteById(id);
-        return new Result(deleteRes > 0 ? Code.DELETE_OK : Code.DELETE_ERR, deleteRes);
+        return Result.choice("删除", deleteRes > 0);
+    }
+
+    @DeleteMapping("/batch/{ids}")
+    public Result deleteGroup(@PathVariable Integer[] ids) {
+        int deleteRes = studentsDao.deleteBatchIds(Arrays.asList(ids));
+        return Result.choice("删除多个", deleteRes > 0);
     }
 
     @PutMapping
     public Result update(@RequestBody Students students) {
         int updateRes = studentsDao.updateById(students);
-        return new Result(updateRes > 0 ? Code.UPDATE_OK : Code.UPDATE_ERR, updateRes, "修改");
+        return Result.choice("修改", updateRes > 0);
     }
 
     @GetMapping()
-    public Result getAll() {
-        List<Students> students = studentsDao.selectList(null);
-        if (students != null) {
-            return new Result(Code.GET_OK, students, "查询成功");
-        } else {
-            return new Result(Code.GET_ERR, null, "查询失败");
-        }
+    public List<Students> getAll() {
+        return studentsDao.selectList(null);
+    }
+
+    @GetMapping("/like/{stuName}")
+    public List<Students> getLike(@PathVariable String stuName) {
+        LambdaQueryWrapper<Students> lqw = new LambdaQueryWrapper<>();
+        lqw.like(Students::getStudentName, stuName);// 模糊查询
+        return studentsDao.selectList(lqw);
     }
 
     @GetMapping("/{id}")
-    public Result getById(@PathVariable Integer id) {
-        Students student = studentsDao.selectById(id);
-        if (student != null) {
-            return new Result(Code.GET_OK, student, "查询成功");
-        } else {
-            return new Result(Code.GET_ERR, null, "查询失败，此人不存在");
-        }
+    public Students getById(@PathVariable Integer id) {
+        return studentsDao.selectById(id);
     }
 }

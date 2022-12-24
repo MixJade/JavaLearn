@@ -1,30 +1,29 @@
 package com.demo.common;
 
+/**
+ * 通用返回结果，封装增删改的响应数据
+ */
 public class Result {
-    private Object data;
-    private Integer code;
-    private String msg;
+    private Integer code; //编码：1成功，0和其它数字为失败
+    private String msg; //传递信息
 
-    public Result() {
+    public static Result choice(String msg, boolean res) {
+        Result r = new Result();
+        if (res) {
+            r.code = 1;
+            r.msg = msg + "成功";
+        } else {
+            r.code = 0;
+            r.msg = msg + "失败";
+        }
+        return r;
     }
 
-    public Result(Integer code,Object data) {
-        this.data = data;
-        this.code = code;
-    }
-
-    public Result(Integer code, Object data, String msg) {
-        this.data = data;
-        this.code = code;
-        this.msg = msg;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
+    public static Result error(String msg) {
+        Result r = new Result();
+        r.code = 0;
+        r.msg = msg;
+        return r;
     }
 
     public Integer getCode() {
