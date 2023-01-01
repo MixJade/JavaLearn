@@ -10,12 +10,6 @@
 </head>
 
 <body>
-<!-- 导航 -->
-<ul class="nav justify-content-end navbar bg-dark">
-    <li class="nav-item"><a class="nav-link active" href="#">首页</a></li>
-    <li class="nav-item"><a class="nav-link disabled">学生管理</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">社团管理</a></li>
-</ul>
 <!-- 吐司消息 -->
 <div class="position-fixed bottom-50 p-3" style="z-index: 5;left: 30%;">
     <div class="toast hide text-white bg-danger" id="liveToast" data-bs-delay="1200" role="alert"
@@ -257,6 +251,7 @@
     // 设置表单标题(添加)
     function setPopTitle() {
         document.getElementById('addPetForm').reset();
+        document.getElementById('id').value=''
         document.getElementById('addPetPopLa').innerHTML = "添加学生"
     }
 
