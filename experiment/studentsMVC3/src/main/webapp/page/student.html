@@ -244,29 +244,19 @@
     //表单数据转json
     function formToJson() {
         const formJson = {
-            "studentName": '',
-            "birthday": '',
-            "id": '',
-            "sex": '',
-            "englishGrade": '',
-            "mathGrade": '',
-            "societyId": '',
-            "money": '',
-            "height": ''
+            "studentName": document.getElementById('studentName').value,
+            "birthday": document.getElementById('birthday').value,
+            "id": document.getElementById('id').value,
+            "sex": 0,
+            "englishGrade": document.getElementById('englishGrade').value,
+            "mathGrade": document.getElementById('mathGrade').value,
+            "societyId": getSocietyId(),
+            "money": document.getElementById("money").value,
+            "height": document.getElementById("height").value
         };
-        formJson.studentName = document.getElementById('studentName').value;
-        formJson.birthday = document.getElementById('birthday').value;
-        formJson.id = document.getElementById('id').value;
         if (document.getElementById("petSexRad_1").checked) {
             formJson.sex = 1
-        } else {
-            formJson.sex = 0
         }
-        formJson.englishGrade = document.getElementById('englishGrade').value;
-        formJson.mathGrade = document.getElementById('mathGrade').value;
-        formJson.societyId = getSocietyId();
-        formJson.money = document.getElementById("money").value;
-        formJson.height = document.getElementById("height").value;
         return formJson;
     }
 
