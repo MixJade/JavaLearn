@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pet_forge?useSSL=true
+    username: root
+    password: root
+  main:
+    banner-mode: off
+
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: isDel
+      logic-not-delete-value: 0
+  mapper-locations: classpath:com/forge/mapper/*.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+shiro:
+  loginUrl: /login.html
+  unauthorizedUrl: /login.html?noPower
+
+pet-forge:
+  images-path: C:\MixJade\forgePet\images\
+  notice-path: C:\MixJade\forgePet\notice\
