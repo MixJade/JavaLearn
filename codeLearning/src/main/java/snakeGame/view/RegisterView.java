@@ -1,8 +1,8 @@
-package sankeGame.view;
+package snakeGame.view;
 
 
-import sankeGame.handle.HandleInsertData;
-import sankeGame.model.Register;
+import snakeGame.handle.HandleInsertData;
+import snakeGame.model.Register;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

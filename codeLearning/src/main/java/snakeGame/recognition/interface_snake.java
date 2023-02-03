@@ -1,4 +1,4 @@
-package sankeGame.recognition;
+package snakeGame.recognition;
 
 import javax.swing.*;
 import java.awt.*;

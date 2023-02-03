@@ -1,6 +1,6 @@
-package sankeGame.handle;
+package snakeGame.handle;
 
-import sankeGame.model.Login;
+import snakeGame.model.Login;
 
 import java.sql.*;
 import javax.swing.JOptionPane;

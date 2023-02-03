@@ -1,8 +1,8 @@
-package sankeGame.recognition;
+package snakeGame.recognition;
 
-import sankeGame.handle.HandleInsertData;
-import sankeGame.model.Register;
-import sankeGame.view.RegisterAndLoginView;
+import snakeGame.handle.HandleInsertData;
+import snakeGame.model.Register;
+import snakeGame.view.RegisterAndLoginView;
 
 import javax.swing.*;
 import java.awt.*;

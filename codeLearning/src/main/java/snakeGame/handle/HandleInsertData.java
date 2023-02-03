@@ -1,7 +1,7 @@
-package sankeGame.handle;
+package snakeGame.handle;
 
 
-import sankeGame.model.Register;
+import snakeGame.model.Register;
 
 import javax.swing.*;
 import java.sql.Connection;

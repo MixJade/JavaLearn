@@ -1,7 +1,7 @@
-package sankeGame.view;
+package snakeGame.view;
 
-import sankeGame.handle.HandleLogin;
-import sankeGame.model.Login;
+import snakeGame.handle.HandleLogin;
+import snakeGame.model.Login;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

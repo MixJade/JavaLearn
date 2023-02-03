@@ -1,7 +1,16 @@
-package sankeGame.model;
-public class Register {
+package snakeGame.model;
+public class Login {
+   boolean loginSuccess = false;
    String nameJade;
    String passwordJade;
+
+   public boolean isLoginSuccess() {
+      return loginSuccess;
+   }
+
+   public void setLoginSuccess(boolean loginSuccess) {
+      this.loginSuccess = loginSuccess;
+   }
 
    public String getNameJade() {
       return nameJade;
