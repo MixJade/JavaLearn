@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class SaveCode {
     public static void main(String[] args) {
-        SaveCode saveCode = new SaveCode("C:\\MixJade\\zooMarkdown\\代码保存结果.md");
+        SaveCode saveCode = new SaveCode("C:\\MixJade\\diaryJade\\代码保存结果.md");
         saveCode.saveMixJadeCode("src");
     }
 
@@ -63,10 +63,8 @@ public class SaveCode {
      */
     private void verifyCode() {
         String altTime = new SimpleDateFormat("MM月dd日 a HH:mm").format(new Date());
-        try {
-            FileWriter fw = new FileWriter(RESULT_PATH);
+        try (FileWriter fw = new FileWriter(RESULT_PATH)) {
             fw.write("# 散玉的JAVA代码\n>创建时间:" + altTime + "\n>在暑假学习JAVA过程中所编辑的代码，为了能够在未来派上用场，特此建立一个md文件来记录。\n---\n");
-            fw.close();
         } catch (IOException e) {
             System.out.println("目录写入失败");
         }
@@ -77,7 +75,6 @@ public class SaveCode {
      */
     private void saveMixJadeCode(String codeWarehouse) {
         File f = new File(codeWarehouse);
-
         String endText = ("\n```\n</details>\n\n---\n");
         int i = 1;
         if (!f.exists()) {
@@ -86,8 +83,7 @@ public class SaveCode {
         }
         File[] fileName = f.listFiles();
         assert fileName != null;
-        try {
-            BufferedWriter bw01 = new BufferedWriter(new FileWriter(RESULT_PATH, StandardCharsets.UTF_8, true));
+        try (BufferedWriter bw01 = new BufferedWriter(new FileWriter(RESULT_PATH, StandardCharsets.UTF_8, true))) {
             for (File fs : fileName) {
                 BasicFileAttributes attributes = Files.readAttributes(fs.toPath(), BasicFileAttributes.class);
                 if (attributes.isRegularFile()) {
@@ -116,7 +112,6 @@ public class SaveCode {
                 }
             }
             bw01.flush();
-            bw01.close();
         } catch (Exception e) {
             System.out.println("读取文件出错" + e);
         }
