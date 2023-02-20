@@ -31,8 +31,8 @@ public class ResizeImg extends JFrame implements ActionListener {
     public ResizeImg() {
         area.setEditable(false);
         area.setLineWrap(true);
-        weightText.setText("350");
-        heightText.setText("128");
+        weightText.setText("375");
+        heightText.setText("100");
         JScrollPane jScrollPane = new JScrollPane(area);
         jScrollPane.setSize(200, 200);
         JFrame jf = new JFrame("重新设置图片尺寸");
