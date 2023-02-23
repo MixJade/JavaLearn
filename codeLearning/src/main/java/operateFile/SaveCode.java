@@ -63,7 +63,7 @@ public class SaveCode {
      */
     private void verifyCode() {
         String altTime = new SimpleDateFormat("MM月dd日 a HH:mm").format(new Date());
-        try (FileWriter fw = new FileWriter(RESULT_PATH)) {
+        try (var fw = new FileWriter(RESULT_PATH)) {
             fw.write("# 散玉的JAVA代码\n>创建时间:" + altTime + "\n>在暑假学习JAVA过程中所编辑的代码，为了能够在未来派上用场，特此建立一个md文件来记录。\n---\n");
         } catch (IOException e) {
             System.out.println("目录写入失败");
@@ -83,7 +83,7 @@ public class SaveCode {
         }
         File[] fileName = f.listFiles();
         assert fileName != null;
-        try (BufferedWriter bw01 = new BufferedWriter(new FileWriter(RESULT_PATH, StandardCharsets.UTF_8, true))) {
+        try (var bw01 = new BufferedWriter(new FileWriter(RESULT_PATH, StandardCharsets.UTF_8, true))) {
             for (File fs : fileName) {
                 BasicFileAttributes attributes = Files.readAttributes(fs.toPath(), BasicFileAttributes.class);
                 if (attributes.isRegularFile()) {
@@ -98,7 +98,7 @@ public class SaveCode {
                         System.out.println(reallyName);
                         secondText = ("## " + i++ + "、" + reallyName + "\n > 暂时没有简介 \n\n<details> \n<summary>" + reallyName + "</summary>\n\n```" + endSuffix + "\n");
                     }
-                    BufferedReader br01 = new BufferedReader(new FileReader(fs, StandardCharsets.UTF_8));
+                    var br01 = new BufferedReader(new FileReader(fs, StandardCharsets.UTF_8));
                     bw01.write(secondText);
                     while ((tempt = br01.readLine()) != null) {
                         bw01.write(tempt);
