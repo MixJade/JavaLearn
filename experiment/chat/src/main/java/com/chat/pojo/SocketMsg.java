@@ -1,16 +1,18 @@
-package com.chat.utils;
+package com.chat.pojo;
 
-import com.chat.pojo.ResultMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * 需要的工具类，用于转化信息格式
+ * 系统返回消息
+ * @param isSystem 是否系统发送
+ * @param fromName 发送者用户名
+ * @param msg 具体消息
  */
-public class MessageUtils {
-    public static String getMessage(boolean isSystemMessage,String fromName,Object message){
+public record SocketMsg(boolean isSystem,String fromName,Object msg){
+    public static String getMsg(boolean isSystem,String fromName,Object message){
         try {
-            ResultMessage result = new ResultMessage(isSystemMessage,fromName,message);
+            SocketMsg result = new SocketMsg(isSystem,fromName,message);
             //把字符串转成json格式的字符串
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(result);
@@ -20,4 +22,3 @@ public class MessageUtils {
         return null;
     }
 }
-

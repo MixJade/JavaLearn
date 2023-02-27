@@ -2,11 +2,13 @@ package com.chat.ws;
 
 
 import com.chat.pojo.Message;
-import com.chat.utils.MessageUtils;
+import com.chat.pojo.SocketMsg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
@@ -17,10 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 通信类
  */
-@ServerEndpoint(value = "/chat",configurator = GetHttpSessionConfigurator.class)
+@ServerEndpoint(value = "/chat",configurator = EndpointConfig.class)
 @Component
 public class ChatEndpoint {
-
+    private static final Logger log = LoggerFactory.getLogger(ChatEndpoint.class);
     //用来存储每个用户客户端对象的ChatEndpoint对象
     private static final Map<String,ChatEndpoint> onlineUsers = new ConcurrentHashMap<>();
 
@@ -32,7 +34,7 @@ public class ChatEndpoint {
 
     //连接建立
     @OnOpen
-    public void onOpen(Session session, EndpointConfig config){
+    public void onOpen(Session session, jakarta.websocket.EndpointConfig config){
         this.session = session;
         HttpSession httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         this.httpSession = httpSession;
@@ -42,13 +44,13 @@ public class ChatEndpoint {
         onlineUsers.put(username,this);
         //将当前在线用户的用户名推送给所有的客户端
         //1 获取消息
-        String message = MessageUtils.getMessage(true, null, getNames());
+        String message = SocketMsg.getMsg(true, null, getNames());
         //2 调用方法进行系统消息的推送
         broadcastAllUsers(message);
     }
 
     private void broadcastAllUsers(String message){
-        System.out.println(message);
+        log.info("系统广播是:"+message);
         try {
             //将消息推送给所有的客户端
             Set<String> names = onlineUsers.keySet();
@@ -57,7 +59,7 @@ public class ChatEndpoint {
                 chatEndpoint.session.getBasicRemote().sendText(message);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            log.warn("系统广播失败");
         }
     }
 
@@ -73,15 +75,15 @@ public class ChatEndpoint {
         try {
             ObjectMapper mapper =new ObjectMapper();
             Message mess = mapper.readValue(message, Message.class);
-            System.out.println("信息是"+mess);
+            log.info("信息是"+mess);
             String toName = mess.toName();
             String data = mess.message();
             String username = (String) httpSession.getAttribute("user");
-            String resultMessage = MessageUtils.getMessage(false, username, data);
+            String resultMessage = SocketMsg.getMsg(false, username, data);
             //发送数据
             onlineUsers.get(toName).session.getBasicRemote().sendText(resultMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("信息发送失败");
         }
 
     }
@@ -92,6 +94,6 @@ public class ChatEndpoint {
         if (username==null) return;
         //从容器中删除指定的用户
         onlineUsers.remove(username);
-        MessageUtils.getMessage(true,null,getNames());
+        SocketMsg.getMsg(true,null,getNames());
     }}
 
