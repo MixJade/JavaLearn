@@ -4,60 +4,8 @@
     <meta charset="UTF-8">
     <title>聊天测试之聊天</title>
 </head>
-<style>
-    #left {
-        float: left;
-        width: 30%;
-        height: 500px;
-        margin-left: 200px;
-    }
-
-    #right {
-        float: right;
-        width: 30%;
-        height: 500px;
-    }
-
-    #top {
-        margin-top: 50px;
-        float: top;
-        width: 30%;
-        height: 250px;
-    }
-
-    #content {
-        border: aquamarine 1px solid;
-        width: 100%;
-        height: 300px;
-    }
-
-    #input {
-        margin-top: 20px;
-        width: 100%;
-        height: 200px;
-    }
-
-    #input input {
-        width: 100%;
-        height: 100px;
-    }
-
-    #input button {
-        float: right;
-    }
-
-    #mes_left {
-        float: left;
-
-    }
-
-    #mes_right {
-        float: right;
-        width: 50%;
-        text-align: right;
-    }
-</style>
 <body>
+<link href="main.css" rel="stylesheet">
 <script src="js/jquery-3.6.3.min.js"></script>
 <h3 style="text-align: center" id="username"></h3>
 <div>
@@ -75,7 +23,6 @@
         <div id="top">
             <p>在线的好友</p>
             <div id="hyList">
-
             </div>
         </div>
         <div id="bottom">
@@ -87,13 +34,12 @@
 </div>
 </body>
 <script>
-    let username;
-    let toName;
+    let username, toName;
     $(function () {
         $.ajax({
             url: "getUsername",
             success: function (res) {
-                if (res==="noMan") location.href="index.html"
+                if (res === "noMan") location.href = "index.html"
                 username = res;
                 $("#username").html("用户：" + username + "<span>在线</span>");
             },
@@ -157,6 +103,7 @@
             ws.send(JSON.stringify(json));
         })
     })
+
     function showChat(name) {
         toName = name;
         const content = $("#content")
