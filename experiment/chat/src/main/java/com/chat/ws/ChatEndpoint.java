@@ -5,12 +5,14 @@ import com.chat.pojo.Message;
 import com.chat.pojo.SocketMsg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.*;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +87,6 @@ public class ChatEndpoint {
         } catch (Exception e) {
             log.warn("信息发送失败");
         }
-
     }
     //链接关闭
     @OnClose
@@ -94,6 +95,5 @@ public class ChatEndpoint {
         if (username==null) return;
         //从容器中删除指定的用户
         onlineUsers.remove(username);
-        SocketMsg.getMsg(true,null,getNames());
     }}
 
