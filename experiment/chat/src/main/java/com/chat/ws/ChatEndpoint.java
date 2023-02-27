@@ -5,10 +5,7 @@ import com.chat.pojo.Message;
 import com.chat.pojo.SocketMsg;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,22 +18,27 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 通信类
  */
-@ServerEndpoint(value = "/chat",configurator = EndpointConfig.class)
+@ServerEndpoint(value = "/chat",configurator = HttpSessionEndpoint.class)
 @Component
 public class ChatEndpoint {
     private static final Logger log = LoggerFactory.getLogger(ChatEndpoint.class);
-    //用来存储每个用户客户端对象的ChatEndpoint对象
+    /**
+     * 用来存储每个用户客户端对象的ChatEndpoint对象
+     */
     private static final Map<String,ChatEndpoint> onlineUsers = new ConcurrentHashMap<>();
 
-    //声明session对象，通过对象可以发送消息给指定的用户
+    /**
+     * 声明session对象，通过对象可以发送消息给指定的用户
+     */
     private Session session;
-
-    //声明HttpSession对象，我们之前在HttpSession对象中存储了用户名
+    /**
+     * 声明HttpSession对象，之前在HttpSession对象中存储了用户名
+     */
     private HttpSession httpSession;
 
     //连接建立
     @OnOpen
-    public void onOpen(Session session, jakarta.websocket.EndpointConfig config){
+    public void onOpen(Session session, EndpointConfig config){
         this.session = session;
         HttpSession httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         this.httpSession = httpSession;
@@ -44,10 +46,9 @@ public class ChatEndpoint {
         String username = (String)httpSession.getAttribute("user");
         if (username==null) return;
         onlineUsers.put(username,this);
-        //将当前在线用户的用户名推送给所有的客户端
         //1 获取消息
         String message = SocketMsg.getMsg(true, null, getNames());
-        //2 调用方法进行系统消息的推送
+        //2 将当前在线用户的用户名推送给所有的客户端
         broadcastAllUsers(message);
     }
 

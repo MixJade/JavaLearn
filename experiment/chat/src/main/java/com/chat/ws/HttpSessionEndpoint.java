@@ -9,7 +9,7 @@ import jakarta.websocket.server.ServerEndpointConfig;
 /**
  * 获取HttpSession对象的类
  */
-public class EndpointConfig extends ServerEndpointConfig.Configurator {
+public class HttpSessionEndpoint extends ServerEndpointConfig.Configurator {
     @Override
     public void modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
         //获取HttpSession对象
