@@ -65,19 +65,18 @@
                         broadcastListStr += "<p>" + name + "上线了</p>";
                     }
                 }
-                $("#hyList").html(userList);
-                $("#xtList").html(broadcastListStr);
+                $("#hyList").html(userList); //在线的角色
+                $("#xtList").html(broadcastListStr); //系统广播
             } else {
                 //不是系统消息
                 let str = "<span id='mes_left'>" + res["msg"] + "</span></br>";
-                if (toName === res["fromName"])
-                    $("#content").append(str);
-
-                const chatData = sessionStorage.getItem(res["fromName"]);
-                if (chatData != null) {
-                    str = chatData + str;
-                }
-                sessionStorage.setItem(res["fromName"], str);
+                if (toName === res["fromName"]) $("#content").append(str);
+                // 此处将所接受消息写入历史消息
+                /*                const chatData = sessionStorage.getItem(res["fromName"]);
+                                if (chatData != null) {
+                                    str = chatData + str;
+                                }
+                                sessionStorage.setItem(res["fromName"], str);*/
             }
         }
         // 关闭链接
@@ -94,26 +93,29 @@
             //将数据展示在聊天区
             let str = "<span id='mes_right'>" + data + "</span></br>";
             $("#content").append(str);
-            const chatData = sessionStorage.getItem(toName);
-            if (chatData != null) {
-                str = chatData + str;
-            }
-            sessionStorage.setItem(toName, str);
+            // 此处将信息存储进历史消息
+            /*            const chatData = sessionStorage.getItem(toName);
+                        if (chatData != null) {
+                            str = chatData + str;
+                        }
+                        sessionStorage.setItem(toName, str);*/
             //发送数据
             ws.send(JSON.stringify(json));
         })
     })
 
+    // 切换对话角色
     function showChat(name) {
         toName = name;
         const content = $("#content")
         //清空聊天区
         content.html("");
         $("#new").html("当前正与" + toName + "聊天");
-        const chatData = sessionStorage.getItem(toName);
-        if (chatData != null) {
-            content.html(chatData);
-        }
+        // 此处获取对应角色历史消息
+        /*        const chatData = sessionStorage.getItem(toName);
+                if (chatData != null) {
+                    content.html(chatData);
+                }*/
     }
 </script>
 </html>

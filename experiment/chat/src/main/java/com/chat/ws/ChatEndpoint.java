@@ -82,9 +82,9 @@ public class ChatEndpoint {
             String toName = mess.toName();
             String data = mess.message();
             String username = (String) httpSession.getAttribute("user");
-            String resultMessage = SocketMsg.getMsg(false, username, data);
+            String socketMsg = SocketMsg.getMsg(false, username, data);
             //发送数据
-            onlineUsers.get(toName).session.getBasicRemote().sendText(resultMessage);
+            onlineUsers.get(toName).session.getBasicRemote().sendText(socketMsg);
         } catch (Exception e) {
             log.warn("信息发送失败");
         }
