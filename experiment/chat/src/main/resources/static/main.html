@@ -6,7 +6,6 @@
 </head>
 <body>
 <link href="main.css" rel="stylesheet">
-<script src="js/jquery-3.6.3.min.js"></script>
 <h3 style="text-align: center" id="username"></h3>
 <div>
     <div id="left">
@@ -33,11 +32,12 @@
     </div>
 </div>
 </body>
+<script src="js/jquery-3.6.3.min.js"></script>
 <script>
     let username, toName;
     $(function () {
         $.ajax({
-            url: "getUsername",
+            url: "getUsername", // 获取与设置用户名
             success: function (res) {
                 if (res === "noMan") location.href = "index.html"
                 username = res;
@@ -45,8 +45,8 @@
             },
             async: false //同步请求，只有上面好了才会接着下面
         });
-        const ws = new WebSocket("ws://localhost:8080/chat");
-        ws.onopen = function () {
+        const ws = new WebSocket("ws://localhost:8080/chat");  // 建立WebSocket对象
+        ws.onopen = function () { // 通过对象建立ws链接
             $("#username").html("用户：" + username + "<span>在线</span>");
         }
         //接受消息
