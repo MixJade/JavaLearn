@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    限制xml中，
+    有一个根标签QuizQuest，
+    根标签下，有许多Option标签，
+    每个Option标签下，有五个标签：
+    分别是:Question、A、AType、B、BTYpe,
+    限制<AType>与<BType>标签中，只能有一个英文大写字母，且只能是F、N、M、J中的一个
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="QuizQuest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Option" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Question" type="xs:string"/>
+                            <xs:element name="A" type="xs:string"/>
+                            <xs:element name="AType">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:length value="1"/>
+                                        <xs:enumeration value="E"/>
+                                        <xs:enumeration value="I"/>
+                                        <xs:enumeration value="S"/>
+                                        <xs:enumeration value="N"/>
+                                        <xs:enumeration value="T"/>
+                                        <xs:enumeration value="F"/>
+                                        <xs:enumeration value="J"/>
+                                        <xs:enumeration value="P"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="B" type="xs:string"/>
+                            <xs:element name="BType">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:length value="1"/>
+                                        <xs:enumeration value="E"/>
+                                        <xs:enumeration value="I"/>
+                                        <xs:enumeration value="S"/>
+                                        <xs:enumeration value="N"/>
+                                        <xs:enumeration value="T"/>
+                                        <xs:enumeration value="F"/>
+                                        <xs:enumeration value="J"/>
+                                        <xs:enumeration value="P"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

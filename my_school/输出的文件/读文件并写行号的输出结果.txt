@@ -1,0 +1,35 @@
+【1】 package course_06;
+【2】 
+【3】 import java.io.*;
+【4】 import java.nio.charset.StandardCharsets;
+【5】 
+【6】 /**
+【7】  * 【6.1】【题】文件倒置读取
+【8】  * 参照例10-8，使用RandomAccessFile流将一个文本文件倒置读出。
+【9】  */
+【10】 public class 文件倒置读取 {
+【11】     public static void main(String[] args) {
+【12】         File f = new File("src/main/resources/course_06/手榴弹.txt");
+【13】         // 打开文件
+【14】         try (RandomAccessFile randomFile = new RandomAccessFile(f, "rw")) {
+【15】             randomFile.seek(0);
+【16】             long m = randomFile.length();//m=文件长度
+【17】             while (m > 0) {
+【18】                 m = m - 1;
+【19】                 randomFile.seek(m);//定位到第m个字符
+【20】                 byte c = randomFile.readByte(); // 这里读取出来的值不会超过255
+【21】                 if (c >= 0) {//英文字符asc码小于255,大于0
+【22】                     System.out.print((char) c);
+【23】                 } else {//汉字不在asc码范围内,
+【24】                     m = m - 2;//我的汉字占3个字节
+【25】                     randomFile.seek(m);
+【26】                     byte[] cc = new byte[3];
+【27】                     randomFile.readFully(cc);//cc为复制文件中连续的字节
+【28】                     System.out.print(new String(cc, StandardCharsets.UTF_8));//把cc转换为字符串
+【29】                 }
+【30】             }
+【31】         } catch (Exception exp) {
+【32】             System.out.println("\n读取失败" + exp.getMessage());
+【33】         }
+【34】     }
+【35】 }

@@ -1,0 +1,5 @@
+target/
+.idea/
+*.iml
+# 忽略上传脚本
+up.sh

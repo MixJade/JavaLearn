@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mixUtils.UserMapper">
+    <insert id="addStudent">
+        INSERT INTO students
+        (studentName, sex, englishGrade, mathGrade, societyId, height, birthday, money)
+        VALUES (#{studentName},
+                #{sex},
+                #{englishGrade},
+                #{mathGrade},
+                #{societyId},
+                #{height},
+                #{birthday},
+                #{money})
+    </insert>
+
+    <update id="updateOrigin">
+        update students
+        set studentName=#{studentName},
+            sex=#{sex},
+            englishGrade=#{englishGrade},
+            mathGrade=#{mathGrade},
+            societyId=#{societyId},
+            height=#{height},
+            birthday=#{birthday},
+            money=#{money}
+        where id = #{id};
+    </update>
+</mapper>

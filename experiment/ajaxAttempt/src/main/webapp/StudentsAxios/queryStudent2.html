@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>查询所有学生2.0</title>
+    <!-- 引入vue2.6.10，这是当初使用的版本，可以在studentManage2项目中找到-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <!-- 这个axios也是当初使用的版本，可以在studentManage2项目中找到-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.18.1/axios.min.js"></script>
+</head>
+<body>
+<h2>查询所有学生,Vue+Axios版</h2>
+<div id="app">
+    <a href="addStudent.html">
+        <button>添加数据</button>
+    </a><br>
+    <hr>
+    <table id="studentsTable" border="1" cellspacing="0" width="90%">
+        <tr>
+            <th>id</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>英语</th>
+            <th>数学</th>
+            <th>社团</th>
+            <th>身高</th>
+            <th>生日</th>
+            <th>钱</th>
+            <th>排序</th>
+            <th>操作</th>
+        </tr>
+        <!--
+            使用v-for遍历tr
+        -->
+        <tr v-for="(student,i) in students" align="center">
+            <td>{{student.id}}</td>
+            <td>{{student.studentName}}</td>
+            <td>{{student.sex}}</td>
+            <td>{{student.englishGrade}}</td>
+            <td>{{student.mathGrade}}</td>
+            <td>{{student.societyName}}</td>
+            <td>{{student.height}}</td>
+            <td>{{student.birthday}}</td>
+            <td>{{student.money}}</td>
+            <td>{{i}}</td>
+            <th>操作</th>
+        </tr>
+    </table>
+</div>
+</body>
+
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                students: []
+            }
+        },
+        mounted() {
+            // 页面加载完成后，发送异步请求，查询数据
+            const _this = this;
+            axios({
+                method: "post",
+                url: "http://localhost:8080/ajaxAttempt/Students/students"
+            }).then(function (resp) {
+                _this.students = resp.data;
+            })
+        }
+    })
+
+
+</script>
+</html>

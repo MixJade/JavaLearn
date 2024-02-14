@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  AreaGather [
+        <!ELEMENT AreaGather (AreaManager+)>
+        <!ELEMENT AreaManager (AreaName,NeedTime,NeedSci,NeedPeople,NowTime,NowSci,NowPeople)>
+        <!ELEMENT AreaName (#PCDATA)>
+        <!ELEMENT NeedTime (#PCDATA)>
+        <!ELEMENT NeedSci (#PCDATA)>
+        <!ELEMENT NeedPeople (#PCDATA)>
+        <!ELEMENT NowTime (#PCDATA)>
+        <!ELEMENT NowSci (#PCDATA)>
+        <!ELEMENT NowPeople (#PCDATA)>
+        ]>
+
+<AreaGather>
+    <AreaManager>
+        <AreaName>综合区—外</AreaName>
+        <NeedTime>375</NeedTime>
+        <NeedSci>295</NeedSci>
+        <NeedPeople>460</NeedPeople>
+        <NowTime>230</NowTime>
+        <NowSci>170</NowSci>
+        <NowPeople>280</NowPeople>
+    </AreaManager>
+    <AreaManager>
+        <AreaName>综合区—内</AreaName>
+        <NeedTime>460</NeedTime>
+        <NeedSci>380</NeedSci>
+        <NeedPeople>280</NeedPeople>
+        <NowTime>240</NowTime>
+        <NowSci>190</NowSci>
+        <NowPeople>200</NowPeople>
+    </AreaManager>
+    <AreaManager>
+        <AreaName>工业区</AreaName>
+        <NeedTime>280</NeedTime>
+        <NeedSci>437</NeedSci>
+        <NeedPeople>400</NeedPeople>
+        <NowTime>200</NowTime>
+        <NowSci>220</NowSci>
+        <NowPeople>220</NowPeople>
+    </AreaManager>
+    <AreaManager>
+        <AreaName>历史区</AreaName>
+        <NeedTime>385</NeedTime>
+        <NeedSci>385</NeedSci>
+        <NeedPeople>365</NeedPeople>
+        <NowTime>241</NowTime>
+        <NowSci>231</NowSci>
+        <NowPeople>199</NowPeople>
+    </AreaManager>
+
+
+</AreaGather>

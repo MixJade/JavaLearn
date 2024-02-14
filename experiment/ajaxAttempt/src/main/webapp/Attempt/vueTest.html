@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>VUE测试</title>
+    <style>
+        body {
+            background-color: rgb(36, 151, 107);
+            text-align: center;
+        }
+    </style>
+    <!-- 引入vue2.6.10，这是当初使用的版本-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.10/vue.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 模型绑定 -->
+        <input v-model="username">
+        <!--插值表达式-->
+        {{username}}
+    </div>
+    <br>
+    <div id="app02">
+        <!-- v-bind绑定 -->
+        <a v-bind:href="url">点击跳转</a>
+        <input v-model="url">
+        {{url}}
+    </div>
+    <br>
+    <div id="app03">
+        <!-- v-on:click单击事件 -->
+        <button v-on:click="my_show">点击</button>
+        <!-- v-if:判定 -->
+        <p v-if="status==1">这是1</p>
+        <p v-else-if="status==2">这是2</p>
+        <p v-else>芝士雪豹</p>
+        输入一个数字:<input v-model="status">
+    </div>
+    <div id="app04">
+        <!-- v-for是VUE的for循环 -->
+        <p v-for="student in students">{{student}}</p>
+        <!-- 注意：索引在第二个值 -->
+        <p v-for="(student,i) in students">{{i}}---{{student}}</p>
+        <!-- 不然如下,顺便展示加值 -->
+        <p v-for="(i,student) in students">{{i+1}}---{{student+1}}</p>
+    </div>
+</body>
+
+<script>
+    //1. 创建Vue核心对象
+    new Vue({
+        el: "#app",
+        data() {  // data() 是 ECMAScript 6 版本的新的写法
+            return {
+                username: "模型绑定与插值"
+            }
+        }
+        //被简化的写法
+        /*data: function () {
+            return {
+                username:""
+            }
+        }*/
+    });
+
+    new Vue({
+        el: "#app02",
+        data() {
+            return {
+                url: "http://www.baidu.com"
+            }
+        }
+    })
+    new Vue({
+        el: "#app03",
+        data() {
+            return {
+                status: 2
+            }
+        },
+        methods: {
+            my_show() {
+                alert("Vue设置methods实现绑定方法")
+            }
+
+        }
+    })
+    new Vue({
+        el: "#app04",
+        data() {
+            return {
+                students: ["张三", "李四", "王五"]
+            }
+        },
+        mounted(){
+            alert("加载完成")
+        }
+    })
+</script>
+
+</html>
