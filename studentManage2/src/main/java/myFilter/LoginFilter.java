@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/manager/*", "/plentiful/*"})
+@WebFilter(urlPatterns = {"/student/*", "/plentiful/*"})
 public class LoginFilter implements Filter {
 
     @Override

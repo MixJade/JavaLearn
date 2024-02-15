@@ -51,7 +51,7 @@
                     <p class="input"><label for="checkCode">验证码: </label><input type="text" name="checkCode"
                                                                                    id="checkCode"
                                                                                    v-model="checkCode">
-                        <img src="http://localhost:8080/studentManage2/login/checkCode" id="checkCodeImg" alt="验证码">
+                        <img src="/login/checkCode" id="checkCodeImg" alt="验证码">
                         <a href="javascript:check_code()" id="changeImg">看不清？</a>
                     </p>
                     <div class="subDiv">
@@ -104,7 +104,7 @@
             getCookie() {
                 axios({
                     method: "get",
-                    url: "http://localhost:8080/studentManage2/login/getMyCookie",
+                    url: "./login/getMyCookie",
                 }).then(resp => {
                     this.user = resp.data
                 })
@@ -116,7 +116,7 @@
             loginMean() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/login/login",
+                    url: "./login/login",
                     data: this.user
                 }).then(resp => {
                     switch (resp.data) {
@@ -139,7 +139,7 @@
             checkSend() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/login/checkSendCode",
+                    url: "./login/checkSendCode",
                     data: this.checkCode
                 }).then(resp => {
                     if (resp.data === "YesCheck") {
@@ -154,7 +154,7 @@
             registerMean() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/login/register",
+                    url: "./login/register",
                     data: this.user01
                 }).then(resp => {
                     switch (resp.data) {
@@ -200,7 +200,7 @@
     document.getElementById("checkCodeImg").onclick = check_code
 
     function check_code() {
-        document.getElementById("checkCodeImg").src = "http://localhost:8080/studentManage2/login/checkCode?" + new Date().getMilliseconds();
+        document.getElementById("checkCodeImg").src = "./login/checkCode?" + new Date().getMilliseconds();
     }
 
     function refresh() {

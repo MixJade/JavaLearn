@@ -137,10 +137,10 @@
     <!-- 分页工具条 -->
     <el-pagination @size-change=" handleSizeChange"
                    @current-change="handleCurrentChange"
-                   :current-page.sync="pageSeparate.currentPage1"
+                   :current-page.sync="pageSeparate.pageNum"
                    :page-sizes="[5, 7, 9, 12]"
-                   :page-size="pageSeparate.pageItem"
-                   layout="total,sizes,prev, pager, next" :total="totalItem">
+                   :page-size="pageSeparate.pageSize"
+                   layout="total,sizes,prev, pager, next" :total="total">
     </el-pagination>
 </div>
 
@@ -191,12 +191,12 @@
                 },
                 formLabelWidth: '120px',
                 // 分页数据
-                totalItem: 50,
+                total: 50,
                 pageSeparate: {
                     studentName: '',
                     societyId: '',
-                    currentPage1: 1,
-                    pageItem: 7
+                    pageNum: 1,
+                    pageSize: 7
                 }
             };
         },
@@ -205,7 +205,7 @@
                 this.multipleSelection = val;
             },
             onSubmit() {
-                this.pageSeparate.currentPage1 = 1
+                this.pageSeparate.pageNum = 1
                 this.selectByPage();
                 console.log(this.pageSeparate);
             },
@@ -242,24 +242,24 @@
                 // 页面加载完成后，发送异步请求，查询查询部分学生
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/selectPage",
+                    url: "../student/selectPage",
                     data: this.pageSeparate
                 }).then(resp => {
-                    this.students = resp.data.rows;
-                    this.totalItem = resp.data.totalItem;
+                    this.students = resp.data.list;
+                    this.total = resp.data.total;
                 })
             },
             addStudent() {
                 // 发送ajax请求，添加
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/addStudent",
+                    url: "../student/addStudent",
                     data: this.student
                 }).then(resp => {
                     // 判断响应数据是否为 YES
                     if (resp.data === "YES") {
                         this.open2("添加成功")
-                        this.pageSeparate.currentPage1 = 1
+                        this.pageSeparate.pageNum = 1
                         this.selectByPage()
                     } else if (resp.data === "NO") {
                         this.open4("插入失败")
@@ -275,7 +275,7 @@
                 console.log(this.selectIdGroup);
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/deleteByIds",
+                    url: "../student/deleteByIds",
                     data: this.selectIdGroup
                 }).then(resp => {
                     // 判断响应数据是否为 YES
@@ -290,7 +290,7 @@
             selectById() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/selectAStu",
+                    url: "../student/selectAStu",
                     data: this.studentID
                 }).then(resp => {
                     this.student = resp.data
@@ -299,7 +299,7 @@
             updateById() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/updateStudent",
+                    url: "../student/updateStudent",
                     data: this.student
                 }).then(resp => {
                     if (resp.data === "YES") {
@@ -313,7 +313,7 @@
             deleteById() {
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/deleteAStu",
+                    url: "../student/deleteAStu",
                     data: this.studentID
                 }).then(resp => {
                     if (resp.data === "YES") {
@@ -334,11 +334,11 @@
                 this.deleteById()
             },
             handleSizeChange(val) {
-                this.pageSeparate.pageItem = val
+                this.pageSeparate.pageSize = val
                 this.selectByPage()
             },
             handleCurrentChange(val) {
-                this.pageSeparate.currentPage1 = val
+                this.pageSeparate.pageNum = val
                 this.selectByPage()
             },
             open2(val) {

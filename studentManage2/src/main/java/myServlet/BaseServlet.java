@@ -1,8 +1,7 @@
 package myServlet;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,21 +9,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-public class MyBaseServlet extends HttpServlet {
+public class BaseServlet extends HttpServlet {
+    // JackSon的转化工具
+    private final static ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * 通过重写service方法，进行请求路径的判断，并提取相应类的方法名;
      * 顺便设置读取编码;
      * 以后其他的Servlet只需要继承这个类就好
      */
     @Override
-    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("utf-8");//设置读取的字符编码
         //获取请求路径，从路径中得到所需方法
         String requestURI = req.getRequestURI();
         int index = requestURI.lastIndexOf("/");
         String needMethod = requestURI.substring(index + 1);
         //获取继承这个类的类
-        Class<? extends MyBaseServlet> cls = this.getClass();
+        Class<? extends BaseServlet> cls = this.getClass();
         //执行与所需方法同名的方法
         try {
             Method method = cls.getMethod(needMethod, HttpServletRequest.class, HttpServletResponse.class);
@@ -44,7 +46,8 @@ public class MyBaseServlet extends HttpServlet {
     protected <T> T parseReq(HttpServletRequest req, Class<T> objectClass) throws IOException {
         BufferedReader reader = req.getReader();
         String line = reader.readLine();
-        return JSON.parseObject(line, objectClass);
+        // JSON换成对象
+        return objectMapper.readValue(line, objectClass);
     }
 
     /**
@@ -66,9 +69,9 @@ public class MyBaseServlet extends HttpServlet {
      * 通过不同的对象来写入JSON
      */
     protected void writeJSON(Object object, HttpServletResponse resp) throws IOException {
-        // 写入JSON
-        String jsonString = JSON.toJSONString(object);
-        // 相应数据
+        // 对象换成JSON
+        String jsonString = objectMapper.writeValueAsString(object);
+        // 响应数据
         resp.setContentType("text/json;charset=utf-8");
         resp.getWriter().write(jsonString);
     }

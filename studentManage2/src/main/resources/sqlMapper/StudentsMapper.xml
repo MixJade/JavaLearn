@@ -29,31 +29,16 @@
     <!--查询分页的学生信息-->
     <select id="selectByPage" resultType="pojo.StudentsMessage">
         select
-        *
+        s1.*, s2.societyName
         from students s1,societys s2
         where s1.societyId=s2.societyId
         <if test="studentName!=null and studentName!=''">
-            and s1.studentName like #{studentName}
+            <bind name="stuName" value="'%'+studentName+'%'"/>
+            and s1.studentName like #{stuName}
         </if>
         <if test="societyId !=null and societyId!=''">
             and s1.societyId=#{societyId}
         </if>
-        limit #{begin},#{pageItem};
-    </select>
-
-    <!--查询分页的条目数-->
-    <select id="selectCount" resultType="int">
-        select
-        count(*)
-        from students
-        <where>
-            <if test="studentName!=null and studentName!=''">
-                and studentName like #{studentName}
-            </if>
-            <if test="societyId !=null and societyId!=''">
-                and societyId=#{societyId}
-            </if>
-        </where>
     </select>
 
     <update id="updateOrigin">

@@ -191,16 +191,16 @@
                 if (val === 2) {
                     _this.selectTitle = "修改学生"
                 } else if (val === 1) {
-                    _this.student= {
+                    _this.student = {
                         id: '',
-                            studentName: '',
-                            sex: '',
-                            englishGrade: '',
-                            mathGrade: '',
-                            societyId: '',
-                            height: '',
-                            birthday: '',
-                            money: ''
+                        studentName: '',
+                        sex: '',
+                        englishGrade: '',
+                        mathGrade: '',
+                        societyId: '',
+                        height: '',
+                        birthday: '',
+                        money: ''
                     }
                     _this.selectTitle = "添加学生"
                 }
@@ -219,7 +219,7 @@
                 // 页面加载完成后，发送异步请求，查询查询部分学生
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/selectAll",
+                    url: "../student/selectAll",
                     data: this.students
                 }).then(resp => {
                     this.students = resp.data;
@@ -229,7 +229,7 @@
                 // 发送ajax请求，添加
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/addStudent",
+                    url: "../student/addStudent",
                     data: this.student
                 }).then(resp => {
                     // 判断响应数据是否为 YES
@@ -251,7 +251,7 @@
                 // 发送ajax请求，删除
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/deleteByIds",
+                    url: "../student/deleteByIds",
                     data: this.selectIdGroup
                 }).then(resp => {
                     // 判断响应数据是否为 YES
@@ -267,7 +267,7 @@
                 // 发送ajax请求，删除
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/selectAStu",
+                    url: "../student/selectAStu",
                     data: this.studentID
                 }).then(resp => {
                     this.student = resp.data
@@ -277,7 +277,7 @@
                 // 发送ajax请求，删除
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/updateStudent",
+                    url: "../student/updateStudent",
                     data: this.student
                 }).then(resp => {
                     if (resp.data === "YES") {
@@ -292,7 +292,7 @@
                 // 发送ajax请求，删除
                 axios({
                     method: "post",
-                    url: "http://localhost:8080/studentManage2/manager/deleteAStu",
+                    url: "../student/deleteAStu",
                     data: this.studentID
                 }).then(resp => {
                     if (resp.data === "YES") {

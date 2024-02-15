@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sqlMapper.LoginMapper">
+    <!-- 登录时查询人是否存在-->
+    <select id="queryUserNum" resultType="java.lang.Integer">
+        select count(*)
+        from loginmixjade
+        where nameJade = #{nameJade}
+          and passwordJade = #{passwordJade};
+    </select>
+
+    <!--注册时查询是否重名-->
+    <select id="queryUserByName" resultType="java.lang.Integer">
+        select count(*)
+        from loginmixjade
+        where nameJade = #{nameJade};
+    </select>
+
+    <!-- 注册插入人员-->
+    <insert id="addUser">
+        INSERT loginmixjade(nameJade, passwordJade)
+        VALUES (#{nameJade}, #{passwordJade})
+    </insert>
+</mapper>

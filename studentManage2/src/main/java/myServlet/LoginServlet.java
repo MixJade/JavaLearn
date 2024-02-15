@@ -1,8 +1,8 @@
 package myServlet;
 
 import myUtils.CheckCodeUtil;
-import pojo.UserMessage;
-import sqlDemo.UserDemo;
+import pojo.LoginVo;
+import service.LoginService;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
@@ -14,18 +14,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 @WebServlet("/login/*")
-public class LoginServlet extends MyBaseServlet {
+public class LoginServlet extends BaseServlet {
 
+    @SuppressWarnings("unused")
     public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMessage userMessage = parseReq(req, UserMessage.class);
+        LoginVo loginVo = parseReq(req, LoginVo.class);
         //获取参数
-        String nameJade = userMessage.getNameJade();
-        String passwordJade = userMessage.getPasswordJade();
-        boolean remember = userMessage.isRemember();
+        String nameJade = loginVo.nameJade();
+        String passwordJade = loginVo.passwordJade();
+        boolean remember = loginVo.remember();
         if ("".equals(nameJade) || "".equals(passwordJade)) {
             resp.getWriter().write("NoText");
         } else {
-            int status = UserDemo.userSelect(nameJade, passwordJade);
+            int status = LoginService.userSelect(nameJade, passwordJade);
             if (remember) addMyCookie(resp, nameJade, passwordJade);
             //登录成功,建立一个session
             HttpSession session = req.getSession();
@@ -35,18 +36,19 @@ public class LoginServlet extends MyBaseServlet {
 
     }
 
+    @SuppressWarnings("unused")
     public void register(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMessage userMessage = parseReq(req, UserMessage.class);
+        LoginVo loginVo = parseReq(req, LoginVo.class);
         //获取参数
-        String nameJade = userMessage.getNameJade();
-        String passwordJade = userMessage.getPasswordJade();
-        boolean remember = userMessage.isRemember();
+        String nameJade = loginVo.nameJade();
+        String passwordJade = loginVo.passwordJade();
+        boolean remember = loginVo.remember();
         if ("".equals(nameJade) || "".equals(passwordJade)) {
             resp.getWriter().write("NoText");
         } else {
-            if (UserDemo.userSelectByName(nameJade)) {
+            if (LoginService.userSelectByName(nameJade)) {
                 if (remember) addMyCookie(resp, nameJade, passwordJade);
-                int status = UserDemo.addUser(nameJade, passwordJade);
+                int status = LoginService.addUser(nameJade, passwordJade);
                 writeStatus(status, resp);
             } else {
                 resp.getWriter().write("Already");
@@ -54,6 +56,7 @@ public class LoginServlet extends MyBaseServlet {
         }
     }
 
+    @SuppressWarnings("unused")
     public void checkSendCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         BufferedReader reader = req.getReader();
         String line = reader.readLine();
@@ -71,6 +74,7 @@ public class LoginServlet extends MyBaseServlet {
         }
     }
 
+    @SuppressWarnings("unused")
     public void checkCode(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // 响应放在请求前面，会出现无法建立会话
         HttpSession session = req.getSession(true);
@@ -96,12 +100,10 @@ public class LoginServlet extends MyBaseServlet {
         resp.addCookie(cookiePassword);
     }
 
+    @SuppressWarnings("unused")
     public void getMyCookie(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserMessage userMessage = new UserMessage();
-        userMessage.setRemember(true);
-        userMessage.setNameJade(getACookie(req, "username_Jade"));
-        userMessage.setPasswordJade(getACookie(req, "password_Jade"));
-        writeJSON(userMessage, resp);
+        LoginVo loginVo = new LoginVo(getACookie(req, "username_Jade"), getACookie(req, "password_Jade"), true);
+        writeJSON(loginVo, resp);
     }
 
     private String getACookie(HttpServletRequest req, String nameNeed) {

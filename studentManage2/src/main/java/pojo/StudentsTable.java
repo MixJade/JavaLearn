@@ -77,17 +77,6 @@ public class StudentsTable {
         this.height = height;
     }
 
-    public void setMessage(String studentName, String sex, String englishGrade, String mathGrade, String societyId, String height, String birthday, String money) {
-        this.studentName = studentName;
-        this.sex = Integer.parseInt(sex);
-        this.englishGrade = Integer.parseInt(englishGrade);
-        this.mathGrade = Integer.parseInt(mathGrade);
-        this.societyId = Integer.parseInt(societyId);
-        this.height = Double.parseDouble(height);
-        this.birthday = birthday;
-        this.money = Integer.valueOf(money);
-    }
-
     @Override
     public String toString() {
         return "StudentsTable{" + id +
