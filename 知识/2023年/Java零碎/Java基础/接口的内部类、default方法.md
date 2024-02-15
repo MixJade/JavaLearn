@@ -1,0 +1,27 @@
+# 接口的内部类、default方法
+
+* 使用了接口的default方法
+* 使用了接口内部类
+* 使用了枚举类(这是一种增加代码可读性的手段)，拒绝魔法数字
+* 只要实现这个接口，就自动有内部类，估计是因为实现其实是另一种继承
+
+```java
+/**
+ * 生成新的订单号
+ */
+public interface NewCode {
+    default String newCode(CodeT codeT, Long maxID) {
+        String nowDate = new SimpleDateFormat("yyMMdd").format(new Date());
+        return codeT.typeNum + nowDate + (maxID + 1);
+    }
+
+    enum CodeT {
+        Foster(1), Adopt(2), Doctor(3), Appoint(5);
+        private final int typeNum;
+
+        CodeT(int typeNum) {
+            this.typeNum = typeNum;
+        }
+    }
+}
+```

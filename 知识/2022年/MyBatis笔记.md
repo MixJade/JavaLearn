@@ -1,4 +1,4 @@
-## Mybatis部分学习笔记
+# MyBatis笔记
 
 1. Mybatis是一个Maven和sql的框架，存在目的是为了解决
     1. 原生模式的硬编码（加载对应接口后，可以以方法形式操作Sql）

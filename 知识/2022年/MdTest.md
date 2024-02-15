@@ -1,9 +1,4 @@
----
-toc:
-  depth_from: 1
-  depth_to: 6
-  ordered: false
----
+# MdTest
 
 [写文小助手](https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/markdown-basics?id=%e6%89%a9%e5%b1%95%e7%9a%84%e8%af%ad%e6%b3%95)
 
@@ -37,53 +32,3 @@ H~2~O 和 12^th^
 
 ## 标题
 > 备注
-
-<details>
-<summary>源码标题.java</summary>
-
-```java
-源代码
-```
-</details>
-
-
-<details>
-<summary>表格标题</summary>
-
-|表头一|表头二|
-|:----:|:----:|
-|内容一|内容二|
-
-</details>
-
-
-
-
-<details>
-<summary style="color:#33DD66">文件夹1</summary>
-
-<details style="text-indent: 2em">
-<summary style="color:#33DD66">文件夹2</summary>
-
-<details style="text-indent: 4em">
-<summary style="color:blue">源码标题.java</summary>
-
-```java
-源代码
-```
-</details>
-</details>
-
-<details style="text-indent: 2em">
-<summary style="color:blue">源码标题.java</summary>
-
-```java
-源代码
-```
-</details>
-
-
-</details>
-
----
-![图片-xhu](http://www.xhu.edu.cn/_upload/article/images/93/7d/7229d5a442e6a3d6133c4fcb79cc/0cdbc8bb-4bae-4a17-889f-bee80cb09759.jpg)

@@ -1,14 +1,23 @@
-# Spring的json转换
+# P5-前端解析Long型数据失败
 
-Spring中御用的json转化器为jackSon，  
-即，我们将bean传到前端时，需用jackSon进行转换，  
-而这里可以通过配置与继承，改变一些转换规则，  
-比如：
+## 前端Bug处理
 
-1. long型数据转化为String防止损失精度
-2. LocalDateTime数据转为特定格式的String防止前端解析之后加上T
+* 前端会自动将Long型的数据四舍五入(超过16位的部分),经常会出现点击对应的员工信息,结果出现找不到这个人的情况
+* 到后端一看,几个人的id都是雪花数,但是最后两位都是0,这是因为,前端自动将long型数据四舍五入
+* 处理方法就是通过在对应字段上加JsonSerialize注解,将long型传出时变成String,相应String传入变long型
+* 但是太多long型变量需要改,后面会定义一个类统一处理(大概)
 
-## 继承ObjectMapper
+```
+@JsonSerialize(using= ToStringSerializer.class)
+private Long id;
+```
+
+## 前端Bug处理(统一处理)
+
+> 编写一个类来统一处理,只是比上面那个麻烦
+
+* 先建立文件JacksonMapper.java
+* 虽然我只是想要转化Long数据,但LocalTime这些必须要,不然报错
 
 ```java
 /**
@@ -41,9 +50,13 @@ public class JacksonMapper extends ObjectMapper {
 }
 ```
 
-## 在配置类中使用
+* 接着在WebMvcConfigurer类中配置它(就是前面所配置拦截器的类)
+* 注意要采用实现接口的方式,不然又会报错
+* 最后的converters.add方法,第一个参数是转换器的顺序
+* spring自己有8个转换器,不将自己的放在前面,会导致传到前端之后才转换
 
 ```java
+
 @Configuration
 public class MyInterceptConfig implements WebMvcConfigurer {
     /**
@@ -75,3 +88,5 @@ public class MyInterceptConfig implements WebMvcConfigurer {
 }
 
 ```
+
+* 然后把之前的注解删除,可以发现成功解析到long数据
