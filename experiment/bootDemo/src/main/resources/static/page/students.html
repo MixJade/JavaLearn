@@ -210,7 +210,7 @@
         row.appendChild(checkRow);
         // 添加其他列
         row.appendChild(add_cell(studentName))
-        row.appendChild(add_cell(societyId))
+        row.appendChild(add_cell(getSocietyName(societyId)))
         if (sex) {
             row.appendChild(add_cell('男'))
         } else {
@@ -350,6 +350,23 @@
     function getAge(birthday) {
         const birthYear = birthday.split("-")[0]
         return nowYear - birthYear
+    }
+
+    function getSocietyName(societyId) {
+        switch (societyId) {
+            case 1:
+                return "散人"
+            case 2:
+                return "头文字D"
+            case 3:
+                return "轻音部"
+            case 4:
+                return "黄金之风"
+            case 5:
+                return "极东魔术昼寝结社"
+            default:
+                return "未知"
+        }
     }
 
     // 删改增操作通用解析
