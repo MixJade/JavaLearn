@@ -2,8 +2,8 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.demo.common.Result;
-import com.demo.dao.StudentsDao;
-import com.demo.domain.Students;
+import com.demo.mapper.StudentsDao;
+import com.demo.model.entity.Students;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

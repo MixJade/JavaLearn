@@ -1,9 +1,9 @@
 package com.demo.common;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.DataIntegrityViolationException;
 
 
 @RestControllerAdvice
