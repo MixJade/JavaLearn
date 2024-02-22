@@ -16,6 +16,7 @@ import java.util.Scanner;
  *
  * @since 2022-3-23
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 矩形面积周长 {
     public static void main(String[] args) {
         Rectangle rect = new Rectangle();

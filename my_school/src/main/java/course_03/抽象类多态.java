@@ -1,6 +1,7 @@
 package course_03;
 
 interface English {
+    @SuppressWarnings("unused")
     void speakEnglish();
 }
 
@@ -23,6 +24,7 @@ interface English {
  *
  * @since 2022-4-6
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 抽象类多态 {
     public static void main(String[] args) {
         BasketballCoach b1 = new BasketballCoach();
@@ -59,14 +61,17 @@ abstract class Human {
     String name;
     int age;
 
+    @SuppressWarnings("unused")
     abstract void eat();
 }
 
 abstract class Coach extends Human {
+    @SuppressWarnings("unused")
     abstract void teach();
 }
 
 abstract class Sportsman extends Human {
+    @SuppressWarnings("unused")
     abstract void learn();
 }
 

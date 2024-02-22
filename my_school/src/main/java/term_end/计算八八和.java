@@ -5,6 +5,7 @@ package term_end;
  *
  * @since 2022-6-13
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 计算八八和 {
     public static void main(String[] args) {
         int a;

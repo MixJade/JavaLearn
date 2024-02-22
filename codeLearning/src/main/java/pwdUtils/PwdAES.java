@@ -18,7 +18,7 @@ import java.util.Base64;
  */
 public class PwdAES extends JFrame implements ActionListener {
     // 文本输入与密钥输入
-    JTextField inputTextField, keyTextField, ivTextField;
+    private final JTextField inputTextField, keyTextField, ivTextField;
     // 结果输出
     JTextArea showArea;
 

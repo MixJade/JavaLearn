@@ -17,6 +17,7 @@ import java.util.Scanner;
  *
  * @since 2022-3-23
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 复数计算 {
     public static void main(String[] args) {
         System.out.println("分别输入两个复数的实部，虚部。如(5 8 5 -8)");

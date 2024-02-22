@@ -9,6 +9,7 @@ package course_04;
  *
  * @since 2022-4-20
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 字符串方法 {
     public static void main(String[] args) {
         String[] st = {"good", "word", "work", "mean", "thank", "me", "you", "or", "and"};

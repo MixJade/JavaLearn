@@ -15,6 +15,7 @@ package course_04;
  *
  * @since 2022-4-20
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 程序实参使用 {
     static Employee[] emo = new Employee[3];
 

@@ -11,6 +11,7 @@ package course_02;
  *
  * @since 2022-3-23
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 梯形圆形面积 {
     public static void main(String[] args) {
         Ladder la = new Ladder(2.00, 3.00, 2.00);

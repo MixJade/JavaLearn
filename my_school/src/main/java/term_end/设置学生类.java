@@ -16,6 +16,7 @@ package term_end;
  *
  * @since 2022-6-13
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 设置学生类 {
     public static void main(String[] args) {
         Student cdy = new Student(9527, "李辉若", true, 21);

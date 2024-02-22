@@ -10,6 +10,7 @@ package course_06;
  *
  * @since 2022-5-11
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 三人排队买票 {
     public static void main(String[] args) {
         TheThingBegin d = new TheThingBegin();

@@ -8,6 +8,7 @@ package course_01;
  *
  * @since 2022-3-10
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 数组合并 {
     public static void main(String[] args) {
         int[] A = {1, 7, 9, 11, 13, 15, 17, 19};

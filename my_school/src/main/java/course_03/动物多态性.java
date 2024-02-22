@@ -13,6 +13,7 @@ interface Animal {
  *
  * @since 2022-4-6
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 动物多态性 {
     public static void main(String[] args) {
         playSound(new Dog());

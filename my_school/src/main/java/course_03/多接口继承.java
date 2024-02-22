@@ -26,9 +26,10 @@ interface Man extends Animal2 {
  *
  * @since 2022-4-6
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 多接口继承 {
     public static void main(String[] args) {
-        NormalMan nm = new NormalMan("李辉若");
+        Man nm = new NormalMan("李辉若");
         nm.breath();
         nm.hasSex();
         nm.eat();

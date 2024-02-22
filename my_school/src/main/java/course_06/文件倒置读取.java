@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @since 2022-5-11
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 文件倒置读取 {
     public static void main(String[] args) {
         File f = new File("src/main/resources/course_06/手榴弹.txt");

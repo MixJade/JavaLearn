@@ -27,15 +27,18 @@ public class InterpretRunDemo {
 
     //只有加了MyTest注解的方法才会运行，为什么会这样？秘诀在Main方法里
     @MyTest
+    @SuppressWarnings("unused")
     public void explainAttempt01() {
         System.out.println("===Method-First===");
     }
 
+    @SuppressWarnings("unused")
     public void explainAttempt02() {
         System.out.println("===Method-Second===");
     }
 
     @MyTest
+    @SuppressWarnings("unused")
     public void explainAttempt03() {
         System.out.println("===Method-Third===");
     }

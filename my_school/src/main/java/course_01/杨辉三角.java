@@ -8,6 +8,7 @@ import java.util.Scanner;
  *
  * @since 2022-3-10
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 杨辉三角 {
     public static void main(String[] args) {
         int n;

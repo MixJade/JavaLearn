@@ -6,6 +6,7 @@ package course_02;
  *
  * @since 2022-3-23
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 面向对象描述 {
     public static void main(String[] args) {
         CPU cpu = new CPU(2200);

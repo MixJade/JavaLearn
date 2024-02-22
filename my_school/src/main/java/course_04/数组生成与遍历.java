@@ -10,6 +10,7 @@ import java.util.Random;
  *
  * @since 2022-4-20
  */
+@SuppressWarnings("NonAsciiCharacters")
 class 数组生成与遍历 {
     public static void main(String[] args) {
         int maxCount = 10; // 总共10人

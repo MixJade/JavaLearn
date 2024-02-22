@@ -8,6 +8,7 @@ package course_01;
  *
  * @since 2022-3-10
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 分数序列和 {
     public static void main(String[] args) {
         int a = 2, b = 1;

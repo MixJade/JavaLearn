@@ -8,6 +8,7 @@ import java.io.*;
  *
  * @since 2022-5-11
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 读文件并写行号 {
     public static void main(String[] args) {
         File f1 = new File("src/main/java/course_06/文件倒置读取.java");

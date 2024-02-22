@@ -52,7 +52,7 @@ public class GuiResizeImg extends JFrame implements ActionListener {
         btn.addActionListener(this);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new GuiResizeImg();
     }
 

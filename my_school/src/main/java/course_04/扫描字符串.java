@@ -9,6 +9,7 @@ import java.util.Scanner;
  *
  * @since 2022-4-20
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 扫描字符串 {
     public static void main(String[] args) {
         String cost = " 数学 87 分，物理 76 分，英语 96 分";

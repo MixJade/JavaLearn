@@ -10,6 +10,7 @@ package course_06;
  *
  * @since 2022-5-11
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 休眠线程唤醒 {
     public static void main(String[] args) {
         ClassRoom cl = new ClassRoom();

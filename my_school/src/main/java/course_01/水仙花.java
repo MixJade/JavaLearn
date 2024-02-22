@@ -6,6 +6,7 @@ package course_01;
  *
  * @since 2022-3-10
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 水仙花 {
     public static void main(String[] args) {
         System.out.println("水仙花是：");

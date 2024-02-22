@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
         "这里有Test,Before,After,BeforeClass,AfterClass五种标注")
 public class TestCXKProxy {
 
-    CXKPractice cxk = new CXKPractice("蔡徐坤", 2.5, "姬霓太美");
+    final CXKPractice cxk = new CXKPractice("蔡徐坤", 2.5, "姬霓太美");
 
     @BeforeClass
     public static void testBeforeType() {

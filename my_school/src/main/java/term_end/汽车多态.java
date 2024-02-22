@@ -9,6 +9,7 @@ package term_end;
  *
  * @since 2022-6-13
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 汽车多态 {
     public static void main(String[] args) {
         Vehicle v = new Vehicle(4, 2);

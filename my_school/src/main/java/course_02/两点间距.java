@@ -19,6 +19,7 @@ import java.util.Scanner;
  *
  * @since 2022-3-23
  */
+@SuppressWarnings("NonAsciiCharacters")
 public class 两点间距 {
     public static void main(String[] args) {
         System.out.println("输入两个点的坐标：(如200.1 200.2 200.3 200.4)");
