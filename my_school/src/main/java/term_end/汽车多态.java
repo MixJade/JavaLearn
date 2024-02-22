@@ -22,8 +22,8 @@ public class 汽车多态 {
 }
 
 class Vehicle {
-    public int wheels;
-    public double weight;
+    public final int wheels;
+    public final double weight;
 
     public Vehicle(int wheels, double weight) {
         this.wheels = wheels;
@@ -37,7 +37,7 @@ class Vehicle {
 }
 
 class Car extends Vehicle {
-    public int passenger_load;
+    public final int passenger_load;
 
     public Car(int wheels, double weight, int passenger_load) {
         super(wheels, weight);
@@ -51,8 +51,8 @@ class Car extends Vehicle {
 }
 
 class Truck extends Vehicle {
-    public double payload;
-    public int passenger_load;
+    public final double payload;
+    public final int passenger_load;
 
     public Truck(int wheels, double weight, int passenger_load, double payload) {
         super(wheels, weight);

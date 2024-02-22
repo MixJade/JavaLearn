@@ -17,7 +17,7 @@ package course_04;
  */
 @SuppressWarnings("NonAsciiCharacters")
 public class 程序实参使用 {
-    static Employee[] emo = new Employee[3];
+    static final Employee[] emo = new Employee[3];
 
     public static void main(String[] args) {
         emo[0] = new Employee("刘备", 1, 45, 5000);

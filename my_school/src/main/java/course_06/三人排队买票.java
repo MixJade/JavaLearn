@@ -21,8 +21,10 @@ public class 三人排队买票 {
 }
 
 class TheThingBegin implements Runnable {
-    Thread firstMan, secondMan, thirdMan;
-    TicketHouse salesman;
+    final Thread firstMan;
+    final Thread secondMan;
+    final Thread thirdMan;
+    final TicketHouse salesman;
 
     TheThingBegin() {
         firstMan = new Thread(this);

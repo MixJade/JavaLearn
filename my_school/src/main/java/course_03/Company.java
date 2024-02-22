@@ -34,7 +34,7 @@ abstract class Employee {
 }
 
 class MonthWorker extends Employee {
-    double monthSalary;
+    final double monthSalary;
 
     MonthWorker(double s) {
         monthSalary = s;
@@ -48,7 +48,7 @@ class MonthWorker extends Employee {
 }
 
 class WeekWorker extends Employee {
-    double weekSalary;
+    final double weekSalary;
 
     WeekWorker(double s) {
         weekSalary = s;
@@ -61,7 +61,7 @@ class WeekWorker extends Employee {
 }
 
 class YearWorker extends Employee {
-    double yearSalary;
+    final double yearSalary;
 
     YearWorker(double s) {
         yearSalary = s;

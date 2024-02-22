@@ -21,7 +21,9 @@ public class 休眠线程唤醒 {
 }
 
 class ClassRoom implements Runnable {
-    Thread student1, student2, teacher;
+    final Thread student1;
+    final Thread student2;
+    final Thread teacher;
 
     ClassRoom() {
         teacher = new Thread(this);
