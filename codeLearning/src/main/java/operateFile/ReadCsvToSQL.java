@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2023-9-22 20:24:55
  */
 public class ReadCsvToSQL {
-    private final static String PATH_CSV = "src/main/resources/operateFile/sit项目数据.csv";
+    private final static String PATH_CSV = "src/main/resources/operateFile/生成sql项目数据.csv";
     private static int nowGroupID = 160,
             nowMemberId = 872;
 
@@ -31,18 +31,18 @@ public class ReadCsvToSQL {
     private static String giveGroupInfo(Project project, String groupID) {
         return String.format("""
                 INSERT INTO
-                GROUP_INFO ( GROUP_ID, GROUP_NM, GROUP_TP, SOURCE_ID, ON_OFF, IS_ALL, DEPT_ID )
+                GROUP_INFO ( GROUP_ID, GROUP_NM, PRJ_ID)
                 VALUES
-                ('%s','%s','2','%s','1','0','');
+                ('%s','%s','%s');
                 """, groupID, project.prjName() + "组", project.prjID());
     }
 
     private static String giveGroupMembers(Project project, String groupNm, String groupID) {
         return String.format("""
                 INSERT INTO
-                Group_Members ( Members_ID, GROUP_ID, GROUP_TP, GROUP_NM, GROUP_ROLE, USR_NO )
+                GROUP_MEMBER ( MEMBER_ID, GROUP_ID, GROUP_NM, MEMBER_ROLE, USER_NO )
                 VALUES
-                ( '%s', '%s', '2', '%s', '%s', '%s');
+                ( '%s', '%s', '%s', '%s', '%s');
                 """, getMembersID(), groupID, groupNm, project.role(), project.usrNo());
     }
 
