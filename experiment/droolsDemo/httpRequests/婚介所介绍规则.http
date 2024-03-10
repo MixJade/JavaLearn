@@ -1,0 +1,23 @@
+### 规则1:未成年
+GET http://localhost:8080/marriage?sex=1&age=13
+Accept: text/plain
+
+### 规则2:年轻男子
+GET http://localhost:8080/marriage?sex=1&age=23
+Accept: text/plain
+
+### 规则3:年老男子
+GET http://localhost:8080/marriage?sex=1&age=120
+Accept: text/plain
+
+### 规则4:年老女人
+GET http://localhost:8080/marriage?sex=0&age=120
+Accept: text/plain
+
+### 规则5:年轻女人
+GET http://localhost:8080/marriage?sex=0&age=23
+Accept: text/plain
+
+### 规则6:修仙者
+GET http://localhost:8080/marriage?sex=1&age=230
+Accept: text/plain
