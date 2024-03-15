@@ -9,6 +9,8 @@
 * 如果IDEA不识别`drl`文件，可以去下载插件`Drools`，这是`JBoss`开发的插件.
 * 这里的drl使用log来打印执行了那些规则(尽量不用System.out.println)
 
+- 添加测试：Valid注解的使用
+
 ## 二、参考网站
 
 [SpringBoot整合规则引擎Drools - 上善若泪 - 博客园 (cnblogs.com)](https://www.cnblogs.com/jingzh/p/17389988.html)

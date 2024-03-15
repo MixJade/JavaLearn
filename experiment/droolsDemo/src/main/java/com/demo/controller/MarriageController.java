@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,10 @@ public class MarriageController {
 
     @PostMapping("/begin")
     @Operation(summary = "正式开始相亲")
-    public ResponseEntity<MarriageRes> begin(@RequestBody Man man) {
+    public ResponseEntity<MarriageRes> begin(@Valid @RequestBody Man man) {
         log.info(man.toString());
+
+
         // Spring自带的返回封装
         return new ResponseEntity<>(marriageService.marriage(man), HttpStatus.OK);
     }
