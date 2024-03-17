@@ -9,7 +9,7 @@
 git fetch origin
 
 # reset头指针到最新远程主分支
-git reset --hard origin/master
+git reset --hard origin/main
 ```
 
 以上命令将会清除你本地所有未推送的提交。
