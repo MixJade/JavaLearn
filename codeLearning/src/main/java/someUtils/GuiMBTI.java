@@ -1,10 +1,13 @@
 package someUtils;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,8 @@ import java.util.regex.Pattern;
  *
  * @since 2023-10-19 21:21
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class GuiMBTI {
-    private static final Path RES_PATH = Paths.get("src/main/resources/someUtils/guiMBTI.xml"),
-            QUEST_PATH = Paths.get("src/main/resources/someUtils/quizQuest.xml");
     private final JButton button1;
     private final JButton button2;
     private final JLabel label;
@@ -61,7 +63,7 @@ public class GuiMBTI {
      */
     private static String getMbtXML(String tagName) {
         try {
-            String content = new String(Files.readAllBytes(RES_PATH));
+            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/someUtils/guiMBTI.xml")));
 
             Pattern pattern = Pattern.compile("<" + tagName + ">(.*?)</" + tagName + ">", Pattern.DOTALL);
             Matcher matcher = pattern.matcher(content);
@@ -82,22 +84,26 @@ public class GuiMBTI {
      */
     private static List<QuizQuestOption> getQuestion() {
         List<QuizQuestOption> qqoList = new ArrayList<>();
-        String strXml = "";
         try {
-            strXml = Files.readString(QUEST_PATH);
-        } catch (IOException e) {
+            SAXReader saxreader = new SAXReader();
+            Document dom = saxreader.read("src/main/resources/someUtils/quizQuest.xml");
+            // 获取根节点
+            Element rootEle = dom.getRootElement();
+            // 从根节点读取元素标签
+            List<Element> quizQuest = rootEle.elements("Option");
+            // 取出每一个值
+            for (Element e : quizQuest) {
+                QuizQuestOption qqo = new QuizQuestOption(
+                        e.elementText("Question"),
+                        e.elementText("A"),
+                        e.elementText("AType"),
+                        e.elementText("B"),
+                        e.elementText("BType"));
+                qqoList.add(qqo);
+            }
+        } catch (DocumentException e) {
             System.out.println("问题的XML不见了" + e);
             System.exit(0);
-        }
-        // 使用正则表达式来获取xml文件的内容
-        Matcher m1 = Pattern.compile("(?<=<Question>).+(?=</Question>)").matcher(strXml);
-        Matcher m2 = Pattern.compile("(?<=<A>).+(?=</A>)").matcher(strXml);
-        Matcher m3 = Pattern.compile("(?<=<AType>).+(?=</AType>)").matcher(strXml);
-        Matcher m4 = Pattern.compile("(?<=<B>).+(?=</B>)").matcher(strXml);
-        Matcher m5 = Pattern.compile("(?<=<BType>).+(?=</BType>)").matcher(strXml);
-        while (m1.find() && m2.find() && m3.find() && m4.find() && m5.find()) {
-            QuizQuestOption qqo = new QuizQuestOption(m1.group(), m2.group(), m3.group(), m4.group(), m5.group());
-            qqoList.add(qqo);
         }
         return qqoList;
     }
