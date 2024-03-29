@@ -1,0 +1,79 @@
+package rules
+import com.demo.model.domain.MarriageRes;
+import com.demo.model.entity.Man;
+
+// 使用日志记录,这里通过全局变量来使用日志
+global  org.slf4j.Logger log;
+
+dialect  "java"
+
+rule "marriage-money-rule-1"
+    // 没有分组的规则,排名靠后的后触发
+    when
+        // 相亲成功
+        $marriageRes:MarriageRes(marriageSuc)
+        $man:Man()
+    then
+        log.info("触发加钱规则1:牵手钱");
+        $marriageRes.setAgencySay("恭喜恭喜,我要多收牵手钱");
+        $marriageRes.setAgencyPay($marriageRes.getAgencyPay()+200);
+        $marriageRes.setPayMoney($man.getYearlyPay());
+end
+
+rule "marriage-money-rule-2"
+    when
+        // 相亲成功，且男方是公务员
+        $marriageRes:MarriageRes(marriageSuc)
+        Man(job == "OFFICIAL")
+    then
+        log.info("触发加钱规则2:公务员");
+        $marriageRes.setAgencySay("公务员啊");
+        $marriageRes.setAgencyPay($marriageRes.getAgencyPay()+100);
+        $marriageRes.setPayMoney($marriageRes.getPayMoney()+10000);
+end
+
+rule "marriage-money-rule-3"
+    when
+        // 相亲成功，且男方是大商人
+        $marriageRes:MarriageRes(marriageSuc)
+        Man(job=="MERCHANT")
+    then
+        log.info("触发加钱规则3:商人");
+        $marriageRes.setAgencySay("WC富佬");
+        $marriageRes.setAgencyPay($marriageRes.getAgencyPay()+10000);
+        $marriageRes.setPayMoney($marriageRes.getPayMoney()+88888);
+end
+
+rule "marriage-money-rule-4"
+    when
+        // 相亲成功，且男方是大商人
+        $marriageRes:MarriageRes(marriageSuc)
+        Man(job=="MERCHANT",yearlyPay>1000000)
+    then
+        log.info("触发加钱规则4:大商人");
+        $marriageRes.setAgencySay("WC富佬");
+        $marriageRes.setAgencyPay($marriageRes.getAgencyPay()+20000);
+        $marriageRes.setPayMoney($marriageRes.getPayMoney()+888888);
+end
+
+rule "marriage-money-rule-5"
+    when
+        // 相亲成功，且男方是工人
+        $marriageRes:MarriageRes(marriageSuc)
+        Man(job=="WORKER")
+    then
+        log.info("触发加钱规则5:工人");
+        $marriageRes.setAgencySay("打工人啊");
+        $marriageRes.setAgencyPay($marriageRes.getAgencyPay()+500);
+        $marriageRes.setPayMoney($marriageRes.getPayMoney()+50000);
+end
+
+rule "marriage-money-rule-6"
+    when
+        // 相亲失败
+        $marriageRes:MarriageRes(!marriageSuc)
+    then
+        log.info("触发加钱规则6:相亲失败");
+        $marriageRes.setAgencySay("相亲失败不要怕，总有人需要爆你的金币的");
+        $marriageRes.setAgencyPay($marriageRes.getAgencyPay()+200);
+end

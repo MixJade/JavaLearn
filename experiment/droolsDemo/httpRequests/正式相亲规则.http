@@ -1,0 +1,41 @@
+### 规则一: 没房没车没钱
+POST http://localhost:8080/marriage/begin
+Content-Type: application/json
+
+{
+  "name": "张三",
+  "age": 23,
+  "sex": true,
+  "job": "ROGUE",
+  "yearlyPay": 0,
+  "hasHome": false,
+  "hasCar": false
+}
+
+### 规则二: 有房没车,收入尚可
+POST http://localhost:8080/marriage/begin
+Content-Type: application/json
+
+{
+  "name": "张三",
+  "age": 23,
+  "sex": true,
+  "job": "ROGUE",
+  "yearlyPay": 200001,
+  "hasHome": true,
+  "hasCar": false
+}
+
+### 规则三: 大富翁,但没房没车
+POST http://localhost:8080/marriage/begin
+Content-Type: application/json
+
+{
+  "name": "张三",
+  "age": 23,
+  "sex": true,
+  "job": "MERCHANT",
+  "yearlyPay": 2000000,
+  "hasHome": false,
+  "hasCar": false
+}

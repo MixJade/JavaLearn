@@ -1,0 +1,80 @@
+package rules;
+
+import com.demo.model.domain.Introduce
+// 使用日志记录,这里通过全局变量来使用日志
+global  org.slf4j.Logger log
+
+// 对于POJO 对象, java dialect 必须使用 getter 和 setter 方法.
+// 对于POJO 对象, mvel dialect 可以直接使用属性名称进行读写, 甚至是 private 属性也可以.
+dialect  "java"
+// 防止死循环
+no-loop true
+
+rule "introduce_rule_1"
+    // 具有相同分组名称的规则只能有一个规则触发,可以整个文件都一个分组
+    // 即: 一个巨大的switch,同时相同优先级的规则,排名靠前的优先
+    activation-group "introduce_group"
+    // 未成年禁止进入,设置优先级为5
+    salience 5
+    when
+        $inctroduce:Introduce(age<18)
+    then
+        log.info("介绍规则1触发");
+        $inctroduce.setResult("什么小屁孩?这不是你该来的地方");
+end
+
+rule "introduce_rule_2"
+    activation-group "introduce_group"
+    // 年轻男子,优先级为3
+    salience 3
+    when
+        // 这里的逗号分割则默认是and
+        $inctroduce:Introduce(sex,age>=18,age<60)
+    then
+        log.info("介绍规则2触发");
+        $inctroduce.setResult("你好先生,这里是爆金币婚介所,保证你会爆金币爆个尽兴,而且最后还什么都得不到");
+end
+
+rule "introduce_rule_3"
+    activation-group "introduce_group"
+    // 老大爷,优先级为1
+    salience 1
+    when
+        $inctroduce:Introduce(sex,age>=60)
+    then
+        log.info("介绍规则3触发");
+        $inctroduce.setResult("一把年纪还来相亲?你有金币可爆吗?");
+end
+
+rule "introduce_rule_4"
+    activation-group "introduce_group"
+    // 老大妈,优先级为1
+    salience 1
+    when
+        $inctroduce:Introduce(!sex,age>=50)
+    then
+        log.info("介绍规则4触发");
+        $inctroduce.setResult("老太婆这么老了还敢出来相亲?");
+end
+
+rule "introduce_rule_5"
+    activation-group "introduce_group"
+    // 年轻女子,优先级为3
+    salience 3
+    when
+        $inctroduce:Introduce(!sex,age>=18,age<50)
+    then
+        log.info("介绍规则5触发");
+        $inctroduce.setResult("小姐,我们爆金币婚介所拥有最优质的爆金币客户资源");
+end
+
+rule "introduce_rule_6"
+    activation-group "introduce_group"
+    // 修仙者,优先级为6
+    salience 6
+    when
+        $inctroduce:Introduce(age>200)
+    then
+        log.info("介绍规则6触发");
+        $inctroduce.setResult("沃槽!修仙者!");
+end

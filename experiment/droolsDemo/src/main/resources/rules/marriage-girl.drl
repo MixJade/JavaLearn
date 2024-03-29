@@ -1,0 +1,144 @@
+package rules;
+import com.demo.model.entity.Man;
+
+// 全局变量,通过全局变量的变动来表示返回值
+global com.demo.model.domain.MarriageRes marriageRes;
+// 使用日志记录,这里通过全局变量来使用日志
+global  org.slf4j.Logger log;
+
+dialect  "java"
+
+rule "marriage_girl_rule_1"
+    // enabled代表规则是否启用,比如这里规则就被关闭了
+    enabled false
+    // when如果没有条件,则总是触发
+    when
+    then
+        log.info("相亲规则1触发:总是触发");
+        marriageRes.setMarriageSuc(false);
+        marriageRes.setGirlSay("笑死,我根本不来");
+end
+
+rule "marriage_girl_rule_2"
+    enabled false
+    // 优先级高的先执行,但如果没有分组的话,这里的优先级低了,会导致后执行,然后覆盖掉前面的结果
+    // 默认的优先级是0
+    salience 1
+    // 这种没有分组的、结果重复的规则,后来的会覆盖前面的
+    when
+        // 首先得是个男的
+        Man(!sex)
+    then
+        log.info("相亲规则2触发:性别女");
+        marriageRes.setMarriageSuc(false);
+        marriageRes.setGirlSay("小仙女不坑小仙女");
+end
+
+rule "marriage_girl_rule_3"
+    // 这里开始分组,这代表相亲进入流程了
+    activation-group "marriage_girl_group"
+    salience 9
+    when
+        // 其次年龄不能太大(即使年龄大了也得有钱)
+        Man(age>50,yearlyPay<300000)
+    then
+        log.info("相亲规则3触发:老迈");
+        marriageRes.setMarriageSuc(false);
+        marriageRes.setGirlSay("你年龄太大了");
+end
+
+rule "marriage_girl_rule_4"
+    activation-group "marriage_girl_group"
+    salience 9
+    when
+        // 其次年龄不能太小
+        Man(age<16)
+    then
+        log.info("相亲规则4触发:年幼");
+        marriageRes.setMarriageSuc(false);
+        marriageRes.setGirlSay("小屁孩来干嘛?");
+end
+
+rule "marriage_girl_rule_5"
+    activation-group "marriage_girl_group"
+    salience 5
+    when
+        // 有房有车吗
+        Man(!hasHome,!hasCar)
+    then
+        log.info("相亲规则5触发:没房没车");
+        marriageRes.setMarriageSuc(false);
+        marriageRes.setGirlSay("没房没车?你干嘛来了");
+end
+
+rule "marriage_girl_rule_6"
+    activation-group "marriage_girl_group"
+    salience 3
+    when
+        // 有房没车,年收入高也行
+        $man:Man(hasHome,!hasCar,yearlyPay>200000)
+    then
+        log.info("相亲规则6触发:有房没车收入高");
+        marriageRes.setMarriageSuc(true);
+        marriageRes.setGirlSay("勉强将就吧");
+end
+
+rule "marriage_girl_rule_7"
+    activation-group "marriage_girl_group"
+    salience 9
+    when
+        // 职业是公务员吗
+        $man:Man(job == "OFFICIAL",yearlyPay>10000)
+    then
+        log.info("相亲规则7触发:公务员");
+        marriageRes.setMarriageSuc(true);
+        marriageRes.setGirlSay("我就喜欢公务员");
+end
+
+rule "marriage_girl_rule_8"
+    activation-group "marriage_girl_group"
+    salience 7
+    when
+        // 有钱吗
+        $man:Man(yearlyPay<100000)
+    then
+        log.info("相亲规则8触发:穷逼");
+        marriageRes.setMarriageSuc(false);
+        marriageRes.setGirlSay("穷逼");
+end
+
+rule "marriage_girl_rule_9"
+    activation-group "marriage_girl_group"
+    salience 5
+    when
+        // 有钱吗
+        $man:Man(yearlyPay>1000000)
+    then
+        log.info("相亲规则9触发:有钱人");
+        marriageRes.setMarriageSuc(true);
+        marriageRes.setGirlSay("虽然你一无所有,但我依然喜欢你");
+end
+
+rule "marriage_girl_rule_10"
+    activation-group "marriage_girl_group"
+    salience 6
+    when
+        // 有车有房
+        $man:Man(hasCar,hasHome)
+    then
+        log.info("相亲规则10触发:有车有房");
+        marriageRes.setMarriageSuc(true);
+        marriageRes.setGirlSay("车房都有,勉强将就吧");
+end
+
+rule "marriage_girl_rule_11"
+    activation-group "marriage_girl_group"
+    salience 8
+    when
+        // 有车有房有钱
+        $man:Man(hasCar,hasHome,yearlyPay>300000)
+    then
+        log.info("相亲规则11触发:有车有房有钱");
+        marriageRes.setMarriageSuc(true);
+        marriageRes.setGirlSay("不错不错，准备齐全");
+end

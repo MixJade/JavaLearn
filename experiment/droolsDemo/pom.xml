@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.0</version>
+    </parent>
+    <groupId>com.demo</groupId>
+    <artifactId>droolsDemo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>drools样例</name>
+    <description>测试drools、swagger的使用</description>
+    <properties>
+        <java.version>17</java.version>
+        <drools.version>7.59.0.Final</drools.version>
+    </properties>
+    <dependencies>
+        <!-- SpringBoot的基础web框架-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 处理valid注解校验的库,springboot2.3以上需要手动引入-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- drools相关依赖1-->
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-core</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+        <!-- drools相关依赖2-->
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+        <!-- drools相关依赖3-->
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-decisiontables</artifactId>
+            <version>${drools.version}</version>
+        </dependency>
+
+        <!-- lombok注解式简化代码编写-->
+        <!-- 因为knife4j获取描述是通过getter或public来读取字段属性的-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- knife4j:一个我比较习惯的swagger-ui界面-->
+        <!-- 已经依赖了springdoc-openapi-starter-webmvc-ui，所以不必重复引入-->
+        <!-- UI地址：http://localhost:8080/doc.html-->
+        <!-- 旧UI地址(openApi)：http://localhost:8080/swagger-ui/index.html-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.5.0</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,4 @@
+# 开启接口文档(开发环境)
+springdoc:
+  api-docs:
+    enabled: true
