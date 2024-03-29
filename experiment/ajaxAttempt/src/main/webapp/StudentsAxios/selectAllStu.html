@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>selectAll</title>
+    <!-- 这个axios也是当初使用的版本，可以在studentManage2项目中找到-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.18.1/axios.min.js"></script>
+</head>
+
+<body>
+<h2>Circulation by JSTL</h2>
+
+
+注意：调用对象的数据是通过调用该对象的get方法实现 =><a href="../">返回主界面</a>
+<=
+<br>
+<br>
+<a href="addStudent.html">
+    <button>添加数据</button>
+</a>
+<br>
+<table width="90%" border="1" id="studentTable">
+</table>
+
+</body>
+
+<script>
+    window.onload = function () {
+        axios({
+            method: "post",
+            url: "http://localhost:8080/ajaxAttempt/Students/students"
+        }).then(function (resp) {
+            let studentMessages = resp.data;
+            let studentData = "<tr>" +
+                "<th>id</th>" +
+                "<th>姓名</th>" +
+                "<th>性别</th>" +
+                "<th>英语</th>" +
+                "<th>数学</th>" +
+                "<th>社团</th>" +
+                "<th>身高</th>" +
+                "<th>生日</th>" +
+                " <th>钱</th>" +
+                "<th>排序</th>" +
+                "<th>操作</th>" +
+                "    </tr>";
+            for (let i = 0; i < studentMessages.length; i++) {
+                let student = studentMessages[i];
+                if (student.sex) {
+                    var sex = "男"
+                } else {
+                    var sex = "女"
+                }
+
+                studentData += "<tr align=\"center\">" +
+                    "<td>" + student.id + "</td>" +
+                    "<td>" + student.studentName + "</td>" +
+                    "<td>" + sex + "</td>" +
+                    "<td>" + student.englishGrade + "</td>" +
+                    "<td>" + student.mathGrade + "</td>" +
+                    "<td>" + student.societyName + "</td>" +
+                    "<td>" + student.height + "</td>" +
+                    "<td>" + student.birthday + "</td>" +
+                    "<td>" + student.money + "</td>" +
+                    "<td>" + i + "</td>" +
+                    "<th>操作</th>" +
+                    "    </tr>";
+            }
+            document.getElementById("studentTable").innerHTML = studentData;
+        })
+    }
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加学生</title>
+    <!-- 这个axios也是当初使用的版本，可以在studentManage2项目中找到-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.18.1/axios.min.js"></script>
+</head>
+
+<body>
+<h3 style="text-align:center">添加学生</h3>
+<div style="padding-left:40%;">
+    <form>
+        姓名:<input type="text" name="studentName" id="studentName"><br>
+        性别:&emsp;
+        <input type="radio" name="sex" value="1" id="female"><label for="female">男&emsp;</label>
+        <input type="radio" name="sex" value="0" id="male"><label for="male">女&emsp;</label>
+        <br>
+        英语:<input type="number" min="1" max="100" name="englishGrade" id="englishGrade"><br>
+        数学:<input type="number" min="1" max="100" name="mathGrade" id="mathGrade"><br>
+        社团:
+        <select name="societyId" id="societyId">
+            <option value="1">散人</option>
+            <option value="2">头文字D</option>
+            <option value="3">轻音部</option>
+            <option value="4">黄金之风</option>
+            <option value="5">极东魔术昼寝结社</option>
+        </select>
+        <br>
+        身高:<input type="number" min="1.00" max="2.00" step="0.01" name="height" id="height"><br>
+        生日:<input type="date" name="birthday" id="birthday"><br>
+        &emsp;钱:<input type="text" name="money" id="money" oninput="value=value.replace(/[^\d]/g,'')"><br>
+        <input type="button" value="添加" onclick="submit_add()">
+    </form>
+</div>
+
+</body>
+<script>
+    function submit_add() {
+        //将表单转换成json
+        var formData = {
+            studentName: "",
+            sex: "",
+            englishGrade: "",
+            mathGrade: "",
+            societyId: "",
+            height: "",
+            birthday: "",
+            money: ""
+        };
+        formData.studentName = document.getElementById("studentName").value;
+        let sex01 = document.getElementsByName("sex");
+        if (sex01[0].checked) {
+            formData.sex = 1;
+        } else {
+            formData.sex = 0;
+        }
+        ;
+        formData.englishGrade = document.getElementById("englishGrade").value;
+        formData.mathGrade = document.getElementById("mathGrade").value;
+        var societyId = document.getElementById("societyId");
+        var opts = societyId.getElementsByTagName("option");
+        for (let i = 0; i < opts.length; i++) {
+            if (opts[i].selected) {
+                formData.societyId = i + 1;
+                break
+            }
+        }
+        formData.height = document.getElementById("height").value;
+        formData.birthday = document.getElementById("birthday").value;
+        formData.money = document.getElementById("money").value;
+        //发送请求
+        axios({
+            method: "post",
+            url: "http://localhost:8080/ajaxAttempt/Students/addStudent",
+            data: formData
+        }).then(function (resp) {
+            if (resp.data == "YES") {
+                alert("插入成功")
+            } else if (resp.data == "NO") {
+                alert("插入失败")
+            }
+        })
+    }
+
+
+</script>
+
+</html>

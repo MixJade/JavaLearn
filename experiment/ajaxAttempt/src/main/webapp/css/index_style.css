@@ -1,0 +1,60 @@
+body {
+    background-color: rgb(36, 151, 107);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#myIndexDiv {
+    width: 37%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 380px;
+    background-color: rgba(16, 32, 72, 0.3);
+    box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
+    border-radius: 5px;
+}
+
+p {
+    margin-top: 20px;
+    margin-left: 20px;
+    color: rgb(219, 168, 30);
+}
+
+a {
+    text-decoration: none;
+}
+
+#last_div {
+    margin-top: 30px;
+}
+
+
+.button_press {
+    border-color: cornsilk;
+    background-color: rgb(199, 130, 2);
+    color: aliceblue;
+    border-style: hidden;
+    border-radius: 5px;
+    width: 100px;
+    height: 31px;
+    font-size: 16px;
+}
+
+li {
+    display: block;
+    margin-top: 10px;
+}
+
+.button_last{
+    border-color: cornsilk;
+    background-color: rgb(199, 2, 2);
+    color: aliceblue;
+    border-style: hidden;
+    border-radius: 5px;
+    width: 130px;
+    height: 28px;
+    font-size: 16px;
+}

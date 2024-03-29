@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加学生</title>
+    <!-- 引入vue2.6.10，这是当初使用的版本，可以在studentManage2项目中找到-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <!-- 这个axios也是当初使用的版本，可以在studentManage2项目中找到-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.18.1/axios.min.js"></script>
+</head>
+
+<body>
+<h3 style="text-align:center">添加学生</h3>
+<div style="padding-left:40%;" id="app">
+    <form>
+        姓名:<input type="text" name="studentName" v-model="formData.studentName" id="studentName"><br>
+        性别:&emsp;
+        <input type="radio" name="sex" v-model="formData.sex" value="1" id="female"><label for="female">男&emsp;</label>
+        <input type="radio" name="sex" v-model="formData.sex" value="0" id="male"><label for="male">女&emsp;</label>
+        <br>
+        英语:<input type="number" min="1" max="100" name="englishGrade" v-model="formData.englishGrade" id="englishGrade"><br>
+        数学:<input type="number" min="1" max="100" name="mathGrade" v-model="formData.mathGrade" id="mathGrade"><br>
+        社团:
+        <select name="societyId" v-model="formData.societyId" id="societyId">
+            <option value="1">散人</option>
+            <option value="2">头文字D</option>
+            <option value="3">轻音部</option>
+            <option value="4">黄金之风</option>
+            <option value="5">极东魔术昼寝结社</option>
+        </select>
+        <br>
+        身高:<input type="number" min="1.00" max="2.00" step="0.01" name="height" v-model="formData.height"
+                  id="height"><br>
+        生日:<input type="date" name="birthday" v-model="formData.birthday" id="birthday"><br>
+        &emsp;钱:<input type="text" name="money" v-model="formData.money" id="money"
+                       oninput="value=value.replace(/[^\d]/g,'')"><br>
+        <input type="button" value="添加" @click="submit_add()">
+    </form>
+</div>
+
+</body>
+<script>
+    new Vue({
+        el: "#app",
+        data(){
+            return {
+                formData:{}
+            }
+        },
+        methods:{
+            submit_add(){
+                // 发送ajax请求，添加
+                var formData01 = this;
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/ajaxAttempt/Students/addStudent",
+                    data:formData01.formData
+                }).then(function (resp) {
+                    // 判断响应数据是否为 YES
+                    if(resp.data == "YES"){
+                        location.href = "http://localhost:8080/ajaxAttempt/StudentsAxios/queryStudent2.html";
+                    }else if (resp.data == "NO") {
+                        alert("插入失败")
+                     }
+                })
+            }
+        }
+    })
+</script>
+</html>
