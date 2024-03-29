@@ -1,0 +1,38 @@
+body {
+    background-color: rgb(36, 151, 107);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#myIndexDiv {
+    width: 37%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 380px;
+    background-color: rgba(16, 32, 72, 0.3);
+    box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
+    border-radius: 5px;
+}
+
+h2{
+    color: #409EFF;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    margin-top: 20px;
+    border-color: cornsilk;
+    background-color: #409EFF;
+    color: aliceblue;
+    border-style: hidden;
+    border-radius: 5px;
+    width: 160px;
+    height: 31px;
+    font-size: 16px;
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 运行设置，包括sql日志打印-->
+    <settings>
+        <!-- 打印sql日志 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <plugins>
+        <!-- 分页插件PageHelper -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 分页参数合理化,当页码数<0时,显示第一页.当页码数>总页码数时,显示最后一页-->
+            <property name="reasonable" value="true"/>
+            <!-- 指定使用MySQL的分页语法-->
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+    <!-- 配置数据库属性-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url"
+                          value="jdbc:mysql://localhost:3306/play?useSSL=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="MC@:(==ni2024"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 指定mapper文件，可指定多个-->
+    <mappers>
+        <mapper resource="sqlMapper/StudentsMapper.xml"/>
+        <mapper resource="sqlMapper/LoginMapper.xml"/>
+    </mappers>
+</configuration>
