@@ -1,0 +1,7 @@
+logging:
+  pattern:
+    dateformat: MM-dd HH:mm
+  level:
+    org:
+      springframework:
+        security: DEBUG
