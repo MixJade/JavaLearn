@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.DogMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.demo.model.entity.Dog">
+        <id column="dog_id" property="dogId"/>
+        <result column="dog_name" property="dogName"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="breed" property="breed"/>
+        <!-- MyBatis的collection标签循环查询-->
+        <collection property="dogSpecialities" ofType="com.demo.model.entity.DogSpeciality"
+                    column="dog_id" select="selectDogSpeciality">
+            <!-- 通用查询映射结果 -->
+            <id column="speciality_id" property="specialityId"/>
+            <result column="speciality_name" property="specialityName"/>
+            <result column="dog_id" property="dogId"/>
+        </collection>
+    </resultMap>
+
+    <!--collection标签所指定的循环查询，可以只存在xml中-->
+    <!--这里的传参dog_id直接就是列名-->
+    <select id="selectDogSpeciality" resultType="com.demo.model.entity.DogSpeciality">
+        SELECT speciality_id,
+               speciality_name,
+               dog_id
+        FROM dog_speciality
+        WHERE dog_id = #{dog_id};
+    </select>
+
+    <!-- 查询所有的狗(带有特质)-->
+    <!-- 使用resultMap来触发collection中的查询-->
+    <select id="queryAllDog" resultMap="BaseResultMap">
+        SELECT *
+        FROM dog;
+    </select>
+
+</mapper>

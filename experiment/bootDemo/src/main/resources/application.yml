@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/play?useSSL=true
+    username: root
+    password: MC@:(==ni2024
+  main:
+    banner-mode: off
+
+mybatis-plus:
+  global-config:
+    banner: false
+  # 下面是打开sql语句输出
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
