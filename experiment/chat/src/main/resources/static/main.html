@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天测试之聊天</title>
+</head>
+<body>
+<link href="main.css" rel="stylesheet">
+<h3 style="text-align: center" id="username"></h3>
+<div>
+    <div id="left">
+        <h4 id="new"></h4>
+        <div id="content">
+        </div>
+        <div id="input">
+            <label for="input_text"></label>
+            <input type="text" id="input_text">
+            <button id="submit">发送</button>
+        </div>
+    </div>
+    <div id="right">
+        <div id="top">
+            <p>在线的好友</p>
+            <div id="hyList">
+            </div>
+        </div>
+        <div id="bottom">
+            <p>系统广播</p>
+            <div id="xtList">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/jquery-3.6.3.min.js"></script>
+<script>
+    let username, toName;
+    $(function () {
+        $.ajax({
+            url: "getUsername", // 获取与设置用户名
+            success: function (res) {
+                if (res === "noMan") location.href = "index.html"
+                username = res;
+                $("#username").html("用户：" + username + "<span>在线</span>");
+            },
+            async: false //同步请求，只有上面好了才会接着下面
+        });
+        const ws = new WebSocket("ws://localhost:8080/chat");  // 建立WebSocket对象
+        ws.onopen = function () { // 通过对象建立ws链接
+            $("#username").html("用户：" + username + "<span>在线</span>");
+        }
+        //接受消息
+        ws.onmessage = function (ev) {
+            const dataStr = ev.data;
+            const res = JSON.parse(dataStr);
+            //判断是否是系统消息
+            if (res["isSystem"]) {
+                //好友列表,系统广播
+                const names = res["msg"];
+                let userList = "";
+                let broadcastListStr = "";
+                for (const name of names) {
+                    if (name !== username) {
+                        userList += `<a href='#' onclick='showChat("${name}")'>${name}</a></br>`;
+                        broadcastListStr += "<p>" + name + "上线了</p>";
+                    }
+                }
+                $("#hyList").html(userList); //在线的角色
+                $("#xtList").html(broadcastListStr); //系统广播
+            } else {
+                //不是系统消息
+                let str = "<span id='mes_left'>" + res["msg"] + "</span></br>";
+                if (toName === res["fromName"]) $("#content").append(str);
+                // 此处将所接受消息写入历史消息
+                /*                const chatData = sessionStorage.getItem(res["fromName"]);
+                                if (chatData != null) {
+                                    str = chatData + str;
+                                }
+                                sessionStorage.setItem(res["fromName"], str);*/
+            }
+        }
+        // 关闭链接
+        ws.onclose = function () {
+            $("#username").html("用户：" + username + "<span>离线</span>");
+        }
+        //发送消息
+        $("#submit").click(function () {
+            //获取输入的内容
+            const input_text = $("#input_text");
+            const data = input_text.val();
+            input_text.val("");
+            const json = {"toName": toName, "message": data};
+            //将数据展示在聊天区
+            let str = "<span id='mes_right'>" + data + "</span></br>";
+            $("#content").append(str);
+            // 此处将信息存储进历史消息
+            /*            const chatData = sessionStorage.getItem(toName);
+                        if (chatData != null) {
+                            str = chatData + str;
+                        }
+                        sessionStorage.setItem(toName, str);*/
+            //发送数据
+            ws.send(JSON.stringify(json));
+        })
+    })
+
+    // 切换对话角色
+    function showChat(name) {
+        toName = name;
+        const content = $("#content")
+        //清空聊天区
+        content.html("");
+        $("#new").html("当前正与" + toName + "聊天");
+        // 此处获取对应角色历史消息
+        /*        const chatData = sessionStorage.getItem(toName);
+                if (chatData != null) {
+                    content.html(chatData);
+                }*/
+    }
+</script>
+</html>
