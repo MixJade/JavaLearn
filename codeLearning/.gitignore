@@ -1,0 +1,6 @@
+target/
+.idea/
+*.iml
+# 忽略输出的文件
+输出的文件/*
+!输出的文件/README.md
