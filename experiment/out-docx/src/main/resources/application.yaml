@@ -1,0 +1,4 @@
+# 设置日志输出
+logging:
+  pattern:
+    dateformat: HH:mm
