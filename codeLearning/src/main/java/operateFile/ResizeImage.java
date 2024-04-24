@@ -11,6 +11,7 @@ public class ResizeImage {
         String path = "src/main/resources/operateFile/testResize.jpg";  // 图片的路径
         int width = 128;  // 新的宽度
         int height = 128;  // 新的高度
+        // 注意：这个方法只能将图片处理为正方形(因为裁剪时考虑不妥当)
         boolean resizeSuc = new ResizeImage().resize(path, width, height);
         System.out.println("转化" + (resizeSuc ? "成功" : "失败"));
     }
