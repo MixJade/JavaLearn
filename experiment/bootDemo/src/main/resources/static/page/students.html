@@ -1,147 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学生管理</title>
-    <!--使用bootstrap-->
-    <link href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <!--引入axios-->
-    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.18.1/axios.min.js"></script>
+    <link href="myCurl.min.css" rel="stylesheet">
 </head>
-
 <body>
-<!-- 吐司消息 -->
-<div class="position-fixed bottom-50 p-3" style="z-index: 5;left: 30%;">
-    <div class="toast hide text-white bg-danger" id="liveToast" data-bs-delay="1200" role="alert"
-         aria-live="assertive" aria-atomic="true">
-        <div class="toast-body">
-            你有一条短消息！
-        </div>
+<!--搜索框-->
+<section class="mySearch">
+    <form role="search" onsubmit="return false">
+        <input type="search" placeholder="学生名字" aria-label="Search" id="searchInput">
+        <button class="btn-line-suc" type="submit" onclick="getAll()">Search</button>
+    </form>
+    <div>
+        <button type="button" class="my-btn btn-danger" onclick="deleteBatch()">批量删除</button>
+        <button type="button" class="my-btn btn-success" onclick="showDialog()">添加学生</button>
     </div>
-</div>
-<!-- 确认删除框 -->
-<div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="delModalLabel">删除确认</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                一旦删除，数据无法找回，是否删除
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="button" data-bs-dismiss="modal">取消</button>
-                <button class="btn btn-danger" id="sureDelBtn" type="button">删除</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 弹出框 -->
-<div class="modal fade" id="addPetPop" tabindex="-1" aria-labelledby="addPetPopLa" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addPetPopLa">添加学生</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="d-grid gap-3" id="addPetForm">
-                    <input type="hidden" id="id">
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="studentName">学生姓名</label>
-                        <div class="col-md-8">
-                            <input class="form-control" id="studentName" type="text" placeholder="学生姓名">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">性别</label>
-                        <div class="col-sm-6">
-                            <input class="btn-check" name="sex" id="petSexRad_1" type="radio" autocomplete="off"
-                                   checked>
-                            <label class="btn btn-outline-success" for="petSexRad_1">男</label>
-                            <input class="btn-check" name="sex" id="petSexRad_2" type="radio" autocomplete="off">
-                            <label class="btn btn-outline-danger" for="petSexRad_2">女</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="englishGrade">英语</label>
-                        <div class="col-md-4">
-                            <input class="form-control" id="englishGrade" type="number" step="5" min="1" max="100"
-                                   value="1">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="mathGrade">数学</label>
-                        <div class="col-md-4">
-                            <input class="form-control" id="mathGrade" type="number" step="5" min="1" max="100"
-                                   value="1">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="societyId">社团</label>
-                        <div class="col-md-5">
-                            <select class="form-select" id="societyId">
-                                <option value="1" selected>散人</option>
-                                <option value="2">头文字D</option>
-                                <option value="3">轻音部</option>
-                                <option value="4">黄金之风</option>
-                                <option value="5">极东魔术昼寝结社</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="height">身高</label>
-                        <div class="col-md-4">
-                            <input class="form-control" id="height" type="number" step="0.1" min="0.5" max="2"
-                                   value="1">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label" for="birthday">出生日期</label>
-                        <div class="col-sm-8">
-                            <input class="form-control" id="birthday" type="date">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="money">钱</label>
-                        <div class="col-md-4">
-                            <input class="form-control" id="money" type="number" step="100" min="0" value="0">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">关闭</button>
-                <button class="btn btn-primary" type="button" onclick="submitForm()">确认提交</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 搜索与添加与批量删除 -->
-<nav class="navbar bg-light sticky-top">
-    <div class="container-fluid">
-        <form class="d-flex" role="search" onsubmit="return false">
-            <input class="form-control me-2" type="search" placeholder="学生名字" aria-label="Search" id="searchInput">
-            <button class="btn btn-outline-success" type="submit" onclick="getByName()">Search</button>
-        </form>
-        <div class="d-flex flex-row-reverse bd-highlight">
-            <button type="button" class="btn btn-danger ms-1" id="delALL">批量删除</button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPetPop"
-                    onclick="setPopTitle()">添加学生
-            </button>
-        </div>
-    </div>
-</nav>
+</section>
 <!-- 表格 -->
-<table class="table table-striped table-bordered table-hover">
+<table class="my-table">
+    <caption>学生信息展示</caption>
     <thead>
     <tr>
-        <th><input class="form-check-input ms-3" type="checkbox" id="checkALL"><label for="checkALL"></label></th>
+        <th><input type="checkbox" id="checkALL" onchange="checkAll(this)">
+            <label for="checkALL"></label>
+        </th>
         <th>姓名</th>
         <th>社团</th>
         <th>性别</th>
@@ -154,268 +37,124 @@
     </tr>
     </thead>
     <tbody id="tb-main">
+    <!--此处靠js来填充-->
     </tbody>
 </table>
+<!--添加模态框-->
+<dialog class="myDialog" id="myDialog">
+    <form class="myForm" id="addPetForm">
+        <fieldset>
+            <legend id="dialogTit">添加学生</legend>
+            <input type="hidden" id="id">
+            <div class="form-row">
+                <label for="studentName">学生姓名</label>
+                <input id="studentName" type="text" placeholder="学生姓名">
+            </div>
+            <div class="form-row">
+                <label>性别</label>
+                <div style="display: inline-block">
+                    <input name="sex" id="petSexRad_1" type="radio" autocomplete="off"
+                           checked>
+                    <label for="petSexRad_1">男</label>
+                    <input name="sex" id="petSexRad_2" type="radio" autocomplete="off">
+                    <label for="petSexRad_2">女</label>
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="englishGrade">英语</label>
+                <input id="englishGrade" type="number" step="5" min="1" max="100"
+                       value="1">
+            </div>
+            <div class="form-row">
+                <label for="mathGrade">数学</label>
+                <input id="mathGrade" type="number" step="5" min="1" max="100"
+                       value="1">
+            </div>
+            <div class="form-row">
+                <label for="societyId">社团</label>
+                <select id="societyId">
+                    <option value="1" selected>散人</option>
+                    <option value="2">头文字D</option>
+                    <option value="3">轻音部</option>
+                    <option value="4">黄金之风</option>
+                    <option value="5">极东魔术昼寝结社</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="height">身高</label>
+                <input id="height" type="number" step="0.1" min="0.5" max="2"
+                       value="1">
+            </div>
+            <div class="form-row">
+                <label for="birthday">出生日期</label>
+                <input id="birthday" type="date">
+            </div>
+            <div class="form-row">
+                <label for="money">钱</label>
+                <input id="money" type="number" step="100" min="0" value="0">
+            </div>
+        </fieldset>
+        <div class="form-footer">
+            <button class="my-btn btn-secondary" type="button" onclick="closeDialog()">关闭</button>
+            <button class="my-btn btn-primary" type="button" onclick="submitForm()">确认提交</button>
+        </div>
+    </form>
+</dialog>
+<!--删除确认框-->
+<dialog id="sureDelModal">
+    <p>
+        一旦删除，数据无法找回，是否删除
+    </p>
+    <div style="text-align: right">
+        <button class="my-btn btn-danger" type="button" id="sureDelBtn">确认</button>
+        <button class="my-btn btn-secondary" type="button" onclick="cancelDel()">取消</button>
+    </div>
+</dialog>
+<!--吐司消息显示框-->
+<div id="myTus"></div>
 </body>
-<script type="text/javascript">
-    window.onload = function () {
-        getAll();
-    }
-
-    function getAll() {
-        axios.get("http://localhost:8080/students").then(resp => {
-            addTableRow(resp.data);
-        })
-    }
-
-    function getByName() {
-        const stuName = document.getElementById("searchInput").value;
-        if (stuName == null || stuName === '') {
-            getAll()
-        } else {
-            axios.get("http://localhost:8080/students/like/" + stuName).then(resp => {
-                addTableRow(resp.data);
-            })
-        }
-    }
-
-    // 传来的json变成表格
-    function addTableRow(per) {
-        const tbody = document.getElementById('tb-main');
-        tbody.innerHTML = ''
-        for (let i = 0; i < per.length; i++) { //遍历一下json数据 
-            const trow = getDataRow(per[i]); //定义一个方法,返回tr数据 
-            tbody.appendChild(trow);
-        }
-    }
-
-    // 向表格类动态添加数据
-    function getDataRow(h) {
-        function add_cell(key) {
-            const jsCell = document.createElement('td')
-            jsCell.innerHTML = key
-            return jsCell
-        }
-
-        const row = document.createElement('tr'); //创建行
-        const {studentName, birthday, id, sex, englishGrade, mathGrade, societyId, money, height} = h
-        // 添加复选框
-        const checkRow = document.createElement('td');
-        const checkA = document.createElement('input');
-        checkA.type = 'checkbox';
-        checkA.className = 'form-check-input ms-2';
-        checkA.setAttribute('name', 'checkA');
-        checkA.setAttribute('placeholder', id);
-        checkRow.appendChild(checkA);
-        row.appendChild(checkRow);
-        // 添加其他列
-        row.appendChild(add_cell(studentName))
-        row.appendChild(add_cell(getSocietyName(societyId)))
-        if (sex) {
-            row.appendChild(add_cell('男'))
-        } else {
-            row.appendChild(add_cell('女'))
-        }
-        row.appendChild(add_cell(englishGrade))
-        row.appendChild(add_cell(mathGrade))
-        row.appendChild(add_cell(getAge(birthday)))
-        row.appendChild(add_cell(money))
-        row.appendChild(add_cell(height))
-        //删除与修改按钮
-        const delCell = document.createElement('td');
-        const btnDel = document.createElement('input');
-        btnDel.setAttribute('type', 'button');
-        btnDel.setAttribute('class', 'btn btn-warning');
-        btnDel.setAttribute('value', '删除');
-        delCell.appendChild(btnDel);
-        const btnUpd = document.createElement('input');
-        btnUpd.setAttribute('type', 'button');
-        btnUpd.setAttribute('class', 'btn btn-info ms-1');
-        btnUpd.setAttribute("data-bs-toggle", "modal");
-        btnUpd.setAttribute("data-bs-target", "#addPetPop");
-        btnUpd.setAttribute('value', '修改');
-        delCell.appendChild(btnUpd);
-        //删除操作 
-        btnDel.onclick = async function () {
-            if (await confirmDel()) {
-                deleteById(id)
-            }
-        }
-        // 修改操作
-        btnUpd.onclick = function () {
-            document.getElementById('addPetPopLa').innerHTML = "修改学生信息";
-            jsonToForm(h)
-        }
-        row.appendChild(delCell);
-        return row;
-    }
-
-    // 设置表单标题(添加)
-    function setPopTitle() {
-        document.getElementById('addPetForm').reset();
-        document.getElementById('id').value = ''
-        document.getElementById('addPetPopLa').innerHTML = "添加学生"
-    }
-
-    const upAddModal = new bootstrap.Modal(document.getElementById("addPetPop"), {keyboard: false})
-
-    // 提交表单信息
-    function submitForm() {
-        upAddModal.hide()
-        if (document.getElementById('addPetPopLa').innerHTML === "修改学生信息") {
-            axios.put("http://localhost:8080/students", formToJson()).then(resp => commonResp(resp))
-        } else {
-            axios.post("http://localhost:8080/students", formToJson()).then(resp => commonResp(resp))
-        }
-    }
-
-    //表单数据转json
-    function formToJson() {
-        const formJson = {
-            "studentName": document.getElementById('studentName').value,
-            "birthday": document.getElementById('birthday').value,
-            "id": document.getElementById('id').value,
-            "sex": 0,
-            "englishGrade": document.getElementById('englishGrade').value,
-            "mathGrade": document.getElementById('mathGrade').value,
-            "societyId": getSocietyId(),
-            "money": document.getElementById("money").value,
-            "height": document.getElementById("height").value
-        };
-        if (document.getElementById("petSexRad_1").checked) {
-            formJson.sex = 1
-        }
-        return formJson;
-    }
-
-    const societyIdS = document.getElementById("societyId");
-
-    function getSocietyId() {
-        const index = societyIdS.selectedIndex;
-        return societyIdS.options[index].value;
-    }
-
-    //json数据转表单
-    function jsonToForm(h) {
-        const {studentName, birthday, id, sex, englishGrade, mathGrade, societyId, money, height} = h
-        document.getElementById('studentName').value = studentName;
-        document.getElementById('birthday').value = birthday;
-        document.getElementById('id').value = id;
-        if (sex === 1) {
-            document.getElementById("petSexRad_1").checked = true;
-        } else {
-            document.getElementById("petSexRad_2").checked = true;
-        }
-        document.getElementById('englishGrade').value = englishGrade;
-        document.getElementById('mathGrade').value = mathGrade;
-        societyIdS.value = societyId;
-        document.getElementById("money").value = money;
-        document.getElementById("height").value = height;
-    }
-
-    // 多选与反选
-    const checkALL = document.getElementById("checkALL");
-    const checkAS = document.getElementsByName("checkA");
-    checkALL.onclick = function () {
-        for (let i = 0; i < checkAS.length; i++) {
-            checkAS[i].checked = this.checked;
-        }
-    }
-
-    // 通过id删除单个
-    function deleteById(id) {
-        axios.delete("http://localhost:8080/students/" + id).then(resp => commonResp(resp))
-    }
-
-    // 通过id批量删除
-    const delALL = document.getElementById("delALL");
-    delALL.onclick = async function () {
-        if (await confirmDel()) {
-            const delGroup = [];
-            for (let i = 0; i < checkAS.length; i++) {
-                if (checkAS[i].checked) {
-                    delGroup.push(checkAS[i].placeholder)
-                }
-            }
-            if (delGroup.length === 0) {
-                return
-            }
-            axios.delete("http://localhost:8080/students/batch/" + delGroup).then(resp => commonResp(resp))
-        }
-    }
-
-    // 根据出生日期算年龄(简化版)
-    const nowYear = new Date().getFullYear()
-
-    function getAge(birthday) {
-        const birthYear = birthday.split("-")[0]
-        return nowYear - birthYear
-    }
-
-    function getSocietyName(societyId) {
-        switch (societyId) {
-            case 1:
-                return "散人"
-            case 2:
-                return "头文字D"
-            case 3:
-                return "轻音部"
-            case 4:
-                return "黄金之风"
-            case 5:
-                return "极东魔术昼寝结社"
-            default:
-                return "未知"
-        }
-    }
-
-    // 删改增操作通用解析
-    function commonResp(resp) {
-        if (resp.data["code"] === 1) {
-            sucToast(resp.data["msg"])
-            getAll();
-        } else if (resp.data["code"] === 0) {
-            errToast(resp.data["msg"])
-        } else {
-            errToast("服务器无响应")
-        }
-    }
-
-    // 吐司消息
-    const toastText = document.querySelector(".toast-body");
-    const toastColor = document.querySelector('.toast');
-
-    function sucToast(msg) {
-        toastColor.classList.remove("bg-danger")
-        toastColor.classList.add("bg-success")
-        toastText.innerHTML = msg;
-        new bootstrap.Toast(toastColor).show();
-    }
-
-    function errToast(msg) {
-        toastColor.classList.remove("bg-success")
-        toastColor.classList.add("bg-danger")
-        toastText.innerHTML = msg;
-        new bootstrap.Toast(toastColor).show();
-    }
-
-    // 确认删除框
-    const delModalFirst = document.getElementById("delModal")
-    const delModal = new bootstrap.Modal(delModalFirst, {keyboard: false})
-    const sureDelBtn = document.getElementById("sureDelBtn")
-
-    function confirmDel() {
-        delModal.show();
-        return new Promise(function (resolve) {
-            delModalFirst.addEventListener('hide.bs.modal', function () {
-                resolve(false)
-            })
-            sureDelBtn.onclick = function () {
-                resolve(true);
-                delModal.hide();
-            }
-        })
-    }
-</script>
-
+<!--表格：一行-->
+<template id="trTemp">
+    <tr>
+        <td>
+            <label>
+                <input type="checkbox" name="checkA">
+            </label>
+        </td>
+        <td>姓名</td>
+        <td>社团</td>
+        <td>性别</td>
+        <td>英语</td>
+        <td>数学</td>
+        <td>年龄</td>
+        <td>钱</td>
+        <td>身高</td>
+        <td>
+            <button class="del-btn" type="button">删除</button>
+            <button class="upd-btn" type="button">修改</button>
+        </td>
+    </tr>
+</template>
+<!--吐司：正确消息-->
+<template id="tus-temp">
+    <div class="tus tus-suc">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+            <circle cx="12" cy="12" r="11" fill="#67C23A"/>
+            <path d="M7 12 L12 17 L17 7" stroke="white" stroke-width="2" fill="none"/>
+        </svg>
+        <span>这是一条吐司消息</span>
+    </div>
+</template>
+<!--吐司：错误消息-->
+<template id="tus-temp2">
+    <div class="tus tus-fail">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+            <circle cx="12" cy="12" r="11" fill="#F56C6C"/>
+            <line x1="17" y1="7" x2="7" y2="17" stroke="white" stroke-width="2"/>
+            <line x1="17" y1="17" x2="7" y2="7" stroke="white" stroke-width="2"/>
+        </svg>
+        <span>这是一条吐司消息</span>
+    </div>
+</template>
+<script src="myCurl.js"></script>
 </html>
