@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>测试一对多循环查询</title>
-    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.18.1/axios.min.js"></script>
 </head>
 <body>
 <div id="dog-res">
-
 </div>
 </body>
 <script>
     window.onload = () => {
         const dosRes = document.getElementById("dog-res")
-        axios.get("http://localhost:8080/dog").then(resp => {
-            resp.data.forEach(item => {
-                const {dogName, sex, age, breed, dogSpecialities} = item
-                dosRes.innerHTML += dogName + ",";
-                console.log(dogName)
-                dosRes.innerHTML += sex ? "公" : "母" + ",";
-                dosRes.innerHTML += age + "岁,";
-                dosRes.innerHTML += breed + ",特质:【";
-                dogSpecialities.forEach(specialities => {
-                    const {specialityName} = specialities
-                    dosRes.innerHTML += specialityName + ",";
+        fetch('http://localhost:8080/dog')
+            .then(response => response.json())
+            .then(resp => {
+                resp.forEach(item => {
+                    const {dogName, sex, age, breed, dogSpecialities} = item
+                    dosRes.innerHTML += dogName + ",";
+                    console.log(dogName)
+                    dosRes.innerHTML += sex ? "公" : "母" + ",";
+                    dosRes.innerHTML += age + "岁,";
+                    dosRes.innerHTML += breed + ",特质:【";
+                    dogSpecialities.forEach(specialities => {
+                        const {specialityName} = specialities
+                        dosRes.innerHTML += specialityName + ",";
+                    })
+                    dosRes.innerHTML += '】<br>';
                 })
-                dosRes.innerHTML += '】<br>';
-            })
-            console.log(resp.data)
-        })
+                console.log(resp)
+            });
     }
 </script>
 </html>
