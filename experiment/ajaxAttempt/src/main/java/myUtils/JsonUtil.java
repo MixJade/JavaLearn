@@ -11,11 +11,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class JsonUtil {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
-    public static String toStr(Object o) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(o);
+    public static String toStr(Object o) {
+        try {
+            return objectMapper.writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            System.err.println("Json转String出错");
+            return "";
+        }
     }
 
-    public static <T> T toObj(String s, Class<T> valueType) throws JsonProcessingException {
-        return objectMapper.readValue(s, valueType);
+    public static <T> T toObj(String s, Class<T> valueType) {
+        try {
+            return objectMapper.readValue(s, valueType);
+        } catch (JsonProcessingException e) {
+            System.err.println("String转Json出错");
+            return null;
+        }
     }
 }

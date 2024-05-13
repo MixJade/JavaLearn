@@ -1,6 +1,5 @@
 package myServlet;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import myUtils.JsonUtil;
 import pojo.StudentsMessage;
 import sqlDemo.StudentsDemo;
@@ -8,7 +7,7 @@ import sqlDemo.StudentsDemo;
 import java.util.List;
 
 public class StudentTs {
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) {
         StudentsDemo studentsDemo = new StudentsDemo();
         List<StudentsMessage> studentsMessages = studentsDemo.allStudent();
         // 对象换成JSON
