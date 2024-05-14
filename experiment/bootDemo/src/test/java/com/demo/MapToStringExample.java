@@ -1,8 +1,6 @@
 package com.demo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,34 +13,30 @@ import java.util.Map;
  */
 public class MapToStringExample {
     public static void main(String[] args) {
-        try {
-            // 创建一个示例的 Map 对象
-            Map<String, String> originalMap = new HashMap<>();
-            originalMap.put("key1", "value1");
-            originalMap.put("key2", "123");
+        // 创建一个示例的 Map 对象
+        Map<String, String> originalMap = new HashMap<>();
+        originalMap.put("key1", "value1");
+        originalMap.put("key2", "123");
 
-            // 将 Map 转换为 String
-            ObjectMapper om = new ObjectMapper();
-            String mapString = om.writeValueAsString(originalMap);
+        // 使用自定义工具类
+        // 将 Map 转换为 String
+        String mapString = JsonUtil.objToStr(originalMap);
 
-            System.out.println("Map 转换为 String：");
-            System.out.println(mapString);
+        System.out.println("Map 转换为 String：");
+        System.out.println(mapString);
 
-            // 将 String 转换为 Map
-            Map<String, String> restoredMap = om.readValue(mapString, new TypeReference<>() {
-            });
+        // 将 String 转换为 Map
+        Map<String, String> restoredMap = JsonUtil.strToObj(mapString, new TypeReference<>() {
+        });
 
-            System.out.println("String 转换为 Map：");
-            System.out.println(restoredMap);
+        System.out.println("String 转换为 Map：");
+        System.out.println(restoredMap);
 
-            // 将传参的String转为Map
-            String mapString2 = "{\"1\":\"value1\",\"2\":\"123\"}";
-            Map<String, String> stringMap = om.readValue(mapString2, new TypeReference<>() {
-            });
-            System.out.println("将传参的String转为Map");
-            System.out.println(stringMap);
-        } catch (JsonProcessingException e) {
-            System.out.println("转化失败");
-        }
+        // 将传参的String转为Map
+        String mapString2 = "{\"1\":\"value1\",\"2\":\"123\"}";
+        Map<String, String> stringMap = JsonUtil.strToObj(mapString2, new TypeReference<>() {
+        });
+        System.out.println("将传参的String转为Map");
+        System.out.println(stringMap);
     }
 }

@@ -1,8 +1,6 @@
 package com.demo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +19,14 @@ public class TesStringToListObj {
         personList.add(new Person("李四", 24));
         personList.add(new Person("王五", 15));
 
-        // 获取JackSon对象
-        ObjectMapper om = new ObjectMapper();
-        try {
-            // 将List_obj转为String
-            String jsonString = om.writeValueAsString(personList);
-            System.out.println("转为String的结果:" + jsonString);
+        // 将List_obj转为String
+        String jsonString = JsonUtil.objToStr(personList);
+        System.out.println("转为String的结果:" + jsonString);
 
-            // 将String转为List_obj，注意这里的接收类型List<Person>是默认转化目标
-            List<Person> listPerson = om.readValue(jsonString, new TypeReference<>() {
-            });
-            System.out.println("转成的结果：" + listPerson);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        // 将String转为List_obj，注意这里的接收类型List<Person>是默认转化目标
+        List<Person> listPerson = JsonUtil.strToObj(jsonString, new TypeReference<>() {
+        });
+        System.out.println("转成的结果：" + listPerson);
     }
 
     record Person(String name, int age) {
