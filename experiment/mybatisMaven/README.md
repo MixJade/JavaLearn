@@ -1,10 +1,10 @@
-## Mybatis部分学习笔记
+# Mybatis部分学习笔记
 
 1. Mybatis是一个Maven和sql的框架，存在目的是为了解决
     1. 原生模式的硬编码（加载对应接口后，可以以方法形式操作Sql）
     2. 简化后期执行SQL（主要是可以以包的形式来管理SQL语句）
 
-### 使用Mybatis
+## 使用Mybatis
 
 1. **定义与SQL映射文件(mapper)同名的接口，并将之放在同一目录下。**
 
@@ -13,6 +13,7 @@
     * 同时也可以直接放在`main/java`和`main/resources`文件夹下，但如果后期文件多了会不好管理。
 
    推荐在`main/resources`文件夹下面建立一个新的文件夹，命名与mapper接口所在文件夹同名。
+
    > 例如接口导包路径为`example.mappe`r（在main/java文件夹下面的那个)，在`resources`新建文件夹时，命名`example/mapper`
 
 2. **设置SQL映射文件的namespace属性为mapper接口的全限定名。**
@@ -26,13 +27,13 @@
 
 4. **通过session.getMapper方法获取接口对象，然后调用对应方法完成SQL执行即可。**
 
-### 推荐插件下载:MyBatisX
+## 推荐插件下载:MyBatisX
 
 这个插件可以让你快捷的在mapper文件与接口之间跳转，同时会标记出mapper文件和接口，以及mapper文件中SQL语句的部分。
 并且可以先在接口写方法，然后通过插件跳转过去会在mapper文件中自动补全。
 ~~（还是想说标记长得真可爱）~~
 
-### 若数据库的字段与Java相异
+## 若数据库的字段与Java相异
 
 如数据库中字段`student_name`到了Java中变成了`studentName`，会导致相应无法传到定义文件(StudentsMessage.java)中。
 
@@ -82,7 +83,7 @@
     </select>
     ```
 
-### 单条件查询
+## 单条件查询
 
 1. **单个条件查询。**
    只需要将JDBC中的`?`换成xml文件中的`#{条件参数}`即可。
@@ -111,7 +112,7 @@
 |   _    |  任何单个字符   |      `abc_` 以abc开头的任意四个字符      |
 | regexp |   正则表达式   | 正常的正则表达式, 不过前面的`like`变成`rlike` |
 
-### 多条件查询
+## 多条件查询
 
 > 多条件查询有三种方式
 
@@ -156,7 +157,7 @@
 
    通过HashMap封装参数，逻辑跟实体类封装参数差不多，但记得映射文件、接口、实现的java文件，都要改。
 
-### 动态查询（条件缺失）
+## 动态查询（条件缺失）
 
 **当条件参数为空**(这里就显示出包装类的重要性了，平常的int根本不能设置为null)时。
 
@@ -165,7 +166,7 @@
   ，这样会报错，解决方法是通过在where后面加1=1来避免，但是有更好的方法，就是用`<where>`标签
 * 注意在`SixthDemo.java`文件中加了判别名字为空时的`if`语句，因为不加的话会被认为查询一个名字叫`%%`的人。
 
-### 动态查询（条件选择）
+## 动态查询（条件选择）
 
 > 感觉跟上面那个没有区别的样子
 
@@ -177,6 +178,8 @@
 |  choose   | switch  |
 |   when    |  case   |
 | otherwise | default |
+
+## 数据操作
 
 ### 插入操作
 
@@ -200,7 +203,7 @@
 * **单个删除**，很正常，记得提交事务就是
 * **批量删除**，通过数组的形式，这要在接口中通过`@Param`重写默认数组名`array`。同时还有新的映射文件语法，见`id="deleteGroup"`
 
-### 参数传递
+## 散列参数占位
 
 > Mybatis通过ParamNameResolver类来进行参数传递
 
@@ -215,7 +218,7 @@
 
 * 其他参数传递方式例如对象、map，你已经懂了
 
-### 注解开发
+## 注解开发
 
 只需要在接口中通过注解进行定义SQL语句即可，不需要通过映射文件，这种方法更加直接，但是如果SQL语句较为复杂的话会非常难看。
 
@@ -228,3 +231,25 @@
         and s1.id =#{id};")
         List<StudentsMessage>selectByExplain(int id);
 ```
+
+## Xml中大于小于号
+
+xml文件中是不识别`<`,`>`,会将xml本身的元素命名搞混，得出无法解析。
+
+| `&lt;` | <    | 小于号 |
+| ---- | ---- | ------ |
+| `&gt;` | >    | 大于号 |
+
+样例如下：
+
+```xml
+<select id="selectByTwoSixty" resultType="backyard.RankShow">
+    select studentName,
+           englishGrade
+    from students
+    <!--这是小于号-->
+    where englishGrade &lt;= #{englishGrade}
+    order by englishGrade desc;
+</select>
+```
+
