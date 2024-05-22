@@ -126,8 +126,10 @@ public class PwdAES extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // 处理密钥
         SecretKey key = new SecretKeySpec(padKeyString(keyTextField.getText()), "AES");
+        // System.out.println(new String(padKeyString(keyTextField.getText()),StandardCharsets.UTF_8));
         // 处理向量
         IvParameterSpec iv = new IvParameterSpec(padIvString(ivTextField.getText()));
+        // System.out.println(new String(padIvString(ivTextField.getText()),StandardCharsets.UTF_8));
         // 处理输入文本
         String inputText = inputTextField.getText();
         // 进行加密、解密
