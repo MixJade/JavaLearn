@@ -153,7 +153,7 @@ public class PwdAES extends JFrame implements ActionListener {
         byte[] inputBytes = input.getBytes(StandardCharsets.UTF_8);
         if (inputBytes.length < 24) {
             // 输出的数组长度小于24，则输出16位的密钥
-            return padIvString(input);
+            return padIvString(input, "WhatCannotBeSeen");
         } else if (inputBytes.length > 24 && inputBytes.length < 32) {
             // 输出数组的长度大于24但小于32，则输出24位数组
             byte[] result = new byte[24];
@@ -172,14 +172,25 @@ public class PwdAES extends JFrame implements ActionListener {
     }
 
     /**
-     * 对输入的向量进行处理，保证输出16位的byte数组
+     * 重置方法：对输入的向量进行处理
      *
      * @param input 输入的向量文本
      * @return 16位的byte数组
-     * @since 2024/1/2 15:00
      */
     public byte[] padIvString(String input) {
-        byte[] padBytes = "TimeWaitForNoMan".getBytes(StandardCharsets.UTF_8);
+        return padIvString(input, "TimeWaitForNoMan");
+    }
+
+    /**
+     * 对输入的向量进行处理，保证输出16位的byte数组
+     *
+     * @param input  输入的向量文本
+     * @param defTxt 默认填充文本
+     * @return 16位的byte数组
+     * @since 2024/1/2 15:00
+     */
+    public byte[] padIvString(String input, String defTxt) {
+        byte[] padBytes = defTxt.getBytes(StandardCharsets.UTF_8);
         byte[] inputBytes = input.getBytes(StandardCharsets.UTF_8);
         if (inputBytes.length < 16) {
             // 输出的数组长度小于16
@@ -187,14 +198,7 @@ public class PwdAES extends JFrame implements ActionListener {
             // 将inputBytes全部复制到result中
             System.arraycopy(inputBytes, 0, result, 0, inputBytes.length);
             // 将填空字符串拼接到输出字符串中
-            int padStart = 0;
-            for (int i = inputBytes.length; i < 16; i++) {
-                result[i] = padBytes[padStart];
-                padStart++;
-                if (padStart >= padBytes.length) {
-                    padStart = 0;
-                }
-            }
+            System.arraycopy(padBytes, inputBytes.length, result, inputBytes.length, 16 - (inputBytes.length));
             return result;
         } else if (inputBytes.length > 16) {
             // 输出数组的长度大于16
