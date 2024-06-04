@@ -1,4 +1,4 @@
-package trial;
+package testCircle;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package study;
+package listStudy;
 
 import java.util.ArrayList;
 import java.util.List;

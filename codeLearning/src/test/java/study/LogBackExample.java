@@ -4,12 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LogBackExample {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogBackExample.class);
+    private static final Logger log = LoggerFactory.getLogger(LogBackExample.class);
 
     public static void main(String[] args) {
-        LOGGER.debug("----------------------------");
-        LOGGER.debug("散玉的暑假生活");
-        LOGGER.info("第一次的日志尝试");
+        log.debug("----------------------------");
+        log.debug("散玉的暑假生活");
+        log.info("第一次的日志尝试");
         permissive();
     }
 
@@ -18,12 +18,12 @@ public class LogBackExample {
         int b = 2;
         int c = 0;
         try {
-            LOGGER.info("开始Try尝试");
-            LOGGER.trace("a={} b={} c={}", a, b, c);
-            LOGGER.trace("a+b={}", (a + b));
+            log.info("开始Try尝试");
+            log.trace("a={} b={} c={}", a, b, c);
+            log.trace("a+b={}", (a + b));
             System.out.println(b / c);
         } catch (Exception e) {
-            LOGGER.error("功能出现异常" + e);
+            log.error("功能出现异常" + e);
         }
     }
 }

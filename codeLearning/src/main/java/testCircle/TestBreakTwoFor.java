@@ -1,4 +1,4 @@
-package study;
+package testCircle;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package trial;
+package listStudy;
 
 import java.util.ArrayList;
 import java.util.Collections;
