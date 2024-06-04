@@ -21,7 +21,7 @@ public class CutFlowChart {
     public static void main(String[] args) {
         List<Node> nodeList = new ArrayList<>();
         // 1.节点列表
-        nodeList.add(new Node("z", 1));
+        nodeList.add(new Node("z", 0));
         nodeList.add(new Node("x", 1));
         nodeList.add(new Node("y", 4));
         nodeList.add(new Node("a", 1));
@@ -29,7 +29,7 @@ public class CutFlowChart {
         nodeList.add(new Node("c", 4));
         nodeList.add(new Node("d", 1));
         nodeList.add(new Node("e", 1));
-        nodeList.add(new Node("m", 2));
+        nodeList.add(new Node("m", 2)); // 可以改成3
         nodeList.add(new Node("w", 2));
         // 2.连线列表
         List<Line> lineList = new ArrayList<>();
@@ -44,8 +44,30 @@ public class CutFlowChart {
         lineList.add(new Line("b", "e", true));
         lineList.add(new Line("c", "m", true));
         lineList.add(new Line("m", "w", true));
+        // 正式开始
+        CutFlowChart cutFlowChart = new CutFlowChart();
+        cutFlowChart.beginFlowCut(nodeList, lineList);
+    }
+
+    /**
+     * 开始方法
+     *
+     * @param nodeList 节点列表
+     * @param lineList 连线列表
+     */
+    private void beginFlowCut(List<Node> nodeList, List<Line> lineList) {
         // 指定开始节点(这大概率已知)
-        String beginNode = "z";
+        String beginNode = null;
+        for (Node node : nodeList) {
+            if (node.type() == 0) {
+                beginNode = node.name();
+                break;
+            }
+        }
+        if (beginNode == null) {
+            System.out.println("初始节点未设置");
+            return;
+        }
         // 组装流程数据
         Set<String> goodNodeNames = packFlowNode(beginNode, lineList);
         // 查询哪些节点有用
@@ -63,7 +85,17 @@ public class CutFlowChart {
         }
     }
 
-    private static List<Node> secondCut(String begin, List<Line> lineList, Set<String> goodNodeNames, List<Node> goodNode) {
+    /**
+     * 第二次剪枝
+     * 减去前置节点未全部满足的并入点(type3节点例外)
+     *
+     * @param begin         开始节点名称
+     * @param lineList      连线列表(原版未动)
+     * @param goodNodeNames 第一次筛选后的节点名称列表
+     * @param goodNode      第一次筛选后的节点列表
+     * @return 最终的节点列表
+     */
+    private List<Node> secondCut(String begin, List<Line> lineList, Set<String> goodNodeNames, List<Node> goodNode) {
         // (一个节点需前置节点都可达才可达,但包含节点例外)
         // 将Line转为map(找初次路径上的所有并入点)
         Map<String, List<Line>> fromLineMap = lineList.stream()
@@ -108,7 +140,14 @@ public class CutFlowChart {
         return goodNode2;
     }
 
-    private static Set<String> packFlowNode(String begin, List<Line> lineList) {
+    /**
+     * 组装可以连起来的线,返回可达节点
+     *
+     * @param begin    开始节点名称
+     * @param lineList 节点列表(第一次是原版，第二次是筛选过的)
+     * @return 可以连成线的节点名称
+     */
+    private Set<String> packFlowNode(String begin, List<Line> lineList) {
         // 注意：LinkedHashSet是能保持元素顺序的Set
         Set<String> goodNodeNames = new LinkedHashSet<>();
         // 将Line转为map
@@ -120,7 +159,14 @@ public class CutFlowChart {
         return goodNodeNames;
     }
 
-    private static void setNextNode(String begin, Set<String> alreadyNode, Map<String, List<Line>> fromLineMap) {
+    /**
+     * (递归方法)遍历寻找每个节点的下一个节点
+     *
+     * @param begin       当前节点
+     * @param alreadyNode 已找到的节点列表,用于登记
+     * @param fromLineMap 以源点为key的路线映射
+     */
+    private void setNextNode(String begin, Set<String> alreadyNode, Map<String, List<Line>> fromLineMap) {
         alreadyNode.add(begin);
         // 最后一个节点直接返回
         if (!fromLineMap.containsKey(begin)) return;
@@ -138,7 +184,7 @@ public class CutFlowChart {
  * 节点对象
  *
  * @param name 节点名称
- * @param type 节点类型,1正常 2不展示 3并入时可多选一 4需要去除
+ * @param type 节点类型,0开始 1正常 2不展示 3并入时可多选一 4需要去除
  */
 record Node(String name, int type) {
 }
