@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * 有一个流程图，它的一些连线上的节点被扣掉了
  * 现在需要重新连线(要求把破碎的线接上)
  * <pre>
- *      ┌─ ── ──┐
+ *      ┌─ ──c──┐
  *   ┌─x┤       ├─m
  * z─┤  └─ ─┐   │
  *   └─ ──d─┴─e─┘
@@ -22,22 +22,11 @@ public class CutFlowLine {
         nodeList.add(new Node(1, "z", 0));
         nodeList.add(new Node(2, "x", 1));
         nodeList.add(new Node(7, "d", 1));
+        nodeList.add(new Node(6, "c", 4));
         nodeList.add(new Node(8, "e", 1));
         nodeList.add(new Node(9, "m", 2));
         // 2.连线列表
-        List<Line> lineList = new ArrayList<>();
-        lineList.add(new Line(1, 2, true));
-        lineList.add(new Line(1, 4, true));
-        lineList.add(new Line(2, 3, true));
-        lineList.add(new Line(2, 5, true));
-        lineList.add(new Line(3, 6, true));
-        lineList.add(new Line(4, 7, true));
-        lineList.add(new Line(7, 8, true));
-        lineList.add(new Line(8, 9, true));
-        lineList.add(new Line(5, 8, true));
-        lineList.add(new Line(6, 9, true));
-        lineList.add(new Line(9, 10, true));
-
+        List<Line> lineList = CutFlowChart.getLineList();
         // 先将List<Line>变成Map<fromNode,List<toNode>>
         Map<Integer, List<Integer>> lineMap = lineList.stream()
                 .collect(Collectors.groupingBy(Line::fromNodeId,
@@ -54,6 +43,13 @@ public class CutFlowLine {
         }
     }
 
+    /**
+     * 对破碎节点重新连线
+     *
+     * @param nodeList 被扣掉后的剩余节点
+     * @param lineMap  Map<fromNode,List<toNode>>
+     * @return 新的连线集合
+     */
     private List<Line> setNewLine(List<Node> nodeList, Map<Integer, List<Integer>> lineMap) {
         List<Line> newLineList = new ArrayList<>();
         // 从传来的节点列表提取出节点编号

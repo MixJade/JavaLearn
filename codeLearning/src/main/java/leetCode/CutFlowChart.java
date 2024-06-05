@@ -18,6 +18,22 @@ import java.util.stream.Collectors;
  * 期望：z,x,a,b,d,e
  */
 public class CutFlowChart {
+    static List<Line> getLineList() {
+        List<Line> lineList = new ArrayList<>();
+        lineList.add(new Line(1, 2, true));
+        lineList.add(new Line(1, 4, true));
+        lineList.add(new Line(2, 3, false)); // 断开x到y的连接
+        lineList.add(new Line(2, 5, true));
+        lineList.add(new Line(3, 6, true));
+        lineList.add(new Line(4, 7, true));
+        lineList.add(new Line(7, 8, true));
+        lineList.add(new Line(8, 9, true));
+        lineList.add(new Line(5, 8, true));
+        lineList.add(new Line(6, 9, true));
+        lineList.add(new Line(9, 10, true));
+        return lineList;
+    }
+
     public static void main(String[] args) {
         List<Node> nodeList = new ArrayList<>();
         // 1.节点列表
@@ -32,18 +48,7 @@ public class CutFlowChart {
         nodeList.add(new Node(9, "m", 2)); // 可以改成3
         nodeList.add(new Node(10, "w", 2));
         // 2.连线列表
-        List<Line> lineList = new ArrayList<>();
-        lineList.add(new Line(1, 2, true));
-        lineList.add(new Line(1, 4, true));
-        lineList.add(new Line(2, 3, false)); // 断开x到y的连接
-        lineList.add(new Line(2, 5, true));
-        lineList.add(new Line(3, 6, true));
-        lineList.add(new Line(4, 7, true));
-        lineList.add(new Line(7, 8, true));
-        lineList.add(new Line(8, 9, true));
-        lineList.add(new Line(5, 8, true));
-        lineList.add(new Line(6, 9, true));
-        lineList.add(new Line(9, 10, true));
+        List<Line> lineList = getLineList();
         // 正式开始
         CutFlowChart cutFlowChart = new CutFlowChart();
         cutFlowChart.beginFlowCut(nodeList, lineList);
