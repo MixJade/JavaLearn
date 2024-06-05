@@ -104,6 +104,8 @@ public class CutFlowChart {
                 .entrySet().stream()
                 .filter(entry -> entry.getValue().size() >= 2)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        // 没有并入点就不处理
+        if (fromLineMap.keySet().size() == 0) return goodNode;
         // 筛选前置节点未全部满足的并入点
         List<Node> nedDelNode = new ArrayList<>();
         for (Node node : goodNode) {
@@ -123,9 +125,17 @@ public class CutFlowChart {
                 if (nedDel) nedDelNode.add(node);
             }
         }
+        if (nedDelNode.size() == 0) return goodNode;
         // 最后清理一波并入点，再筛选一次路径
         goodNode.removeAll(nedDelNode);
         List<String> goodNodeName2 = goodNode.stream()
+                .filter(i -> {
+                    for (Node node : nedDelNode) {
+                        if (node.name().equals(i.name()))
+                            return false;
+                    }
+                    return true;
+                })
                 .map(Node::name)
                 .toList();
         List<Line> lines2 = lineList.stream()
