@@ -36,7 +36,7 @@ public class CutFlowChart {
 
     public static void main(String[] args) {
         List<Node> nodeList = new ArrayList<>();
-        // 1.节点列表
+        // 1.节点列表(这里的顺序一旦乱掉，最终结果也会乱)
         nodeList.add(new Node(1, "z", 0));
         nodeList.add(new Node(2, "x", 1));
         nodeList.add(new Node(3, "y", 4));
