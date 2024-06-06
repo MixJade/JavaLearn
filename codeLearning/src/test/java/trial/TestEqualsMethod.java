@@ -40,6 +40,17 @@ public class TestEqualsMethod {
         }
         // 最后的map值
         System.out.println("dogMap最终值：" + dogMap);
+
+        // 4 测试异种比较
+        System.out.println("\n=====测试4======");
+        System.out.println("但不同类型不会相同：" + dog2.equals(2L));
+        System.out.println("同类型就行：" + dog2.equals(new Dog(2L, "怡中")));
+
+        // 5 测试异种取值
+        System.out.println("\n=====测试5======");
+        Map<Object, Integer> dogMap2 = new HashMap<>();
+        dogMap2.put(dog1, 1);
+        System.out.println("objMap能通过Long取值吗：" + dogMap2.get(1L));
     }
 }
 
