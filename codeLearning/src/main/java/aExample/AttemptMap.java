@@ -20,5 +20,6 @@ public class AttemptMap {
         System.out.println("查找是否有这个键，返回布尔:" + stringMap.containsKey("bearing"));
         System.out.println("根据键查找值:" + stringMap.get(firstName[2]));
         System.out.println("展示所有值(很明显存储是无序的):" + stringMap.values());
+        System.out.println("根据键查找值(但有默认值):" + stringMap.getOrDefault("noName", "默认值"));
     }
 }
