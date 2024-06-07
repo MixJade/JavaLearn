@@ -128,7 +128,7 @@ public class CutFlowLine {
         // 从开始节点进行遍历
         // 【注意：TreeMap是有序集合，里面的内容会按照key值进行排序】
         Map<Integer, Set<Integer>> sortMap = new TreeMap<>();
-        for (int i = 0; i < lineList.size(); i++) {
+        for (int i = 0; i <= lineList.size(); i++) {
             sortMap.put(i, fromNodeIdSet);
             Set<Integer> nextIdSet = new HashSet<>();
             for (Integer nextId : fromNodeIdSet) {
