@@ -19,8 +19,17 @@ import java.util.stream.Collectors;
  */
 public class CutFlowLine {
     public static void main(String[] args) {
-        List<Node> nodeList = new ArrayList<>();
+        CutFlowLine cutFlowLine = new CutFlowLine();
+        cutFlowLine.beginNewLine();
+        cutFlowLine.beginNewSort();
+    }
+
+    /**
+     * 1. 对破碎节点进行重新连线
+     */
+    void beginNewLine() {
         // 1.节点列表
+        List<Node> nodeList = new ArrayList<>();
         nodeList.add(new Node(1, "z", 0));
         nodeList.add(new Node(2, "x", 1));
         nodeList.add(new Node(7, "d", 1));
@@ -33,8 +42,8 @@ public class CutFlowLine {
         Map<Integer, List<Integer>> lineMap = lineList.stream()
                 .collect(Collectors.groupingBy(Line::fromNodeId,
                         Collectors.mapping(Line::toNodeId, Collectors.toList())));
-        CutFlowLine cutFlowLine = new CutFlowLine();
-        List<Line> newLine = cutFlowLine.setNewLine(nodeList, lineMap);
+        // 得到新的连线
+        List<Line> newLine = setNewLine(nodeList, lineMap);
         // 查看结果
         Map<Integer, Node> nodeMap = new HashMap<>();
         for (Node node : nodeList) {
@@ -45,8 +54,23 @@ public class CutFlowLine {
                     nodeMap.get(line.fromNodeId()).name(),
                     nodeMap.get(line.toNodeId()).name());
         }
+    }
+
+    /**
+     * 2. 对指定的节点列表、连线列表进行排序
+     */
+    void beginNewSort() {
+        // 1.节点列表
+        List<Node> nodeList = new ArrayList<>();
+        nodeList.add(new Node(1, "a", 0));
+        nodeList.add(new Node(2, "b", 1));
+        nodeList.add(new Node(3, "c", 1));
+        // 2 连线列表
+        List<Line> lineList = new ArrayList<>();
+        lineList.add(new Line(1, 2, true));
+        lineList.add(new Line(2, 3, true));
         // 通过连线结果对节点进行排序
-        List<Node> newNodeList = cutFlowLine.sortNodeByLine(nodeMap, lineList, lineMap);
+        List<Node> newNodeList = sortNodeByLine(nodeList, lineList);
         if (newNodeList == null) {
             System.out.println("排序未生效");
         } else {
@@ -111,12 +135,19 @@ public class CutFlowLine {
     /**
      * 对破碎节点进行层次遍历
      *
-     * @param nodeMap  Map<nodeId,Node>被扣掉后的剩余节点
+     * @param nodeList 待排序的节点(一般是最终节点集合)
      * @param lineList 连线集合(旧)
-     * @param lineMap  Map<fromNode,List<toNode>>
      * @return 按顺序排好的节点列表
      */
-    private List<Node> sortNodeByLine(Map<Integer, Node> nodeMap, List<Line> lineList, Map<Integer, List<Integer>> lineMap) {
+    private List<Node> sortNodeByLine(List<Node> nodeList, List<Line> lineList) {
+        // 淘洗数据
+        Map<Integer, Node> nodeMap = new HashMap<>();
+        for (Node node : nodeList) {
+            nodeMap.put(node.nodeId(), node);
+        }
+        Map<Integer, List<Integer>> lineMap = lineList.stream()
+                .collect(Collectors.groupingBy(Line::fromNodeId,
+                        Collectors.mapping(Line::toNodeId, Collectors.toList())));
         // 淘换连线集合找出发节点
         Set<Integer> fromNodeIdSet = lineList.stream().map(Line::fromNodeId).collect(Collectors.toSet());
         Set<Integer> toNodeIdSet = lineList.stream().map(Line::toNodeId).collect(Collectors.toSet());
