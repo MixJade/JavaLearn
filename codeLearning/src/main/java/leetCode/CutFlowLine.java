@@ -131,9 +131,9 @@ public class CutFlowLine {
         for (int i = 0; i <= lineList.size(); i++) {
             sortMap.put(i, fromNodeIdSet);
             Set<Integer> nextIdSet = new HashSet<>();
-            for (Integer nextId : fromNodeIdSet) {
-                if (lineMap.containsKey(nextId))
-                    nextIdSet.addAll(lineMap.get(nextId));
+            for (Integer fromId : fromNodeIdSet) {
+                if (lineMap.containsKey(fromId))
+                    nextIdSet.addAll(lineMap.get(fromId));
             }
             // 如果下层没有节点，就结束遍历
             if (nextIdSet.size() == 0) break;
