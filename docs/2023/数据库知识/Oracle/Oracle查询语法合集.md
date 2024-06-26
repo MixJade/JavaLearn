@@ -242,3 +242,70 @@ GROUP BY A.name;
 SELECT LISTAGG(B.address, ', ') FROM  B 
 ```
 
+## 九、逗号分割字段的联查
+
+> 2024-6-26 20:21:41
+
+我需要将一张表中，使用逗号分割字段，来联查另一张表，并使查出来的结果也是逗号分割。
+
+需要用到`instr()`函数来分割逗号，`LISTAGG()`函数来聚合结果
+
+### 9.1 样例表
+
+* **客户表(client)**
+* 其中`dog_ids`字段为逗号分割
+
+| client_id | clinet_name | dog_ids |
+| --------- | ----------- | ------- |
+| 1         | 牢大        | 1,2     |
+| 2         | 劳尔        | 3,1     |
+| 3         | 阿三        | 1       |
+
+* **狗表(dog)**
+
+| dog_id | dog_name |
+| ------ | -------- |
+| 1      | 旺财     |
+| 2      | 阿黄     |
+| 3      | 阿黑     |
+
+### 9.2 样例SQL
+
+* 这里使用`left join`，防止因为`dog_ids`为空导致查不出来客户。
+* 使用`instr`函数解析逗号字符串。
+
+```sql
+SELECT cl.client_id,
+       cl.client_name,
+       cl.dog_ids,
+       LISTAGG(dl.dog_name, ',') AS dogs_name
+FROM client cl
+         LEFT JOIN dog dl
+                   ON instr(',' || cl.dog_ids || ',', ',' || dl.dog_id || ',') > 0
+group by cl.client_id, cl.client_name, cl.dog_ids;
+```
+
+### 9.3 INSTR函数讲解
+
+INSTR函数在Oracle中是一个字符串函数，用于返回子字符串在字符串中第一次出现的位置。如果没有找到子字符串，那么函数返回0。
+
+使用语法是：INSTR (string, substring, [start_position], [nth_appearance])
+
+- string是要搜索的字符串。
+- substring是子字符串，我们希望知道其在主字符串中的位置。
+- start_position是可选参数，表示搜索的起始位置。
+- nth_appearance也是一个可选参数，表示在字符串中查找子字符串的第几个出现。
+
+那么：
+
+```sql
+WHERE instr(',' || cl.dog_ids || ',', ',' || dl.dog_id || ',') > 0
+```
+
+作为一个过滤条件，意为：
+
+当`dl.dog_id`存在于`cl.dog_ids`中时(存在则返回值大于0)，返回`true`。
+
+同时，为了防止出现`dog_id`为*12*的项匹配到`dogs_id`为*123*的项这种乌龙情况，故在匹配项的首尾都加上逗号防止匹配混乱。
+
+最终逻辑即：`,1,`(dog_id)是否在字符串`,1,2,`(dog_ids)中。
