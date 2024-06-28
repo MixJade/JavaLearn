@@ -70,7 +70,7 @@
 
 * `ctrl + enter` 执行单条sql
 * `alt+X`执行多条选中sql
-* `ctrl + alt + F` 对sql语句进行格式化
+* `ctrl + shift + F` 对sql语句进行格式化
 * `ctrl + d` 删除当前行
 * `alt + ↑` 向上选定一条sql语句
 * `alt + ↓` 向下选定一条sql语句
