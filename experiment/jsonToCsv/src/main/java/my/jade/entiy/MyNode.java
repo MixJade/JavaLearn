@@ -2,6 +2,7 @@ package my.jade.entiy;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import my.jade.enums.NodeTpEnum;
 import my.jade.utils.IdUtil;
@@ -9,6 +10,7 @@ import my.jade.utils.IdUtil;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class MyNode {
     /**
      * 节点编号

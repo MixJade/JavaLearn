@@ -17,25 +17,28 @@ public class JsonUtil {
             return objectMapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
             System.err.println("Json转String出错");
+            e.printStackTrace();
             return "";
         }
     }
 
-    @SuppressWarnings("unused")
     public static <T> T strToObj(String s, Class<T> valueType) {
         try {
             return objectMapper.readValue(s, valueType);
         } catch (JsonProcessingException e) {
             System.err.println("String转Json出错");
+            e.printStackTrace();
             return null;
         }
     }
 
+    @SuppressWarnings("unused")
     public static <T> T strToObj(String s, TypeReference<T> valueTypeRef) {
         try {
             return objectMapper.readValue(s, valueTypeRef);
         } catch (JsonProcessingException e) {
             System.err.println("String转Json出错");
+            e.printStackTrace();
             return null;
         }
     }
