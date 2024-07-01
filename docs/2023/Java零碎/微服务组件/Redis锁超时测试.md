@@ -2,32 +2,58 @@
 
 > 2024-6-27 21:05:14
 
-* 比如同一份代码。dev环境服务器部署一个，本地启动一个
+## 一、锁代码样例
 
 * 锁代码如下
 
 ```java
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.redis.util.RedisLockRegistry;
+import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+
+@Slf4j
+@Service
 public class XXXServiceImpl {
     @Autowired
     RedisLockRegistry redisLockRegistry;
 
     void sss() {
         Lock lock = redisLockRegistry.obtain("iAmLock");
+        boolean sucLock = false;
         try {
-            lock.tryLock(60, TimeUnit.SECONDS);
-            log.info("拿到锁");
-
+            // 在60s内不断尝试获取锁,如成功获取则返回true,并向下走
+            sucLock = lock.tryLock(60, TimeUnit.SECONDS);
+            // tryLock返回false意为获取锁超时,即在60s中都没有获取到锁
+            if (sucLock) {
+                log.info("拿到锁");
+            } else {
+                log.error("锁超时");
+            }
+            // ...乱七八糟的业务代码
         } catch (InterruptedException e) {
-            log.error(e.toString());
+            log.error("获取锁失败{}", e.toString());
         } finally {
-            lock.unlock();
-            log.info("释放锁");
+            if (sucLock) {
+                // 解锁前需要判断锁是否存在，如果解锁不存在的锁会有异常抛出
+                // 这里通过解锁是否成功来判断纯属无奈之举
+                lock.unlock();
+                log.info("释放锁");
+            }
         }
     }
 }
 ```
+
+## 二、解锁时的报错
+
+> 在解锁时，出现了当前锁不存在，无法解锁的报错
+
+* 比如同一份代码。dev环境服务器部署一个，本地启动一个
+* 锁代码如上文的代码样例
 
 然后做如下操作
 
