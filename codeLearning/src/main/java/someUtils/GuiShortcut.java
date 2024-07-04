@@ -17,6 +17,7 @@ public class GuiShortcut {
         frame.setSize(200, 260);
         frame.setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
         frame.setLayout(new GridLayout(7, 1));
+        frame.setResizable(false); // 禁用最大化窗口
 
         JLabel label = new JLabel("自定义快捷方式", SwingConstants.CENTER);
         frame.add(label);
