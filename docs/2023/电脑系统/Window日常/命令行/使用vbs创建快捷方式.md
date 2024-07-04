@@ -3,6 +3,7 @@
 > 2024年7月4日09:22:06
 
 * 通过vbs在桌面建一个快捷方式，生成的快捷方式所指向的是与它同级目录的runMyGUI.vbs，所指定的icon是同级目录的myico.ico
+* 注意要通过`WorkingDirectory`+`WindowStyle`来设置快捷方式的起始位置，不然目标脚本运行找不到目录
 
 ```vbscript
 Set WshShell = WScript.CreateObject("WScript.Shell")
@@ -14,6 +15,8 @@ strIconPath = WshShell.CurrentDirectory & "\myico.ico"
 Set oShortcut = WshShell.CreateShortcut(strShortcutPath) 
 oShortcut.TargetPath = strAppPath 
 oShortcut.IconLocation = strIconPath 
+oShortcut.WorkingDirectory = WshShell.CurrentDirectory
+oShortcut.WindowStyle = 1
 oShortcut.Save
 ```
 
