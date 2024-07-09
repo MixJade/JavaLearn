@@ -9,14 +9,15 @@
 ├─src
    ├─main
    │  ├─java
+   │  │  ├─aExample 【关于某个功能的例子】
    │  │  ├─correspondence 【网络通信相关】
    │  │  ├─gameUtil 【玩游戏相关的计算工具】
    │  │  ├─JDBCAttempt 【JDBC的学习】
    │  │  ├─leetCode 【刷力扣时的代码】
+   │  │  ├─listStudy 【关于列表的测试】
    │  │  ├─operateFile 【关于文件操作】
-   │  │  ├─pwdUtils 【加密相关工具】
    │  │  ├─proxy_annotate 【注解与代理】
-   │  │  ├─snakeGame 【贪吃蛇游戏】
+   │  │  ├─pwdUtils 【加密相关工具】
    │  │  ├─someUtils 【一些小工具】
    │  │  └─threadCategory 【线程相关】
    │  └─resources
@@ -26,4 +27,7 @@
    │      └─someUtils 【一些小工具所用到的数据】
    └─test
        └─java 【测试类】
+          ├─study 【研究新的api所用】
+          ├─testCircle 【测试循环相关的细节】
+          └─trial 【研究一些基础、但易混淆的语法】
 ```
