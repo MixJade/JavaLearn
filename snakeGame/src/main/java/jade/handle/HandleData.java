@@ -1,6 +1,6 @@
-package snakeGame.handle;
+package jade.handle;
 
-import snakeGame.SnakeDataConfig;
+import jade.SnakeDataConfig;
 
 import javax.swing.*;
 import java.sql.*;

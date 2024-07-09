@@ -1,7 +1,7 @@
-package snakeGame.view;
+package jade.view;
 
 
-import snakeGame.handle.HandleData;
+import jade.handle.HandleData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

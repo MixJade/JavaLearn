@@ -1,4 +1,4 @@
-package snakeGame;
+package jade;
 
 /**
  * 贪吃蛇游戏的数据库配置

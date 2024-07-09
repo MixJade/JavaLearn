@@ -1,4 +1,4 @@
-package snakeGame.view;
+package jade.view;
 
 import javax.swing.*;
 import java.awt.*;

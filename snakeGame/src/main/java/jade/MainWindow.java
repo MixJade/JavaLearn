@@ -1,9 +1,9 @@
-package snakeGame;
+package jade;
 
-import snakeGame.handle.HandleData;
-import snakeGame.recognition.HuaRongRoad;
-import snakeGame.recognition.SnakeWindow;
-import snakeGame.view.RegisterAndLoginView;
+import jade.handle.HandleData;
+import jade.recognition.HuaRongRoad;
+import jade.recognition.SnakeWindow;
+import jade.view.RegisterAndLoginView;
 
 import javax.swing.*;
 import java.awt.*;
