@@ -1,8 +1,10 @@
 package jade.show;
 
 import jade.consts.GameConst;
+import jade.consts.ImgEnum;
 
 import javax.swing.*;
+import java.util.Objects;
 
 /**
  * 窗体
@@ -21,7 +23,7 @@ public class GameFrame extends JFrame {
         // 设置窗口坐标
         setLocationRelativeTo(null);
         // 设置窗口图标
-        ImageIcon icon = new ImageIcon(GameConst.IMG_PATH + "red-up.png");
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(ImgEnum.RED_UP.getImg()));
         setIconImage(icon.getImage());
         // 设置窗口可见
         setVisible(true);

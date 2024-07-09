@@ -1,8 +1,6 @@
 package jade.consts;
 
 public interface GameConst {
-    // 图片文件夹的位置
-    String IMG_PATH = "src/main/resources/picture/";
     int MOVE_SPEED = 1, // 地面及柱子移动初始速度。
             UP_GAP = 5, // 等级提高的分数间隔
             MAX_LEVEL = UP_GAP * 5; // 最大速度时的分数

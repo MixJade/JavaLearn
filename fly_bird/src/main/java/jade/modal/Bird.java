@@ -1,11 +1,12 @@
 package jade.modal;
 
-import jade.consts.BirdEnum;
 import jade.consts.GameConst;
+import jade.consts.ImgEnum;
 import jade.consts.MusicEnum;
 import jade.utils.MusicPlayer;
 
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * 小鸟类
@@ -20,9 +21,37 @@ public class Bird {
 
     private double v = 0; // 小鸟上升速度
 
+    /**
+     * 获取小鸟的图片
+     *
+     * @return 小鸟翅膀在上方、中间、下方的图片
+     */
+    private static BufferedImage[] getBie() {
+        BufferedImage[] bufferedImages = new BufferedImage[3];
+        Random random = new Random();
+        int color = random.nextInt(3);
+        switch (color) {
+            case 0 -> {
+                bufferedImages[0] = ImgEnum.RED_UP.getImg();
+                bufferedImages[1] = ImgEnum.RED_MID.getImg();
+                bufferedImages[2] = ImgEnum.RED_DOWN.getImg();
+            }
+            case 1 -> {
+                bufferedImages[0] = ImgEnum.BLUE_UP.getImg();
+                bufferedImages[1] = ImgEnum.BLUE_MID.getImg();
+                bufferedImages[2] = ImgEnum.BLUE_DOWN.getImg();
+            }
+            case 2 -> {
+                bufferedImages[0] = ImgEnum.YELLOW_UP.getImg();
+                bufferedImages[1] = ImgEnum.YELLOW_MID.getImg();
+                bufferedImages[2] = ImgEnum.YELLOW_DOWN.getImg();
+            }
+        }
+        return bufferedImages;
+    }
+
     public Bird() {
-        BirdEnum birdEnum = BirdEnum.randomBird();
-        images = birdEnum.getBie();
+        images = getBie();
         img = images[1];
         // 获取小鸟的宽高
         weight = img.getWidth();

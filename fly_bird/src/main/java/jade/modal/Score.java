@@ -1,28 +1,27 @@
 package jade.modal;
 
 import jade.consts.GameConst;
+import jade.consts.ImgEnum;
 import jade.consts.MusicEnum;
 import jade.utils.MusicPlayer;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Score {
     private int scoreNum = 0; // 初始分数
     private int x;
-    private final BufferedImage[] IMG = new BufferedImage[10];
-
-    public Score() {
-        try {
-            for (int i = 0; i < 10; i++) {
-                IMG[i] = ImageIO.read(new File(GameConst.IMG_PATH + i + ".png"));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private final BufferedImage[] IMG = new BufferedImage[]{
+            ImgEnum.ZERO.getImg(),
+            ImgEnum.ONE.getImg(),
+            ImgEnum.TWO.getImg(),
+            ImgEnum.THREE.getImg(),
+            ImgEnum.FOUR.getImg(),
+            ImgEnum.FIVE.getImg(),
+            ImgEnum.SIX.getImg(),
+            ImgEnum.SEVEN.getImg(),
+            ImgEnum.EIGHT.getImg(),
+            ImgEnum.NINE.getImg()
+    };
 
     /**
      * 获取分数的图片形式
