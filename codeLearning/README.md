@@ -11,7 +11,6 @@
    │  ├─java
    │  │  ├─aExample 【关于某个功能的例子】
    │  │  ├─correspondence 【网络通信相关】
-   │  │  ├─gameUtil 【玩游戏相关的计算工具】
    │  │  ├─JDBCAttempt 【JDBC的学习】
    │  │  ├─leetCode 【刷力扣时的代码】
    │  │  ├─listStudy 【关于列表的测试】
@@ -21,10 +20,8 @@
    │  │  ├─someUtils 【一些小工具】
    │  │  └─threadCategory 【线程相关】
    │  └─resources
-   │      ├─gameUtil 【游戏工具的配置文件】
    │      ├─JDBCAttempt 【德鲁伊的配置】
-   │      ├─operateFile 【文件操作相关的文件】
-   │      └─someUtils 【一些小工具所用到的数据】
+   │      └─operateFile 【文件操作相关的文件】
    └─test
        └─java 【测试类】
           ├─study 【研究新的api所用】
