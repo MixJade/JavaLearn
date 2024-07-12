@@ -1,4 +1,4 @@
-package study;
+package aExample;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +19,7 @@ public class LogBackExample {
         int c = 0;
         try {
             log.info("开始Try尝试");
+            // 配置了最低输出级别为debug,所以trace级别的不能输出
             log.trace("a={} b={} c={}", a, b, c);
             log.trace("a+b={}", (a + b));
             System.out.println(b / c);

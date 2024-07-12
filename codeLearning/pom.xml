@@ -29,23 +29,12 @@
             <artifactId>druid</artifactId>
             <version>1.2.13-SNSAPSHOT</version>
         </dependency>
-        <!--logback日志框架依赖1-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.3</version>
-        </dependency>
-        <!--logback日志框架依赖2-->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.4.4</version>
-        </dependency>
-        <!--logback日志框架依赖3-->
+        <!--logback日志框架依赖-->
+        <!--该依赖还依赖了`org.slf4j的slf4j-api`和`ch.qos.logback的logback-core`-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.4</version>
+            <version>1.5.6</version>
         </dependency>
         <!--单元测试框架-->
         <dependency>
