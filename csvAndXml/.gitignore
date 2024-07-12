@@ -1,0 +1,5 @@
+# Ignore output
+output/*
+
+# But not test.csv
+!output/test.csv

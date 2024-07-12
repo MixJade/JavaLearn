@@ -1,4 +1,4 @@
-package operateFile;
+package testXml;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -16,13 +16,16 @@ import java.util.List;
  * 属性查找：//@属性名 、 //元素[@属性名] 、 //元素//[@属性名='值']
  */
 public class TestXPath {
+    /**
+     * 直接获取所有的中文名
+     */
     @Test
     public void xpathParse01() {
         SAXReader saxReader = new SAXReader();
         InputStream is = TestXPath.class.getResourceAsStream("SaveCodeDictionary.xml");
         try {
             Document document = saxReader.read(is);
-            List<Node> chineseNames = document.selectNodes("//FileChineseName");
+            List<Node> chineseNames = document.selectNodes("//FileCnName");
             for (Node chineseName : chineseNames) {
                 System.out.println(chineseName.getText());
             }
@@ -31,6 +34,9 @@ public class TestXPath {
         }
     }
 
+    /**
+     * 挨个输出每个节点的信息
+     */
     @Test
     public void xpathParse02() {
         SAXReader saxReader = new SAXReader();

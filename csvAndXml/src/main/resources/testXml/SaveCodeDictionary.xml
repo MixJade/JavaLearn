@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  FileGather [
+        <!ELEMENT FileGather (FileManager+)>
+        <!ELEMENT FileManager (FileName,FileCnName,Introduce)>
+        <!ELEMENT FileName (#PCDATA)>
+        <!ELEMENT FileCnName (#PCDATA)>
+        <!ELEMENT Introduce (#PCDATA)>
+        ] >
+
+<FileGather>
+    <FileManager>
+        <FileName>MuseumGame.java</FileName>
+        <FileCnName>星铁博物馆计算</FileCnName>
+        <Introduce>星铁博物馆玩法的配比工具</Introduce>
+    </FileManager>
+    <FileManager>
+        <FileName>NoitaMap.java</FileName>
+        <FileCnName>Noita地图</FileCnName>
+        <Introduce>绘制Noita的关键坐标地图</Introduce>
+    </FileManager>
+    <FileManager>
+        <FileName>SaveCode.java</FileName>
+        <FileCnName>保存代码</FileCnName>
+        <Introduce>读取xml的配置,生成一个大的md文件</Introduce>
+    </FileManager>
+    <FileManager>
+        <FileName>SaveCodeDictionary.xml</FileName>
+        <FileCnName>保存代码的字典</FileCnName>
+        <Introduce>采用DTD文档约束</Introduce>
+    </FileManager>
+    <FileManager>
+        <FileName>TestXmlAnalysis.java</FileName>
+        <FileCnName>Dom4j解析</FileCnName>
+        <Introduce>dom4j解析技术，只演示了冰山一角，更多用法请看它的官方文档</Introduce>
+    </FileManager>
+    <FileManager>
+        <FileName>TestXPath.java</FileName>
+        <FileCnName>XPath解析技术</FileCnName>
+        <Introduce>又是熟悉的XPath，跟python的差不多啊</Introduce>
+    </FileManager>
+    <FileManager>
+        <FileName>GuiMBTI.java</FileName>
+        <FileCnName>MBTI玩具</FileCnName>
+        <Introduce>从xml中读取配置并运用</Introduce>
+    </FileManager>
+</FileGather>

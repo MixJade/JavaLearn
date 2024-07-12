@@ -1,4 +1,4 @@
-package operateFile;
+package testXml;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -7,7 +7,6 @@ import org.dom4j.io.SAXReader;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +44,11 @@ public class TestXmlAnalysis {
             Document document = saxReader.read(getClass().getResource("SaveCodeDictionary.xml"));
             Element root = document.getRootElement();
             //注意：element是得到指定字段的子节点（默认第一个），并且不能够跨代。
-            // 比如下面要是直接拿fileChineseName会报错(空的String)，因为root的子节点是FileManager
-            Element chineseName = root.element("FileManager").element("FileChineseName");
+            // 比如下面要是直接拿fileCnName会报错(空的String)，因为root的子节点是FileManager
+            Element chineseName = root.element("FileManager").element("FileCnName");
             System.out.println("用getText获取文本： " + chineseName.getText());
             //得到文本还有一种写法，用elementText来获取文本
-            String chineseNameText = root.element("FileManager").elementText("FileChineseName");
+            String chineseNameText = root.element("FileManager").elementText("FileCnName");
             System.out.println("用elementText获取文本： " + chineseNameText);
         } catch (DocumentException e) {
             System.out.println("文件不存在，可能是路径出问题了");
@@ -58,27 +57,28 @@ public class TestXmlAnalysis {
 
     @Test
     public void testXmlToMap() {
-        Map<String, ArrayList<String>> xmlDictionary = new HashMap<>();
-        ArrayList<String> chineseList = new ArrayList<>();
+        Map<String, FileManager> xmlDictionary = new HashMap<>();
         SAXReader saxReader = new SAXReader();//创建解析器对象
         // 下面这句话代表是从这个类所在文件夹开始找指定文件
         // 文件前面加正斜杠代表源根路径：从源文件夹(src)往下的文件
-        InputStream ips = TestXmlAnalysis.class.getResourceAsStream("/operateFile/SaveCodeDictionary.xml");
+        InputStream ips = TestXmlAnalysis.class.getResourceAsStream("/testXml/SaveCodeDictionary.xml");
         try {
             Document document = saxReader.read(ips);//引入xml文件
             Element root = document.getRootElement();//获取根元素对象
             List<Element> sonNode = root.elements();
             for (Element sonElement : sonNode) {
                 String fileNameText = sonElement.elementText("FileName");
-                String fileChineseNameText = sonElement.elementText("FileChineseName");
+                String fileCnNameText = sonElement.elementText("FileCnName");
                 String introduceText = sonElement.elementText("Introduce");
                 // 开始添加
-                chineseList.add(fileChineseNameText);
-                chineseList.add(introduceText);
-                xmlDictionary.put(fileNameText, chineseList);
+                xmlDictionary.put(fileNameText, new FileManager(fileCnNameText, introduceText));
             }
-            String reallyName = "CreateThread.java";
-            System.out.println(reallyName + "\n" + xmlDictionary.get(reallyName).get(0) + "\n" + xmlDictionary.get(reallyName).get(1));
+            String reallyName = "TestXmlAnalysis.java";
+            System.out.println(reallyName
+                    + "\n"
+                    + xmlDictionary.get(reallyName).fileCnName()
+                    + "\n"
+                    + xmlDictionary.get(reallyName).introduce());
         } catch (DocumentException e) {
             System.out.println("文件路径不对");
         }

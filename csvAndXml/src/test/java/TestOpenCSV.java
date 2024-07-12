@@ -1,6 +1,7 @@
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import org.junit.Test;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,13 +15,9 @@ import java.util.Arrays;
  *
  * @since 2024-6-29 10:49:11
  */
-public class TesOpenCSV {
-    public static void main(String[] args) {
-        testWriteCsv();
-        testReadCsv();
-    }
-
-    private static void testWriteCsv() {
+public class TestOpenCSV {
+    @Test
+    public void testWriteCsv() {
         String[] header = {"Name", "Age", "Address"};
         String[] record1 = {"John", "23", "New York"};
         String[] record2 = {"Tom", "25", "London"};
@@ -38,9 +35,11 @@ public class TesOpenCSV {
         }
     }
 
-    private static void testReadCsv() {
+    @Test
+    public void testReadCsv() {
         try {
             CSVReader reader = new CSVReader(new FileReader("output/test.csv"));
+            reader.skip(1); // 跳过第一行
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 System.out.println(Arrays.toString(nextLine));

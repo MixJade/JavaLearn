@@ -1,4 +1,4 @@
-package someUtils;
+package toy;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -7,8 +7,8 @@ import org.dom4j.io.SAXReader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -61,9 +61,18 @@ public class GuiMBTI {
      * @param tagName XML中的标签名字
      * @return 对应的内容
      */
-    private static String getMbtXML(String tagName) {
-        try {
-            String content = new String(Files.readAllBytes(Paths.get("src/main/resources/someUtils/guiMBTI.xml")));
+    private String getMbtXML(String tagName) {
+        try (var in = getClass().getResourceAsStream("guiMBTI.xml")) {
+            assert in != null;
+            StringBuilder result = new StringBuilder();
+            try (var reader = new BufferedReader(new InputStreamReader(in))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                    result.append("\n");
+                }
+            }
+            String content = result.toString();
 
             Pattern pattern = Pattern.compile("<" + tagName + ">(.*?)</" + tagName + ">", Pattern.DOTALL);
             Matcher matcher = pattern.matcher(content);
@@ -82,11 +91,11 @@ public class GuiMBTI {
      *
      * @return 问题及答案
      */
-    private static List<QuizQuestOption> getQuestion() {
+    private List<QuizQuestOption> getQuestion() {
         List<QuizQuestOption> qqoList = new ArrayList<>();
         try {
             SAXReader saxreader = new SAXReader();
-            Document dom = saxreader.read("src/main/resources/someUtils/quizQuest.xml");
+            Document dom = saxreader.read(getClass().getResourceAsStream("quizQuest.xml"));
             // 获取根节点
             Element rootEle = dom.getRootElement();
             // 从根节点读取元素标签
@@ -151,15 +160,16 @@ public class GuiMBTI {
         JOptionPane.showMessageDialog(null, scrollPane, "最终结果" + model, JOptionPane.PLAIN_MESSAGE);
     }
 
-    /**
-     * 各种问题的文本与选项(私有内部类)
-     *
-     * @param quest 问题文本
-     * @param a     A选项文本
-     * @param aTp   A选项类型
-     * @param b     B选项文本
-     * @param bTp   B选项类型
-     */
-    private record QuizQuestOption(String quest, String a, String aTp, String b, String bTp) {
-    }
+}
+
+/**
+ * 各种问题的文本与选项
+ *
+ * @param quest 问题文本
+ * @param a     A选项文本
+ * @param aTp   A选项类型
+ * @param b     B选项文本
+ * @param bTp   B选项类型
+ */
+record QuizQuestOption(String quest, String a, String aTp, String b, String bTp) {
 }

@@ -1,14 +1,18 @@
 package gameUtil;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Noita(女巫)的坐标图
@@ -29,26 +33,25 @@ public class NoitaMap {
      * @return 关键坐标点的列表
      */
     private static List<Coordinate> readCSV() {
-        String line;
-        String csvSplitBy = ",";
         List<Coordinate> coordinateList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/gameUtil/NoitaDot.csv"))) {
-            boolean firstLine = true;
-            while ((line = br.readLine()) != null) {
-                if (firstLine) {
-                    firstLine = false;
-                    continue; // 跳过第一行
-                }
-                String[] fields = line.split(csvSplitBy);
-                String name = fields[0].trim();
-                int x = Integer.parseInt(fields[1].trim());
-                int y = Integer.parseInt(fields[2].trim());
+        try (CSVReader csvReader = new CSVReader(new InputStreamReader(
+                Objects.requireNonNull(NoitaMap.class.getResourceAsStream("NoitaDot.csv")),
+                StandardCharsets.UTF_8))) {
+            csvReader.skip(1); // 跳过第一行
+            String[] nextLine;
+            while ((nextLine = csvReader.readNext()) != null) {
+                String name = nextLine[0].trim();
+                int x = Integer.parseInt(nextLine[1].trim());
+                int y = Integer.parseInt(nextLine[2].trim());
                 Coordinate coordinate = new Coordinate(name, x, y);
                 coordinateList.add(coordinate);
             }
+
             coordinateList.remove(0); // 去掉第一行
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (CsvValidationException e) {
+            System.out.println("csv解析异常" + e);
         }
         return coordinateList;
     }
@@ -97,35 +100,36 @@ public class NoitaMap {
         System.out.println("图片生成成功，请前往桌面查看!");
     }
 
-    /**
-     * 坐标对象
-     *
-     * @param des 坐标名
-     * @param x   x坐标
-     * @param y   y坐标
-     */
-    record Coordinate(String des, int x, int y) {
-        public String tDes() {
-            return des + "(" + x + "," + y + ")";
-        }
+}
 
-        @Override
-        public int x() {
-            return x >> 6;
-        }
-
-        @Override
-        public int y() {
-            return y >> 6;
-        }
-
-        public int tX(int strLen) {
-            return (x - strLen / 2) >> 6;
-        }
-
-        public int tY() {
-            return (y >> 6) + 5;
-        }
-
+/**
+ * 坐标对象
+ *
+ * @param des 坐标名
+ * @param x   x坐标
+ * @param y   y坐标
+ */
+record Coordinate(String des, int x, int y) {
+    public String tDes() {
+        return des + "(" + x + "," + y + ")";
     }
+
+    @Override
+    public int x() {
+        return x >> 6;
+    }
+
+    @Override
+    public int y() {
+        return y >> 6;
+    }
+
+    public int tX(int strLen) {
+        return (x - strLen / 2) >> 6;
+    }
+
+    public int tY() {
+        return (y >> 6) + 5;
+    }
+
 }

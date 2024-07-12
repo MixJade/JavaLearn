@@ -1,32 +1,40 @@
-package operateFile;
+package testXml;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+/**
+ * 一键保存代码
+ *
+ * @since 2023-6-25
+ */
 public class SaveCode {
-    private final File RESULT_PATH;
-    private final Map<String, ArrayList<String>> NAME_MAP = new HashMap<>();
+    private final File OUTPUT_PATH = new File("output/代码保存结果.md");
+    private final Map<String, FileManager> NAME_MAP = new HashMap<>();
+
     /**
      * 构造方法，参数是输出文件的路径
      */
-    public SaveCode(String RESULT_PATH) {
-        this.RESULT_PATH = new File(RESULT_PATH);
+    public SaveCode() {
         makeNameMap();
         verifyCode();
     }
 
     public static void main(String[] args) {
-        SaveCode saveCode = new SaveCode("输出的文件/代码保存结果.md");
+        SaveCode saveCode = new SaveCode();
         saveCode.saveMixJadeCode("src");
     }
 
@@ -35,25 +43,20 @@ public class SaveCode {
      * 返回文件名与文件详情的集合
      */
     private void makeNameMap() {
-        String strXml = " ";
+        SAXReader saxReader = new SAXReader();
+        InputStream is = getClass().getResourceAsStream("SaveCodeDictionary.xml");
         try {
-            String xml_path = "src/main/resources/operateFile/SaveCodeDictionary.xml";
-            strXml = Files.readString(Path.of(xml_path));
-        } catch (IOException e) {
-            System.out.println("XML不见了" + e);
-        }
-
-        Pattern p1 = Pattern.compile("(?<=<FileName>).+(?=</FileName>)");
-        Pattern p2 = Pattern.compile("(?<=<FileChineseName>).+(?=</FileChineseName>)");
-        Pattern p3 = Pattern.compile("(?<=<Introduce>).+(?=</Introduce>)");
-        Matcher m1 = p1.matcher(strXml);
-        Matcher m2 = p2.matcher(strXml);
-        Matcher m3 = p3.matcher(strXml);
-        while (m1.find() && m2.find() && m3.find()) {
-            ArrayList<String> followList = new ArrayList<>();
-            followList.add(m2.group());
-            followList.add(m3.group());
-            NAME_MAP.put(m1.group(), followList);
+            Document document = saxReader.read(is);
+            List<Node> fileManagers = document.selectNodes("/FileGather/FileManager");
+            for (Node fileManager : fileManagers) {
+                Element mixFile = (Element) fileManager;
+                String fileName = mixFile.element("FileName").getTextTrim();//这个方法意思是去掉空格获取文本
+                String fileCnName = mixFile.element("FileCnName").getTextTrim();
+                String introduce = mixFile.element("Introduce").getTextTrim();
+                NAME_MAP.put(fileName, new FileManager(fileCnName, introduce));
+            }
+        } catch (DocumentException e) {
+            System.out.println("xml路径有问题");
         }
     }
 
@@ -62,7 +65,7 @@ public class SaveCode {
      */
     private void verifyCode() {
         String altTime = new SimpleDateFormat("MM月dd日 a HH:mm").format(new Date());
-        try (var fw = new FileWriter(RESULT_PATH)) {
+        try (var fw = new FileWriter(OUTPUT_PATH)) {
             fw.write("# 散玉的JAVA代码\n>创建时间:" + altTime + "\n>在暑假学习JAVA过程中所编辑的代码，为了能够在未来派上用场，特此建立一个md文件来记录。\n---\n");
         } catch (IOException e) {
             System.out.println("目录写入失败");
@@ -82,7 +85,7 @@ public class SaveCode {
         }
         File[] fileName = f.listFiles();
         assert fileName != null;
-        try (var bw01 = new BufferedWriter(new FileWriter(RESULT_PATH, StandardCharsets.UTF_8, true))) {
+        try (var bw01 = new BufferedWriter(new FileWriter(OUTPUT_PATH, StandardCharsets.UTF_8, true))) {
             for (File fs : fileName) {
                 BasicFileAttributes attributes = Files.readAttributes(fs.toPath(), BasicFileAttributes.class);
                 if (attributes.isRegularFile()) {
@@ -92,7 +95,7 @@ public class SaveCode {
                     String beginText = "***文件夹:" + codeWarehouse + "***\n";
                     bw01.write(beginText);
                     if (NAME_MAP.get(reallyName) != null) {
-                        secondText = ("## " + i++ + "、" + NAME_MAP.get(reallyName).get(0) + "\n > " + NAME_MAP.get(reallyName).get(1) + " \n\n<details> \n<summary>" + reallyName + "</summary>\n\n```" + endSuffix + "\n");
+                        secondText = ("## " + i++ + "、" + NAME_MAP.get(reallyName).fileCnName() + "\n > " + NAME_MAP.get(reallyName).introduce() + " \n\n<details> \n<summary>" + reallyName + "</summary>\n\n```" + endSuffix + "\n");
                     } else {
                         System.out.println(reallyName);
                         secondText = ("## " + i++ + "、" + reallyName + "\n > 暂时没有简介 \n\n<details> \n<summary>" + reallyName + "</summary>\n\n```" + endSuffix + "\n");
@@ -115,4 +118,13 @@ public class SaveCode {
             System.out.println("读取文件出错" + e);
         }
     }
+}
+
+/**
+ * 文件信息
+ *
+ * @param fileCnName 文件中文名
+ * @param introduce  简介
+ */
+record FileManager(String fileCnName, String introduce) {
 }
