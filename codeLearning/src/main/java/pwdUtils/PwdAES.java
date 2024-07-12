@@ -9,7 +9,25 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.Base64;
+
+enum PwdBtn {
+    AES_ENC("AES加密"),
+    AES_DEC("AES解密"),
+    DATE_PWD("日期密码"),
+    ;
+
+    private final String nm;
+
+    PwdBtn(String nm) {
+        this.nm = nm;
+    }
+
+    public String getNm() {
+        return nm;
+    }
+}
 
 /**
  * AES加密
@@ -23,25 +41,42 @@ public class PwdAES extends JFrame implements ActionListener {
     JTextArea showArea;
 
     public PwdAES() {
+        // 使用东西南北布局
         setLayout(new BorderLayout());
         setTitle("AES加密");
 
         // 上方面板
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("输入"));
-        inputTextField = new JTextField(20);
+        inputTextField = new JTextField(24);
         inputTextField.setText("Hello World");
         topPanel.add(inputTextField);
+        // 右边区域
+        JPanel rightPanel = new JPanel();
+        // 设置布局为 BoxLayout，元素竖直排列
+        BoxLayout rightLayout = new BoxLayout(rightPanel, BoxLayout.Y_AXIS);
+        rightPanel.setLayout(rightLayout);
         // 两个按钮
-        JButton inBtn = new JButton("加密"),
-                outBtn = new JButton("解密");
-        topPanel.add(inBtn);
-        topPanel.add(outBtn);
+        JButton inBtn = new JButton(PwdBtn.AES_ENC.getNm()),
+                outBtn = new JButton(PwdBtn.AES_DEC.getNm());
+        rightPanel.add(inBtn);
+        rightPanel.add(outBtn);
         // 添加监听器
-        inBtn.setActionCommand("encrypt");
+        inBtn.setActionCommand(PwdBtn.AES_ENC.name());
         inBtn.addActionListener(this);
-        outBtn.setActionCommand("decrypt");
+        outBtn.setActionCommand(PwdBtn.AES_DEC.name());
         outBtn.addActionListener(this);
+
+        // 左边区域
+        JPanel leftPanel = new JPanel();
+        // 一样是竖直布局(布局不能复用,只能再New)
+        BoxLayout leftLayout = new BoxLayout(leftPanel, BoxLayout.Y_AXIS);
+        leftPanel.setLayout(leftLayout);
+        // 添加按钮
+        JButton openDialogBtn = new JButton(PwdBtn.DATE_PWD.getNm());
+        openDialogBtn.setActionCommand(PwdBtn.DATE_PWD.name());
+        openDialogBtn.addActionListener(this);
+        leftPanel.add(openDialogBtn);
 
         // 居中面板, JTextArea默认是可编辑的，我们设置为不可编辑
         showArea = new JTextArea();
@@ -67,12 +102,15 @@ public class PwdAES extends JFrame implements ActionListener {
 
         // 添加面板到JFrame
         this.add(topPanel, BorderLayout.NORTH);
+        this.add(rightPanel, BorderLayout.EAST);
+        this.add(leftPanel, BorderLayout.WEST);
         this.add(showArea, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         // 设置窗口属性
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
+        setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
         setVisible(true);
     }
 
@@ -133,12 +171,19 @@ public class PwdAES extends JFrame implements ActionListener {
         // 处理输入文本
         String inputText = inputTextField.getText();
         // 进行加密、解密
-        if ("encrypt".equals(e.getActionCommand())) {
+        if (PwdBtn.AES_ENC.name().equals(e.getActionCommand())) {
             // 加密
             showArea.setText(encrypt(key, iv, inputText));
-        } else if ("decrypt".equals(e.getActionCommand())) {
+        } else if (PwdBtn.AES_DEC.name().equals(e.getActionCommand())) {
             // 解密
             showArea.setText(decrypt(key, iv, inputText));
+        } else if (PwdBtn.DATE_PWD.name().equals(e.getActionCommand())) {
+            // 打开弹窗
+            try {
+                new PwdCreatByDate();
+            } catch (ParseException pe) {
+                System.out.println("初始化失败");
+            }
         }
     }
 

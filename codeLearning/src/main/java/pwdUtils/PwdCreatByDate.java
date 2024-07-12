@@ -42,7 +42,7 @@ public class PwdCreatByDate extends JFrame {
         });
         setSize(new Dimension(200, 300));
         setTitle("通过日期生成密码");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 当其它JFrame调用时,可以正常关闭
         setSize(300, 200);
         setVisible(true);
         setResizable(false);

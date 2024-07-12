@@ -6,11 +6,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PwdDisplace extends JFrame implements ActionListener {
+/**
+ * 凯撒加密
+ */
+public class PwdCaesar extends JFrame implements ActionListener {
     JButton addBtn, reduceBtn;
     JTextField plainText, keyText;
     JTextArea cipherText;
-    PwdDisplace() {
+    PwdCaesar() {
         init();
         setVisible(true);
         setResizable(true);
@@ -18,7 +21,7 @@ public class PwdDisplace extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new PwdDisplace();
+        new PwdCaesar();
     }
 
     private void init() {
