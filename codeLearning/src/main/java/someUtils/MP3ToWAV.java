@@ -36,6 +36,7 @@ public class MP3ToWAV extends JFrame implements ActionListener {
         JPanel panel3 = new JPanel();
         // 创建一个按钮，点击后开始转化
         JButton btn = new JButton("转化");
+        panel3.add(new JLabel("将MP3文件拖入窗口"));
         panel3.add(btn);
         jf.add(panel3);
         new DropTarget(area, DnDConstants.ACTION_COPY_OR_MOVE, dropTargetAdapter());
