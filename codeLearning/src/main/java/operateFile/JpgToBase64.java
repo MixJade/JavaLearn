@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class JpgToBase64 {
     public static void main(String[] args) {
-        String pathStr = "src/main/resources/testResize.jpg";
+        String pathStr = "src/main/resources/operateFile/testResize.jpg";
         imageToBase64(pathStr);
     }
 
