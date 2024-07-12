@@ -42,7 +42,8 @@ public class MuseumGame {
         SAXReader saxreader = new SAXReader();
         Document dom;
         try {
-            dom = saxreader.read("src/main/resources/game/MuseumArea.xml");
+            // 不使用相对路径了,使用相当于Resource文件夹的路径
+            dom = saxreader.read(getClass().getResourceAsStream("MuseumArea.xml"));
         } catch (Exception e) {
             System.out.println("XML不见了" + e);
             return null;
@@ -76,7 +77,7 @@ public class MuseumGame {
         SAXReader saxreader = new SAXReader();
         Document dom;
         try {
-            dom = saxreader.read("src/main/resources/game/MuseumPeople.xml");
+            dom = saxreader.read(getClass().getResourceAsStream("MuseumPeople.xml"));
         } catch (Exception e) {
             System.out.println("XML不见了" + e);
             return null;

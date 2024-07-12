@@ -42,7 +42,7 @@ public class TestXmlAnalysis {
         SAXReader saxReader = new SAXReader();
         try {
             //其实read可以直接读取url的
-            Document document = saxReader.read("src/main/resources/operateFile/SaveCodeDictionary.xml");
+            Document document = saxReader.read(getClass().getResource("SaveCodeDictionary.xml"));
             Element root = document.getRootElement();
             //注意：element是得到指定字段的子节点（默认第一个），并且不能够跨代。
             // 比如下面要是直接拿fileChineseName会报错(空的String)，因为root的子节点是FileManager
@@ -77,7 +77,7 @@ public class TestXmlAnalysis {
                 chineseList.add(introduceText);
                 xmlDictionary.put(fileNameText, chineseList);
             }
-            String reallyName = "HelloWorld.java";
+            String reallyName = "CreateThread.java";
             System.out.println(reallyName + "\n" + xmlDictionary.get(reallyName).get(0) + "\n" + xmlDictionary.get(reallyName).get(1));
         } catch (DocumentException e) {
             System.out.println("文件路径不对");
