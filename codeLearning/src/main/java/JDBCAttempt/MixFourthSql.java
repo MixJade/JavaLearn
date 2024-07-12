@@ -38,17 +38,18 @@ public class MixFourthSql {
         }
     }
 
-    /**
-     * 私有内部类
-     */
-    private record StudentsMessage(int id, String name, int sex, double height) {
-        @Override
-        public String toString() {
-            return "id:" + id
-                    + " 姓名：" + name
-                    + " 性别：" + (sex > 0 ? "男" : "女")
-                    + " 身高：" + height + "m";
-        }
+}
+
+/**
+ * 私有内部类
+ */
+record StudentsMessage(int id, String name, int sex, double height) {
+    @Override
+    public String toString() {
+        return "id:" + id
+                + " 姓名：" + name
+                + " 性别：" + (sex > 0 ? "男" : "女")
+                + " 身高：" + height + "m";
     }
 }
 

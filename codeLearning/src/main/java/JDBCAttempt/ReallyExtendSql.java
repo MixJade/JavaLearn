@@ -51,15 +51,16 @@ public class ReallyExtendSql {
         }
     }
 
-    /**
-     * 私有内部类
-     */
-    private record StudentAndSociety(String name, boolean sex, String societyName) {
-        @Override
-        public String toString() {
-            return " 姓名：" + String.format("%-7s", name)
-                    + " 性别：" + (sex ? "男" : "女")
-                    + " 社团：" + societyName;
-        }
+}
+
+/**
+ * 学生与其对应的社团
+ */
+record StudentAndSociety(String name, boolean sex, String societyName) {
+    @Override
+    public String toString() {
+        return " 姓名：" + String.format("%-7s", name)
+                + " 性别：" + (sex ? "男" : "女")
+                + " 社团：" + societyName;
     }
 }
