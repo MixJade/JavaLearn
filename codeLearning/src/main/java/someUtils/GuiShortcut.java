@@ -58,6 +58,7 @@ public class GuiShortcut {
     }
 }
 
+@SuppressWarnings("ClassCanBeRecord") // 为了兼容,必须使用Java8的方式
 class MyDir {
     private final String btnNm, dirPath;
     private final Color color;
