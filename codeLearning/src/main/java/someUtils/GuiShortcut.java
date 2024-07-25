@@ -3,7 +3,6 @@ package someUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * 自定义快捷方式GUI
@@ -51,7 +50,7 @@ public class GuiShortcut {
                 // 打开上两级文件夹
                 File myFile = new File("../../" + dirPath);
                 Desktop.getDesktop().open(myFile);
-            } catch (IOException | IllegalArgumentException ex) {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
             }
         }
