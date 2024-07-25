@@ -14,9 +14,9 @@ public class GuiShortcut {
     public GuiShortcut() {
         JFrame frame = new JFrame("S");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200, 260);
+        frame.setSize(200, 280);
         frame.setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
-        frame.setLayout(new GridLayout(7, 1));
+        frame.setLayout(new GridLayout(8, 1));
         frame.setResizable(false); // 禁用最大化窗口
 
         JLabel label = new JLabel("自定义快捷方式", SwingConstants.CENTER);
@@ -29,6 +29,7 @@ public class GuiShortcut {
                 new MyDir("Java笔记", "/JavaLearn/docs/2023", Color.MAGENTA),
                 new MyDir("图片文件", "/MyPicture/public", Color.LIGHT_GRAY),
                 new MyDir("图片服务", "/MyPicture/script", Color.LIGHT_GRAY),
+                new MyDir("无用存档", "/mixArchive", Color.GRAY),
         };
         for (MyDir myDir : myDirs) {
             JButton button1 = new JButton(myDir.getBtnNm());
@@ -50,9 +51,8 @@ public class GuiShortcut {
                 // 打开上两级文件夹
                 File myFile = new File("../../" + dirPath);
                 Desktop.getDesktop().open(myFile);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                System.out.println("没有找到文件");
+            } catch (IOException | IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
