@@ -92,6 +92,10 @@ WHERE TABLE_NAME IN ('目标表表名');
 
 ## 二、查询表字段信息
 
+* 注意：在实际使用时需要在`WHERE`子句中加上`OWNER = '你的模式名'` 的条件
+* 不然可能会将同一个字段给查出来多条(如果这张表存在于多个模式中)
+* 或者将`ALL_CONS_COLUMNS`改成`USER_TAB_COLUMNS`、将`ALL_COL_COMMENTS`改成`USER_COL_COMMENTS`
+
 ```sql
 SELECT A.COLUMN_NAME,
        CASE
