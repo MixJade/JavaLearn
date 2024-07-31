@@ -14,9 +14,9 @@ import java.util.Map;
 public class FreemarkerDemo {
 
     public static void main(String[] args) throws IOException, TemplateException {
-        // 创建配置类
-        Configuration cfa = new Configuration(Configuration.getVersion());
-        // 设置模板路径，这里我们设置的是class路径下的模板文件夹
+        // 创建配置类(顺便指定默认版本)
+        Configuration cfa = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+        // 设置模板路径，这里我们设置的是class路径下的文件夹
         cfa.setClassLoaderForTemplateLoading(ClassLoader.getSystemClassLoader(), "");
         // 设置字符集
         cfa.setDefaultEncoding("UTF-8");
