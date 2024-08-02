@@ -86,7 +86,7 @@ public class PwdCreatByDate extends JFrame {
         Random random = new Random(timestamp);
 
         //设置密码长度
-        int passwordLength = 8;
+        int passwordLength = 16;
 
         StringBuilder password = new StringBuilder();
 
