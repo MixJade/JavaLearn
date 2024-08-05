@@ -9,13 +9,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.Base64;
 
 enum PwdBtn {
     AES_ENC("AES加密"),
     AES_DEC("AES解密"),
-    DATE_PWD("日期密码"),
+    DATE_PWD("选择文件"),
     ;
 
     private final String nm;
@@ -178,12 +177,14 @@ public class PwdAES extends JFrame implements ActionListener {
             // 解密
             showArea.setText(decrypt(key, iv, inputText));
         } else if (PwdBtn.DATE_PWD.name().equals(e.getActionCommand())) {
-            // 打开弹窗
-            try {
-                new PwdCreatByDate();
-            } catch (ParseException pe) {
-                System.out.println("初始化失败");
-            }
+            // 打开选择文件对话框
+            FileDialog fileDialog;
+            fileDialog = new FileDialog(this);
+            fileDialog.setVisible(true);
+            String filePath = fileDialog.getDirectory();
+            String fileName = fileDialog.getFile();
+            System.out.println("filePath:" + filePath);
+            System.out.println("fileName:" + fileName);
         }
     }
 
