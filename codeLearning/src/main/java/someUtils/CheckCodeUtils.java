@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Random;
 
 interface ImgConfig {
-    String IMG_PATH = "输出的文件/"; // 验证码图片保存路径
+    String IMG_PATH = "unusedFile/"; // 验证码图片保存路径
     int WIDTH = 90, HEIGHT = 20; // 定义图片的宽高
     int CODE_COUNT = 5; // 定义图片上显示验证码的个数
     int FONT_HEIGHT = 18; // 字体高度

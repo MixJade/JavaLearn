@@ -15,7 +15,7 @@ public class JpgToBase64 {
         // 匹配绝对路径的正则表达式：pathStr.replaceAll(".+\\\\", "")
         // 以下：匹配相对路径的正则表达式（最终结果是无后缀的文件名）
         String resultFileName = (pathStr.replaceAll(".+/", "")).replaceAll("\\..+", "");
-        String resultFilePath = "输出的文件/" + resultFileName + "（图片）的base64.txt";
+        String resultFilePath = "unusedFile/" + resultFileName + "（图片）的base64.txt";
         // 对字节数组Base64编码
         Base64.Encoder encoder = Base64.getEncoder();
         // 返回Base64编码过的字节数组字符串

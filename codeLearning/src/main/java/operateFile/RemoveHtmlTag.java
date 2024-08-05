@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class RemoveHtmlTag {
     public static void main(String[] args) {
         Path inputPath = Paths.get("src/main/resources/operateFile/去除html的尖括号.txt");
-        Path outputPath = Paths.get("输出的文件/去除html的尖括号(结果).txt");
+        Path outputPath = Paths.get("unusedFile/去除html的尖括号(结果).txt");
 
         try {
             String content = Files.readString(inputPath);

@@ -1,0 +1,6 @@
+# Ignore everything
+*
+
+# But not this file and readMe
+!.gitignore
+!README.md

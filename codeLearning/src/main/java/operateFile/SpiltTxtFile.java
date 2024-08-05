@@ -11,7 +11,7 @@ public class SpiltTxtFile {
     // 输入文件
     private static final String INPUT_FILE = "src/main/resources/operateFile/通过字符串分割.txt";
     // 输出文件的路径与文件前缀
-    private static final String OUTPUT_FILE_PREFIX = "输出的文件/分割后的文件";
+    private static final String OUTPUT_FILE_PREFIX = "unusedFile/分割后的文件";
     // 用于分割的字符串
     private static final String DELIMITER = "分割线";
 
