@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -178,13 +179,16 @@ public class PwdAES extends JFrame implements ActionListener {
             showArea.setText(decrypt(key, iv, inputText));
         } else if (PwdBtn.DATE_PWD.name().equals(e.getActionCommand())) {
             // 打开选择文件对话框
-            FileDialog fileDialog;
-            fileDialog = new FileDialog(this);
-            fileDialog.setVisible(true);
-            String filePath = fileDialog.getDirectory();
-            String fileName = fileDialog.getFile();
-            System.out.println("filePath:" + filePath);
-            System.out.println("fileName:" + fileName);
+            JFileChooser fileChooser = new JFileChooser("../../");
+            fileChooser.setDialogTitle("请选择待加解密的文件");
+            // 打开一个文件对话框
+            int returnValue = fileChooser.showOpenDialog(null);
+            // 当用户选中一个文件并点击"Open"按钮时，returnValue的值为 `JFileChooser.APPROVE_OPTION`
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                // 用户选中的文件
+                File selectedFile = fileChooser.getSelectedFile();
+                System.out.println("选中的文件名：" + selectedFile.getName());
+            }
         }
     }
 
