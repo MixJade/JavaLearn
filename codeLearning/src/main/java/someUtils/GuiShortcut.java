@@ -56,8 +56,8 @@ enum MyDir {
     TS_DOC("前端笔记", "../../TsLearn/docs", Color.CYAN),
     JAVA_DOC("Java笔记", "../../JavaLearn/docs/2023", Color.MAGENTA),
     PIC_PUB("图片文件", "../../MyPicture/public", Color.LIGHT_GRAY),
-    UNUSED("无用文件", "unusedFile", Color.GRAY),
-    MIX_ARCH("备份存档", "../../mixArchive", Color.GRAY),
+    MIX_ARCH("备份存档", "../../mixArchive", Color.WHITE),
+    UNUSED("无用快捷", "unusedFile", Color.GRAY),
     ;
     private final String btnNm, dirPath;
     private final Color color;
