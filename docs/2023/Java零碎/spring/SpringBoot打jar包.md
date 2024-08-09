@@ -1,9 +1,9 @@
-# 打包为jar
+# SpringBoot打jar包
 
 * 在pom中引入插件，插件位置可以自己新建一个spring项目看看
 * version版本号与自己的spring版本一样
 
-```
+```xml
 <build>
     <plugins>
         <plugin>
@@ -17,7 +17,7 @@
 
 * 然后取出jar包，并在旁边整一个bat文件
 
-```
+```sh
 start http://localhost:8080/login.html
 java -jar forge-0.0.1-SNAPSHOT.jar
 pause
