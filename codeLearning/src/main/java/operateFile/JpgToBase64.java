@@ -36,23 +36,12 @@ public class JpgToBase64 {
 
     private static byte[] readImage(String methodPath) {
         byte[] data = null;
-        InputStream in = null;
-        try {
-            in = new FileInputStream(methodPath);
+        try (InputStream in = new FileInputStream(methodPath)) {
             data = new byte[in.available()];
             long howLong = in.read(data);
             System.out.println("图片字节长度: " + howLong);
-            in.close();
         } catch (IOException e) {
             System.out.println("没有找到图片");
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
         return data;
     }
