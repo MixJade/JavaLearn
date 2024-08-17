@@ -1,4 +1,4 @@
-package mix.jade.demofx;
+package mix.jade;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

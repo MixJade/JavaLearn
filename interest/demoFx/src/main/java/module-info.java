@@ -1,8 +1,8 @@
-module mix.jade.demofx {
+module mix.jade {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens mix.jade.demofx to javafx.fxml;
-    exports mix.jade.demofx;
+    opens mix.jade to javafx.fxml;
+    exports mix.jade;
 }
