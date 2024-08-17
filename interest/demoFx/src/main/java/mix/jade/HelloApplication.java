@@ -24,7 +24,27 @@ public class HelloApplication extends Application {
         stage.getIcons().add(new Image("v.png"));
         stage.setTitle("Hello!");
         stage.setScene(scene);
+
+        // 设置不可改变窗口大小
+        // stage.setResizable(false);
+        // 可以设置最大的宽高(最大化也不能超过这个高度)
+        // stage.setMaxHeight(600);
+        // stage.setMaxWidth(800);
+        // 也可以设置最小的宽高
+        // stage.setMinHeight(200);
+        // stage.setMinWidth(200);
+
+        // 当然可以监听高度变化
+        // stage.heightProperty().addListener((observableValue, number, t1) -> {
+        //     System.out.println("旧高度:" + number.doubleValue());
+        //     System.out.println("新高度:" + t1.doubleValue());
+        // });
+
         stage.show(); // 让窗口出现必须调show
+
+        // 可以获取宽高，但最好是在show方法之后
+        // System.out.println("窗口宽度:" + stage.getWidth());
+        // System.out.println("窗口高度:" + stage.getHeight());
     }
 
     @Override
