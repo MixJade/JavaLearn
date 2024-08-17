@@ -48,9 +48,15 @@ public class HelloApplication extends Application {
 }
 ```
 
-## 二、设置宽高
+## 二、窗口认识
+
+### 2.1 设置宽高
 
 * 这块删去其它无关代码
+* 包括设置不可改变窗口大小
+* 设置最大的宽高
+* 设置最小的宽高
+* 获取宽高
 
 ```java
 public class HelloApplication extends Application {
@@ -74,7 +80,7 @@ public class HelloApplication extends Application {
 }
 ```
 
-## 三、监听高度变化
+### 2.2 监听高度变化
 
 * 同理可以监听宽度，主要用于做响应式适配
 *  `addListener`中的lamba表达式其实是`ChangeListener<Number>`这个接口，可以自行实现
@@ -90,6 +96,33 @@ public class HelloApplication extends Application {
         });
 
         stage.show(); // 让窗口出现必须调show
+    }
+}
+```
+
+### 2.3 其它函数
+
+* 设置透明度
+* 设置总是在上面
+* 设置窗口初始坐标
+* 监听窗口的xy轴变化
+
+```java
+public class HelloApplication extends Application {
+    @Override
+    public void start(Stage stage) {
+        // 设置透明度(0是完全透明,1是不透明)
+        stage.setOpacity(0.6);
+        // 设置总是在上面
+        stage.setAlwaysOnTop(true);
+        // 设置窗口初始坐标
+        stage.setX(50);
+        stage.setY(50);
+        // 监听窗口的xy轴变化(以窗口左上角为基)
+        stage.xProperty().addListener((observableValue, number, t1) -> {
+            System.out.println("旧x:" + number.doubleValue());
+            System.out.println("新x:" + t1.doubleValue());
+        });
     }
 }
 ```
