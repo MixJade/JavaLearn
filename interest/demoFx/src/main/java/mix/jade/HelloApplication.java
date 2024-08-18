@@ -1,10 +1,13 @@
 package mix.jade;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -125,6 +128,47 @@ public class HelloApplication extends Application {
         stage5.initModality(Modality.WINDOW_MODAL);
         stage5.initOwner(stage3); // 设置拥有者为第3个窗口
         stage5.show();
+    }
+
+    /**
+     * 第四课：Platform使用
+     *
+     * @apiNote Platform设置关闭窗口后不退出程序
+     * @since 2024-8-18 10:42:33
+     * @deprecated
+     */
+    public void startLesson4(Stage stage) {
+        // Platform设置关闭窗口后不退出程序(甚至不会触发生命周期的stop方法),用于隐藏到托盘所用
+        Platform.setImplicitExit(false);
+        // 想要退出可以使用Platform.exit()
+        Platform.exit();
+
+        stage.show(); // 让窗口出现必须调show
+    }
+
+    /**
+     * 第五课：屏幕类的使用
+     *
+     * @apiNote 包括获取屏幕dpi、分辨率、可视分辨率
+     * @since 2024-8-18 10:54:17
+     * @deprecated
+     */
+    public void startLesson5() {
+        // 获取屏幕对象
+        Screen screen = Screen.getPrimary();
+        // 获取当前屏幕的dpi
+        double dpi = screen.getDpi();
+        System.out.println("当前屏幕dpi=" + dpi);
+        // 获取整个屏幕的对象
+        Rectangle2D bounds = screen.getBounds();
+        System.out.printf("当前屏幕分辨率：%sx%s%n", bounds.getWidth(), bounds.getHeight());
+        System.out.printf("当前屏幕左上角坐标：(%s,%s)%n", bounds.getMinX(), bounds.getMinY());
+        System.out.printf("当前屏幕右下角坐标：(%s,%s)%n", bounds.getMaxX(), bounds.getMaxY());
+        // 获取当前可看的屏幕对象(会少一点任务栏的)
+        Rectangle2D visualBounds = screen.getVisualBounds();
+        System.out.printf("当前屏幕可看分辨率：%sx%s%n", visualBounds.getWidth(), visualBounds.getHeight());
+        System.out.printf("当前屏幕可看左上角坐标：(%s,%s)%n", visualBounds.getMinX(), visualBounds.getMinY());
+        System.out.printf("当前屏幕可看右下角坐标：(%s,%s)%n", visualBounds.getMaxX(), visualBounds.getMaxY());
     }
 
 

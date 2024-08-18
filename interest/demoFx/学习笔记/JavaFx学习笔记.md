@@ -179,3 +179,21 @@ public class HelloApplication extends Application {
     }
 }
 ```
+
+### 2.5 Platform使用
+
+* Platform设置关闭窗口后不退出程序(甚至不会触发生命周期的stop方法)
+
+```java
+public class HelloApplication extends Application {
+    @Override
+    public void start(Stage stage) {
+        // Platform设置关闭窗口后不退出程序(甚至不会触发生命周期的stop方法),用于隐藏到托盘所用
+        Platform.setImplicitExit(false);
+        // 想要退出可以使用Platform.exit()
+        Platform.exit();
+
+        stage.show(); // 让窗口出现必须调show
+    }
+}
+```
