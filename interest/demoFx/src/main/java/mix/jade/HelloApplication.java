@@ -1,10 +1,14 @@
 package mix.jade;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -169,6 +173,39 @@ public class HelloApplication extends Application {
         System.out.printf("当前屏幕可看分辨率：%sx%s%n", visualBounds.getWidth(), visualBounds.getHeight());
         System.out.printf("当前屏幕可看左上角坐标：(%s,%s)%n", visualBounds.getMinX(), visualBounds.getMinY());
         System.out.printf("当前屏幕可看右下角坐标：(%s,%s)%n", visualBounds.getMaxX(), visualBounds.getMaxY());
+    }
+
+    /**
+     * 第六课：场景类与网络服务使用
+     *
+     * @apiNote 包括舞台与场景的关系、设置鼠标悬停样式、打开特定网址
+     * @since 2024-8-18 10:54:17
+     * @deprecated
+     */
+    public void startLesson6(Stage stage) {
+        // 加入一个按钮
+        Button button = new Button("测试按钮");
+        button.setCursor(Cursor.CROSSHAIR); // 设置按钮的鼠标悬停样式
+        button.setPrefSize(200,200); // 设置按钮大小
+        // 设置按钮坐标，不设默认为(0,0)
+        button.setLayoutX(50);
+        button.setLayoutY(50);
+
+        // Group类的使用
+        Group group = new Group();
+        group.getChildren().add(button); // 也可以使用addAll一次添加多个
+        // 建立一个场景
+        Scene scene = new Scene(group);
+        scene.setCursor(Cursor.HAND); // scene可以设置鼠标悬停样式
+
+        // 设置舞台集成场景
+        stage.setScene(scene);
+        stage.show(); // 让窗口出现必须调show
+
+        // 获取网络服务打开百度网页
+        HostServices hostServices = getHostServices();
+        hostServices.showDocument("www.baidu.com");
+
     }
 
 
