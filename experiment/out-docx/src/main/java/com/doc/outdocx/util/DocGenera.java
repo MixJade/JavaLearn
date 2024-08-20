@@ -35,7 +35,7 @@ public class DocGenera {
                 ，希望你%s
                 """, param.text1(), param.text2(), param.text3(), param.text4()));
         // 将图像插入文档中
-         builder.insertImage("https://ts1.cn.mm.bing.net/th/id/R-C.4863a753e2e0bf0c07b3126a4e74aeca?rik=N4InHKa%2bowsHIQ&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f94%2f4194.jpg&ehk=VdLyn0AXfOtVfJNoRvXVr%2fc8BVNCDSjEmt3r%2b7kQSCg%3d&risl=&pid=ImgRaw&r=0");
+        builder.insertImage("http://127.0.0.1:9527/pic/avatar/avatar6.jpg");
         // 将格式应用于文本
         Font font = builder.getFont();
         font.setSize(16);
