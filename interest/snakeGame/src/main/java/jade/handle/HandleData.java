@@ -6,31 +6,25 @@ import javax.swing.*;
 import java.sql.*;
 
 public class HandleData {
+    String sqlQuery = "SELECT COUNT(*) FROM loginmixjade WHERE nameJade=? AND passwordJade=? ";
     public void writeRegisterModel(String name, String pwd) {
-        String sqlQuery = String.format("""
-                        SELECT
-                        COUNT(*)
-                        FROM loginmixjade
-                        WHERE nameJade="%s" AND passwordJade="%s"
-                """, name, pwd);
-        String sqlInsert = String.format("""
-                        INSERT
-                        INTO
-                        loginmixjade(nameJade,passwordJade)
-                        VALUES("%s","%s")
-                """, name, pwd);
         try (Connection con = getCon()) {
-            PreparedStatement preSql01 = con.prepareStatement(sqlQuery, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet nowSum = preSql01.executeQuery(sqlQuery);
-            if (nowSum.first() && (Long) nowSum.getObject(1) > 0) {
+            PreparedStatement preSql01 = con.prepareStatement(sqlQuery);
+            preSql01.setString(1, name);
+            preSql01.setString(2, pwd);
+            ResultSet nowSum = preSql01.executeQuery();
+            if (nowSum.next() && nowSum.getInt(1) > 0) {
+                String msg = String.format("已有账号，账号:%s,密码:%s", name, pwd);
+                JOptionPane.showMessageDialog(null, msg, "提示", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                String sqlInsert = "INSERT INTO loginmixjade(nameJade,passwordJade) VALUES(?,?) ";
                 PreparedStatement preSql02 = con.prepareStatement(sqlInsert);
+                preSql02.setString(1, name);
+                preSql02.setString(2, pwd);
                 int ok = preSql02.executeUpdate();
                 if (ok != 0) {
                     JOptionPane.showMessageDialog(null, "注册成功", "恭喜", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } else {
-                String msg = String.format("已有账号，账号:%s,密码:%s", name, pwd);
-                JOptionPane.showMessageDialog(null, msg, "提示", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,20 +34,16 @@ public class HandleData {
 
     public boolean queryVerify(String name, String pwd) {
         boolean isSuc = false;
-        String sqlQuery = String.format("""
-                        SELECT
-                        COUNT(*)
-                        FROM loginmixjade
-                        WHERE nameJade="%s" AND passwordJade="%s"
-                """, name, pwd);
         try (Connection con = getCon()) {
             PreparedStatement preSql = con.prepareStatement(sqlQuery);
+            preSql.setString(1, name);
+            preSql.setString(2, pwd);
             ResultSet rs = preSql.executeQuery();
-            if (rs.next()) {
+            if (rs.next() && (rs.getInt(1) > 0)) {
                 isSuc = true;
                 JOptionPane.showMessageDialog(null, "登录成功", "恭喜", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "登录失败", "登录失败，重新登录", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "账号密码输入错误", "登录失败", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             System.out.println("查询失败" + e);
