@@ -38,7 +38,7 @@ public class FtlDemo1 {
         List<User> users = new ArrayList<>();
         users.add(new User("张三", 20));
         users.add(new User("李四", 25));
-        users.add(new User("王五", 25));
+        users.add(new User("王五", 55));
         return users;
     }
 }
