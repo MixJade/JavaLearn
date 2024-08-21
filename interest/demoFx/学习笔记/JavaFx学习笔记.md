@@ -197,3 +197,97 @@ public class HelloApplication extends Application {
     }
 }
 ```
+
+## 三、事件
+
+### 3.1 按钮单击事件
+
+* 在fxml文件中，通过onAction属性定义事件
+* 这里`fx:id`属性为对应控制器中的全局属性，用于操作对应组件的
+
+```text
+<Label fx:id="welcomeText"/>
+<Button text="Hello!" onAction="#onHelloButtonClick"/>
+```
+
+* 在fxml对应的控制器中，通过与事件同名的方法定义逻辑
+* 可以打上`@FXML`注解，这个注解意义不大，但可以作为标注
+* 注意这里对`fx:id`属性对应的`Label`操控
+
+```text
+@FXML
+private Label welcomeText;
+
+/**
+ * 按钮点击事件
+ */
+@FXML
+protected void onHelloButtonClick() {
+    welcomeText.setText("Welcome to JavaFX Application!");
+}
+```
+
+### 3.2 组件的右键菜单
+
+首先，你需要在FXML文件中添加一个`ContextMenu`元素。 这个元素将包含一个或多个`MenuItem`元素，这些元素定义了右键菜单中的每个选项。
+
+然后，你需要将这个ContextMenu设置为你想要添加右键菜单的元素（如Button，TextField等）的`contextMenu`属性。
+
+下面是一个例子，在这个例子中，一个文本框有一个右键菜单，包含一个“复制”选项和一个“粘贴”选项：
+
+```xml
+<TextField fx:id="myTextField">
+    <contextMenu>
+        <ContextMenu>
+            <items>
+                <MenuItem text="复制" onAction="#handleCopyAction"/>
+                <MenuItem text="粘贴" onAction="#handlePasteAction"/>
+            </items>
+        </ContextMenu>
+    </contextMenu>
+</TextField>
+```
+
+在你的JavaFX Controller文件中，你需要定义`handleCopyAction`和`handlePasteAction`方法，这些方法将在用户点击右键菜单的这些选项时被调用。
+
+```text
+public void handleCopyAction(ActionEvent actionEvent) {
+    // 处理复制操作。
+}
+
+public void handlePasteAction(ActionEvent actionEvent) {
+    // 处理粘贴操作。
+}
+```
+
+以上代码将使得文本框具有右键菜单的功能。右键点击文本框时，将会出现预定义的右键菜单。
+
+### 3.2 键盘按键事件
+
+首先，你需要在你的FXML文件中为想要捕获键盘事件的元素设置`onKeyPressed`属性。这通常将指向一个在你的控制器类中定义的方法。
+
+```xml
+<Button fx:id="myButton" layoutX="141" layoutY="90" mnemonicParsing="false" 
+             onKeyPressed="#handleKeyPressed" text="Button"/>
+```
+
+在控制器类中，你可以定义`handleKeyPressed`方法并使用`KeyEvent`事件对象来判断是否按下了K键:
+
+```java
+public class FXMLDocumentController {
+
+    @FXML
+    private Button myButton;
+
+    @FXML
+    private void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.K) {
+            System.out.println("[K]ey was pressed. ssss!");
+        }
+    }
+}
+```
+
+按下K键时，上述示例将输出`"[K]ey was pressed. ssss!"`。
+
+确保你的用户界面在按下K键时已经将焦点放在正确的元素上。
