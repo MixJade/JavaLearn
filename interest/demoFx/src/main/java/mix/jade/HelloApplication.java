@@ -72,6 +72,10 @@ public class HelloApplication extends Application {
         }
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
     /**
      * 第一课：窗口宽高相关
      *

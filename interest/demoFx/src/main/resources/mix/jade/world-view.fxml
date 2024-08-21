@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="mix.jade.controller.WorldController"
@@ -11,6 +12,7 @@
       stylesheets="@css/world.css">
     <Label text="这是一个新的页面"/>
     <Hyperlink text="切换页面" onAction="#changeScene"/>
+    <Button text="选择文件"  onAction="#chooseFile"/>
     <Label text="下面是拖拽文本框"/>
     <TextArea fx:id="output" prefColumnCount="30" editable="false" onDragOver="#fileDragOver"
               onDragDropped="#fileDragDropped" promptText="请拖拽文件至此"/>
