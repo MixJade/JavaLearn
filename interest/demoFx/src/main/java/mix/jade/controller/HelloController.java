@@ -1,4 +1,4 @@
-package mix.jade;
+package mix.jade.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import mix.jade.HelloApplication;
 
 public class HelloController {
     @FXML
@@ -49,5 +50,10 @@ public class HelloController {
             alert.setContentText("你刚才按下了回车键是吧");
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    public void changeScene() {
+        HelloApplication.switchScene(2);
     }
 }

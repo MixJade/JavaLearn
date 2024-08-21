@@ -18,16 +18,58 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 620, 240);
-        // 设置图标
-        stage.getIcons().add(new Image("v.png"));
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+    private static Scene firstScene,
+            secondScene;
+    private static Stage stage;
 
-        stage.show(); // 让窗口出现必须调show
+    @Override
+    public void start(Stage primaryStage) {
+        //缓存主Stage
+        stage = primaryStage;
+        // 设置图标
+        primaryStage.getIcons().add(new Image("v.png"));
+
+        //加载所有场景
+        loadAllScene();
+        // 设置场景
+        switchScene(1);
+
+        primaryStage.show(); // 让窗口出现必须调show
+    }
+
+    /**
+     * 加载所有场景
+     */
+    private void loadAllScene() {
+        try {
+            // 场景1
+            FXMLLoader firstFXML = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+            firstScene = new Scene(firstFXML.load(), 620, 240);
+            // 场景2
+            FXMLLoader secondFXML = new FXMLLoader(HelloApplication.class.getResource("world-view.fxml"));
+            secondScene = new Scene(secondFXML.load(), 300, 275);
+        } catch (IOException e) {
+            System.out.println("场景加载失败");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 切换场景
+     *
+     * @param sceneOrder 场景顺序
+     */
+    public static void switchScene(int sceneOrder) {
+        switch (sceneOrder) {
+            case 1 -> {
+                stage.setScene(firstScene);
+                stage.setTitle("Hello!");
+            }
+            case 2 -> {
+                stage.setScene(secondScene);
+                stage.setTitle("Second Scene");
+            }
+        }
     }
 
     /**
