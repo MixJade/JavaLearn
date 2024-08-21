@@ -1,0 +1,7 @@
+.root {
+    -fx-font-size: 16px;
+}
+
+.hyperlink {
+    -fx-background-color: lightblue;
+}

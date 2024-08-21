@@ -6,7 +6,8 @@
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="mix.jade.controller.WorldController"
-      prefHeight="400.0" prefWidth="600.0">
+      prefHeight="400.0" prefWidth="600.0"
+      stylesheets="@css/world.css">
     <Label text="这是一个新的页面"/>
     <Hyperlink text="超链接" onAction="#changeScene"/>
 </VBox>

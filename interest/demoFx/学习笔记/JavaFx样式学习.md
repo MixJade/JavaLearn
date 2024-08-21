@@ -24,3 +24,29 @@ HBox和VBox是JavaFX中的两种布局面板。
     <TextField fx:id="myTextField"/>
 </HBox>
 ```
+
+## 三、引用css文件
+
+要在JavaFX中使用CSS样式表，您需要执行以下步骤：
+
+1. 创建一个CSS文件，如`styles.css`。
+2. 定义您的样式，如：
+```
+.root {
+    -fx-font-size: 16px;
+}
+
+.button {
+    -fx-background-color: lightblue;
+}
+```
+3. 在你的FXML文件中引用你的CSS文件。其方法是在FXML文件顶部的`<Scene>`（或者任何其他元素）节点中添加`stylesheets`属性，并指定CSS文件路径，比如：
+
+如果CSS文件放在src的同级目录resources中：
+```xml
+<Scene stylesheets="@../../../resources/styles.css">
+```
+如果CSS文件是放在当前FXML文件路径中：
+```xml
+<Scene stylesheets="@styles.css">
+```
