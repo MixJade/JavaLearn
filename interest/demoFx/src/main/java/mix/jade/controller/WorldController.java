@@ -20,7 +20,7 @@ public class WorldController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("这是一开始就会执行的方法");
+        System.out.println("这是一开始就会执行的方法,一般用于初始化一些组件");
     }
 
     @FXML
