@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
@@ -9,5 +10,8 @@
       prefHeight="400.0" prefWidth="600.0"
       stylesheets="@css/world.css">
     <Label text="这是一个新的页面"/>
-    <Hyperlink text="超链接" onAction="#changeScene"/>
+    <Hyperlink text="切换页面" onAction="#changeScene"/>
+    <Label text="下面是拖拽文本框"/>
+    <TextArea fx:id="output" prefColumnCount="30" editable="false" onDragOver="#fileDragOver"
+              onDragDropped="#fileDragDropped"/>
 </VBox>
