@@ -12,6 +12,11 @@
     <HBox spacing="10" alignment="CENTER">
         <Label text="Your Label"/>
         <TextField fx:id="myTextField" promptText="这是占位符">
+            <!--消息提示-->
+            <tooltip>
+                <Tooltip text="这是消息提示"/>
+            </tooltip>
+            <!--右键菜单-->
             <contextMenu>
                 <ContextMenu>
                     <items>
