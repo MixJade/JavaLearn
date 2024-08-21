@@ -11,7 +11,7 @@
     </padding>
     <HBox spacing="10" alignment="CENTER">
         <Label text="Your Label"/>
-        <TextField fx:id="myTextField">
+        <TextField fx:id="myTextField" promptText="这是占位符">
             <contextMenu>
                 <ContextMenu>
                     <items>

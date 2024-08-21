@@ -13,5 +13,5 @@
     <Hyperlink text="切换页面" onAction="#changeScene"/>
     <Label text="下面是拖拽文本框"/>
     <TextArea fx:id="output" prefColumnCount="30" editable="false" onDragOver="#fileDragOver"
-              onDragDropped="#fileDragDropped"/>
+              onDragDropped="#fileDragDropped" promptText="请拖拽文件至此"/>
 </VBox>
