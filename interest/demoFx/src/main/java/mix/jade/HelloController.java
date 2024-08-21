@@ -1,6 +1,7 @@
 package mix.jade;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -41,8 +42,12 @@ public class HelloController {
      */
     @FXML
     private void handleKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.K) {
-            System.out.println("[K]ey was pressed. ssss!");
+        if (event.getCode() == KeyCode.ENTER) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("消息弹框标题");
+            alert.setHeaderText("按键提示");
+            alert.setContentText("你刚才按下了回车键是吧");
+            alert.showAndWait();
         }
     }
 }

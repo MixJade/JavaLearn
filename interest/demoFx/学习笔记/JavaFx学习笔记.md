@@ -198,6 +198,63 @@ public class HelloApplication extends Application {
 }
 ```
 
+### 2.6 屏幕类的使用
+
+```java
+public class HelloApplication extends Application {
+    @Override
+    public void start() {
+        // 获取屏幕对象
+        Screen screen = Screen.getPrimary();
+        // 获取当前屏幕的dpi
+        double dpi = screen.getDpi();
+        System.out.println("当前屏幕dpi=" + dpi);
+        // 获取整个屏幕的对象
+        Rectangle2D bounds = screen.getBounds();
+        System.out.printf("当前屏幕分辨率：%sx%s%n", bounds.getWidth(), bounds.getHeight());
+        System.out.printf("当前屏幕左上角坐标：(%s,%s)%n", bounds.getMinX(), bounds.getMinY());
+        System.out.printf("当前屏幕右下角坐标：(%s,%s)%n", bounds.getMaxX(), bounds.getMaxY());
+        // 获取当前可看的屏幕对象(会少一点任务栏的)
+        Rectangle2D visualBounds = screen.getVisualBounds();
+        System.out.printf("当前屏幕可看分辨率：%sx%s%n", visualBounds.getWidth(), visualBounds.getHeight());
+        System.out.printf("当前屏幕可看左上角坐标：(%s,%s)%n", visualBounds.getMinX(), visualBounds.getMinY());
+        System.out.printf("当前屏幕可看右下角坐标：(%s,%s)%n", visualBounds.getMaxX(), visualBounds.getMaxY());
+    }
+}
+```
+
+### 2.7 场景类与网络服务使用
+
+```java
+public class HelloApplication extends Application {
+    @Override
+    public void start(Stage stage) {
+        // 加入一个按钮
+        Button button = new Button("测试按钮");
+        button.setCursor(Cursor.CROSSHAIR); // 设置按钮的鼠标悬停样式
+        button.setPrefSize(200, 200); // 设置按钮大小
+        // 设置按钮坐标，不设默认为(0,0)
+        button.setLayoutX(50);
+        button.setLayoutY(50);
+
+        // Group类的使用
+        Group group = new Group();
+        group.getChildren().add(button); // 也可以使用addAll一次添加多个
+        // 建立一个场景
+        Scene scene = new Scene(group);
+        scene.setCursor(Cursor.HAND); // scene可以设置鼠标悬停样式
+
+        // 设置舞台集成场景
+        stage.setScene(scene);
+        stage.show(); // 让窗口出现必须调show
+
+        // 获取网络服务打开百度网页
+        HostServices hostServices = getHostServices();
+        hostServices.showDocument("www.baidu.com");
+    }
+}
+```
+
 ## 三、事件
 
 ### 3.1 按钮单击事件
@@ -291,3 +348,21 @@ public class FXMLDocumentController {
 按下K键时，上述示例将输出`"[K]ey was pressed. ssss!"`。
 
 确保你的用户界面在按下K键时已经将焦点放在正确的元素上。
+
+## 四、弹框
+
+在JavaFX中，可以使用`Alert`类来创建弹出框提示，下面显示了一个基本的例子：
+
+```text
+Alert alert = new Alert(Alert.AlertType.INFORMATION);
+alert.setTitle("Information Dialog");
+alert.setHeaderText(null);
+alert.setContentText("Here is the message that you want to convey to the user.");
+alert.showAndWait();
+```
+
+在这个例子中，我们创建了一个`Alert`对象，设置了它的标题，删除了默认的头部文本（通过设置为null），添加了我们的消息，然后我们调用`showAndWait()`来显示这个警告框。
+
+`AlertType`可以是以下之一：`CONFIRMATION`, `ERROR`, `INFORMATION`, `NONE`, `WARNING`. 分别表示确认框，错误框，信息框，无图标框，警告框。
+
+注意，如果你希望在用户响应弹出框之前不允许他们与其他窗口交互，可以使用`showAndWait()`，而不仅仅是`show()`。

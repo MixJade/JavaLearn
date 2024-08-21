@@ -2,22 +2,26 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="mix.jade.HelloController" onKeyPressed="#handleKeyPressed">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <TextField fx:id="myTextField">
-        <contextMenu>
-            <ContextMenu>
-                <items>
-                    <MenuItem text="数据1" onAction="#handleRightAction1"/>
-                    <MenuItem text="数据2" onAction="#handleRightAction2"/>
-                </items>
-            </ContextMenu>
-        </contextMenu>
-    </TextField>
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Your Label"/>
+        <TextField fx:id="myTextField">
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem text="数据1" onAction="#handleRightAction1"/>
+                        <MenuItem text="数据2" onAction="#handleRightAction2"/>
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TextField>
+    </HBox>
     <Label fx:id="welcomeText"/>
     <Button text="Hello!" onAction="#onHelloButtonClick"/>
 </VBox>
