@@ -18,8 +18,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private static Scene firstScene,
-            secondScene;
+    private static Scene scene_1, scene_2, scene_3;
     private static Stage stage;
 
     @Override
@@ -29,29 +28,10 @@ public class HelloApplication extends Application {
         // 设置图标
         primaryStage.getIcons().add(new Image("v.png"));
 
-        //加载所有场景
-        loadAllScene();
         // 设置场景
         switchScene(1);
 
         primaryStage.show(); // 让窗口出现必须调show
-    }
-
-    /**
-     * 加载所有场景
-     */
-    private void loadAllScene() {
-        try {
-            // 场景1
-            FXMLLoader firstFXML = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            firstScene = new Scene(firstFXML.load(), 620, 240);
-            // 场景2
-            FXMLLoader secondFXML = new FXMLLoader(HelloApplication.class.getResource("world-view.fxml"));
-            secondScene = new Scene(secondFXML.load(), 300, 275);
-        } catch (IOException e) {
-            System.out.println("场景加载失败");
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -60,15 +40,39 @@ public class HelloApplication extends Application {
      * @param sceneOrder 场景顺序
      */
     public static void switchScene(int sceneOrder) {
-        switch (sceneOrder) {
-            case 1 -> {
-                stage.setScene(firstScene);
-                stage.setTitle("Hello!");
+        try {
+            switch (sceneOrder) {
+                case 1 -> {
+                    if (scene_1 == null) {
+                        System.out.println("场景1初始化");
+                        FXMLLoader firstFXML = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+                        scene_1 = new Scene(firstFXML.load(), 620, 240);
+                    }
+                    stage.setScene(scene_1);
+                    stage.setTitle("Hello!");
+                }
+                case 2 -> {
+                    if (scene_2 == null) {
+                        System.out.println("场景2初始化");
+                        FXMLLoader secondFXML = new FXMLLoader(HelloApplication.class.getResource("world-view.fxml"));
+                        scene_2 = new Scene(secondFXML.load(), 300, 275);
+                    }
+                    stage.setScene(scene_2);
+                    stage.setTitle("Second Scene");
+                }
+                case 3 -> {
+                    if (scene_3 == null) {
+                        System.out.println("场景3初始化");
+                        FXMLLoader secondFXML = new FXMLLoader(HelloApplication.class.getResource("panel-view.fxml"));
+                        scene_3 = new Scene(secondFXML.load(), 600, 400);
+                    }
+                    stage.setScene(scene_3);
+                    stage.setTitle("Scene_3");
+                }
             }
-            case 2 -> {
-                stage.setScene(secondScene);
-                stage.setTitle("Second Scene");
-            }
+        } catch (IOException e) {
+            System.out.println("场景加载失败");
+            throw new RuntimeException(e);
         }
     }
 

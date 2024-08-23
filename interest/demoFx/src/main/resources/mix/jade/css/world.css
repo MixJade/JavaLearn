@@ -5,3 +5,9 @@
 .hyperlink {
     -fx-background-color: lightblue;
 }
+
+.red-bg {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

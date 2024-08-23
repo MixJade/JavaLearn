@@ -11,7 +11,8 @@
       prefHeight="400.0" prefWidth="600.0"
       stylesheets="@css/world.css">
     <Label text="这是一个新的页面"/>
-    <Hyperlink text="切换页面" onAction="#changeScene"/>
+    <Hyperlink text="切换页面1" onAction="#changeScene"/>
+    <Hyperlink text="切换页面3" onAction="#changeScene3" styleClass="red-bg"/>
     <Button text="选择文件"  onAction="#chooseFile"/>
     <Label text="下面是拖拽文本框"/>
     <TextArea fx:id="output" prefColumnCount="30" editable="false" onDragOver="#fileDragOver"

@@ -30,6 +30,11 @@ public class WorldController implements Initializable {
         HelloApplication.switchScene(1);
     }
 
+    @FXML
+    public void changeScene3() {
+        HelloApplication.switchScene(3);
+    }
+
     /**
      * 文件拖拽到输入框上的事件(还没有放入)
      *
