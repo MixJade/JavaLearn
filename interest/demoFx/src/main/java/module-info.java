@@ -5,6 +5,6 @@ module mix.jade {
 
     opens mix.jade to javafx.fxml;
     exports mix.jade;
-    exports mix.jade.controller;
-    opens mix.jade.controller to javafx.fxml;
+    exports mix.jade.child;
+    opens mix.jade.child to javafx.fxml;
 }

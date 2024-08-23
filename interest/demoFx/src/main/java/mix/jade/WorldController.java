@@ -1,4 +1,4 @@
-package mix.jade.controller;
+package mix.jade;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,7 +7,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
-import mix.jade.HelloApplication;
 
 import java.io.File;
 import java.io.IOException;
