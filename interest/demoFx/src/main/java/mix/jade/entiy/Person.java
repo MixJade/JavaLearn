@@ -1,9 +1,14 @@
 package mix.jade.entiy;
 
-@SuppressWarnings({"ClassCanBeRecord", "unused"})
+@SuppressWarnings({"unused"})
 public class Person {
     private final String name;
     private final int age;
+
+    public Person() {
+        this.name = "";
+        this.age = 0;
+    }
 
     public Person(String name, int age) {
         this.name = name;

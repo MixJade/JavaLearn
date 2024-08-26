@@ -62,21 +62,29 @@ public class PanelItem1 implements Initializable {
 
     public void updatePerson() {
         if (nowPerson == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("消息弹框标题");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "没有选中行");
             alert.setHeaderText(null);
-            alert.setContentText("没有选中行");
             alert.showAndWait();
         } else {
             // 创建一个新的对话框
-            Dialog<String[]> dialog = new PanelItem1Dialog(nowPerson);
+            Dialog<Person> dialog = new PanelItem1Dialog(nowPerson);
             // 显示对话框，并获取结果
-            String[] result = dialog.showAndWait().orElse(null);
+            Person result = dialog.showAndWait().orElse(null);
             // 输出结果
             if (result != null) {
-                System.out.println("输入1: " + result[0]);
-                System.out.println("输入2: " + result[1]);
+                System.out.println("输入数值: " + result);
             }
+        }
+    }
+
+    public void addPerson() {
+        // 创建一个新的对话框
+        Dialog<Person> dialog = new PanelItem1Dialog(new Person());
+        // 显示对话框，并获取结果
+        Person result = dialog.showAndWait().orElse(null);
+        // 输出结果
+        if (result != null) {
+            System.out.println("输入数值: " + result);
         }
     }
 }

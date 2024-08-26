@@ -9,6 +9,7 @@
     <HBox spacing="10">
         <Label fx:id="checkText" text="当前未选中行"/>
         <Button text="修改" onAction="#updatePerson"/>
+        <Button text="新增" onAction="#addPerson"/>
     </HBox>
     <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
         <columns>
