@@ -19,6 +19,8 @@ public class PanelItem1 implements Initializable {
     @FXML
     public Label checkText;
 
+    private Person nowPerson;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -30,7 +32,9 @@ public class PanelItem1 implements Initializable {
         // 创建并添加数据到表格中
         ObservableList<Person> data = FXCollections.observableArrayList(
                 new Person("张三", 23),
-                new Person("李四", 44));
+                new Person("李四", 44),
+                new Person("王五", 25)
+        );
         tableView.setItems(data);
 
         // 设置每行点击事件
@@ -39,6 +43,7 @@ public class PanelItem1 implements Initializable {
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty()) {
                     Person person = row.getItem();
+                    nowPerson = person;
                     if (event.getClickCount() == 1) {
                         System.out.println(person);
                         checkText.setText("当前选中值:" + person.getName());
@@ -53,5 +58,25 @@ public class PanelItem1 implements Initializable {
             });
             return row;
         });
+    }
+
+    public void updatePerson() {
+        if (nowPerson == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("消息弹框标题");
+            alert.setHeaderText(null);
+            alert.setContentText("没有选中行");
+            alert.showAndWait();
+        } else {
+            // 创建一个新的对话框
+            Dialog<String[]> dialog = new PanelItem1Dialog(nowPerson);
+            // 显示对话框，并获取结果
+            String[] result = dialog.showAndWait().orElse(null);
+            // 输出结果
+            if (result != null) {
+                System.out.println("输入1: " + result[0]);
+                System.out.println("输入2: " + result[1]);
+            }
+        }
     }
 }
