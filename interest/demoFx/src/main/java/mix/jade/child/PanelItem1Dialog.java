@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import mix.jade.entiy.Person;
 
+import java.util.regex.Pattern;
+
 public class PanelItem1Dialog extends Dialog<Person> {
     public PanelItem1Dialog(Person person) {
         super();
@@ -40,19 +42,26 @@ public class PanelItem1Dialog extends Dialog<Person> {
         });
         // 2. 年龄输入框
         TextField ageInput = new TextField(String.valueOf(person.getAge()));
-        grid.add(new Text("输入2："), 0, 2);
+        grid.add(new Text("年龄："), 0, 2);
         grid.add(ageInput, 1, 2);
-
+        Label ageErrLab = new Label("");
+        ageErrLab.setTextFill(Color.FIREBRICK);
+        grid.add(ageErrLab, 1, 3);
         DialogPane dialogPane = this.getDialogPane();
         dialogPane.setContent(grid);
-
+        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
         // 设置点击确定按钮的校验事件
         Button dontCloseButton = (Button) getDialogPane().lookupButton(okButtonType);
         dontCloseButton.addEventFilter(ActionEvent.ACTION, event -> {
             boolean isErr = false;
             if (nameInput.getText().isBlank()) {
-                System.out.println("sssss");
                 nameErrLab.setText("请输入名字");
+                isErr = true;
+            }
+            if (pattern.matcher(ageInput.getText()).matches()) {
+                ageErrLab.setText("");
+            } else {
+                ageErrLab.setText("请输入数字");
                 isErr = true;
             }
             if (isErr) event.consume();
