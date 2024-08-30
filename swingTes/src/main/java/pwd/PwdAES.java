@@ -1,10 +1,13 @@
-package pwdUtils;
+package pwd;
+
+import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,7 +47,9 @@ public class PwdAES extends JFrame implements ActionListener {
         // 使用东西南北布局
         setLayout(new BorderLayout());
         setTitle("AES加密");
-
+        // 设置图标
+        ImageIcon icon = new ImageIcon("src/main/resources/favor.jpg");
+        setIconImage(icon.getImage());
         // 上方面板
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("输入"));
@@ -81,6 +86,9 @@ public class PwdAES extends JFrame implements ActionListener {
         // 居中面板, JTextArea默认是可编辑的，我们设置为不可编辑
         showArea = new JTextArea();
         showArea.setEditable(false);
+        // 创建边框
+        Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3);
+        showArea.setBorder(border);
 
         // 下方面板
         JPanel bottomPanel = new JPanel();
@@ -157,6 +165,7 @@ public class PwdAES extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        FlatIntelliJLaf.setup();
         new PwdAES();
     }
 

@@ -1,4 +1,4 @@
-package pwdUtils;
+package pwd;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;

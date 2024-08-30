@@ -1,4 +1,6 @@
-package pwdUtils;
+package pwd;
+
+import com.formdev.flatlaf.FlatDarculaLaf;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -31,13 +33,17 @@ public class PwdRC4 extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        FlatDarculaLaf.setup();
         new PwdRC4();
     }
 
     private void init() {
         setLayout(new FlowLayout());
         setBounds(100, 100, 500, 200);
-        setTitle("普通的加密");
+        setTitle("RC4加密");
+        // 设置图标
+        ImageIcon icon = new ImageIcon("src/main/resources/favor.jpg");
+        setIconImage(icon.getImage());
         // 设置组件
         closeBtn = new JButton("加密");
         openBtn = new JButton("解密");

@@ -1,4 +1,6 @@
-package someUtils;
+package demo;
+
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -187,6 +189,7 @@ public class CalendarTrain extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        FlatMacLightLaf.setup();
         new CalendarTrain();
     }
 

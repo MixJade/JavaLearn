@@ -1,4 +1,4 @@
-package pwdUtils;
+package pwd;
 
 import java.nio.CharBuffer;
 

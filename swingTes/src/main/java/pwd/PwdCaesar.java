@@ -1,5 +1,7 @@
-package pwdUtils;
+package pwd;
 
+
+import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,13 +23,14 @@ public class PwdCaesar extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
+        FlatIntelliJLaf.setup();
         new PwdCaesar();
     }
 
     private void init() {
         setLayout(new FlowLayout());
         setBounds(100, 100, 500, 200);
-        setTitle("普通的加密");
+        setTitle("凯撒加密");
         // 设置组件
         addBtn = new JButton("加密");
         reduceBtn = new JButton("解密");
