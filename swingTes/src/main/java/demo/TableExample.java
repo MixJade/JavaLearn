@@ -46,7 +46,12 @@ public class TableExample {
         JButton delSixBtn = new JButton("删除老六");
         delSixBtn.addActionListener(e -> tableModel.removeRowData(4));
 
+        // 设置更新按钮
+        JButton updSixBtn = new JButton("更新星君");
+        updSixBtn.addActionListener(e -> tableModel.updateRowData(2));
+
         frame.add(delSixBtn);
+        frame.add(updSixBtn);
         frame.add(sp);
         frame.setSize(500, 300);
         frame.setVisible(true);
@@ -107,7 +112,14 @@ class MyTableModel extends AbstractTableModel {
     public void removeRowData(int index) {
         System.out.println("删除:" + getRowData(index).name());
         data.remove(index);
-        // 最后调用这个方法来刷新数据
+        // 最后调用这个方法来刷新整个表格数据
         fireTableDataChanged();
+    }
+
+    public void updateRowData(int index) {
+        System.out.println("更新:" + getRowData(index).name());
+        data.set(index, new MyData("恶堕星君", 324, false));
+        // 最后调用这个方法来刷新一行数据
+        fireTableRowsUpdated(index, index);
     }
 }
