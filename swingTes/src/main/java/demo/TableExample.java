@@ -4,7 +4,9 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class TableExample {
         FlatMacLightLaf.setup();
         // 窗口属性
         JFrame frame = new JFrame();
-        frame.setLayout(new FlowLayout()); // 流式布局
+        frame.setLayout(new BorderLayout()); // 东南西北布局
         frame.setTitle("表格样例尝试");
 
         // 设置表格数据(其实可以用二维数组直接上)
@@ -45,15 +47,46 @@ public class TableExample {
         // 设置删除按钮
         JButton delSixBtn = new JButton("删除老六");
         delSixBtn.addActionListener(e -> tableModel.removeRowData(4));
-
         // 设置更新按钮
         JButton updSixBtn = new JButton("更新星君");
         updSixBtn.addActionListener(e -> tableModel.updateRowData(2));
+        // 按钮加入顶部面板
+        JPanel topPanel = new JPanel();
+        topPanel.add(delSixBtn);
+        topPanel.add(updSixBtn);
 
-        frame.add(delSixBtn);
-        frame.add(updSixBtn);
-        frame.add(sp);
+        // 底部分页条
+        JPanel bottomPanel = new JPanel();
+        JLabel pageLabel = new JLabel("这是分页条");
+        bottomPanel.add(pageLabel);
+
+        // 右侧面板
+        JPanel rightPanel = new JPanel(); // 布局GridLayout，每行有2列;
+        // 姓名
+        JLabel nameLabel = new JLabel("姓名");
+        JTextField nameInput = new JTextField();
+        rightPanel.add(nameLabel);
+        rightPanel.add(nameInput);
+        // 年龄(数字输入框)
+        JLabel ageLabel = new JLabel("年龄");
+        NumberFormat format = NumberFormat.getInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(0);
+        formatter.setMaximum(Integer.MAX_VALUE);
+        formatter.setAllowsInvalid(false);
+        // 如果你想要提交编辑，你也可以在这里调用 formatter.setCommitsOnValidEdit(true);
+        JFormattedTextField ageInput = new JFormattedTextField(formatter);
+        rightPanel.add(ageLabel);
+        rightPanel.add(ageInput);
+
+        // 最后添加组件
+        frame.add(topPanel, BorderLayout.NORTH);
+        frame.add(sp, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
+        frame.add(rightPanel, BorderLayout.EAST);
         frame.setSize(500, 300);
+        // frame.pack(); // 调整框架的大小以适应其所有的子组件
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
