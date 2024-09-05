@@ -151,3 +151,30 @@ public class DogServiceImpl extends ServiceImpl<DogMapper, Dog> implements DogSe
 }
 ```
 
+## 六、附录：一个简单的消费者类
+
+> 目前来看，单纯的消费者可以不用像上面那样弄一堆配置，只需要建立一个类就行
+>
+> 但发送者目前还没看到简化的方法
+
+```java
+import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.springframework.stereotype.Service;
+
+/**
+ * 消费消息
+ * 配置RocketMQ监听
+ */
+@Service
+// 不用配置文件，直接在这里配置group与对应topic
+@RocketMQMessageListener(consumerGroup = "myTesMq-group", topic = "myTesMq_topic")
+public class MyTesMqRokcetListener implements RocketMQListener<String> {
+
+    @Override
+    public void onMessage(String s) {
+        System.out.println("简单MQ消费消息：" + s);
+    }
+}
+```
+
