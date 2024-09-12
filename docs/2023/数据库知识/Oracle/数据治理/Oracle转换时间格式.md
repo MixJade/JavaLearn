@@ -1,0 +1,51 @@
+# Oracle转换时间格式
+
+> 2024-09-12 09:42:42
+
+背景：在Oracle中，有一张表有两个数据格式：`20230710 16:15:59`与`26-5月 -23`这两种，
+
+如何将这两种格式统一转换成`YYYY-MM-DD HH24:MI:SS`这种格式
+
+## 一、转换1
+
+1. `LENGTH(PUSH_TIME) > 15`是为了防止两种格式混在一起，筛选时间字符串长度大于15的，即`20240123 16:43:02`这种格式的时间，从而排除`26-5月 -23`这种格式的。
+
+```sql
+-- 当前时间格式：20240123 16:43:02
+SELECT TO_CHAR(TO_DATE(PUSH_TIME, 'YYYYMMDD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')
+FROM MY_TRAN_TABLE
+WHERE PUSH_TIME IS NOT NULL
+  AND LENGTH(PUSH_TIME) > 15;
+  
+-- 正式转换
+UPDATE MY_TRAN_TABLE SET PUSH_TIME = TO_CHAR(TO_DATE(PUSH_TIME, 'YYYYMMDD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')
+WHERE PUSH_TIME IS NOT NULL
+  AND LENGTH(PUSH_TIME) > 15;
+```
+
+## 二、转换2
+
+* 将`26-5月 -23`这种格式转换，需要先去掉里面的中文才行。
+* `LENGTH(PUSH_TIME) < 10`同样是防止两种格式混合，特别是当上一个转换执行之后，防止改变其结果。
+
+```sql
+-- 当前时间格式：26-5月 -23
+SELECT TO_CHAR(TO_DATE(REPLACE('26-5月-23', '月', ''), 'DD-MM -YY'), 'YYYY-MM-DD HH24:MI:SS')
+FROM DUAL;
+-- 当前时间格式：26-11月-23
+SELECT TO_CHAR(TO_DATE(REPLACE('26-11月-23', '月', ''), 'DD-MM -YY'), 'YYYY-MM-DD HH24:MI:SS')
+FROM DUAL;
+
+-- 当前时间格式：26-5月 -23
+SELECT TO_CHAR(TO_DATE(REPLACE(PUSH_TIME, '月', ''), 'DD-MM -YY'), 'YYYY-MM-DD HH24:MI:SS')
+FROM MY_TRAN_TABLE
+WHERE PUSH_TIME IS NOT NULL
+  AND LENGTH(PUSH_TIME) < 10;
+  
+-- 正式转换
+-- 当前时间格式：26-5月 -23
+UPDATE MY_TRAN_TABLE SET PUSH_TIME = TO_CHAR(TO_DATE(REPLACE(PUSH_TIME, '月', ''), 'DD-MM -YY'), 'YYYY-MM-DD HH24:MI:SS')
+WHERE PUSH_TIME IS NOT NULL
+  AND LENGTH(PUSH_TIME) < 10;
+```
+
