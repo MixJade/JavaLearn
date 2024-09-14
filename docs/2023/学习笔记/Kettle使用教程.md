@@ -92,7 +92,7 @@ Kettle是一个数据库迁移工具，似乎叫ETL类型工具
 * 这里的字典转换建议使用`Case-When`，如：
 
   ```sql
-  UPDATE Student
+  UPDATE TFL_Studnet
   SET stu_type =
           CASE
               WHEN stu_type = 'D级人员' THEN 'D01'
