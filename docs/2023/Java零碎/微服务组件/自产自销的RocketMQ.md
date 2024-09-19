@@ -178,3 +178,11 @@ public class MyTesMqRokcetListener implements RocketMQListener<String> {
 }
 ```
 
+* 上面的MQ注解也可以使用占位符
+
+```java
+// 这里的占位符会自动从配置文件中读取
+@RocketMQMessageListener(consumerGroup = "${my.mq.group}", topic = "${my.mq.topic}")
+public class MyTesMqRokcetListener implements RocketMQListener<String> {}
+```
+
