@@ -18,14 +18,14 @@ import java.util.concurrent.Executors;
 public class MyServer {
 
     public static void main(String[] args) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(9527), 0);
         server.createContext("/operateFile", new MyHandler());
 
         server.setExecutor(Executors.newFixedThreadPool(1));
         server.start();
         System.out.println("服务器已启动");
-        System.out.println("测试访问:http://localhost:8000/operateFile/testResize.jpg");
-        System.out.println("测试访问:http://localhost:8000/operateFile/index.html?testResize");
+        System.out.println("测试访问:http://localhost:9527/operateFile/testResize.jpg");
+        System.out.println("测试访问:http://localhost:9527/operateFile/index.html?testResize");
     }
 
     static class MyHandler implements HttpHandler {
