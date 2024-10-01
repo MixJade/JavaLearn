@@ -38,6 +38,10 @@ public class MyServer {
                 File file = new File(path);
                 if (file.isFile()) {
                     byte[] bytes = Files.readAllBytes(file.toPath());
+                    // 为.svg后缀的请求设置响应头
+                    if (httpExchange.getRequestURI().toString().endsWith(".svg")) {
+                        httpExchange.getResponseHeaders().add("Content-Type", "image/svg+xml");
+                    }
                     httpExchange.sendResponseHeaders(200, bytes.length);
                     OutputStream os = httpExchange.getResponseBody();
                     os.write(bytes);
