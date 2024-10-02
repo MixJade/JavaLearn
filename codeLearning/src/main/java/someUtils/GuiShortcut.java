@@ -2,6 +2,8 @@ package someUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
@@ -9,28 +11,48 @@ import java.io.File;
  *
  * @since 2024-7-4 10:26:57
  */
-public class GuiShortcut {
+public class GuiShortcut implements ActionListener {
     public GuiShortcut() {
-        // 获取配置的值
-        MyDir[] myDirs = MyDir.values();
+        // 按钮名称
+        String[] btnNames = new String[]{
+                "Python脚本", "Python笔记", "前端笔记", "Java笔记", "我的密码"
+                , "图片文件", "备份存档", "无用快捷"
+        };
+        // 按钮颜色
+        Color[] btnColors = new Color[]{
+                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE
+                , Color.LIGHT_GRAY, Color.WHITE, Color.GRAY};
         // 开始创建界面
         JFrame frame = new JFrame("S");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200, 140 + myDirs.length * 20);
+        frame.setSize(200, 140 + btnNames.length * 20);
         frame.setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
-        frame.setLayout(new GridLayout(myDirs.length + 1, 1));
+        frame.setLayout(new GridLayout(btnNames.length + 1, 1));
         frame.setResizable(false); // 禁用最大化窗口
         JLabel label = new JLabel("自定义快捷方式", SwingConstants.CENTER);
         frame.add(label);
         // 为每个按钮添加事件
-        for (MyDir myDir : myDirs) {
-            JButton button1 = new JButton(myDir.btnNm());
-            button1.setBackground(myDir.color());
-            button1.addActionListener(e -> openDir(myDir.dirPath()));
+        for (int i = 0; i < btnNames.length; i++) {
+            JButton button1 = new JButton(btnNames[i]);
+            button1.setBackground(btnColors[i]);
+            button1.addActionListener(this);
             frame.add(button1);
         }
-
         frame.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "Python脚本" -> openDir("../../PythonLearn/Normal/utils/pyCmd");
+            case "Python笔记" -> openDir("../../PythonLearn/docs");
+            case "前端笔记" -> openDir("../../TsLearn/docs");
+            case "Java笔记" -> openDir("../../JavaLearn/docs/2023");
+            case "我的密码" -> execCmd();
+            case "图片文件" -> openDir("../../MyPicture/public");
+            case "备份存档" -> openDir("../../mixArchive");
+            case "无用快捷" -> openDir("unusedFile");
+        }
     }
 
     public static void main(String[] args) {
@@ -38,45 +60,23 @@ public class GuiShortcut {
     }
 
     private void openDir(String dirPath) {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                // 打开上两级文件夹
-                File myFile = new File("" + dirPath);
-                Desktop.getDesktop().open(myFile);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
-            }
+        try {
+            // 打开上两级文件夹
+            File myFile = new File("" + dirPath);
+            Desktop.getDesktop().open(myFile);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
         }
     }
-}
 
-enum MyDir {
-    PY_CMD("Python脚本", "../../PythonLearn/Normal/utils/pyCmd", Color.GREEN),
-    PT_DOC("Python笔记", "../../PythonLearn/docs", Color.GREEN),
-    TS_DOC("前端笔记", "../../TsLearn/docs", Color.CYAN),
-    JAVA_DOC("Java笔记", "../../JavaLearn/docs/2023", Color.MAGENTA),
-    PIC_PUB("图片文件", "../../MyPicture/public", Color.LIGHT_GRAY),
-    MIX_ARCH("备份存档", "../../mixArchive", Color.WHITE),
-    UNUSED("无用快捷", "unusedFile", Color.GRAY),
-    ;
-    private final String btnNm, dirPath;
-    private final Color color;
-
-    MyDir(String btnNm, String dirPath, Color color) {
-        this.btnNm = btnNm;
-        this.dirPath = dirPath;
-        this.color = color;
-    }
-
-    public String btnNm() {
-        return btnNm;
-    }
-
-    public String dirPath() {
-        return dirPath;
-    }
-
-    public Color color() {
-        return color;
+    private void execCmd() {
+        try {
+            // 创建一个Runtime实例
+            Runtime rt = Runtime.getRuntime();
+            // 执行cmd命令，这里只是打开了一个记事本应用
+            rt.exec("java -jar myPwd-1.0-SNAPSHOT.jar");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "命令执行失败", "警告", JOptionPane.WARNING_MESSAGE);
+        }
     }
 }
