@@ -55,11 +55,8 @@ public class PanCreatByDate extends JPanel {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date date = sdf.parse(dateStr);
             // 开始转化
-            long timestamp = date.getTime();
-            System.out.println("时间戳：" + timestamp);
-            return timestamp;
+            return date.getTime();
         } catch (ParseException e) {
-            System.out.println("时间转化失败");
             return System.currentTimeMillis();
         }
     }
@@ -87,7 +84,6 @@ public class PanCreatByDate extends JPanel {
             password.append(finalString.charAt(position));
         }
         // 输出生成的随机密码
-        System.out.println("生成的密码为：" + password);
         return String.valueOf(password);
     }
 }

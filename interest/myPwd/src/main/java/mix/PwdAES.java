@@ -157,12 +157,9 @@ public class PwdAES {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, key, iv);
             String fileContext = Files.readString(originFile.toPath());
-            System.out.println(fileContext);
             byte[] encrypted = cipher.doFinal(fileContext.getBytes());
             // 把二进制数据写入文件
             outputStream.write(encrypted);
-
-            System.out.println("Binary data has been written to file.");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
