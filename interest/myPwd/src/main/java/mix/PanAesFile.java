@@ -66,7 +66,7 @@ public class PanAesFile extends JPanel implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(showArea);
         // 创建边框
         Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3);
-        showArea.setBorder(border);
+        scrollPane.setBorder(border);
 
         // 下方面板
         JPanel bottomPanel = new JPanel();

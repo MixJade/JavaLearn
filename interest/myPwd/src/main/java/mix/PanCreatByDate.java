@@ -1,6 +1,7 @@
 package mix;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -35,6 +36,9 @@ public class PanCreatByDate extends JPanel {
         JButton button2 = new JButton("复制");
         JTextArea result = new JTextArea(5, 24);
         result.setEditable(false);
+        // 创建边框
+        Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3);
+        result.setBorder(border);
         // 将组件加入面板
         add(dateLabel);
         add(dateTextField);
