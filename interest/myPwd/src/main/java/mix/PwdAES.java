@@ -156,8 +156,8 @@ public class PwdAES {
         try (FileOutputStream outputStream = new FileOutputStream(originFile.getPath() + ".enc")) {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-            String fileContext = Files.readString(originFile.toPath());
-            byte[] encrypted = cipher.doFinal(fileContext.getBytes());
+            String fileContext = Files.readString(originFile.toPath(), StandardCharsets.UTF_8);
+            byte[] encrypted = cipher.doFinal(fileContext.getBytes(StandardCharsets.UTF_8));
             // 把二进制数据写入文件
             outputStream.write(encrypted);
             return true;
