@@ -1,8 +1,12 @@
-package pwd;
+package cryptography;
 
 import java.nio.CharBuffer;
 
-
+/**
+ * 密码学：PlayFair密码
+ *
+ * @since 2023-05-10 10:11:16
+ */
 public class PwdPlayFair {
     public static void main(String[] args) {
         String plain = "you are a good listener".replaceAll(" ", ""); // 明文,去掉空格

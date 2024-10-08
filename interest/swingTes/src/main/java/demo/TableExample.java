@@ -23,6 +23,10 @@ public class TableExample {
         frame.setLayout(new BorderLayout()); // 东南西北布局
         frame.setTitle("表格样例尝试");
 
+        // 设置图标
+        ImageIcon icon = new ImageIcon("src/main/resources/favor.jpg");
+        frame.setIconImage(icon.getImage());
+
         // 设置表格数据(其实可以用二维数组直接上)
         List<MyData> data = MyData.getMyDataList();
         MyTableModel tableModel = new MyTableModel(data);
