@@ -35,10 +35,9 @@ public class PwdAES {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-            byte[] encrypted = cipher.doFinal(value.getBytes());
+            byte[] encrypted = cipher.doFinal(value.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(encrypted);
         } catch (Exception e) {
-            e.printStackTrace();
             return "加密失败";
         }
     }
@@ -61,9 +60,8 @@ public class PwdAES {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, key, iv);
             byte[] original = cipher.doFinal(Base64.getDecoder().decode(encrypted));
-            return new String(original);
+            return new String(original, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
             return "解密失败";
         }
     }
@@ -162,7 +160,6 @@ public class PwdAES {
             outputStream.write(encrypted);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -187,7 +184,6 @@ public class PwdAES {
             byte[] original = cipher.doFinal(inputStream.readAllBytes());
             return new String(original, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
             return "解密失败";
         }
     }
