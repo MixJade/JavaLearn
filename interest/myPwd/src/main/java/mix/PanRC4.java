@@ -19,7 +19,8 @@ public class PanRC4 extends JPanel implements ActionListener {
     // 加密与解密按钮
     JButton closeBtn, openBtn;
     // 文本输入与密钥输入
-    JTextField plainText, keyText;
+    JTextField plainText;
+    JPasswordField keyText;
     // 结果输出
     JTextArea cipherText;
 
@@ -32,7 +33,7 @@ public class PanRC4 extends JPanel implements ActionListener {
         plainText = new JTextField(15);
         plainText.setText("蜈蚣的证词");
         cipherText = new JTextArea();
-        keyText = new JTextField(10);
+        keyText = new JPasswordField(10);
         keyText.setText("TheKey");
         // 添加监听器
         closeBtn.addActionListener(this);
@@ -56,7 +57,7 @@ public class PanRC4 extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String plain = plainText.getText();
-        String key = keyText.getText().trim();
+        String key = String.valueOf(keyText.getPassword()).trim();
         if (e.getSource() == closeBtn) {
             cipherText.setText(encryptRC4(plain, key));
         } else {

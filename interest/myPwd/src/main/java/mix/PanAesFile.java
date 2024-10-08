@@ -17,7 +17,7 @@ import static mix.PwdAES.encryptFile;
  */
 public class PanAesFile extends JPanel implements ActionListener {
     // 文本输入与密钥输入
-    private final JTextField keyTextField, ivTextField;
+    private final JPasswordField keyTextField, ivTextField;
     // 结果输出
     JTextArea showArea;
     private File selectedFile = null;
@@ -74,14 +74,14 @@ public class PanAesFile extends JPanel implements ActionListener {
         // 第一行
         JPanel row1 = new JPanel();
         row1.add(new JLabel("密钥"));
-        keyTextField = new JTextField(20);
+        keyTextField = new JPasswordField(16);
         keyTextField.setText("WhatCannotBeSeen");
         row1.add(keyTextField);
         bottomPanel.add(row1);
         // 第二行
         JPanel row2 = new JPanel();
-        row2.add(new JLabel("初始向量"));
-        ivTextField = new JTextField(20);
+        row2.add(new JLabel("向量"));
+        ivTextField = new JPasswordField(16);
         ivTextField.setText("TimeWaitForNoMan");
         row2.add(ivTextField);
         bottomPanel.add(row2);
@@ -111,9 +111,9 @@ public class PanAesFile extends JPanel implements ActionListener {
             return;
         }
         // 处理密钥
-        String key = keyTextField.getText();
+        String key = String.valueOf(keyTextField.getPassword());
         // 处理向量
-        String iv = ivTextField.getText();
+        String iv = String.valueOf(ivTextField.getPassword());
         // 进行加密、解密
         if (selectedFile == null) {
             JOptionPane.showMessageDialog(null, "请先选择文件", "散玉说", JOptionPane.ERROR_MESSAGE);

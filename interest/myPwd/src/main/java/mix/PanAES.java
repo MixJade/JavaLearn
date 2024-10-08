@@ -15,8 +15,10 @@ import static mix.PwdAES.encrypt;
  * @since 2024-1-2 19:47
  */
 public class PanAES extends JPanel implements ActionListener {
-    // 文本输入与密钥输入
-    private final JTextField inputTextField, keyTextField, ivTextField;
+    // 文本输入
+    private final JTextField inputTextField;
+    // 密钥输入
+    private final JPasswordField keyTextField, ivTextField;
     // 结果输出
     JTextArea showArea;
 
@@ -26,7 +28,7 @@ public class PanAES extends JPanel implements ActionListener {
         // 上方面板
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("输入"));
-        inputTextField = new JTextField(24);
+        inputTextField = new JTextField(20);
         inputTextField.setText("Hello World");
         topPanel.add(inputTextField);
         // 右边区域
@@ -69,14 +71,14 @@ public class PanAES extends JPanel implements ActionListener {
         // 第一行
         JPanel row1 = new JPanel();
         row1.add(new JLabel("密钥"));
-        keyTextField = new JTextField(20);
+        keyTextField = new JPasswordField(16);
         keyTextField.setText("WhatCannotBeSeen");
         row1.add(keyTextField);
         bottomPanel.add(row1);
         // 第二行
         JPanel row2 = new JPanel();
-        row2.add(new JLabel("初始向量"));
-        ivTextField = new JTextField(20);
+        row2.add(new JLabel("向量"));
+        ivTextField = new JPasswordField(16);
         ivTextField.setText("TimeWaitForNoMan");
         row2.add(ivTextField);
         bottomPanel.add(row2);
@@ -92,9 +94,9 @@ public class PanAES extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // 处理密钥
-        String key = keyTextField.getText();
+        String key = String.valueOf(keyTextField.getPassword());
         // 处理向量
-        String iv = ivTextField.getText();
+        String iv = String.valueOf(ivTextField.getPassword());
         // 处理输入文本
         String inputText = inputTextField.getText();
         // 进行加密、解密
