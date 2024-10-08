@@ -3,6 +3,8 @@ package mix;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,12 +32,14 @@ public class PanCreatByDate extends JPanel {
         // 初始化一个格式输入框
         JFormattedTextField dateTextField = new JFormattedTextField(maskFormatter);
         JButton button = new JButton("生成");
+        JButton button2 = new JButton("复制");
         JTextArea result = new JTextArea(5, 24);
         result.setEditable(false);
         // 将组件加入面板
         add(dateLabel);
         add(dateTextField);
         add(button);
+        add(button2);
         add(result);
         // 通过输入框生成密码
         button.addActionListener(arg0 -> {
@@ -43,6 +47,13 @@ public class PanCreatByDate extends JPanel {
             long aLong = tranDateToLong(date);
             String pwd = generatePwd(aLong);
             result.setText(pwd);
+        });
+        // 复制密码
+        button2.addActionListener(arg0 -> {
+            StringSelection stringSelection = new StringSelection(result.getText());
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+            result.setText("复制成功");
         });
         setSize(new Dimension(200, 300));
         // 让Frame在屏幕中心出现
@@ -61,6 +72,7 @@ public class PanCreatByDate extends JPanel {
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private String generatePwd(long timestamp) {// 必要的字符集合
         String lowerCaseLetter = "abcdefghijklmnopqrstuvwxyz";
         String upperCaseLetter = lowerCaseLetter.toUpperCase();
