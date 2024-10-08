@@ -12,7 +12,7 @@ import java.io.File;
  * @since 2024-7-4 10:26:57
  */
 public class GuiShortcut implements ActionListener {
-    public GuiShortcut() {
+    GuiShortcut() {
         // 按钮名称
         String[] btnNames = new String[]{
                 "Python脚本", "Python笔记", "前端笔记", "Java笔记", "我的密码"
@@ -71,10 +71,13 @@ public class GuiShortcut implements ActionListener {
 
     private void execCmd() {
         try {
-            // 创建一个Runtime实例
-            Runtime rt = Runtime.getRuntime();
-            // 执行cmd命令，这里只是打开了一个记事本应用
-            rt.exec("java -jar myPwd-1.0-SNAPSHOT.jar");
+            File myPwdJar = new File("myPwd-1.0-SNAPSHOT.jar");
+            if (myPwdJar.exists()) {
+                // 创建一个Runtime实例并执行
+                Runtime.getRuntime().exec("java -jar myPwd-1.0-SNAPSHOT.jar");
+            } else {
+                JOptionPane.showMessageDialog(null, "对应Jar包不存在", "疑问", JOptionPane.WARNING_MESSAGE);
+            }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "命令执行失败", "警告", JOptionPane.WARNING_MESSAGE);
         }
