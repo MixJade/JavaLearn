@@ -26,13 +26,11 @@ import java.util.concurrent.CountDownLatch;
  * 解析M3u8并下载ts文件
  */
 public class Panel2 extends JPanel implements ActionListener {
+    private static final int THREAD_COUNT = 5; // 线程数量
     private final JTextField baseUrl, m3u8SavePath;
     private final JButton saveTsBtn;
     private final JProgressBar progressBar;
-
     private final Panel1 panel1;
-
-    private static final int THREAD_COUNT = 5; // 线程数量
 
     public Panel2(Panel1 panel1) {
         this.panel1 = panel1;
@@ -61,7 +59,7 @@ public class Panel2 extends JPanel implements ActionListener {
         gbc.gridwidth = 2;
         add(new JLabel("m3u8文件"), gbc);
         // m3u8地址输入框
-        m3u8SavePath = new JTextField("example/sss/index.m3u8", 20);
+        m3u8SavePath = new JTextField("example\\sss\\index.m3u8", 20);
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 10;
@@ -103,7 +101,19 @@ public class Panel2 extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("SAVE_TS".equals(e.getActionCommand())) {
-            saveTsList();
+            // 异步执行防止卡死
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() {
+                    saveTsList();
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }.execute();
         } else if ("SYNC".equals(e.getActionCommand())) {
             Panel2Vo dataToPanel2 = panel1.getDataToPanel2();
             baseUrl.setText(dataToPanel2.baseUrl());
@@ -128,14 +138,16 @@ public class Panel2 extends JPanel implements ActionListener {
         final CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
         List<TsName> tsNames = ReadTsFromM3u8.readTsNameList(m3u8SaveText, baseUrlText);
         int tsNameSize = tsNames.size();
+        if (tsNameSize == 0) {
+            JOptionPane.showMessageDialog(null, "m3u8解析失败", "错误", JOptionPane.ERROR_MESSAGE);
+            saveTsBtn.setEnabled(true);
+            return;
+        }
         progressBar.setMaximum(tsNameSize);
-        MyOKO myOKO = new MyOKO(tsNames);
-        // 创建结束钩子
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("程序结束了！");
-            // 将列表写入文件
-            myOKO.writeDealItemToFile();
-        }));
+        MyOKO myOKO = new MyOKO(tsNames, parentDir);
+        // 创建结束钩子,将列表写入文件
+        Runtime.getRuntime().addShutdownHook(new Thread(myOKO::writeDealItemToFile));
+        // 正式开始下载
         for (int i = 0; i < THREAD_COUNT; i++) {
             new DownTsThread(myOKO, latch, parentDir).start();
         }
@@ -152,9 +164,8 @@ public class Panel2 extends JPanel implements ActionListener {
             latch.await();  // 等待所有的线程结束
             timer.cancel();
         } catch (InterruptedException exception) {
-            System.out.println("线程结束失败");
+            JOptionPane.showMessageDialog(null, "线程结束失败", "错误", JOptionPane.ERROR_MESSAGE);
         }
-        System.out.println("All of jobs has processed");
     }
 }
 
@@ -162,11 +173,12 @@ public class Panel2 extends JPanel implements ActionListener {
  * 公共变量类
  */
 class MyOKO {
-    private static final String FILE_NAME = "dealItemList.txt"; // 保存的文件名
+    private final String FILE_NAME; // 保存的文件名
     private final CopyOnWriteArrayList<TsName> TS_LIST = new CopyOnWriteArrayList<>(),
             alreadyTlList = new CopyOnWriteArrayList<>();
 
-    public MyOKO(List<TsName> tsList) {
+    public MyOKO(List<TsName> tsList, String dirPath) {
+        FILE_NAME = dirPath + "\\dealItemList.txt";
         readDingItemFromFile(tsList);
         TS_LIST.addAll(tsList);
     }
@@ -183,6 +195,10 @@ class MyOKO {
         return TS_LIST.remove(0);
     }
 
+    int getProgress() {
+        return alreadyTlList.size();
+    }
+
     /**
      * 将已完成的项目加入已完成列表
      *
@@ -190,10 +206,6 @@ class MyOKO {
      */
     void setProgress(TsName item) {
         alreadyTlList.add(item);
-    }
-
-    int getProgress() {
-        return alreadyTlList.size();
     }
 
     /**
@@ -222,13 +234,13 @@ class MyOKO {
     }
 
     /**
-     * 将所有已完成的项目写入文件中
+     * 在程序结束时,将所有已完成的项目写入文件中
      */
     public void writeDealItemToFile() {
         File file = new File(FILE_NAME);
         try {
             // 创建新文件
-            if (file.createNewFile()) {
+            if (!file.exists() && file.createNewFile()) {
                 System.out.println("创建文件: " + file.getName());
             }
             // 创建FileWriter对象
@@ -251,20 +263,17 @@ class DownTsThread extends Thread {
     private final CountDownLatch latch;
     private final String DIR_PATH;
 
-    public DownTsThread(MyOKO myOKO, CountDownLatch latch, String m3u8Path) {
+    public DownTsThread(MyOKO myOKO, CountDownLatch latch, String downDir) {
         this.myOKO = myOKO;
         this.latch = latch;
-        // 获取保存文件路径
-        int index = m3u8Path.lastIndexOf("/");
-        if (index == -1) this.DIR_PATH = m3u8Path; // 如果没有出现斜线
-        else this.DIR_PATH = m3u8Path.substring(0, index + 1); // 返回包含斜线及其前面的字符串
+        this.DIR_PATH = downDir;
     }
 
     @Override
     public void run() {
         TsName item;
         while ((item = myOKO.getNextItem()) != null) {
-            DownFile.downFromWeb(item.url(), DIR_PATH + item.fileName());
+            DownFile.downFromWeb(item.url(), DIR_PATH + "\\" + item.fileName());
             myOKO.setProgress(item);
         }
         latch.countDown();

@@ -14,8 +14,9 @@ public class DownFile {
      *
      * @param webUrl   网络链接
      * @param filePath 文件路径
+     * @return 下载成功
      */
-    public static void downFromWeb(String webUrl, String filePath) {
+    public static boolean downFromWeb(String webUrl, String filePath) {
         try {
             URL url = new URL(webUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -32,8 +33,9 @@ public class DownFile {
                 }
             }
             conn.disconnect();
+            return true;
         } catch (IOException e) {
-            System.out.println("IO异常");
+            return false;
         }
     }
 }

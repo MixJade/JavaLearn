@@ -33,12 +33,11 @@ public class ReadTsFromM3u8 {
                         myTsList.add(new TsName(baseUrl + line, line));
                 }
             }
+            // 最后输出
+            return myTsList;
         } catch (IOException e) {
-            e.printStackTrace();
+            return myTsList;
         }
-        // 最后输出
-        System.out.println("一共" + myTsList.size() + "个ts文件");
-        return myTsList;
     }
 
     /**

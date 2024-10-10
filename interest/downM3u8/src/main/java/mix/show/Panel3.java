@@ -34,7 +34,7 @@ public class Panel3 extends JPanel implements ActionListener {
         gbc.gridheight = 1;
         add(new JLabel("转换文件夹"), gbc);
         // 对输入框进行设置
-        saveDir = new JTextField("example/sss", 20);
+        saveDir = new JTextField("example\\sss", 20);
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridwidth = 10;
@@ -83,6 +83,22 @@ public class Panel3 extends JPanel implements ActionListener {
         add(tranBtn, gbc);
     }
 
+    public static void writeNewM3u8(String m3u8Path, String newM3u8Path) {
+        try (var reader = new BufferedReader(new FileReader(m3u8Path));
+             var writer = new BufferedWriter(new FileWriter(newM3u8Path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // 读取
+                if (line.startsWith("http"))
+                    line = ReadTsFromM3u8.getNameFromUrl(line);
+                // 写入
+                writer.write(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("TRAN".equals(e.getActionCommand())) {
@@ -98,35 +114,18 @@ public class Panel3 extends JPanel implements ActionListener {
                 // ffmpeg -allowed_extensions ALL -i index.m3u8 -c copy xxx.mp4
                 ProcessBuilder pb = new ProcessBuilder(
                         "ffmpeg", "-allowed_extensions", "ALL", "-i",
-                        newM3u8Path, "-c", "copy", movieName.getText());
-                Process process = pb.start();
+                        newM3u8Path, "-c", "copy", movieName.getText() + ".mp4");
+                pb.start();
                 // 等待命令执行完毕
-                process.waitFor();
-                System.out.println("命令执行完毕");
+                Thread.sleep(3000);
+                JOptionPane.showMessageDialog(null, "转换成功", "反馈", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                JOptionPane.showMessageDialog(null, "转换失败", "错误", JOptionPane.ERROR_MESSAGE);
             }
         } else if ("SYNC".equals(e.getActionCommand())) {
             Panel3Vo dataToPanel3 = panel1.getDataToPanel3();
             saveDir.setText(dataToPanel3.saveDir());
             m3u8Name.setText(dataToPanel3.m3u8Name());
-        }
-    }
-
-
-    public static void writeNewM3u8(String m3u8Path, String newM3u8Path) {
-        try (var reader = new BufferedReader(new FileReader(m3u8Path));
-             var writer = new BufferedWriter(new FileWriter(newM3u8Path))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // 读取
-                if (line.startsWith("http"))
-                    line = ReadTsFromM3u8.getNameFromUrl(line);
-                // 写入
-                writer.write(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

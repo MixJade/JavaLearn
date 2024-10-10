@@ -46,7 +46,7 @@ public class Panel1 extends JPanel implements ActionListener {
         gbc.gridwidth = 2;
         add(new JLabel("保存文件夹"), gbc);
         // 保存地址输入框
-        savePath = new JTextField("example/sss", 20);
+        savePath = new JTextField("example\\sss", 20);
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 10;
@@ -84,12 +84,18 @@ public class Panel1 extends JPanel implements ActionListener {
             File file = new File(filePath);
             if (!file.getParentFile().exists()) {
                 if (!file.getParentFile().mkdirs()) {
-                    System.out.println("建立文件夹失败");
+                    JOptionPane.showMessageDialog(null, "建立文件夹失败", "错误", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
             }
             // 下载m3u8并保存
-            DownFile.downFromWeb(webUrl, filePath);
-            System.out.println("m3u8已保存至:" + filePath);
+            boolean downFromWeb = DownFile.downFromWeb(webUrl, filePath);
+            if (downFromWeb) {
+                JOptionPane.showMessageDialog(null, "m3u8已保存至" + filePath, "反馈", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                saveBtn.setEnabled(true); // 下载失败就恢复点击
+                JOptionPane.showMessageDialog(null, "m3u8下载失败", "错误", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

@@ -19,8 +19,7 @@ public class Main extends JFrame {
                 ImageIcon icon = new ImageIcon(ImageIO.read(favor));
                 setIconImage(icon.getImage());
             }
-        } catch (IOException e) {
-            System.out.println("未读到图片");
+        } catch (IOException ignored) {
         }
         // 创建一个新的 JTabbedPane
         JTabbedPane tabbedPane = new JTabbedPane();
