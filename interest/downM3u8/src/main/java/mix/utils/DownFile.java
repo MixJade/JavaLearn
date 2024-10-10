@@ -1,9 +1,6 @@
 package mix.utils;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -36,6 +33,29 @@ public class DownFile {
             return true;
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    /**
+     * 写下错误日志
+     *
+     * @param errMsg 下载失败文件的路径
+     */
+    public static void writeErrorText(String errMsg) {
+        final String errFileName = "错误日志.txt";
+        File errFile = new File(errFileName);
+        if (!errFile.exists()) {
+            try {
+                //noinspection ResultOfMethodCallIgnored
+                errFile.createNewFile();
+            } catch (IOException ignored) {
+            }
+        }
+        try (FileWriter fw = new FileWriter(errFileName, true);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write(errMsg + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

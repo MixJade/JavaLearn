@@ -108,11 +108,6 @@ public class Panel2 extends JPanel implements ActionListener {
                     saveTsList();
                     return null;
                 }
-
-                @Override
-                protected void done() {
-                    JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
-                }
             }.execute();
         } else if ("SYNC".equals(e.getActionCommand())) {
             Panel2Vo dataToPanel2 = panel1.getDataToPanel2();
@@ -166,6 +161,11 @@ public class Panel2 extends JPanel implements ActionListener {
         } catch (InterruptedException exception) {
             JOptionPane.showMessageDialog(null, "线程结束失败", "错误", JOptionPane.ERROR_MESSAGE);
         }
+        // 最后总结
+        if (myOKO.getProgress() == tsNameSize)
+            JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
+        else
+            JOptionPane.showMessageDialog(null, "有部分ts下载失败,请查看错误日志", "错误", JOptionPane.ERROR_MESSAGE);
     }
 }
 
@@ -240,8 +240,9 @@ class MyOKO {
         File file = new File(FILE_NAME);
         try {
             // 创建新文件
-            if (!file.exists() && file.createNewFile()) {
-                System.out.println("创建文件: " + file.getName());
+            if (!file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.createNewFile();
             }
             // 创建FileWriter对象
             FileWriter writer = new FileWriter(file);
@@ -273,8 +274,9 @@ class DownTsThread extends Thread {
     public void run() {
         TsName item;
         while ((item = myOKO.getNextItem()) != null) {
-            DownFile.downFromWeb(item.url(), DIR_PATH + "\\" + item.fileName());
-            myOKO.setProgress(item);
+            boolean downFromWeb = DownFile.downFromWeb(item.url(), DIR_PATH + "\\" + item.fileName());
+            if (downFromWeb) myOKO.setProgress(item);
+            else DownFile.writeErrorText(item.fileName());
         }
         latch.countDown();
     }
