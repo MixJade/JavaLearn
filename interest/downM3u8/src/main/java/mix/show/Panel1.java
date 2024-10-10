@@ -1,6 +1,7 @@
 package mix.show;
 
 import mix.entiy.Panel2Vo;
+import mix.entiy.Panel3Vo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,5 +94,14 @@ public class Panel1 extends JPanel implements ActionListener {
         }
         String m3u8SavePath = Paths.get(savePath.getText(), m3u8Name.getText()).toString();
         return new Panel2Vo(baseUrl, m3u8SavePath);
+    }
+
+    /**
+     * 为panel3获取数据预留接口
+     *
+     * @return panel2的数据
+     */
+    Panel3Vo getDataToPanel3() {
+        return new Panel3Vo(savePath.getText(), m3u8Name.getText());
     }
 }
