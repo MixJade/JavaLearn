@@ -3,9 +3,12 @@ package mix.utils;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 
 
 public class DownFile {
+    public static boolean isAlreadyErr = false; // 是否报过错
+
     /**
      * 从网络下载资源
      *
@@ -53,6 +56,16 @@ public class DownFile {
         }
         try (FileWriter fw = new FileWriter(errFileName, true);
              BufferedWriter bw = new BufferedWriter(fw)) {
+            // 如果没有报过错则进行记录
+            if (!isAlreadyErr) {
+                isAlreadyErr = true;
+                bw.write(String.format("""
+                        ================================================================
+                                    报错日志  %s
+                        ================================================================
+                                                """, LocalDate.now()));
+            }
+            // 正常记录错误消息记录
             bw.write(errMsg + "\n");
         } catch (IOException e) {
             e.printStackTrace();

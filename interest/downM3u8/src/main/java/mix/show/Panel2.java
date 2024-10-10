@@ -162,10 +162,10 @@ public class Panel2 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, "线程结束失败", "错误", JOptionPane.ERROR_MESSAGE);
         }
         // 最后总结
-        if (myOKO.getProgress() == tsNameSize)
-            JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
-        else
+        if (DownFile.isAlreadyErr)
             JOptionPane.showMessageDialog(null, "有部分ts下载失败,请查看错误日志", "错误", JOptionPane.ERROR_MESSAGE);
+        else
+            JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
     }
 }
 
