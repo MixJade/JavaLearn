@@ -25,11 +25,11 @@ public class Main extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // 创建面板1
-        JPanel panel1 = new Panel1();
+        Panel1 panel1 = new Panel1();
         tabbedPane.addTab("基本参数", panel1);
 
         // 创建面板2
-        JPanel panel2 = new Panel2();
+        Panel2 panel2 = new Panel2(panel1);
         tabbedPane.addTab("下载ts", panel2);
 
         // 将选项卡面板添加到帧中

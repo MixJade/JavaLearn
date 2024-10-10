@@ -1,5 +1,7 @@
 package mix.show;
 
+import mix.entiy.Panel2Vo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -76,5 +78,20 @@ public class Panel1 extends JPanel implements ActionListener {
             System.out.println("下载地址:" + m3u8Url.getText());
             System.out.println("转存文件名:" + Paths.get(savePath.getText(), m3u8Name.getText()));
         }
+    }
+
+    /**
+     * 为panel2获取数据预留接口
+     *
+     * @return panel2的数据
+     */
+    Panel2Vo getDataToPanel2() {
+        String baseUrl = m3u8Url.getText();
+        int lastIndex = baseUrl.lastIndexOf('/');
+        if (lastIndex != -1) {
+            baseUrl = baseUrl.substring(0, lastIndex + 1);
+        }
+        String m3u8SavePath = Paths.get(savePath.getText(), m3u8Name.getText()).toString();
+        return new Panel2Vo(baseUrl, m3u8SavePath);
     }
 }

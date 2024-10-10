@@ -1,5 +1,7 @@
 package mix.show;
 
+import mix.entiy.Panel2Vo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +16,10 @@ public class Panel2 extends JPanel implements ActionListener {
     private final JButton saveTsBtn;
     private final JProgressBar progressBar;
 
-    public Panel2() {
+    private final Panel1 panel1;
+
+    public Panel2(Panel1 panel1) {
+        this.panel1 = panel1;
         // 设置布局
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
@@ -60,19 +65,28 @@ public class Panel2 extends JPanel implements ActionListener {
         gbc.gridwidth = 10;
         add(progressBar, gbc);
 
-        // 下载按钮
-        saveTsBtn = new JButton("下载ts文件");
+        // 同步按钮
+        JButton syncBtn = new JButton("同步配置");
         gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
-        saveTsBtn.setActionCommand("SAVE_TS_BTN");
+        syncBtn.setActionCommand("SYNC");
+        syncBtn.addActionListener(this);
+        add(syncBtn, gbc);
+
+        // 下载按钮
+        saveTsBtn = new JButton("下载ts文件");
+        gbc.gridx = 4;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        saveTsBtn.setActionCommand("SAVE_TS");
         saveTsBtn.addActionListener(this);
         add(saveTsBtn, gbc);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if ("SAVE_TS_BTN".equals(e.getActionCommand())) {
+        if ("SAVE_TS".equals(e.getActionCommand())) {
             saveTsBtn.setEnabled(false); // 禁止多次点击
             String baseUrlText = baseUrl.getText();
             if (!baseUrlText.endsWith("/")) baseUrlText += "/";
@@ -87,6 +101,10 @@ public class Panel2 extends JPanel implements ActionListener {
 
             progressBar.setValue(2);
             progressBar.setString("2/100");
+        } else if ("SYNC".equals(e.getActionCommand())) {
+            Panel2Vo dataToPanel2 = panel1.getDataToPanel2();
+            baseUrl.setText(dataToPanel2.baseUrl());
+            m3u8SavePath.setText(dataToPanel2.m3u8SavePath());
         }
     }
 }
