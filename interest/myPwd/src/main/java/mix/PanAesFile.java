@@ -2,6 +2,7 @@ package mix;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -100,6 +101,9 @@ public class PanAesFile extends JPanel implements ActionListener {
             // 打开选择文件对话框
             JFileChooser fileChooser = new JFileChooser("../");
             fileChooser.setDialogTitle("请选择待加解密的文件");
+            // 创建一个FileNameExtensionFilter，只接受".md"和".txt"后缀的文件
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("md & txt", "md", "txt");
+            fileChooser.setFileFilter(filter);
             // 打开一个文件对话框
             int returnValue = fileChooser.showOpenDialog(null);
             // 当用户选中一个文件并点击"Open"按钮时，returnValue的值为 `JFileChooser.APPROVE_OPTION`
