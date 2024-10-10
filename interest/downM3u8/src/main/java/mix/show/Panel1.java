@@ -19,6 +19,7 @@ public class Panel1 extends JPanel implements ActionListener {
         setLayout(gridBagLayout);
         GridBagConstraints gbc = new GridBagConstraints();//实例化这个对象用来对组件进行管理
         gbc.fill = GridBagConstraints.NONE; // 如果组件所在的区域比组件大,不调整组件大小。
+
         // 加入组件
         // 组件1(grid-x,grid-y)组件的左上角坐标
         // grid-width，grid-height：组件占用的网格行数和列数
@@ -32,40 +33,37 @@ public class Panel1 extends JPanel implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridwidth = 10;
-        gbc.gridheight = 1;
         add(m3u8Url, gbc);
+
         // 保存地址lab
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
-        gbc.gridheight = 1;
         add(new JLabel("保存文件夹"), gbc);
         // 保存地址输入框
         savePath = new JTextField("example/sss", 20);
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 10;
-        gbc.gridheight = 1;
         add(savePath, gbc);
+
         // m3u8文件名
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.gridheight = 1;
         add(new JLabel("m3u8文件名"), gbc);
-        // 保存地址输入框
+        // m3u8名称输入框
         m3u8Name = new JTextField("index.m3u8", 20);
         gbc.gridx = 2;
         gbc.gridy = 2;
         gbc.gridwidth = 10;
-        gbc.gridheight = 1;
         add(m3u8Name, gbc);
+
         // 下载按钮
         saveBtn = new JButton("下载m3u8");
         gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
-        gbc.gridheight = 1;
         saveBtn.setActionCommand("SAVE_BTN");
         saveBtn.addActionListener(this);
         add(saveBtn, gbc);

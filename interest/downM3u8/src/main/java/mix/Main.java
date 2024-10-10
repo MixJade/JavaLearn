@@ -1,6 +1,7 @@
 package mix;
 
 import mix.show.Panel1;
+import mix.show.Panel2;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,8 +29,7 @@ public class Main extends JFrame {
         tabbedPane.addTab("基本参数", panel1);
 
         // 创建面板2
-        JPanel panel2 = new JPanel();
-        panel2.add(new JLabel("这 is 面板2"));
+        JPanel panel2 = new Panel2();
         tabbedPane.addTab("下载ts", panel2);
 
         // 将选项卡面板添加到帧中
