@@ -17,21 +17,20 @@ public class ReadTsFromM3u8 {
      * 从m3u8文件中读取ts的文件路径
      *
      * @param m3u8Path m3u8的文件路径
+     * @param baseUrl  基础下载路径
      * @return ts的下载路径+文件名
      */
-    public static List<TsName> readTsNameList(String m3u8Path) {
+    public static List<TsName> readTsNameList(String m3u8Path, String baseUrl) {
         List<TsName> myTsList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(m3u8Path))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#EXTINF:")) {
-                    // 是#EXT开头则读取下一行
-                    if ((line = reader.readLine()) != null) {
-                        if (line.startsWith("http"))
-                            myTsList.add(new TsName(line, getNameFromUrl(line)));
-                        else
-                            myTsList.add(new TsName("http://127.0.0.1/" + line, line));
-                    }
+                // 是#EXT开头则读取下一行
+                if (line.startsWith("#EXTINF:") && (line = reader.readLine()) != null) {
+                    if (line.startsWith("http"))
+                        myTsList.add(new TsName(line, getNameFromUrl(line)));
+                    else
+                        myTsList.add(new TsName(baseUrl + line, line));
                 }
             }
         } catch (IOException e) {

@@ -2,11 +2,13 @@ package mix.show;
 
 import mix.entiy.Panel2Vo;
 import mix.entiy.Panel3Vo;
+import mix.utils.DownFile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.nio.file.Paths;
 
 /**
@@ -76,8 +78,18 @@ public class Panel1 extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if ("SAVE_BTN".equals(e.getActionCommand())) {
             saveBtn.setEnabled(false); // 禁止多次点击
-            System.out.println("下载地址:" + m3u8Url.getText());
-            System.out.println("转存文件名:" + Paths.get(savePath.getText(), m3u8Name.getText()));
+            String webUrl = m3u8Url.getText();
+            String filePath = Paths.get(savePath.getText(), m3u8Name.getText()).toString();
+            // 下载之前看对应的文件夹是否存在
+            File file = new File(filePath);
+            if (!file.getParentFile().exists()) {
+                if (!file.getParentFile().mkdirs()) {
+                    System.out.println("建立文件夹失败");
+                }
+            }
+            // 下载m3u8并保存
+            DownFile.downFromWeb(webUrl, filePath);
+            System.out.println("m3u8已保存至:" + filePath);
         }
     }
 

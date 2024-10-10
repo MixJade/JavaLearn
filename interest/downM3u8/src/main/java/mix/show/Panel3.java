@@ -1,11 +1,14 @@
 package mix.show;
 
 import mix.entiy.Panel3Vo;
+import mix.utils.ReadTsFromM3u8;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.nio.file.Paths;
 
 /**
  * 将ts文件打包
@@ -85,15 +88,45 @@ public class Panel3 extends JPanel implements ActionListener {
         if ("TRAN".equals(e.getActionCommand())) {
             tranBtn.setEnabled(false); // 禁止多次点击
 
-            System.out.println("文件夹名称" + saveDir.getText());
-
-            System.out.println("m3u8名称:" + m3u8Name.getText());
-
-            System.out.println("电影名称" + movieName.getText());
+            // 规范ts文件名
+            String saveDirText = saveDir.getText();
+            String m3u8Path = Paths.get(saveDirText, m3u8Name.getText()).toString();
+            String newM3u8Path = Paths.get(saveDirText, "newPlay.m3u8").toString();
+            writeNewM3u8(m3u8Path, newM3u8Path);
+            // 执行转换命令
+            try {
+                // ffmpeg -allowed_extensions ALL -i index.m3u8 -c copy xxx.mp4
+                ProcessBuilder pb = new ProcessBuilder(
+                        "ffmpeg", "-allowed_extensions", "ALL", "-i",
+                        newM3u8Path, "-c", "copy", movieName.getText());
+                Process process = pb.start();
+                // 等待命令执行完毕
+                process.waitFor();
+                System.out.println("命令执行完毕");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         } else if ("SYNC".equals(e.getActionCommand())) {
             Panel3Vo dataToPanel3 = panel1.getDataToPanel3();
             saveDir.setText(dataToPanel3.saveDir());
             m3u8Name.setText(dataToPanel3.m3u8Name());
+        }
+    }
+
+
+    public static void writeNewM3u8(String m3u8Path, String newM3u8Path) {
+        try (var reader = new BufferedReader(new FileReader(m3u8Path));
+             var writer = new BufferedWriter(new FileWriter(newM3u8Path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // 读取
+                if (line.startsWith("http"))
+                    line = ReadTsFromM3u8.getNameFromUrl(line);
+                // 写入
+                writer.write(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
