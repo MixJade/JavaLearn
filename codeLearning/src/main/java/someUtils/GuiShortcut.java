@@ -15,12 +15,12 @@ public class GuiShortcut implements ActionListener {
     GuiShortcut() {
         // 按钮名称
         String[] btnNames = new String[]{
-                "Python脚本", "Python笔记", "前端笔记", "Java笔记"
+                "Python脚本", "Python笔记", "前端笔记", "Java笔记", "我的工具"
                 , "图片文件", "备份存档", "无用快捷"
         };
         // 按钮颜色
         Color[] btnColors = new Color[]{
-                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA
+                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE
                 , Color.LIGHT_GRAY, Color.WHITE, Color.GRAY};
         // 开始创建界面
         JFrame frame = new JFrame("S");
@@ -48,6 +48,7 @@ public class GuiShortcut implements ActionListener {
             case "Python笔记" -> openDir("../../PythonLearn/docs");
             case "前端笔记" -> openDir("../../TsLearn/docs");
             case "Java笔记" -> openDir("../../JavaLearn/docs/2023");
+            case "我的工具" -> openDir("../../selfTool");
             case "图片文件" -> openDir("../../MyPicture/public");
             case "备份存档" -> openDir("../../mixArchive");
             case "无用快捷" -> openDir("unusedFile");
