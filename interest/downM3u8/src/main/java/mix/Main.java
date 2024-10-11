@@ -9,6 +9,11 @@ import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * m3u8多线程下载器
+ *
+ * @since 2024-10-11 14:33:42
+ */
 public class Main extends JFrame {
     Main() {
         // 创建一个新的 JFrame

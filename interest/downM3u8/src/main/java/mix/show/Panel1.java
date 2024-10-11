@@ -9,7 +9,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * 下载M3u8以及设置一些基础参数
@@ -17,6 +22,7 @@ import java.nio.file.Paths;
 public class Panel1 extends JPanel implements ActionListener {
     private final JTextField m3u8Url, savePath, m3u8Name;
     private final JButton saveBtn;
+    private final String CONFIG_NAME = "downConfig.txt";
 
     public Panel1() {
         // 设置布局
@@ -72,6 +78,9 @@ public class Panel1 extends JPanel implements ActionListener {
         saveBtn.setActionCommand("SAVE_BTN");
         saveBtn.addActionListener(this);
         add(saveBtn, gbc);
+
+        // 读取记忆配置
+        readConfigOnFirst();
     }
 
     @Override
@@ -92,12 +101,53 @@ public class Panel1 extends JPanel implements ActionListener {
             boolean downFromWeb = DownFile.downFromWeb(webUrl, filePath);
             if (downFromWeb) {
                 JOptionPane.showMessageDialog(null, "m3u8已保存至" + filePath, "反馈", JOptionPane.INFORMATION_MESSAGE);
+                writeConfigAfterDown();
             } else {
                 saveBtn.setEnabled(true); // 下载失败就恢复点击
                 JOptionPane.showMessageDialog(null, "m3u8下载失败", "错误", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
+
+    /**
+     * 下载成功之后,记忆当前配置
+     */
+    private void writeConfigAfterDown() {
+        File file = new File(CONFIG_NAME);
+        try {
+            // 创建新文件
+            if (!file.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                file.createNewFile();
+            }
+            // 创建FileWriter对象
+            FileWriter writer = new FileWriter(file);
+            // 向文件写入内容
+            String weTxt = m3u8Url.getText() + "\n" + savePath.getText() + "\n" + m3u8Name.getText();
+            writer.write(weTxt);
+            writer.close();
+        } catch (IOException ignored) {
+        }
+    }
+
+    /**
+     * 初始化时，读取记忆配置
+     */
+    private void readConfigOnFirst() {
+        Path filePath = Paths.get(CONFIG_NAME);
+        try {
+            if (Files.exists(filePath)) {
+                // 文件存在
+                List<String> lines = Files.readAllLines(filePath);
+                m3u8Url.setText(lines.get(0));
+                savePath.setText(lines.get(1));
+                m3u8Name.setText(lines.get(2));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      * 为panel2获取数据预留接口

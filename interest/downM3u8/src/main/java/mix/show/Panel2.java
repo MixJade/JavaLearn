@@ -96,6 +96,9 @@ public class Panel2 extends JPanel implements ActionListener {
         saveTsBtn.setActionCommand("SAVE_TS");
         saveTsBtn.addActionListener(this);
         add(saveTsBtn, gbc);
+
+        // 同步参数
+        syncConfigFormPanel1();
     }
 
     @Override
@@ -109,11 +112,8 @@ public class Panel2 extends JPanel implements ActionListener {
                     return null;
                 }
             }.execute();
-        } else if ("SYNC".equals(e.getActionCommand())) {
-            Panel2Vo dataToPanel2 = panel1.getDataToPanel2();
-            baseUrl.setText(dataToPanel2.baseUrl());
-            m3u8SavePath.setText(dataToPanel2.m3u8SavePath());
-        }
+        } else if ("SYNC".equals(e.getActionCommand()))
+            syncConfigFormPanel1();
     }
 
     /**
@@ -166,6 +166,15 @@ public class Panel2 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, "有部分ts下载失败,请查看错误日志", "错误", JOptionPane.ERROR_MESSAGE);
         else
             JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * 从第一面板同步数据过来
+     */
+    private void syncConfigFormPanel1() {
+        Panel2Vo dataToPanel2 = panel1.getDataToPanel2();
+        baseUrl.setText(dataToPanel2.baseUrl());
+        m3u8SavePath.setText(dataToPanel2.m3u8SavePath());
     }
 }
 
@@ -228,8 +237,7 @@ class MyOKO {
                 // 将已处理的加入已处理列表
                 alreadyTlList.addAll(haveTsName);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignored) {
         }
     }
 

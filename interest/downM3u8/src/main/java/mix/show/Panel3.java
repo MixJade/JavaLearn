@@ -81,6 +81,9 @@ public class Panel3 extends JPanel implements ActionListener {
         tranBtn.setActionCommand("TRAN");
         tranBtn.addActionListener(this);
         add(tranBtn, gbc);
+
+        // 同步配置
+        syncConfigFormPanel1();
     }
 
     public static void writeNewM3u8(String m3u8Path, String newM3u8Path) {
@@ -122,10 +125,16 @@ public class Panel3 extends JPanel implements ActionListener {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "转换失败", "错误", JOptionPane.ERROR_MESSAGE);
             }
-        } else if ("SYNC".equals(e.getActionCommand())) {
-            Panel3Vo dataToPanel3 = panel1.getDataToPanel3();
-            saveDir.setText(dataToPanel3.saveDir());
-            m3u8Name.setText(dataToPanel3.m3u8Name());
-        }
+        } else if ("SYNC".equals(e.getActionCommand()))
+            syncConfigFormPanel1();
+    }
+
+    /**
+     * 从第一面板同步数据过来
+     */
+    private void syncConfigFormPanel1() {
+        Panel3Vo dataToPanel3 = panel1.getDataToPanel3();
+        saveDir.setText(dataToPanel3.saveDir());
+        m3u8Name.setText(dataToPanel3.m3u8Name());
     }
 }
