@@ -15,12 +15,12 @@ public class GuiShortcut implements ActionListener {
     GuiShortcut() {
         // 按钮名称
         String[] btnNames = new String[]{
-                "Python脚本", "Python笔记", "前端笔记", "Java笔记", "我的密码"
+                "Python脚本", "Python笔记", "前端笔记", "Java笔记"
                 , "图片文件", "备份存档", "无用快捷"
         };
         // 按钮颜色
         Color[] btnColors = new Color[]{
-                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE
+                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA
                 , Color.LIGHT_GRAY, Color.WHITE, Color.GRAY};
         // 开始创建界面
         JFrame frame = new JFrame("S");
@@ -48,7 +48,6 @@ public class GuiShortcut implements ActionListener {
             case "Python笔记" -> openDir("../../PythonLearn/docs");
             case "前端笔记" -> openDir("../../TsLearn/docs");
             case "Java笔记" -> openDir("../../JavaLearn/docs/2023");
-            case "我的密码" -> execCmd();
             case "图片文件" -> openDir("../../MyPicture/public");
             case "备份存档" -> openDir("../../mixArchive");
             case "无用快捷" -> openDir("unusedFile");
@@ -66,20 +65,6 @@ public class GuiShortcut implements ActionListener {
             Desktop.getDesktop().open(myFile);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    private void execCmd() {
-        try {
-            File myPwdJar = new File("myPwd-1.0-SNAPSHOT.jar");
-            if (myPwdJar.exists()) {
-                // 创建一个Runtime实例并执行
-                Runtime.getRuntime().exec("java -jar myPwd-1.0-SNAPSHOT.jar");
-            } else {
-                JOptionPane.showMessageDialog(null, "对应Jar包不存在", "疑问", JOptionPane.WARNING_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "命令执行失败", "警告", JOptionPane.WARNING_MESSAGE);
         }
     }
 }
