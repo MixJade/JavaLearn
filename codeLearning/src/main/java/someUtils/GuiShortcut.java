@@ -18,6 +18,17 @@ public class GuiShortcut implements ActionListener {
                 "Python脚本", "Python笔记", "前端笔记", "Java笔记", "我的工具"
                 , "图片文件", "备份存档", "无用快捷"
         };
+        // 对应的文件夹路径
+        String[] btnDir = new String[]{
+                "../../PythonLearn/Normal/utils/pyCmd",
+                "../../PythonLearn/docs",
+                "../../TsLearn/docs",
+                "../../JavaLearn/docs/2023",
+                "../../selfTool",
+                "../../MyPicture/public",
+                "../../mixArchive",
+                "unusedFile",
+        };
         // 按钮颜色
         Color[] btnColors = new Color[]{
                 Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE
@@ -36,6 +47,7 @@ public class GuiShortcut implements ActionListener {
             JButton button1 = new JButton(btnNames[i]);
             button1.setBackground(btnColors[i]);
             button1.addActionListener(this);
+            button1.setActionCommand(btnDir[i]);
             frame.add(button1);
         }
         frame.setVisible(true);
@@ -43,16 +55,7 @@ public class GuiShortcut implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "Python脚本" -> openDir("../../PythonLearn/Normal/utils/pyCmd");
-            case "Python笔记" -> openDir("../../PythonLearn/docs");
-            case "前端笔记" -> openDir("../../TsLearn/docs");
-            case "Java笔记" -> openDir("../../JavaLearn/docs/2023");
-            case "我的工具" -> openDir("../../selfTool");
-            case "图片文件" -> openDir("../../MyPicture/public");
-            case "备份存档" -> openDir("../../mixArchive");
-            case "无用快捷" -> openDir("unusedFile");
-        }
+        openDir(e.getActionCommand());
     }
 
     public static void main(String[] args) {
