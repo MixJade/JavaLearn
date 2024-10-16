@@ -55,20 +55,16 @@ public class GuiShortcut implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        openDir(e.getActionCommand());
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(GuiShortcut::new);
-    }
-
-    private void openDir(String dirPath) {
         try {
             // 打开上两级文件夹
-            File myFile = new File("" + dirPath);
+            File myFile = new File(e.getActionCommand());
             Desktop.getDesktop().open(myFile);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(GuiShortcut::new);
     }
 }
