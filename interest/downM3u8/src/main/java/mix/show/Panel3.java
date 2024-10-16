@@ -158,9 +158,13 @@ public class Panel3 extends JPanel implements ActionListener {
             ProcessBuilder pb = new ProcessBuilder(
                     "ffmpeg", "-allowed_extensions", "ALL", "-i",
                     newM3u8Path, "-c", "copy", movieName.getText() + ".mp4");
-            pb.start();
+            final Process p = pb.start();
+            //为了避免阻塞，启动一个新的线程来接受错误流/输出流
+            new RunProcess(p.getErrorStream()).start();
+            new RunProcess(p.getInputStream()).start();
+
             // 等待命令执行完毕
-            Thread.sleep(3000);
+            p.waitFor();
             JOptionPane.showMessageDialog(null, "转换成功", "反馈", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "转换失败", "错误", JOptionPane.ERROR_MESSAGE);
@@ -174,5 +178,27 @@ public class Panel3 extends JPanel implements ActionListener {
         Panel3Vo dataToPanel3 = panel1.getDataToPanel3();
         saveDir.setText(dataToPanel3.saveDir());
         m3u8Name.setText(dataToPanel3.m3u8Name());
+    }
+}
+
+/**
+ * 专门处理命令行输出流的线程
+ */
+class RunProcess extends Thread {
+    private final InputStream ioStream;
+
+    RunProcess(InputStream ioStream) {
+        this.ioStream = ioStream;
+    }
+
+    @Override
+    public void run() {
+        // 仅仅只是象征性的读一下，防止命令行的缓冲区爆炸
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(ioStream))) {
+            //noinspection StatementWithEmptyBody
+            while (reader.readLine() != null) {
+            }
+        } catch (IOException ignored) {
+        }
     }
 }
