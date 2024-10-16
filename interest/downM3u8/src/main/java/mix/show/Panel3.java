@@ -1,6 +1,7 @@
 package mix.show;
 
 import mix.entiy.Panel3Vo;
+import mix.utils.CheckM3u8;
 import mix.utils.ReadTsFromM3u8;
 
 import javax.swing.*;
@@ -73,10 +74,19 @@ public class Panel3 extends JPanel implements ActionListener {
         syncBtn.addActionListener(this);
         add(syncBtn, gbc);
 
+        // 检查按钮
+        JButton checkBtn = new JButton("检查广告");
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        checkBtn.setActionCommand("CHECK");
+        checkBtn.addActionListener(this);
+        add(checkBtn, gbc);
+
         // 下载按钮
         tranBtn = new JButton("开始转换");
         gbc.gridx = 4;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2;
         tranBtn.setActionCommand("TRAN");
         tranBtn.addActionListener(this);
@@ -106,27 +116,55 @@ public class Panel3 extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if ("TRAN".equals(e.getActionCommand())) {
             tranBtn.setEnabled(false); // 禁止多次点击
-
-            // 规范ts文件名
-            String saveDirText = saveDir.getText();
-            String m3u8Path = Paths.get(saveDirText, m3u8Name.getText()).toString();
-            String newM3u8Path = Paths.get(saveDirText, "newPlay.m3u8").toString();
-            writeNewM3u8(m3u8Path, newM3u8Path);
-            // 执行转换命令
-            try {
-                // ffmpeg -allowed_extensions ALL -i index.m3u8 -c copy xxx.mp4
-                ProcessBuilder pb = new ProcessBuilder(
-                        "ffmpeg", "-allowed_extensions", "ALL", "-i",
-                        newM3u8Path, "-c", "copy", movieName.getText() + ".mp4");
-                pb.start();
-                // 等待命令执行完毕
-                Thread.sleep(3000);
-                JOptionPane.showMessageDialog(null, "转换成功", "反馈", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "转换失败", "错误", JOptionPane.ERROR_MESSAGE);
-            }
+            tranTsToMp4();
         } else if ("SYNC".equals(e.getActionCommand()))
             syncConfigFormPanel1();
+        else if ("CHECK".equals(e.getActionCommand())) {
+            checkAdvertisement();
+        }
+    }
+
+    /**
+     * 检查是否有广告
+     */
+    private void checkAdvertisement() {
+        String saveDirText = saveDir.getText();
+        String m3u8Path = Paths.get(saveDirText, m3u8Name.getText()).toString();
+        // 设置要显示的长文本
+        String dupTsGroup = CheckM3u8.checkDupTsGroup(m3u8Path);
+        // 设置显示的文本区域
+        JTextArea textArea = new JTextArea(8, 20);
+        textArea.setText(dupTsGroup);
+        textArea.setEditable(false);
+        textArea.setCaretPosition(0);
+        // 设置滚动条
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        // 在点击按钮时显示带有长文本的消息对话框
+        JOptionPane.showMessageDialog(this, scrollPane, "疑似广告", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    /**
+     * 使用ffmpeg将ts文件转为mp4
+     */
+    private void tranTsToMp4() {
+        // 规范ts文件名
+        String saveDirText = saveDir.getText();
+        String m3u8Path = Paths.get(saveDirText, m3u8Name.getText()).toString();
+        String newM3u8Path = Paths.get(saveDirText, "newPlay.m3u8").toString();
+        writeNewM3u8(m3u8Path, newM3u8Path);
+        // 执行转换命令
+        try {
+            // ffmpeg -allowed_extensions ALL -i index.m3u8 -c copy xxx.mp4
+            ProcessBuilder pb = new ProcessBuilder(
+                    "ffmpeg", "-allowed_extensions", "ALL", "-i",
+                    newM3u8Path, "-c", "copy", movieName.getText() + ".mp4");
+            pb.start();
+            // 等待命令执行完毕
+            Thread.sleep(3000);
+            JOptionPane.showMessageDialog(null, "转换成功", "反馈", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "转换失败", "错误", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
