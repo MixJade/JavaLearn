@@ -47,6 +47,6 @@ public class LongTextDialog extends JFrame implements ActionListener {
         // 设置滚动条
         JScrollPane scrollPane = new JScrollPane(textArea);
         // 在点击按钮时显示带有长文本的消息对话框
-        JOptionPane.showMessageDialog(this, scrollPane);
+        JOptionPane.showMessageDialog(this, scrollPane, "长文本测试", JOptionPane.PLAIN_MESSAGE);
     }
 }
