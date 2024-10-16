@@ -39,8 +39,13 @@ public class MyServer {
                 if (file.isFile()) {
                     byte[] bytes = Files.readAllBytes(file.toPath());
                     // 为.svg后缀的请求设置响应头
-                    if (httpExchange.getRequestURI().toString().endsWith(".svg")) {
+                    String httpFileName = httpExchange.getRequestURI().toString();
+                    if (httpFileName.endsWith(".svg")) {
                         httpExchange.getResponseHeaders().add("Content-Type", "image/svg+xml");
+                    } else if (httpFileName.endsWith(".js")) {
+                        httpExchange.getResponseHeaders().add("Content-Type", "application/javascript; charset=utf-8");
+                    } else if (httpFileName.endsWith(".css")) {
+                        httpExchange.getResponseHeaders().add("Content-Type", "text/css; charset=utf-8");
                     }
                     httpExchange.sendResponseHeaders(200, bytes.length);
                     OutputStream os = httpExchange.getResponseBody();
