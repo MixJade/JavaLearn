@@ -9,6 +9,8 @@ import org.w3c.dom.NodeList;
 import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import java.util.List;
  * @since 2023-10-19 21:21
  */
 @SuppressWarnings("SpellCheckingInspection")
-public class GuiMBTI extends JFrame {
+public class GuiMBTI extends JFrame implements ActionListener {
     private final JButton button1;
     private final JButton button2;
     private final JLabel label;
@@ -38,10 +40,12 @@ public class GuiMBTI extends JFrame {
         label = new JLabel("开始答题", SwingConstants.CENTER);
 
         button1 = new JButton("选项1");
-        button1.addActionListener(e -> nextQuest(true));
+        button1.setActionCommand("A");
+        button1.addActionListener(this);
 
         button2 = new JButton("选项2");
-        button2.addActionListener(e -> nextQuest(false));
+        button2.setActionCommand("B");
+        button2.addActionListener(this);
 
         add(label);
         add(button1);
@@ -117,17 +121,18 @@ public class GuiMBTI extends JFrame {
         return qqoList;
     }
 
-    private void nextQuest(boolean isOp1) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // 刚开始不加分(因为刚开始命令是AB)
+        addScope(e.getActionCommand());
+        // 向下翻一道题
         if (questIndex < quizQuestOptions.size()) {
             QuizQuestOption questOption = quizQuestOptions.get(questIndex);
             label.setText(questOption.quest());
+            button1.setActionCommand(questOption.aTp());
             button1.setText(questOption.a());
+            button2.setActionCommand(questOption.bTp());
             button2.setText(questOption.b());
-            if (isOp1) {
-                addScope(questOption.aTp());
-            } else {
-                addScope(questOption.bTp());
-            }
             questIndex++;
         } else {
             showResult();
