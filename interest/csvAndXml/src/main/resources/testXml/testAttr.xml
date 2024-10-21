@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!--一个内部DTD的示例,首先写根元素“家庭”-->
+<!--包含两个元素，人至少出现一次，家电可以出现人一次，这两个元素都被定义为空类型-->
+<!DOCTYPE House[
+        <!ELEMENT House (People+,Furniture*)>
+        <!ELEMENT People EMPTY>
+        <!ELEMENT Furniture EMPTY>
+        <!--开始定义属性-->
+        <!ATTLIST People
+                name CDATA #REQUIRED
+                age CDATA #REQUIRED
+                like CDATA #IMPLIED
+                >
+        <!ATTLIST Furniture
+                name CDATA #REQUIRED
+                count CDATA #REQUIRED
+                say CDATA #IMPLIED
+                >
+        ]>
+<!--DTD部分结束-->
+<House>
+    <People name="张三" age="25"/>
+    <People name="李四" age="38" like="踢足球"/>
+    <Furniture name="彩电" count="三"/>
+</House>
