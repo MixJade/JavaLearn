@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ZhouYi [
+        <!ELEMENT ZhouYi (Gua+)>
+        <!ELEMENT Gua (#PCDATA)>
+        <!ATTLIST Gua
+                name ID #REQUIRED
+                >
+        ]>
+
+<ZhouYi>
+    <Gua name="坤坤">坤坤的内容</Gua>
+    <Gua name="坤艮">坤艮的内容</Gua>
+    <Gua name="坤坎">坤坎的内容</Gua>
+    <Gua name="坤巽">坤巽的内容</Gua>
+    <Gua name="坤震">坤震的内容</Gua>
+    <Gua name="坤离">坤离的内容</Gua>
+    <Gua name="坤兑">坤兑的内容</Gua>
+    <Gua name="坤乾">坤乾的内容</Gua>
+    <Gua name="艮坤">艮坤的内容</Gua>
+    <Gua name="艮艮">艮艮的内容</Gua>
+    <Gua name="艮坎">艮坎的内容</Gua>
+    <Gua name="艮巽">艮巽的内容</Gua>
+    <Gua name="艮震">艮震的内容</Gua>
+    <Gua name="艮离">艮离的内容</Gua>
+    <Gua name="艮兑">艮兑的内容</Gua>
+    <Gua name="艮乾">艮乾的内容</Gua>
+    <Gua name="坎坤">坎坤的内容</Gua>
+    <Gua name="坎艮">坎艮的内容</Gua>
+    <Gua name="坎坎">坎坎的内容</Gua>
+    <Gua name="坎巽">坎巽的内容</Gua>
+    <Gua name="坎震">坎震的内容</Gua>
+    <Gua name="坎离">坎离的内容</Gua>
+    <Gua name="坎兑">坎兑的内容</Gua>
+    <Gua name="坎乾">坎乾的内容</Gua>
+    <Gua name="巽坤">巽坤的内容</Gua>
+    <Gua name="巽艮">巽艮的内容</Gua>
+    <Gua name="巽坎">巽坎的内容</Gua>
+    <Gua name="巽巽">巽巽的内容</Gua>
+    <Gua name="巽震">巽震的内容</Gua>
+    <Gua name="巽离">巽离的内容</Gua>
+    <Gua name="巽兑">巽兑的内容</Gua>
+    <Gua name="巽乾">巽乾的内容</Gua>
+    <Gua name="震坤">震坤的内容</Gua>
+    <Gua name="震艮">震艮的内容</Gua>
+    <Gua name="震坎">震坎的内容</Gua>
+    <Gua name="震巽">震巽的内容</Gua>
+    <Gua name="震震">震震的内容</Gua>
+    <Gua name="震离">震离的内容</Gua>
+    <Gua name="震兑">震兑的内容</Gua>
+    <Gua name="震乾">震乾的内容</Gua>
+    <Gua name="离坤">离坤的内容</Gua>
+    <Gua name="离艮">离艮的内容</Gua>
+    <Gua name="离坎">离坎的内容</Gua>
+    <Gua name="离巽">离巽的内容</Gua>
+    <Gua name="离震">离震的内容</Gua>
+    <Gua name="离离">离离的内容</Gua>
+    <Gua name="离兑">离兑的内容</Gua>
+    <Gua name="离乾">离乾的内容</Gua>
+    <Gua name="兑坤">兑坤的内容</Gua>
+    <Gua name="兑艮">兑艮的内容</Gua>
+    <Gua name="兑坎">兑坎的内容</Gua>
+    <Gua name="兑巽">兑巽的内容</Gua>
+    <Gua name="兑震">兑震的内容</Gua>
+    <Gua name="兑离">兑离的内容</Gua>
+    <Gua name="兑兑">兑兑的内容</Gua>
+    <Gua name="兑乾">兑乾的内容</Gua>
+    <Gua name="乾坤">乾坤的内容</Gua>
+    <Gua name="乾艮">乾艮的内容</Gua>
+    <Gua name="乾坎">乾坎的内容</Gua>
+    <Gua name="乾巽">乾巽的内容</Gua>
+    <Gua name="乾震">乾震的内容</Gua>
+    <Gua name="乾离">乾离的内容</Gua>
+    <Gua name="乾兑">乾兑的内容</Gua>
+    <Gua name="乾乾">乾乾的内容</Gua>
+</ZhouYi>
