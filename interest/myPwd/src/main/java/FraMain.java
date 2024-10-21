@@ -25,14 +25,14 @@ public class FraMain extends JFrame {
         JPanel panFileAES = new PanAesFile();
         JPanel panRC4 = new PanRC4();
         JPanel panCaesar = new PanCaesar();
-        JPanel panCreatByDate = new PanCreatByDate();
+        JPanel panGenPwd = new PanGenPwd();
 
         // 将面板添加到选项卡面板中
         tabbedPane.addTab("AES", panAES);
         tabbedPane.addTab("AES文件", panFileAES);
         tabbedPane.addTab("PC4", panRC4);
         tabbedPane.addTab("凯撒", panCaesar);
-        tabbedPane.addTab("Date", panCreatByDate);
+        tabbedPane.addTab("生成密码", panGenPwd);
 
         // 将选项卡面板添加到帧中
         add(tabbedPane);
