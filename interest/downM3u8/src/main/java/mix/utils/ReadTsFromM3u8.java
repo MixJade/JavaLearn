@@ -87,4 +87,22 @@ public class ReadTsFromM3u8 {
             return "";
         }
     }
+
+    /**
+     * 含有key的行变成真的key
+     *
+     * @param line 含有key的行,如 #xxxxxx,URI="/xxs/key.key"
+     * @return 新的key行, 如 #xxxxxx,URI="key.key"
+     */
+    public static String getKeyLineForLine(String line) {
+        // 匹配URI="xxx"中的xxx
+        Pattern p = Pattern.compile("(?<=URI=\").*(?=\")");
+        Matcher m = p.matcher(line);
+        if (m.find()) {
+            String keyName = m.group();
+            if (keyName.startsWith("http") || keyName.startsWith("/"))
+                line = line.replace(keyName, getNameFromUrl(keyName));
+        }
+        return line;
+    }
 }
