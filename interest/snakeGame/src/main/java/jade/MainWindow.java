@@ -35,7 +35,7 @@ public class MainWindow extends JFrame implements ActionListener {
         add(view, BorderLayout.CENTER);
         add(gameFace, BorderLayout.SOUTH);
         add(registerSanYu, BorderLayout.NORTH);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
 
@@ -46,13 +46,13 @@ public class MainWindow extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (!view.isLoginSuccess()) {
-            JOptionPane.showMessageDialog(null, "请登录", "登录提示", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "请登录", "登录提示", JOptionPane.WARNING_MESSAGE);
         }
         if (view.isLoginSuccess()) {
             if (e.getSource() == gameTwo) {
-                new SnakeWindow();
+                SwingUtilities.invokeLater(SnakeWindow::new);
             } else {
-                new HuaRongRoad();
+                SwingUtilities.invokeLater(HuaRongRoad::new);
             }
         }
         if (e.getSource() == registerSanYu) {

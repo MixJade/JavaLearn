@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class SkinSnake {
+class SkinSnake extends KeyAdapter {
     private final LinkedList<FruitSnake> body = new LinkedList<>();
     private int direction = KeyEvent.VK_DOWN;
 
@@ -19,11 +19,19 @@ class SkinSnake {
         }
     }
 
-    public int getDirection() {
+    public void init() {
+        direction = KeyEvent.VK_DOWN;
+        body.clear();
+        for (int i = 200; i < 260; i += 10) {
+            body.add(new FruitSnake(i, 100));
+        }
+    }
+
+    private int getDirection() {
         return direction;
     }
 
-    public void setDirection(int direction) {
+    private void setDirection(int direction) {
         this.direction = direction;
     }
 
@@ -72,11 +80,38 @@ class SkinSnake {
         FruitSnake first = body.getFirst();
         return first.getX() == food.getX() && first.getY() == food.getY();
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        //获取 键盘按下的键。
+        int keyCode = e.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
+                if (getDirection() != KeyEvent.VK_DOWN)
+                    setDirection(KeyEvent.VK_UP);
+                break;
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
+                if (getDirection() != KeyEvent.VK_UP)
+                    setDirection(KeyEvent.VK_DOWN);
+                break;
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
+                if (getDirection() != KeyEvent.VK_RIGHT)
+                    setDirection(KeyEvent.VK_LEFT);
+                break;
+            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
+                if (getDirection() != KeyEvent.VK_LEFT)
+                    setDirection(KeyEvent.VK_RIGHT);
+                break;
+        }
+    }
 }
 
 class FruitSnake {
-    private int x;
-    private int y;
+    private int x, y;
 
     public FruitSnake() {
     }
@@ -101,23 +136,22 @@ class FruitSnake {
     }
 }
 
-public class SnakeWindow {
+public class SnakeWindow extends JFrame {
     private final SkinSnake snake = new SkinSnake(); //蛇
     private final FruitSnake food = new FruitSnake(); //食物
-    private JFrame SNAKE = new JFrame("贪吃蛇-上下左右键");
     private JPanel jp;
     private int score;
-    private int eject = 0;
 
     public SnakeWindow() {
+        setTitle("贪吃蛇-上下左右键");
         init();
         repaintEveryPeriod();// 开计时器。
-        initDirectionListener();
+        addKeyListener(snake);
         food.randomXY(); // 食物获取随机坐标
-        SNAKE.setVisible(true);
-        SNAKE.setBounds(200, 160, 600, 401);
-        SNAKE.setDefaultCloseOperation(SNAKE.DISPOSE_ON_CLOSE);
-        SNAKE.setResizable(false);
+        setVisible(true);
+        setBounds(200, 160, 600, 401);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
     }
 
     private void init() {
@@ -149,7 +183,7 @@ public class SnakeWindow {
             }
         };
         jp.setBounds(0, 0, 600, 401);
-        SNAKE.add(jp);
+        add(jp);
     }
 
     private void repaintEveryPeriod() {
@@ -170,13 +204,12 @@ public class SnakeWindow {
                 boolean alive = snake.isAlive();
                 if (!alive) {
                     String msg = "您的得分是：" + score + "\n是否重开?";
-                    eject = JOptionPane.showConfirmDialog(null, msg, "你已经嗝屁了", JOptionPane.YES_NO_OPTION);
+                    int eject = JOptionPane.showConfirmDialog(null, msg, "你已经嗝屁了", JOptionPane.YES_NO_OPTION);
                     if (eject == JOptionPane.YES_OPTION) {
-                        JOptionPane.showMessageDialog(new JFrame(), "已重开");
+                        JOptionPane.showMessageDialog(null, "已重开");
                         reSnake();
                     } else {
-                        SNAKE.dispose(); // 关闭窗口
-                        SNAKE = null; // 及时清空，以免复活
+                        dispose(); // 关闭窗口
                     }
                     t.cancel(); // 取消定时器任务，很重要
                 }
@@ -186,37 +219,10 @@ public class SnakeWindow {
     }
 
     public void reSnake() {
-        SNAKE.dispose();
-        SNAKE = null;
-        new SnakeWindow();
-    }
-
-    private void initDirectionListener() {
-        SNAKE.addKeyListener(
-                new KeyAdapter() {
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        //获取 键盘按下的键。
-                        int keyCode = e.getKeyCode();
-                        switch (keyCode) {
-                            case KeyEvent.VK_UP:
-                                if (snake.getDirection() != KeyEvent.VK_DOWN)
-                                    snake.setDirection(KeyEvent.VK_UP);
-                                break;
-                            case KeyEvent.VK_DOWN:
-                                if (snake.getDirection() != KeyEvent.VK_UP)
-                                    snake.setDirection(KeyEvent.VK_DOWN);
-                                break;
-                            case KeyEvent.VK_LEFT:
-                                if (snake.getDirection() != KeyEvent.VK_RIGHT)
-                                    snake.setDirection(KeyEvent.VK_LEFT);
-                                break;
-                            case KeyEvent.VK_RIGHT:
-                                if (snake.getDirection() != KeyEvent.VK_LEFT)
-                                    snake.setDirection(KeyEvent.VK_RIGHT);
-                                break;
-                        }
-                    }
-                });
+        score = 0;
+        remove(jp);
+        snake.init();
+        init();
+        repaintEveryPeriod();// 开计时器。
     }
 }
