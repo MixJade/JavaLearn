@@ -1,9 +1,14 @@
 package jade.recognition;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Timer;
@@ -143,6 +148,11 @@ public class SnakeWindow extends JFrame {
     private int score;
 
     public SnakeWindow() {
+        // 设置图标
+        try (InputStream favor = getClass().getResourceAsStream("../th006.jpg")) {
+            if (favor != null) setIconImage(new ImageIcon(ImageIO.read(favor)).getImage());
+        } catch (IOException ignored) {
+        }
         setTitle("贪吃蛇-上下左右键");
         init();
         repaintEveryPeriod();// 开计时器。
@@ -216,6 +226,13 @@ public class SnakeWindow extends JFrame {
             }
         };
         t.schedule(task, 0, 200);
+        // 设置退出时取消定时器
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                t.cancel();
+            }
+        });
     }
 
     public void reSnake() {

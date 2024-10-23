@@ -5,10 +5,13 @@ import jade.recognition.HuaRongRoad;
 import jade.recognition.SnakeWindow;
 import jade.view.RegisterAndLoginView;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 贪吃蛇游戏启动类
@@ -20,6 +23,11 @@ public class MainWindow extends JFrame implements ActionListener {
     RegisterAndLoginView view;
 
     MainWindow() {
+        // 设置图标
+        try (InputStream favor = getClass().getResourceAsStream("th006.jpg")) {
+            if (favor != null) setIconImage(new ImageIcon(ImageIO.read(favor)).getImage());
+        } catch (IOException ignored) {
+        }
         setBounds(100, 100, 800, 300);
         JPanel gameFace = new JPanel();
         gameFace.setSize(800, 80);
