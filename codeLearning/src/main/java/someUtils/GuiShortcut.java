@@ -15,7 +15,7 @@ public class GuiShortcut extends JFrame implements ActionListener {
     GuiShortcut() {
         // 按钮名称
         String[] btnNames = new String[]{
-                "Python脚本", "Python笔记", "前端笔记", "Java笔记", "Java工具"
+                "Python脚本", "Python笔记", "前端笔记", "Java工具", "Java笔记"
                 , "图片文件", "备份存档", "无用快捷"
         };
         // 对应的文件夹路径
@@ -23,8 +23,8 @@ public class GuiShortcut extends JFrame implements ActionListener {
                 "../../PythonLearn/Normal/utils/pyCmd",
                 "../../PythonLearn/docs",
                 "../../TsLearn/docs",
-                "../../JavaLearn/docs/2023",
                 "../../selfTool",
+                "../../JavaLearn/docs/2023",
                 "../../MyPicture/public",
                 "../../mixArchive",
                 "unusedFile",
