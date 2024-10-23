@@ -3,6 +3,7 @@ package mix.show;
 import mix.entiy.Panel2Vo;
 import mix.entiy.Panel3Vo;
 import mix.utils.DownFile;
+import mix.utils.ReadTsFromM3u8;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,8 +72,18 @@ public class Panel1 extends JPanel implements ActionListener {
         add(m3u8Name, gbc);
 
         // 下载按钮
-        saveBtn = new JButton("下载m3u8");
+        JButton reqFileBtn = new JButton("设请求头");
         gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        reqFileBtn.setActionCommand("REQ_FILE_BTN");
+        reqFileBtn.addActionListener(this);
+        add(reqFileBtn, gbc);
+
+
+        // 下载按钮
+        saveBtn = new JButton("下载m3u8");
+        gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         saveBtn.setActionCommand("SAVE_BTN");
@@ -85,8 +96,10 @@ public class Panel1 extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String reqFileName = "reqHeadConfig.properties";
         if ("SAVE_BTN".equals(e.getActionCommand())) {
             saveBtn.setEnabled(false); // 禁止多次点击
+            DownFile.readReqConfig(reqFileName);
             String webUrl = m3u8Url.getText();
             String filePath = Paths.get(savePath.getText(), m3u8Name.getText()).toString();
             // 下载之前看对应的文件夹是否存在
@@ -101,10 +114,27 @@ public class Panel1 extends JPanel implements ActionListener {
             boolean downFromWeb = DownFile.downFromWeb(webUrl, filePath);
             if (downFromWeb) {
                 JOptionPane.showMessageDialog(null, "m3u8已保存至" + filePath, "反馈", JOptionPane.INFORMATION_MESSAGE);
+                // 检查是否有key
+                String keyName = ReadTsFromM3u8.readKey(filePath);
+                if (!"".equals(keyName))
+                    DownFile.downFromWeb(getDataToPanel2().baseUrl() + keyName,
+                            Paths.get(savePath.getText(), keyName).toString());
+                // 记忆配置
                 writeConfigAfterDown();
             } else {
                 saveBtn.setEnabled(true); // 下载失败就恢复点击
                 JOptionPane.showMessageDialog(null, "m3u8下载失败", "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if ("REQ_FILE_BTN".equals(e.getActionCommand())) {
+            try {
+                File reqFile = new File(reqFileName);
+                if (reqFile.exists())
+                    Desktop.getDesktop().open(reqFile);
+                else {
+                    if (reqFile.createNewFile()) Desktop.getDesktop().open(reqFile);
+                    else JOptionPane.showMessageDialog(null, "请求头文件建立失败", "错误", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IOException ignored) {
             }
         }
     }

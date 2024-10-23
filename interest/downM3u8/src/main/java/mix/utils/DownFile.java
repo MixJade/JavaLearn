@@ -3,11 +3,13 @@ package mix.utils;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 
 public class DownFile {
-    public static boolean isAlreadyErr = false; // 是否报过错
+    private static final List<ReqHead> reqHeadList = new ArrayList<>(); // 请求头集合
 
     /**
      * 从网络下载资源
@@ -23,6 +25,9 @@ public class DownFile {
             conn.setRequestMethod("GET"); // 请求方法
             // 设置请求头
             conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+            if (reqHeadList.size() > 0)
+                for (ReqHead reqHead : reqHeadList)
+                    conn.setRequestProperty(reqHead.key(), reqHead.value());
             conn.connect();
             try (InputStream is = conn.getInputStream();
                  OutputStream os = new FileOutputStream(filePath)) {
@@ -39,36 +44,17 @@ public class DownFile {
         }
     }
 
-    /**
-     * 写下错误日志
-     *
-     * @param errMsg 下载失败文件的路径
-     */
-    public static void writeErrorText(String errMsg) {
-        final String errFileName = "错误日志.txt";
-        File errFile = new File(errFileName);
-        if (!errFile.exists()) {
-            try {
-                //noinspection ResultOfMethodCallIgnored
-                errFile.createNewFile();
-            } catch (IOException ignored) {
-            }
-        }
-        try (FileWriter fw = new FileWriter(errFileName, true);
-             BufferedWriter bw = new BufferedWriter(fw)) {
-            // 如果没有报过错则进行记录
-            if (!isAlreadyErr) {
-                isAlreadyErr = true;
-                bw.write(String.format("""
-                        ================================================================
-                                    报错日志  %s
-                        ================================================================
-                                                """, LocalDate.now()));
-            }
-            // 正常记录错误消息记录
-            bw.write(errMsg + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void readReqConfig(String fileName) {
+        try (InputStream fis = new FileInputStream(fileName)) {
+            Properties props = new Properties();
+            //加载属性列表
+            props.load(fis);
+            for (String key : props.stringPropertyNames())
+                reqHeadList.add(new ReqHead(key, props.getProperty(key)));
+        } catch (Exception ignored) {
         }
     }
+}
+
+record ReqHead(String key, String value) {
 }

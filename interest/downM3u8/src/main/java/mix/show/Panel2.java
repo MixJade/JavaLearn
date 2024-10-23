@@ -21,6 +21,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 解析M3u8并下载ts文件
@@ -31,6 +32,8 @@ public class Panel2 extends JPanel implements ActionListener {
     private final JButton saveTsBtn;
     private final JProgressBar progressBar;
     private final Panel1 panel1;
+
+    private final JLabel errCount;
 
     public Panel2(Panel1 panel1) {
         this.panel1 = panel1;
@@ -97,6 +100,14 @@ public class Panel2 extends JPanel implements ActionListener {
         saveTsBtn.addActionListener(this);
         add(saveTsBtn, gbc);
 
+        // 错误计数
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 12;
+        // 下载进度条
+        errCount = new JLabel("错误计数: 0");
+        add(errCount, gbc);
+
         // 同步参数
         syncConfigFormPanel1();
     }
@@ -153,6 +164,7 @@ public class Panel2 extends JPanel implements ActionListener {
             public void run() {
                 progressBar.setValue(myOKO.getProgress());
                 progressBar.setString(myOKO.getProgress() + "/" + tsNameSize);
+                errCount.setText("错误计数: " + myOKO.getErrCount());
             }
         }, 0, 5000); // 每5秒执行一次
         try {
@@ -162,9 +174,11 @@ public class Panel2 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, "线程结束失败", "错误", JOptionPane.ERROR_MESSAGE);
         }
         // 最后总结
-        if (DownFile.isAlreadyErr)
+        if (myOKO.getErrCount() > 0) {
             JOptionPane.showMessageDialog(null, "有部分ts下载失败,请查看错误日志", "错误", JOptionPane.ERROR_MESSAGE);
-        else
+            saveTsBtn.setText("重下失败Ts");
+            saveTsBtn.setEnabled(false);
+        } else
             JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -185,6 +199,7 @@ class MyOKO {
     private final String FILE_NAME; // 保存的文件名
     private final CopyOnWriteArrayList<TsName> TS_LIST = new CopyOnWriteArrayList<>(),
             alreadyTlList = new CopyOnWriteArrayList<>();
+    private final AtomicInteger ERROR_COUNT = new AtomicInteger(0);
 
     public MyOKO(List<TsName> tsList, String dirPath) {
         FILE_NAME = dirPath + "\\dealItemList.txt";
@@ -262,6 +277,14 @@ class MyOKO {
         } catch (IOException ignored) {
         }
     }
+
+    void addErrorCount() {
+        ERROR_COUNT.incrementAndGet();
+    }
+
+    int getErrCount() {
+        return ERROR_COUNT.get();
+    }
 }
 
 /**
@@ -284,7 +307,7 @@ class DownTsThread extends Thread {
         while ((item = myOKO.getNextItem()) != null) {
             boolean downFromWeb = DownFile.downFromWeb(item.url(), DIR_PATH + "\\" + item.fileName());
             if (downFromWeb) myOKO.setProgress(item);
-            else DownFile.writeErrorText(item.fileName());
+            else myOKO.addErrorCount();
         }
         latch.countDown();
     }
