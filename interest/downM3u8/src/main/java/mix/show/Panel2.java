@@ -123,6 +123,7 @@ public class Panel2 extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if ("SAVE_TS".equals(e.getActionCommand())) {
+            DownFile.readReqConfig();
             // 异步执行防止卡死
             new SwingWorker<Void, Void>() {
                 @Override

@@ -44,8 +44,13 @@ public class DownFile {
         }
     }
 
-    public static void readReqConfig(String fileName) {
-        try (InputStream fis = new FileInputStream(fileName)) {
+    /**
+     * 读取请求头配置
+     */
+    public static void readReqConfig() {
+        File reqFile = new File("reqHeadConfig.properties");
+        if (!reqFile.exists()) return;
+        try (InputStream fis = new FileInputStream(reqFile)) {
             Properties props = new Properties();
             //加载属性列表
             props.load(fis);

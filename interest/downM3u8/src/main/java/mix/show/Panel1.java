@@ -96,10 +96,9 @@ public class Panel1 extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String reqFileName = "reqHeadConfig.properties";
         if ("SAVE_BTN".equals(e.getActionCommand())) {
             saveBtn.setEnabled(false); // 禁止多次点击
-            DownFile.readReqConfig(reqFileName);
+            DownFile.readReqConfig();
             String webUrl = m3u8Url.getText();
             String filePath = Paths.get(savePath.getText(), m3u8Name.getText()).toString();
             // 下载之前看对应的文件夹是否存在
@@ -127,7 +126,7 @@ public class Panel1 extends JPanel implements ActionListener {
             }
         } else if ("REQ_FILE_BTN".equals(e.getActionCommand())) {
             try {
-                File reqFile = new File(reqFileName);
+                File reqFile = new File("reqHeadConfig.properties");
                 if (reqFile.exists())
                     Desktop.getDesktop().open(reqFile);
                 else {
