@@ -29,8 +29,10 @@ public class ReadTsFromM3u8 {
             while ((line = reader.readLine()) != null) {
                 // 是#EXT开头则读取下一行
                 if (line.startsWith("#EXTINF:") && (line = reader.readLine()) != null) {
-                    if (line.startsWith("http") || line.startsWith("/"))
+                    if (line.startsWith("http"))
                         myTsList.add(new TsName(line, getNameFromUrl(line)));
+                    else if (line.startsWith("/"))
+                        myTsList.add(new TsName(baseUrl + getNameFromUrl(line), getNameFromUrl(line)));
                     else
                         myTsList.add(new TsName(baseUrl + line, line));
                 }
