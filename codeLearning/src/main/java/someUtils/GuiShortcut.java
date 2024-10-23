@@ -11,11 +11,11 @@ import java.io.File;
  *
  * @since 2024-7-4 10:26:57
  */
-public class GuiShortcut implements ActionListener {
+public class GuiShortcut extends JFrame implements ActionListener {
     GuiShortcut() {
         // 按钮名称
         String[] btnNames = new String[]{
-                "Python脚本", "Python笔记", "前端笔记", "Java笔记", "我的工具"
+                "Python脚本", "Python笔记", "前端笔记", "Java笔记", "Java工具"
                 , "图片文件", "备份存档", "无用快捷"
         };
         // 对应的文件夹路径
@@ -31,26 +31,26 @@ public class GuiShortcut implements ActionListener {
         };
         // 按钮颜色
         Color[] btnColors = new Color[]{
-                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.ORANGE
+                Color.GREEN, Color.GREEN, Color.CYAN, Color.MAGENTA, Color.MAGENTA
                 , Color.LIGHT_GRAY, Color.WHITE, Color.GRAY};
         // 开始创建界面
-        JFrame frame = new JFrame("S");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(200, 140 + btnNames.length * 20);
-        frame.setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
-        frame.setLayout(new GridLayout(btnNames.length + 1, 1));
-        frame.setResizable(false); // 禁用最大化窗口
+        setTitle("S");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(200, 140 + btnNames.length * 20);
+        setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
+        setLayout(new GridLayout(btnNames.length + 1, 1));
+        setResizable(false); // 禁用最大化窗口
         JLabel label = new JLabel("自定义快捷方式", SwingConstants.CENTER);
-        frame.add(label);
+        add(label);
         // 为每个按钮添加事件
         for (int i = 0; i < btnNames.length; i++) {
             JButton button1 = new JButton(btnNames[i]);
             button1.setBackground(btnColors[i]);
             button1.addActionListener(this);
             button1.setActionCommand(btnDir[i]);
-            frame.add(button1);
+            add(button1);
         }
-        frame.setVisible(true);
+        setVisible(true);
     }
 
     @Override
@@ -65,6 +65,6 @@ public class GuiShortcut implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(GuiShortcut::new);
+        new GuiShortcut();
     }
 }
