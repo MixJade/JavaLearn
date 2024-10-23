@@ -102,7 +102,7 @@ public class Panel3 extends JPanel implements ActionListener {
             String line;
             while ((line = reader.readLine()) != null) {
                 // 读取
-                if (line.startsWith("http"))
+                if (line.startsWith("http") || line.startsWith("/"))
                     line = ReadTsFromM3u8.getNameFromUrl(line);
                 else if (line.startsWith("#EXT-X-KEY:"))
                     line = ReadTsFromM3u8.getKeyLineForLine(line);

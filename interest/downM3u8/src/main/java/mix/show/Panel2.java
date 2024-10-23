@@ -33,7 +33,7 @@ public class Panel2 extends JPanel implements ActionListener {
     private final JProgressBar progressBar;
     private final Panel1 panel1;
 
-    private final JLabel errCount;
+    private final JLabel errCount, refreshCount;
 
     public Panel2(Panel1 panel1) {
         this.panel1 = panel1;
@@ -103,10 +103,18 @@ public class Panel2 extends JPanel implements ActionListener {
         // 错误计数
         gbc.gridx = 0;
         gbc.gridy = 4;
-        gbc.gridwidth = 12;
+        gbc.gridwidth = 4;
         // 下载进度条
         errCount = new JLabel("错误计数: 0");
         add(errCount, gbc);
+
+        // 错误计数
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        gbc.gridwidth = 6;
+        // 下载进度条
+        refreshCount = new JLabel("刷新计数: 0");
+        add(refreshCount, gbc);
 
         // 同步参数
         syncConfigFormPanel1();
@@ -160,11 +168,14 @@ public class Panel2 extends JPanel implements ActionListener {
         // 定时输出进度
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
+            int refreshCou = 0;
+
             @Override
             public void run() {
                 progressBar.setValue(myOKO.getProgress());
                 progressBar.setString(myOKO.getProgress() + "/" + tsNameSize);
                 errCount.setText("错误计数: " + myOKO.getErrCount());
+                refreshCount.setText("刷新计数: " + refreshCou++);
             }
         }, 0, 5000); // 每5秒执行一次
         try {
@@ -175,9 +186,9 @@ public class Panel2 extends JPanel implements ActionListener {
         }
         // 最后总结
         if (myOKO.getErrCount() > 0) {
-            JOptionPane.showMessageDialog(null, "有部分ts下载失败,请查看错误日志", "错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "有部分ts下载失败,请重下", "错误", JOptionPane.ERROR_MESSAGE);
             saveTsBtn.setText("重下失败Ts");
-            saveTsBtn.setEnabled(false);
+            saveTsBtn.setEnabled(true);
         } else
             JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
     }
