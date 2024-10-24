@@ -1,4 +1,4 @@
-package mix.entiy;
+package mix.model;
 
 import java.util.Objects;
 

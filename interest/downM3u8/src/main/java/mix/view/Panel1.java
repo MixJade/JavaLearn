@@ -1,7 +1,7 @@
-package mix.show;
+package mix.view;
 
-import mix.entiy.Panel2Vo;
-import mix.entiy.Panel3Vo;
+import mix.model.Panel2Vo;
+import mix.model.Panel3Vo;
 import mix.utils.DownFile;
 import mix.utils.ReadTsFromM3u8;
 

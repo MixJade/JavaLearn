@@ -1,6 +1,6 @@
 package mix.utils;
 
-import mix.entiy.TsName;
+import mix.model.TsName;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -1,6 +1,7 @@
-package mix.show;
+package mix.view;
 
-import mix.entiy.Panel3Vo;
+import mix.controller.RunProcessThread;
+import mix.model.Panel3Vo;
 import mix.utils.CheckM3u8;
 import mix.utils.ReadTsFromM3u8;
 
@@ -96,6 +97,12 @@ public class Panel3 extends JPanel implements ActionListener {
         syncConfigFormPanel1();
     }
 
+    /**
+     * 将旧m3u8文件转述成一个新的文件
+     *
+     * @param m3u8Path    旧m3u8路径
+     * @param newM3u8Path 新m3u8路径
+     */
     public static void writeNewM3u8(String m3u8Path, String newM3u8Path) {
         try (var reader = new BufferedReader(new FileReader(m3u8Path));
              var writer = new BufferedWriter(new FileWriter(newM3u8Path))) {
@@ -162,8 +169,8 @@ public class Panel3 extends JPanel implements ActionListener {
                     newM3u8Path, "-c", "copy", movieName.getText() + ".mp4");
             final Process p = pb.start();
             //为了避免阻塞，启动一个新的线程来接受错误流/输出流
-            new RunProcess(p.getErrorStream()).start();
-            new RunProcess(p.getInputStream()).start();
+            new RunProcessThread(p.getErrorStream()).start();
+            new RunProcessThread(p.getInputStream()).start();
 
             // 等待命令执行完毕
             p.waitFor();
@@ -183,24 +190,3 @@ public class Panel3 extends JPanel implements ActionListener {
     }
 }
 
-/**
- * 专门处理命令行输出流的线程
- */
-class RunProcess extends Thread {
-    private final InputStream ioStream;
-
-    RunProcess(InputStream ioStream) {
-        this.ioStream = ioStream;
-    }
-
-    @Override
-    public void run() {
-        // 仅仅只是象征性的读一下，防止命令行的缓冲区爆炸
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(ioStream))) {
-            //noinspection StatementWithEmptyBody
-            while (reader.readLine() != null) {
-            }
-        } catch (IOException ignored) {
-        }
-    }
-}

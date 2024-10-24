@@ -1,12 +1,13 @@
 package mix.utils;
 
+import mix.model.TsFileGroup;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -70,11 +71,5 @@ public class CheckM3u8 {
             }
         }
         return outStr.toString();
-    }
-}
-
-record TsFileGroup(String time1, String time2, String time3, String time4, String tsName) {
-    int getKey() {
-        return Objects.hash(time1, time2, time3, time4);
     }
 }

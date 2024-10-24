@@ -1,8 +1,8 @@
 package mix;
 
-import mix.show.Panel1;
-import mix.show.Panel2;
-import mix.show.Panel3;
+import mix.view.Panel1;
+import mix.view.Panel2;
+import mix.view.Panel3;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

@@ -1,7 +1,9 @@
-package mix.show;
+package mix.view;
 
-import mix.entiy.Panel2Vo;
-import mix.entiy.TsName;
+import mix.controller.DownTsThread;
+import mix.controller.DownTsData;
+import mix.model.Panel2Vo;
+import mix.model.TsName;
 import mix.utils.DownFile;
 import mix.utils.ReadTsFromM3u8;
 
@@ -10,18 +12,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 解析M3u8并下载ts文件
@@ -159,12 +153,12 @@ public class Panel2 extends JPanel implements ActionListener {
             return;
         }
         progressBar.setMaximum(tsNameSize);
-        MyOKO myOKO = new MyOKO(tsNames, parentDir);
+        DownTsData downTsData = new DownTsData(tsNames, parentDir);
         // 创建结束钩子,将列表写入文件
-        Runtime.getRuntime().addShutdownHook(new Thread(myOKO::writeDealItemToFile));
+        Runtime.getRuntime().addShutdownHook(new Thread(downTsData::writeDealItemToFile));
         // 正式开始下载
         for (int i = 0; i < THREAD_COUNT; i++) {
-            new DownTsThread(myOKO, latch, parentDir).start();
+            new DownTsThread(downTsData, latch, parentDir).start();
         }
         // 定时输出进度
         Timer timer = new Timer();
@@ -173,9 +167,9 @@ public class Panel2 extends JPanel implements ActionListener {
 
             @Override
             public void run() {
-                progressBar.setValue(myOKO.getProgress());
-                progressBar.setString(myOKO.getProgress() + "/" + tsNameSize);
-                errCount.setText("错误计数: " + myOKO.getErrCount());
+                progressBar.setValue(downTsData.getProgress());
+                progressBar.setString(downTsData.getProgress() + "/" + tsNameSize);
+                errCount.setText("错误计数: " + downTsData.getErrCount());
                 refreshCount.setText("刷新计数: " + refreshCou++);
             }
         }, 0, 5000); // 每5秒执行一次
@@ -186,7 +180,7 @@ public class Panel2 extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, "线程结束失败", "错误", JOptionPane.ERROR_MESSAGE);
         }
         // 最后总结
-        if (myOKO.getErrCount() > 0) {
+        if (downTsData.getErrCount() > 0) {
             JOptionPane.showMessageDialog(null, "有部分ts下载失败,请重下", "错误", JOptionPane.ERROR_MESSAGE);
             saveTsBtn.setText("重下失败Ts");
             saveTsBtn.setEnabled(true);
@@ -201,126 +195,5 @@ public class Panel2 extends JPanel implements ActionListener {
         Panel2Vo dataToPanel2 = panel1.getDataToPanel2();
         baseUrl.setText(dataToPanel2.baseUrl());
         m3u8SavePath.setText(dataToPanel2.m3u8SavePath());
-    }
-}
-
-/**
- * 公共变量类
- */
-class MyOKO {
-    private final String FILE_NAME; // 保存的文件名
-    private final CopyOnWriteArrayList<TsName> TS_LIST = new CopyOnWriteArrayList<>(),
-            alreadyTlList = new CopyOnWriteArrayList<>();
-    private final AtomicInteger ERROR_COUNT = new AtomicInteger(0);
-
-    public MyOKO(List<TsName> tsList, String dirPath) {
-        FILE_NAME = dirPath + "\\dealItemList.txt";
-        readDingItemFromFile(tsList);
-        TS_LIST.addAll(tsList);
-    }
-
-    /**
-     * 获取下一项待处理，并从待选列表中移除
-     *
-     * @return 下一项待处理的
-     */
-    TsName getNextItem() {
-        if (TS_LIST.isEmpty()) {
-            return null;
-        }
-        return TS_LIST.remove(0);
-    }
-
-    int getProgress() {
-        return alreadyTlList.size();
-    }
-
-    /**
-     * 将已完成的项目加入已完成列表
-     *
-     * @param item 已完成项目
-     */
-    void setProgress(TsName item) {
-        alreadyTlList.add(item);
-    }
-
-    /**
-     * 从文件中读取已完成的项目，并与传来的列表进行筛选
-     *
-     * @param tsList 传来的列表
-     */
-    private void readDingItemFromFile(List<TsName> tsList) {
-        try {
-            Path filePath = Paths.get(FILE_NAME);
-            if (Files.exists(filePath)) {
-                // 文件存在
-                List<String> lines = Files.readAllLines(filePath);
-                List<TsName> haveTsName = new ArrayList<>();
-                for (String line : lines) {
-                    haveTsName.add(new TsName("", line));
-                }
-                // 循环并筛选掉已处理的
-                tsList.removeAll(haveTsName);
-                // 将已处理的加入已处理列表
-                alreadyTlList.addAll(haveTsName);
-            }
-        } catch (IOException ignored) {
-        }
-    }
-
-    /**
-     * 在程序结束时,将所有已完成的项目写入文件中
-     */
-    public void writeDealItemToFile() {
-        File file = new File(FILE_NAME);
-        try {
-            // 创建新文件
-            if (!file.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                file.createNewFile();
-            }
-            // 创建FileWriter对象
-            FileWriter writer = new FileWriter(file);
-            // 向文件写入内容
-            List<String> alreadyTlTextList = alreadyTlList.stream()
-                    .map(TsName::fileName).toList();
-            writer.write(String.join("\n", alreadyTlTextList));
-            writer.close();
-        } catch (IOException ignored) {
-        }
-    }
-
-    void addErrorCount() {
-        ERROR_COUNT.incrementAndGet();
-    }
-
-    int getErrCount() {
-        return ERROR_COUNT.get();
-    }
-}
-
-/**
- * 用于读取元素并计数的线程
- */
-class DownTsThread extends Thread {
-    private final MyOKO myOKO;
-    private final CountDownLatch latch;
-    private final String DIR_PATH;
-
-    public DownTsThread(MyOKO myOKO, CountDownLatch latch, String downDir) {
-        this.myOKO = myOKO;
-        this.latch = latch;
-        this.DIR_PATH = downDir;
-    }
-
-    @Override
-    public void run() {
-        TsName item;
-        while ((item = myOKO.getNextItem()) != null) {
-            boolean downFromWeb = DownFile.downFromWeb(item.url(), DIR_PATH + "\\" + item.fileName());
-            if (downFromWeb) myOKO.setProgress(item);
-            else myOKO.addErrorCount();
-        }
-        latch.countDown();
     }
 }

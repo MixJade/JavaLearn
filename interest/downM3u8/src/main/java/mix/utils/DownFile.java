@@ -1,5 +1,7 @@
 package mix.utils;
 
+import mix.model.ReqHead;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -59,7 +61,4 @@ public class DownFile {
         } catch (Exception ignored) {
         }
     }
-}
-
-record ReqHead(String key, String value) {
 }
