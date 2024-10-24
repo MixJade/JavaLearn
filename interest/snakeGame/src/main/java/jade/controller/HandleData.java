@@ -1,6 +1,4 @@
-package jade.handle;
-
-import jade.SnakeDataConfig;
+package jade.controller;
 
 import javax.swing.*;
 import java.sql.*;

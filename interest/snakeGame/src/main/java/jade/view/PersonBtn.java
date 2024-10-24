@@ -1,16 +1,16 @@
-package jade.recognition;
+package jade.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-public class Person extends JButton implements FocusListener {
+public class PersonBtn extends JButton implements FocusListener {
     int number;
     Color c = new Color(255, 245, 170);
     Font font = new Font("宋体", Font.BOLD, 12);
 
-    Person(int number, String s) {
+    PersonBtn(int number, String s) {
         super(s);
         setBackground(c);
         setFont(font);

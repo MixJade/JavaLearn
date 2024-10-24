@@ -1,11 +1,11 @@
-package jade.recognition;
+package jade.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class HuaRongRoad extends JFrame implements MouseListener, KeyListener, ActionListener {
-    Person[] person = new Person[10];
+    PersonBtn[] personBtns = new PersonBtn[10];
     JButton left, right, above, below;
     JButton restart = new JButton("重新开始");
 
@@ -25,22 +25,22 @@ public class HuaRongRoad extends JFrame implements MouseListener, KeyListener, A
         restart.addActionListener(this);
         String[] name = {"曹操", "关羽", "张", "刘", "周", "黄", "兵", "兵", "兵", "兵"};
         for (int k = 0; k < name.length; k++) {
-            person[k] = new Person(k, name[k]);
-            person[k].addMouseListener(this);
-            person[k].addKeyListener(this);
-            add(person[k]);
+            personBtns[k] = new PersonBtn(k, name[k]);
+            personBtns[k].addMouseListener(this);
+            personBtns[k].addKeyListener(this);
+            add(personBtns[k]);
         }
-        person[0].setBounds(104, 54, 100, 100);
-        person[1].setBounds(104, 154, 100, 50);
-        person[2].setBounds(54, 154, 50, 100);
-        person[3].setBounds(204, 154, 50, 100);
-        person[4].setBounds(54, 54, 50, 100);
-        person[5].setBounds(204, 54, 50, 100);
-        person[6].setBounds(54, 254, 50, 50);
-        person[7].setBounds(204, 254, 50, 50);
-        person[8].setBounds(104, 204, 50, 50);
-        person[9].setBounds(154, 204, 50, 50);
-        person[9].requestFocus();
+        personBtns[0].setBounds(104, 54, 100, 100);
+        personBtns[1].setBounds(104, 154, 100, 50);
+        personBtns[2].setBounds(54, 154, 50, 100);
+        personBtns[3].setBounds(204, 154, 50, 100);
+        personBtns[4].setBounds(54, 54, 50, 100);
+        personBtns[5].setBounds(204, 54, 50, 100);
+        personBtns[6].setBounds(54, 254, 50, 50);
+        personBtns[7].setBounds(204, 254, 50, 50);
+        personBtns[8].setBounds(104, 204, 50, 50);
+        personBtns[9].setBounds(154, 204, 50, 50);
+        personBtns[9].requestFocus();
         left = new JButton();
         right = new JButton();
         above = new JButton();
@@ -66,7 +66,7 @@ public class HuaRongRoad extends JFrame implements MouseListener, KeyListener, A
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Person man = (Person) e.getSource();
+        PersonBtn man = (PersonBtn) e.getSource();
         if (e.getKeyCode() == KeyEvent.VK_DOWN)
             go(man, below);
         if (e.getKeyCode() == KeyEvent.VK_UP)
@@ -79,7 +79,7 @@ public class HuaRongRoad extends JFrame implements MouseListener, KeyListener, A
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Person man = (Person) e.getSource();
+        PersonBtn man = (PersonBtn) e.getSource();
         int x = e.getX(),
                 y = e.getY();
         int w = man.getBounds().width;
@@ -110,7 +110,7 @@ public class HuaRongRoad extends JFrame implements MouseListener, KeyListener, A
     public void mouseClicked(MouseEvent e) {
     }
 
-    public void go(Person man, JButton direction) {
+    public void go(PersonBtn man, JButton direction) {
         boolean move = true;
         Rectangle manRect = man.getBounds();
         int x = man.getBounds().x;
@@ -126,7 +126,7 @@ public class HuaRongRoad extends JFrame implements MouseListener, KeyListener, A
         manRect.setLocation(x, y);
         Rectangle directionRect = direction.getBounds();
         for (int k = 0; k < 10; k++) {
-            Rectangle personRect = person[k].getBounds();
+            Rectangle personRect = personBtns[k].getBounds();
             if ((manRect.intersects(personRect)) && (man.number != k))
                 move = false;
         }

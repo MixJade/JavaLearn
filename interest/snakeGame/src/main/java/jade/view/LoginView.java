@@ -1,6 +1,6 @@
 package jade.view;
 
-import jade.handle.HandleData;
+import jade.controller.HandleData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

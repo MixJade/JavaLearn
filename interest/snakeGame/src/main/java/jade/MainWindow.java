@@ -1,9 +1,9 @@
 package jade;
 
-import jade.handle.HandleData;
-import jade.recognition.HuaRongRoad;
-import jade.recognition.SnakeWindow;
+import jade.controller.HandleData;
+import jade.view.HuaRongRoad;
 import jade.view.RegisterAndLoginView;
+import jade.view.SnakeWindow;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

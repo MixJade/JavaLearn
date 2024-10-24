@@ -1,4 +1,4 @@
-package jade;
+package jade.controller;
 
 /**
  * 贪吃蛇游戏的数据库配置
