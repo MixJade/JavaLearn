@@ -17,10 +17,8 @@ import java.io.InputStream;
  * 贪吃蛇游戏启动类
  */
 public class MainWindow extends JFrame implements ActionListener {
-    JButton gameOne;
-    JButton gameTwo;
-    JButton registerSanYu;
-    RegisterAndLoginView view;
+    private final JButton gameOne, gameTwo, registerSanYu;
+    private final RegisterAndLoginView view;
 
     MainWindow() {
         // 设置图标
@@ -59,7 +57,7 @@ public class MainWindow extends JFrame implements ActionListener {
         if (view.isLoginSuccess()) {
             if (e.getSource() == gameTwo) {
                 SwingUtilities.invokeLater(SnakeWindow::new);
-            } else {
+            } else if (e.getSource() == gameOne) {
                 SwingUtilities.invokeLater(HuaRongRoad::new);
             }
         }
