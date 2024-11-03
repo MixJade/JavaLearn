@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>聊天测试之登录</title>
+    <link href="css/inputAndBtn.min.css" rel="stylesheet">
 </head>
 <body>
-<label for="user">账号：</label>
-<input type="text" name="user" id="user">
-<button type="button" id="btn">登录</button>
-<p id="err_msg"></p>
+<div id="login-form">
+    <label for="user">账号：</label>
+    <input type="text" name="user" id="user">
+    <button type="button" id="btn">登录</button>
+    <p id="err_msg"></p>
+</div>
 <script src="js/jquery-3.6.3.min.js"></script>
 <script>
     $("#btn").click(function () {
-        $.get("http://localhost:8080/toLogin?user=" + $("#user").val(), function (res) {
+        $.get("/toLogin?user=" + $("#user").val(), function (res) {
             if (res["flag"]) location.href = "main.html";
             else $("#err_msg").html(res.message);
         }, "json");

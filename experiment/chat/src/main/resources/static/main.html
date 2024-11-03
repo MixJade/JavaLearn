@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>聊天测试之聊天</title>
@@ -45,7 +45,10 @@
             },
             async: false //同步请求，只有上面好了才会接着下面
         });
-        const ws = new WebSocket("ws://localhost:8080/chat");  // 建立WebSocket对象
+        const ws = new WebSocket("ws://" + window.location.host + "/chat");  // 建立WebSocket对象
+        if (typeof (ws) === "undefined") {
+            alert("您的浏览器不支持socket")
+        }
         ws.onopen = function () { // 通过对象建立ws链接
             $("#username").html("用户：" + username + "<span>在线</span>");
         }
