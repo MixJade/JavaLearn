@@ -126,7 +126,9 @@ public class Bird {
      * @return 加分为真
      */
     public boolean isScore(Pipe p) {
-        return x >= p.getRightX() && x < p.getRightX() + p.getSpeed();
+        boolean hasScore = p.isNewPipe() && x >= p.getRightX();
+        if (hasScore) p.setNewPipe(false);
+        return hasScore;
     }
 
     public BufferedImage getImg() {

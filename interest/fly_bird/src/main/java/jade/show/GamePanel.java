@@ -176,8 +176,8 @@ public class GamePanel extends JPanel {
                             t.cancel();
                         } else if (bird.isScore(pipe1) || bird.isScore(pipe2)) {
                             score.add(); // 分数增加
-                            scoreNum++; // 每五次加分提高难度
-                            if (scoreNum % GameConst.UP_GAP == 0 && scoreNum < GameConst.MAX_LEVEL) {
+                            scoreNum++; // 加分到一定程度会提高难度
+                            if (GameConst.UP_SPEED_LEVEL.contains(scoreNum)) {
                                 System.out.println("速度提升，第" + scoreNum + "分 ");
                                 pipe1.speedUp();
                                 pipe2.speedUp();

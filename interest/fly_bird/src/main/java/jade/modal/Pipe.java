@@ -18,6 +18,7 @@ public class Pipe {
     private final int width, height;// 柱子宽高
     private final Random random = new Random();// 一个生成随机数的对象
     private int speed = GameConst.MOVE_SPEED;
+    private boolean newPipe = true; // 是否没有记过分
 
     public Pipe(int x) {
         img = MyUtil.choice(ImgEnum.RED_PIPE, ImgEnum.GREEN_PIPE);
@@ -30,9 +31,11 @@ public class Pipe {
     // 柱子移动，游戏一旦开始则柱子移动
     public void move() {
         x -= speed;
+        // 柱子离开屏幕就重绘
         if (x <= -width) {
             x = GameConst.WIDTH;
             y = random.nextInt((int) (GameConst.HEIGHT * 0.3), (int) (GameConst.HEIGHT * 0.7));
+            newPipe = true;
         }
     }
 
@@ -100,7 +103,11 @@ public class Pipe {
         this.speed++;
     }
 
-    public int getSpeed() {
-        return speed;
+    public boolean isNewPipe() {
+        return newPipe;
+    }
+
+    public void setNewPipe(boolean newPipe) {
+        this.newPipe = newPipe;
     }
 }

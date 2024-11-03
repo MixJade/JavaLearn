@@ -1,9 +1,11 @@
 package jade.consts;
 
+import java.util.Arrays;
+import java.util.List;
+
 public interface GameConst {
-    int MOVE_SPEED = 1, // 地面及柱子移动初始速度。
-            UP_GAP = 5, // 等级提高的分数间隔
-            MAX_LEVEL = UP_GAP * 5; // 最大速度时的分数
+    int MOVE_SPEED = 3; // 地面及柱子移动初始速度。
+    List<Integer> UP_SPEED_LEVEL = Arrays.asList(5, 20, 50); // 速度提高的分数
     // 界面参数
     String TITLE = "老鸟管道";
     int WIDTH = 300,
