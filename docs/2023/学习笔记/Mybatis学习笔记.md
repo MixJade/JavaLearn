@@ -1,4 +1,4 @@
-# Mybatis部分学习笔记
+# Mybatis学习笔记
 
 1. Mybatis是一个Maven和sql的框架，存在目的是为了解决
     1. 原生模式的硬编码（加载对应接口后，可以以方法形式操作Sql）
@@ -41,7 +41,7 @@
 
 1. **在查询的时候给字段起别名。**
    > 缺点是代码会变得非常难读
-    ```
+    ```xml
     <select id="selectAll" resultType="attempt01.StudentsMessage">
     select 
         id,student_Name as studentName,english_Grade as englishGrade 
@@ -53,7 +53,7 @@
     ```
 2. **通过SQL片段来给列起别名，然后查询的时候引用。**
    > 第一种的升级版，缺点是不太灵活
-    ```
+    ```xml
     <sql id="students_column">
         id,student_Name as studentName,english_Grade as englishGrade
     </sql>
@@ -69,7 +69,7 @@
    > 注意：这个方法中，resultMap的type就是原select的resultType属性，同时将select中的resultType改成相应的resultMap。
 
    ~~查出来的列名和map中对应不上的话，它会报错~~
-    ```
+    ```xml
     <resultMap id="studentsResultMap" type="attempt01.StudentsMessage">
     <result column="english_Grade" property="englishGrade"/>
     </resultMap>
@@ -96,7 +96,7 @@
 
 3. **参数类型**(可以不加)
    *parameterType="int"*
-    ```
+    ```xml
     <select 
     id="selectByTwoSixty"
     parameterType="int" 
@@ -118,7 +118,7 @@
 
 1. **散列函数**
    跟单个查询不同的地方在于，接口中要用 `@Param("xml中的条件参数")` 定义
-    ```
+    ```java
     List<RankShow> selectByTwoSixty(
         @Param("englishGrade") int englishGrade,
         @Param("mathGrade") int mathGrade
@@ -146,12 +146,11 @@
         </select>
     ```
    接口文件：
-    ```
-    List<RankShow> 
-        selectDimObject(RankShow rankShow);
+    ```java
+    List<RankShow> selectDimObject(RankShow rankShow);
     ```
    实现用法见`MybatisFourthDemo.java`
-
+   
 3. **Map封装参数**
    > SQL中的参数名要跟map中的键一样
 
@@ -222,7 +221,7 @@
 
 只需要在接口中通过注解进行定义SQL语句即可，不需要通过映射文件，这种方法更加直接，但是如果SQL语句较为复杂的话会非常难看。
 
-```
+```java
     @Select(
         "select * from 
         students s1, societys s2
