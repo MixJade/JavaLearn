@@ -81,26 +81,22 @@ public class SkinSnake extends KeyAdapter {
         //获取 键盘按下的键。
         int keyCode = e.getKeyCode();
         switch (keyCode) {
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
+            case KeyEvent.VK_UP, KeyEvent.VK_W -> {
                 if (getDirection() != KeyEvent.VK_DOWN)
                     setDirection(KeyEvent.VK_UP);
-                break;
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
+            }
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
                 if (getDirection() != KeyEvent.VK_UP)
                     setDirection(KeyEvent.VK_DOWN);
-                break;
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
+            }
+            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
                 if (getDirection() != KeyEvent.VK_RIGHT)
                     setDirection(KeyEvent.VK_LEFT);
-                break;
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
+            }
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
                 if (getDirection() != KeyEvent.VK_LEFT)
                     setDirection(KeyEvent.VK_RIGHT);
-                break;
+            }
         }
     }
 }
