@@ -14,6 +14,12 @@
 </div>
 <script src="js/jquery-3.6.3.min.js"></script>
 <script>
+    window.onload = () => {
+        $.get("/getRandomName", res => {
+            $("#user").val(res)
+        });
+    }
+
     $("#btn").click(function () {
         $.get("/toLogin?user=" + $("#user").val(), function (res) {
             if (res["flag"]) location.href = "main.html";

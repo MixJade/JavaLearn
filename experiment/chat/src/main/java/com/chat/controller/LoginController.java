@@ -1,6 +1,7 @@
 package com.chat.controller;
 
 import com.chat.pojo.Result;
+import com.chat.utils.NameUtil;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+
+    @GetMapping("/getRandomName")
+    public String getRandomName() {
+        return NameUtil.getName();
+    }
 
     @GetMapping("/toLogin")
     public Result toLogin(@RequestParam("user") String user, HttpSession session) {
