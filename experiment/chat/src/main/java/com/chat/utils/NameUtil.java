@@ -1,6 +1,7 @@
 package com.chat.utils;
 
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class NameUtil {
@@ -114,6 +115,9 @@ public class NameUtil {
             "鼓上蚤时迁",
             "金毛犬段景住",
     };
+
+    // 当前登录用户
+    public static final CopyOnWriteArrayList<String> nowName = new CopyOnWriteArrayList<>();
 
     public static String getName() {
         return names[new Random().nextInt(names.length)];

@@ -25,6 +25,7 @@ public class LoginController {
         log.info("用户【{}】登录", user);
         if (user != null && !user.isBlank()) {
             session.setAttribute("user", user);
+            NameUtil.nowName.add(user);
             return new Result(true, "成功");
         } else {
             return new Result(false, "失败");
