@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,8 +47,6 @@ public class ChatEndpoint {
         BASICS_MAP.put(userVo.username(), basicRemote);
         // 将刚上线的用户名推送给所有的客户端
         broadcastAllUsers(true, userVo.username());
-        // 同步历史消息
-        syncHistoryMsg(basicRemote);
     }
 
     /**
@@ -68,18 +67,9 @@ public class ChatEndpoint {
 
     /**
      * 将当前的历史消息同步给客户端
-     *
-     * @param basicRemote 客户端的远程端点
      */
-    private void syncHistoryMsg(Basic basicRemote) {
-        if (MSG_LIST.size() == 0) return;
-        try {
-            for (String message : MSG_LIST) {
-                basicRemote.sendText(message);
-            }
-        } catch (Exception e) {
-            log.warn("消息同步失败");
-        }
+    public static List<String> getHistoryMsg() {
+        return MSG_LIST;
     }
 
     /**

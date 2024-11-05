@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 public class LoginController {
@@ -43,6 +45,11 @@ public class LoginController {
         UserVo userVo = (UserVo) session.getAttribute("user");
         if (userVo == null) return "noMan";
         return userVo.username();
+    }
+
+    @GetMapping("/syncHistoryMsg")
+    public List<String> syncHistoryMsg(){
+        return ChatEndpoint.getHistoryMsg();
     }
 }
 

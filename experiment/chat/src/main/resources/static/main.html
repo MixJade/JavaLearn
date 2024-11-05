@@ -29,13 +29,20 @@
     $(function () {
             $.ajax({
                 url: "getUsername", // 获取与设置用户名
-                success: function (res) {
+                success: res => {
                     if (res === "noMan") location.href = "index.html"
                     username = res;
                     $("#header2").html("当前账号:" + username);
                 },
                 async: false //同步请求，只有上面好了才会接着下面
             });
+            // 获取历史消息
+            $.get("syncHistoryMsg", res => {
+                res.forEach(i => dealMsg(i))
+                // 向下滑动
+                chatContent.animate({scrollTop: chatContent[0].scrollHeight}, 1000)
+            })
+            const chatContent = $('#chatContent');
             // 链接webSocket
             const ws = new WebSocket("ws://" + window.location.host + "/chat");  // 建立WebSocket对象
             if (typeof (ws) === "undefined") {
@@ -46,9 +53,12 @@
             }
             //接受消息
             ws.onmessage = function (ev) {
-                const dataStr = ev.data;
+                dealMsg(ev.data)
+                // 向下滑动
+                chatContent.animate({scrollTop: chatContent[0].scrollHeight}, 1000)
+            }
+            const dealMsg = (dataStr) => {
                 const res = JSON.parse(dataStr);
-                const chatContent = $('#chatContent');
                 if (res["isSystem"]) {
                     // 是系统消息
                     chatContent.append(`<span class="noticeMsg">${res["message"]}</span>`)
@@ -65,8 +75,6 @@
             <span class="msgUser">${res["userVo"]["username"]} ${res["sendTime"]}</span>
             <div class="msgImg" style="background-color: ${res["userVo"]["imgColor"]}">${res["userVo"]["simpleNm"]}</div>
             <div class="msgContent" ${selfColor}>${messageText}</div></div>`)
-                    // 向下滑动
-                    chatContent.animate({scrollTop: chatContent[0].scrollHeight}, 1000)
                 }
             }
             // 关闭链接
