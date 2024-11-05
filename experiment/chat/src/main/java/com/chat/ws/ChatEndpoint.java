@@ -43,10 +43,12 @@ public class ChatEndpoint {
         //存储登陆的对象
         UserVo userVo = (UserVo) httpSession.getAttribute("user");
         if (userVo == null) return;
+        String username = userVo.username();
+        log.info("用户【{}】上线", username);
         Basic basicRemote = session.getBasicRemote();
-        BASICS_MAP.put(userVo.username(), basicRemote);
+        BASICS_MAP.put(username, basicRemote);
         // 将刚上线的用户名推送给所有的客户端
-        broadcastAllUsers(true, userVo.username());
+        broadcastAllUsers(true, username);
     }
 
     /**
@@ -61,6 +63,7 @@ public class ChatEndpoint {
             for (String name : names)
                 BASICS_MAP.get(name).sendText(message);
         } catch (Exception e) {
+            e.printStackTrace();
             log.warn("系统广播失败");
         }
     }
@@ -91,6 +94,7 @@ public class ChatEndpoint {
             for (String name : names)
                 BASICS_MAP.get(name).sendText(sendMsg);
         } catch (Exception e) {
+            e.printStackTrace();
             log.warn("信息发送失败");
         }
     }
