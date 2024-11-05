@@ -1,18 +1,18 @@
 package com.chat.ws;
 
-
 import com.chat.pojo.Message;
-import com.chat.pojo.MsgUser;
-import com.chat.pojo.SocketMsg;
-import com.chat.utils.NameUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.chat.pojo.UserVo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.*;
+import jakarta.websocket.RemoteEndpoint.Basic;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -23,7 +23,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ChatEndpoint {
     private static final Logger log = LoggerFactory.getLogger(ChatEndpoint.class);
 
-    private static final CopyOnWriteArrayList<MsgUser> MSG_USER_LIST = new CopyOnWriteArrayList<>();
+    // 所有用户的远程端点集合
+    private static final Map<String, Basic> BASICS_MAP = new ConcurrentHashMap<>();
+
+    // 历史存储的消息
+    private static final CopyOnWriteArrayList<String> MSG_LIST = new CopyOnWriteArrayList<>();
 
     /**
      * 声明HttpSession对象，登录时在HttpSession对象中存储了用户名
@@ -36,46 +40,66 @@ public class ChatEndpoint {
         HttpSession httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         this.httpSession = httpSession;
         //存储登陆的对象
-        String username = (String) httpSession.getAttribute("user");
-        if (username == null) return;
-        MSG_USER_LIST.add(new MsgUser(username, session.getBasicRemote()));
-        // 将当前在线用户的用户名推送给所有的客户端
-        broadcastAllUsers();
+        UserVo userVo = (UserVo) httpSession.getAttribute("user");
+        if (userVo == null) return;
+        Basic basicRemote = session.getBasicRemote();
+        BASICS_MAP.put(userVo.username(), basicRemote);
+        // 将刚上线的用户名推送给所有的客户端
+        broadcastAllUsers(true, userVo.username());
+        // 同步历史消息
+        syncHistoryMsg(basicRemote);
     }
 
     /**
      * 将当前在线用户的用户名推送给所有的客户端
      */
-    private void broadcastAllUsers() {
-        String message = SocketMsg.getMsg(true, null, NameUtil.nowName);
-        log.info("系统广播是:" + message);
+    private void broadcastAllUsers(boolean isUP, String userName) {
+        String message = Message.getSystemMsg(isUP, userName);
+        // log.info("系统广播:" + message);
         try {
-            //将消息推送给所有的客户端
-            for (MsgUser msgUser : MSG_USER_LIST) {
-                msgUser.basic().sendText(message);
-            }
+            // 将消息推送给所有的客户端
+            Set<String> names = BASICS_MAP.keySet();
+            for (String name : names)
+                BASICS_MAP.get(name).sendText(message);
         } catch (Exception e) {
             log.warn("系统广播失败");
         }
     }
 
-    //收到客户端发送数据
+    /**
+     * 将当前的历史消息同步给客户端
+     *
+     * @param basicRemote 客户端的远程端点
+     */
+    private void syncHistoryMsg(Basic basicRemote) {
+        if (MSG_LIST.size() == 0) return;
+        try {
+            for (String message : MSG_LIST) {
+                basicRemote.sendText(message);
+            }
+        } catch (Exception e) {
+            log.warn("消息同步失败");
+        }
+    }
+
+    /**
+     * 收到客户端发送数据
+     *
+     * @param message 客户端发的消息,需json转换
+     */
     @OnMessage
     public void onMessage(String message) {
         //将数据转换成对象
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            Message mess = mapper.readValue(message, Message.class);
-            log.info("信息是" + mess);
-            String toName = mess.toName();
-            String data = mess.message();
-            String username = (String) httpSession.getAttribute("user");
-            String socketMsg = SocketMsg.getMsg(false, username, data);
+            UserVo userVo = (UserVo) httpSession.getAttribute("user");
+            // log.info("用户【{}】说:{}", userVo.username(), message);
+            String sendMsg = Message.getUserMsg(userVo, message);
+            MSG_LIST.add(sendMsg);
             //发送数据
-            for (MsgUser msgUser : MSG_USER_LIST) {
-                if (msgUser.username().equals(toName))
-                    msgUser.basic().sendText(socketMsg);
-            }
+            //将消息推送给所有的客户端
+            Set<String> names = BASICS_MAP.keySet();
+            for (String name : names)
+                BASICS_MAP.get(name).sendText(sendMsg);
         } catch (Exception e) {
             log.warn("信息发送失败");
         }
@@ -84,13 +108,39 @@ public class ChatEndpoint {
     //链接关闭
     @OnClose
     public void onClose() {
-        String username = (String) httpSession.getAttribute("user");
-        if (username == null) return;
+        UserVo userVo = (UserVo) httpSession.getAttribute("user");
+        if (userVo == null) return;
+        String username = userVo.username();
+        log.info("用户【{}】离线", username);
         // 从容器中删除指定的用户
-        MSG_USER_LIST.removeIf(i -> i.username().equals(username));
-        NameUtil.nowName.remove(username);
+        BASICS_MAP.remove(username);
         // 通知用户
-        broadcastAllUsers();
+        broadcastAllUsers(false, username);
+    }
+
+    /**
+     * 配置错误信息处理
+     *
+     * @param session 客户端会话,缺少会报错
+     * @param t       WebSocket抛的异常,缺少会报错
+     */
+    @OnError
+    @SuppressWarnings("unused")
+    public void onError(Session session, Throwable t) {
+        // 什么都不想打印都去掉就好了
+        log.info("WebSocket出错");
+        // 这里打印的也是  java.io.EOFException: null
+        // t.printStackTrace();
+    }
+
+    /**
+     * 检查是否重名
+     *
+     * @param username 新的用户名
+     * @return 重名了
+     */
+    public static boolean isDupName(String username) {
+        return BASICS_MAP.containsKey(username);
     }
 }
 

@@ -1,7 +1,10 @@
 package com.chat.controller;
 
 import com.chat.pojo.Result;
+import com.chat.pojo.UserVo;
+import com.chat.utils.ColorUtil;
 import com.chat.utils.NameUtil;
+import com.chat.ws.ChatEndpoint;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +25,13 @@ public class LoginController {
 
     @GetMapping("/toLogin")
     public Result toLogin(@RequestParam("user") String user, HttpSession session) {
-        log.info("用户【{}】登录", user);
         if (user != null && !user.isBlank()) {
-            session.setAttribute("user", user);
-            NameUtil.nowName.add(user);
+            if (ChatEndpoint.isDupName(user))
+                return new Result(false, "名称重复");
+            session.setAttribute("user", new UserVo(user,
+                    ColorUtil.randomColor(),
+                    user.substring(user.length() - 1)));
+            log.info("用户【{}】登录", user);
             return new Result(true, "成功");
         } else {
             return new Result(false, "失败");
@@ -34,9 +40,9 @@ public class LoginController {
 
     @GetMapping("/getUsername")
     public String getUsername(HttpSession session) {
-        String username = (String) session.getAttribute("user");
-        if (username == null) return "noMan";
-        return username;
+        UserVo userVo = (UserVo) session.getAttribute("user");
+        if (userVo == null) return "noMan";
+        return userVo.username();
     }
 }
 
