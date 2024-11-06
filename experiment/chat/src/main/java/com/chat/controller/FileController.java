@@ -3,14 +3,21 @@ package com.chat.controller;
 import com.chat.pojo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文件上传下载所调用的接口
@@ -21,8 +28,15 @@ public class FileController {
     private static final Logger log = LoggerFactory.getLogger(FileController.class);
     private static final String dirPath = Paths.get("").toAbsolutePath() + "\\chatFile\\";
 
+    /**
+     * 上传文件
+     *
+     * @param myFile formData格式的文件
+     * @return 上传成功
+     */
     @PostMapping("/upload")
     public Result upload(MultipartFile myFile) {
+        if (myFile == null) return new Result(false, "请选择文件");
         // 检查对应目录是否存在
         File directory = new File(dirPath);
         if (!directory.exists()) {
@@ -45,6 +59,51 @@ public class FileController {
             log.warn("转存图片失败");
             return new Result(false, "上传失败");
         }
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param filename 文件名
+     * @return 下载文件流
+     */
+    @GetMapping("/down/{filename}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String filename) {
+        String filePath = dirPath + filename;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            InputStreamResource resource = new InputStreamResource(fileInputStream);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8))
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 获取可下载的文件列表
+     *
+     * @return chatFile的存在文件
+     */
+    @GetMapping("/getFileList")
+    public List<String> getFileList() {
+        List<String> fileNames = new ArrayList<>();
+        // 检查对应目录是否存在
+        File directory = new File(dirPath);
+        if (directory.exists()) {
+            // 存在则返回文件名列表
+            File[] listOfFiles = directory.listFiles();
+            if (listOfFiles == null) return fileNames;
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    fileNames.add(file.getName());
+                }
+            }
+        }
+        return fileNames;
     }
 }
 

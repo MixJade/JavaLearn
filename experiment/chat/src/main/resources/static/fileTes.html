@@ -5,11 +5,19 @@
     <title>文件上传下载</title>
 </head>
 <body>
+<h3>文件上传</h3>
 <input type="file" id="fileInput">
 <button type="button" id="uploadBtn">确认上传</button>
+<h3>文件下载</h3>
+<ul id="downUl">
+</ul>
 </body>
 <script src="js/jquery-3.6.3.min.js"></script>
 <script>
+    "use strict";
+    window.onload = () => getFileList()
+
+    // 上传文件
     $('#uploadBtn').click(() => {
         const fileInput = $('#fileInput').get(0);
         const myFile = fileInput.files[0]
@@ -23,8 +31,22 @@
             contentType: false,  // 不设置内容类型
             success: res => {
                 alert(res["msg"])
+                // 上传成功之后刷新
+                if (res["flag"]) getFileList()
             }
         });
     })
+
+    // 输出可下载文件的列表
+    const getFileList = () => {
+        $.get("/file/getFileList", res => {
+            const downUl = $('#downUl');
+            downUl.html("")
+            if (res.length > 0)
+                res.forEach(i => downUl.append(`<li><a href="/file/down/${i}">${i}</a></li>`))
+            else
+                downUl.html("<li>暂无可下载资源</li>")
+        })
+    }
 </script>
 </html>
