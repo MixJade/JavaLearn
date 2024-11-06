@@ -25,6 +25,7 @@
 </body>
 <script src="js/jquery-3.6.3.min.js"></script>
 <script>
+    "use strict";
     let username;
     $(function () {
             $.ajax({
@@ -90,6 +91,14 @@
                 //发送数据
                 if (data === "") return;
                 ws.send(data);
+            })
+
+            //获取登录人列表
+            $('#header3').click(() => {
+                $.get("getLoginUserList", res => {
+                    if (res.length === 0) alert("无人在线")
+                    else alert(res)
+                })
             })
         }
     )

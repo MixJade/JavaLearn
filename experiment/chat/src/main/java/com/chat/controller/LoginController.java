@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -50,6 +51,11 @@ public class LoginController {
     @GetMapping("/syncHistoryMsg")
     public List<String> syncHistoryMsg(){
         return ChatEndpoint.getHistoryMsg();
+    }
+
+    @GetMapping("/getLoginUserList")
+    public Set<String> getLoginUserList(){
+        return ChatEndpoint.getLoginUserList();
     }
 }
 

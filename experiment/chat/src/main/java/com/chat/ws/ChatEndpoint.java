@@ -136,5 +136,12 @@ public class ChatEndpoint {
     public static boolean isDupName(String username) {
         return BASICS_MAP.containsKey(username);
     }
+
+    /**
+     * 获取当前登录人列表
+     */
+    public static Set<String> getLoginUserList() {
+        return BASICS_MAP.keySet();
+    }
 }
 
