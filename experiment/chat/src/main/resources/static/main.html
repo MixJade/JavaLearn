@@ -29,7 +29,7 @@
     let username;
     $(function () {
             $.ajax({
-                url: "getUsername", // 获取与设置用户名
+                url: "/chat/getUsername", // 获取与设置用户名
                 success: res => {
                     if (res === "noMan") location.href = "index.html"
                     username = res;
@@ -38,7 +38,7 @@
                 async: false //同步请求，只有上面好了才会接着下面
             });
             // 获取历史消息
-            $.get("syncHistoryMsg", res => {
+            $.get("/chat/syncHistoryMsg", res => {
                 res.forEach(i => dealMsg(i))
                 // 向下滑动
                 chatContent.animate({scrollTop: chatContent[0].scrollHeight}, 1000)
@@ -95,7 +95,7 @@
 
             //获取登录人列表
             $('#header3').click(() => {
-                $.get("getLoginUserList", res => {
+                $.get("/chat/getLoginUserList", res => {
                     if (res.length === 0) alert("无人在线")
                     else alert(res)
                 })

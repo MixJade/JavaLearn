@@ -23,13 +23,13 @@
     }
 
     const randomName = () => {
-        $.get("/getRandomName", res => {
+        $.get("/login/getRandomName", res => {
             $("#user").val(res)
         });
     }
 
     $("#chatDiv").click(function () {
-        $.get("/toLogin?user=" + $("#user").val(), function (res) {
+        $.get("/login/toLogin?user=" + $("#user").val(), function (res) {
             if (res["flag"]) location.href = "main.html";
             else alert(res["msg"]);
         }, "json");
