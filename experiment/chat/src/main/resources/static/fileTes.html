@@ -9,6 +9,10 @@
 <input type="file" id="fileInput">
 <button type="button" id="uploadBtn">确认上传</button>
 <h3>文件下载</h3>
+<label for="absoluteFilePath">下载远程电脑的文件</label>
+<input type="text" id="absoluteFilePath" placeholder="输入绝对路径">
+<button type="button" id="downServerBtn">下载</button>
+<!--文件列表-->
 <ul id="downUl">
 </ul>
 </body>
@@ -48,5 +52,16 @@
                 downUl.html("<li>暂无可下载资源</li>")
         })
     }
+
+    // 下载远程电脑的文件
+    $('#downServerBtn').click(() => {
+        const absoluteFilePath = $('#absoluteFilePath').val();
+        if (absoluteFilePath === "") return;
+        $.get("/file/checkServer?absoluteFile=" + absoluteFilePath, res => {
+            if (res["flag"])
+                location.href = "/file/downServer?absoluteFile=" + absoluteFilePath
+            else alert("该文件路径无效")
+        })
+    })
 </script>
 </html>

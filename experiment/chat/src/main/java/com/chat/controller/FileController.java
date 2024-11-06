@@ -70,12 +70,58 @@ public class FileController {
     @GetMapping("/down/{filename}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String filename) {
         String filePath = dirPath + filename;
-        try {
-            FileInputStream fileInputStream = new FileInputStream(filePath);
-            InputStreamResource resource = new InputStreamResource(fileInputStream);
+        return downFile(filePath, filename);
+    }
 
+    /**
+     * 检查服务端文件是否有效
+     *
+     * @param absoluteFile 文件的绝对路径，如：C:\MyCode\ChatApplication.java
+     * @return 下载文件流
+     */
+    @GetMapping("/checkServer")
+    public Result checkServer(String absoluteFile) {
+        File file = new File(absoluteFile);
+        if (file.exists())
+            return new Result(true, "文件有效");
+        else return new Result(false, "文件无效");
+    }
+
+    /**
+     * 下载服务端文件
+     *
+     * @param absoluteFile 文件的绝对路径，如：C:\MyCode\ChatApplication.java
+     * @return 下载文件流
+     */
+    @GetMapping("/downServer")
+    public ResponseEntity<InputStreamResource> downServerFile(String absoluteFile) {
+        log.info("下载服务端文件:{}", absoluteFile);
+        File file = new File(absoluteFile);
+        if (file.exists()) {
+            String fileName = file.getName();
+            return downFile(absoluteFile, fileName);
+        } else {
+            log.info("服务端文件不存在");
+            return null;
+        }
+    }
+
+    /**
+     * 下载
+     *
+     * @param absoluteFile 文件的绝对路径，如: C:\MyCode\ChatApplication.java
+     * @param fileName     文件名, 如: ChatApplication.java
+     * @return 下载输入流
+     */
+    private ResponseEntity<InputStreamResource> downFile(String absoluteFile, String fileName) {
+        try {
+            log.info("下载{}", fileName);
+            FileInputStream fileInputStream = new FileInputStream(absoluteFile);
+            InputStreamResource resource = new InputStreamResource(fileInputStream);
+            // 还需对文件名进行转码
+            String encodeName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + encodeName)
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
         } catch (Exception e) {
