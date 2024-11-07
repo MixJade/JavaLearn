@@ -1,6 +1,5 @@
 package zhouYi;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,7 +20,6 @@ public class GuiZhouYi extends JFrame implements ActionListener {
     private final JTextArea resultArea;
 
     public static void main(String[] args) {
-        FlatDarkLaf.setup();
         new GuiZhouYi();
     }
 
@@ -41,7 +39,7 @@ public class GuiZhouYi extends JFrame implements ActionListener {
 
         // 中间面板
         JPanel centerPanel = new JPanel();
-        resultArea = new JTextArea(5, 24);
+        resultArea = new JTextArea(7, 48);
         resultArea.setEditable(false);
         // 创建边框
         Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3);
@@ -52,7 +50,7 @@ public class GuiZhouYi extends JFrame implements ActionListener {
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
         // 窗口设置
-        setSize(400, 200);
+        setSize(580, 280);
         setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
         // 启动窗口
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
