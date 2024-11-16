@@ -1,5 +1,13 @@
 # Linux启动Jar
 
+## 安装jdk命令
+
+```sh
+$ sudo apt install openjdk-17-jdk
+```
+
+## 运行jar包
+
 后面的jar包名可以直接将对应的jar包拖入终端获得。
 
 ```bash
