@@ -71,13 +71,16 @@ public class FileController {
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String filename) {
         String filePath = dirPath + filename;
         try {
-            log.info("下载{}", filename);
-            FileInputStream fileInputStream = new FileInputStream(filePath);
+            File file = new File(filePath);
+            String fileLength = String.valueOf(file.length());
+            log.info("下载{}  文件大小{}", filename, fileLength);
+            FileInputStream fileInputStream = new FileInputStream(file);
             InputStreamResource resource = new InputStreamResource(fileInputStream);
             // 还需对文件名进行转码
             String encodeName = URLEncoder.encode(filename, StandardCharsets.UTF_8);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + encodeName)
+                    .header(HttpHeaders.CONTENT_LENGTH, fileLength)
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
         } catch (Exception e) {
