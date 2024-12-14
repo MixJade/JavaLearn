@@ -8,6 +8,10 @@
 <h3>文件上传</h3>
 <input type="file" id="fileInput">
 <button type="button" id="uploadBtn">确认上传</button>
+<div id="progressDiv" style="display: none;">
+    <progress id="progressBar" max="100" value="0">0%</progress>
+    <span id="progressTxt">上传进度</span>
+</div>
 <hr>
 <h3>文件下载</h3>
 <ul id="downUl">
@@ -30,13 +34,35 @@
             data: formData,
             processData: false,  // 不处理数据
             contentType: false,  // 不设置内容类型
+            xhr: () => {
+                progressDiv.show(); // 展示上传进度条
+                const xhr = $.ajaxSettings.xhr();
+                if (onprogress && xhr.upload) {
+                    xhr.upload.addEventListener("progress", onprogress, false);
+                    return xhr;
+                }
+            },
             success: res => {
+                progressDiv.hide(); // 展示上传进度条
                 alert(res["msg"])
                 // 上传成功之后刷新
                 if (res["flag"]) getFileList()
             }
         });
     })
+
+    // 上传进度条相关
+    const progressDiv = $('#progressDiv')
+    const progressBar = $('#progressBar')
+    const progressTxt = $('#progressTxt')
+    const onprogress = evt => {
+        //已经上传大小情况 / 附件总大小
+        const per = 100 * (evt.loaded / evt.total);  //已经上传的百分比
+        console.log("已经上传了：" + per + "%");
+        //在这里对页面的进度条进行操作
+        progressBar.val(per)
+        progressTxt.text(evt.loaded + "/" + evt.total)
+    }
 
     // 输出可下载文件的列表
     const getFileList = () => {
