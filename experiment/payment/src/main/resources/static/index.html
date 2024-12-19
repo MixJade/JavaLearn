@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>记账管理</title>
+    <link href="assert/myCurl.min.css" rel="stylesheet">
+</head>
+<body>
+<!--搜索框-->
+<section class="mySearch">
+    <form role="search" onsubmit="return false">
+        <input type="search" placeholder="名字" aria-label="Search" id="searchInput">
+        <button class="btn-line-suc" type="submit" onclick="getAll()">Search</button>
+    </form>
+    <div>
+        <button type="button" class="my-btn btn-success" onclick="showDialog()">添加</button>
+    </div>
+</section>
+<!-- 表格 -->
+<table class="my-table">
+    <caption>收支记录</caption>
+    <thead>
+    <tr>
+        <th>收支</th>
+        <th>类型</th>
+        <th>金额</th>
+        <th>备注</th>
+        <th>付费时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tb-main">
+    <!--此处靠js来填充-->
+    </tbody>
+</table>
+<!--添加模态框-->
+<dialog class="myDialog" id="myDialog">
+    <form class="myForm" id="addPetForm">
+        <fieldset>
+            <legend id="dialogTit">添加记录</legend>
+            <input type="hidden" id="recordId">
+            <div class="form-row">
+                <label for="paymentType">收支类型</label>
+                <input id="paymentType" type="text">
+            </div>
+            <div class="form-row">
+                <label>收支</label>
+                <div style="display: inline-block">
+                    <input name="sex" id="isIncome_1" type="radio" autocomplete="off">
+                    <label for="isIncome_1">收入</label>
+                    <input name="sex" id="isIncome_2" type="radio" autocomplete="off" checked>
+                    <label for="isIncome_2">支出</label>
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="money">金额</label>
+                <input id="money" type="number" step="0.1" min="0.01" max="10000"
+                       value="1">
+            </div>
+            <div class="form-row">
+                <label for="remark">备注</label>
+                <input id="remark" type="text">
+            </div>
+            <div class="form-row">
+                <label for="payDate">付费时间</label>
+                <input id="payDate" type="date">
+            </div>
+        </fieldset>
+        <div class="form-footer">
+            <button class="my-btn btn-secondary" type="button" onclick="closeDialog()">关闭</button>
+            <button class="my-btn btn-primary" type="button" onclick="submitForm()">确认提交</button>
+        </div>
+    </form>
+</dialog>
+<!--删除确认框-->
+<dialog id="sureDelModal">
+    <p>
+        一旦删除，数据无法找回，是否删除
+    </p>
+    <div style="text-align: right">
+        <button class="my-btn btn-danger" type="button" id="sureDelBtn">确认</button>
+        <button class="my-btn btn-secondary" type="button" onclick="cancelDel()">取消</button>
+    </div>
+</dialog>
+<!--吐司消息显示框-->
+<div id="myTus"></div>
+</body>
+<!--表格：一行-->
+<template id="trTemp">
+    <tr>
+        <td>收支</td>
+        <td>类型</td>
+        <td>金额</td>
+        <td>备注</td>
+        <td>付费时间</td>
+        <td>
+            <button class="del-btn" type="button">❌</button>
+            <button class="upd-btn" type="button">🖊</button>
+        </td>
+    </tr>
+</template>
+<!--吐司：正确消息-->
+<template id="tus-temp">
+    <div class="tus tus-suc">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+            <circle cx="12" cy="12" r="11" fill="#67C23A"/>
+            <path d="M7 12 L12 17 L17 7" stroke="white" stroke-width="2" fill="none"/>
+        </svg>
+        <span>这是一条吐司消息</span>
+    </div>
+</template>
+<!--吐司：错误消息-->
+<template id="tus-temp2">
+    <div class="tus tus-fail">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+            <circle cx="12" cy="12" r="11" fill="#F56C6C"/>
+            <line x1="17" y1="7" x2="7" y2="17" stroke="white" stroke-width="2"/>
+            <line x1="17" y1="17" x2="7" y2="7" stroke="white" stroke-width="2"/>
+        </svg>
+        <span>这是一条吐司消息</span>
+    </div>
+</template>
+<script src="assert/myCurl.js"></script>
+</html>
