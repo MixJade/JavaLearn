@@ -1,7 +1,8 @@
 package com.demo.service;
 
-import com.demo.model.entity.PaymentDict;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.demo.model.entity.PaymentDict;
+import com.demo.model.vo.TypeOption;
 
 import java.util.List;
 
@@ -15,6 +16,11 @@ import java.util.List;
  */
 public interface IPaymentDictService extends IService<PaymentDict> {
 
-    // 获取选项值
-    List<PaymentDict> getOption();
+    /**
+     * 获取选项值
+     *
+     * @param isIncome 是否收入
+     * @return 收入大类+其下的小类
+     */
+    List<TypeOption> getOption(boolean isIncome);
 }

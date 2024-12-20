@@ -41,17 +41,18 @@
             <legend id="dialogTit">添加记录</legend>
             <input type="hidden" id="recordId">
             <div class="form-row">
-                <label for="paymentType">收支类型</label>
-                <select id="paymentType"></select>
-            </div>
-            <div class="form-row">
                 <label>收支</label>
                 <div style="display: inline-block">
-                    <input name="sex" id="isIncome_1" type="radio" autocomplete="off">
+                    <input name="sex" id="isIncome_1" type="radio" autocomplete="off" onchange="inComeChange(1)">
                     <label for="isIncome_1">收入</label>
-                    <input name="sex" id="isIncome_2" type="radio" autocomplete="off" checked>
+                    <input name="sex" id="isIncome_2" type="radio" autocomplete="off" onchange="inComeChange(0)"
+                           checked>
                     <label for="isIncome_2">支出</label>
                 </div>
+            </div>
+            <div class="form-row">
+                <label for="paymentType">收支类型</label>
+                <select id="paymentType"></select>
             </div>
             <div class="form-row">
                 <label for="money">金额(绝对值)</label>

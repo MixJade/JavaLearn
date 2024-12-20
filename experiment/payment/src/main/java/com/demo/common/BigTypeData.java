@@ -3,7 +3,9 @@ package com.demo.common;
 import com.demo.model.vo.BigType;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 收支类型大类
@@ -26,5 +28,13 @@ public class BigTypeData {
 
     public static List<BigType> getBigTypes() {
         return bigTypes;
+    }
+
+    public static Map<Integer, String> getMap() {
+        Map<Integer, String> bigTypeMap = new HashMap<>();
+        for (BigType bigType : bigTypes) {
+            bigTypeMap.put(bigType.typeKey(), bigType.typeName());
+        }
+        return bigTypeMap;
     }
 }

@@ -4,6 +4,7 @@ import com.demo.common.BigTypeData;
 import com.demo.common.Result;
 import com.demo.model.entity.PaymentDict;
 import com.demo.model.vo.BigType;
+import com.demo.model.vo.TwoTypeOption;
 import com.demo.service.IPaymentDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -60,8 +61,11 @@ public class PaymentDictController {
     }
 
     @GetMapping("/option")
-    public List<PaymentDict> getOption() {
-        return paymentDictService.getOption();
+    public TwoTypeOption getOption() {
+        return new TwoTypeOption(
+                paymentDictService.getOption(true),
+                paymentDictService.getOption(false)
+        );
     }
 
     @GetMapping("/{id}")

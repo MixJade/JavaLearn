@@ -3,20 +3,46 @@ window.onload = () => {
     getAll()
 };
 
-const paymentTypeMap = new Map();
+/**
+ * 组装支付类型下拉框
+ */
+const paymentTypeMap = new Map(); // 用于展示的字典
+let paymentTypeInOp = ""; // 收入列表
+let paymentTypeOutOp = ""; // 支出列表
+const paymentTypeSel = $('paymentType')
 const getPayType = () => {
     fetch('/paymentDict/option')
         .then(response => response.json())
         .then(resp => {
-            const paymentTypeSel = $('paymentType')
-            for (let respElement of resp) {
-                const {paymentType, keyName} = respElement
-                paymentTypeMap.set(paymentType, keyName)
-                paymentTypeSel.innerHTML += `<option value="${paymentType}">${keyName}</option>`
-            }
+            for (const respElement of resp["inList"])
+                paymentTypeInOp += getOpGroup(respElement)
+            for (const respElement of resp["outList"])
+                paymentTypeOutOp += getOpGroup(respElement)
+            paymentTypeSel.innerHTML = paymentTypeOutOp
         })
         .catch((error) => console.error('Error:', error));
 };
+const getOpGroup = (respElement) => {
+    const {typeName, paymentDictList} = respElement
+    let optGroup = `<optgroup label="${typeName}">`
+    for (const paymentDict of paymentDictList) {
+        const {paymentType, keyName} = paymentDict
+        paymentTypeMap.set(paymentType, keyName)
+        optGroup += `<option value="${paymentType}">${keyName}</option>`
+    }
+    optGroup += `</optgroup>`
+    return optGroup;
+}
+
+/**
+ * 当支出收入单选框变化时，切换下拉框
+ * @param flag 标识符
+ */
+const inComeChange = (flag) => {
+    if (flag === 1) paymentTypeSel.innerHTML = paymentTypeInOp
+    else paymentTypeSel.innerHTML = paymentTypeOutOp
+}
+
 const getAll = () => {
     const stuName = $("searchInput").value;
     if (stuName == null || stuName === '') {
