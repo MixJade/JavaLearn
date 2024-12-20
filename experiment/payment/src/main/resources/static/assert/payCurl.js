@@ -199,9 +199,6 @@ const firstLoadPa = (dataNum, pageNum) => {
  */
 const cutPage = (paNum) => {
     if (paNum === nowPage) return;
-    const paOneList = pageStrip.getElementsByTagName("span");
-    paOneList[nowPage - 1].classList.remove("active")
-    paOneList[paNum - 1].classList.add("active")
     nowPage = paNum
     getAll()
 }
