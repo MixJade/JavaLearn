@@ -47,7 +47,9 @@ public class PaymentRecordController {
 
     @GetMapping
     public List<PaymentRecord> getAll() {
-        return paymentRecordService.list();
+        return paymentRecordService.lambdaQuery()
+                .orderByAsc(PaymentRecord::getPayDate)
+                .list();
     }
 
     @GetMapping("/{id}")

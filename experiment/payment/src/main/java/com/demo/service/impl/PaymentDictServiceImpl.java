@@ -23,6 +23,7 @@ public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, Payme
     public List<PaymentDict> getOption() {
         return lambdaQuery()
                 .select(PaymentDict::getPaymentType, PaymentDict::getKeyName, PaymentDict::getIsIncome)
+                .orderByAsc(PaymentDict::getBigType)
                 .list();
     }
 }

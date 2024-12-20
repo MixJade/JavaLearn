@@ -49,7 +49,9 @@ public class PaymentDictController {
 
     @GetMapping
     public List<PaymentDict> getAll() {
-        return paymentDictService.list();
+        return paymentDictService.lambdaQuery()
+                .orderByAsc(PaymentDict::getBigType)
+                .list();
     }
 
     @GetMapping("/bigType")

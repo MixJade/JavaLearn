@@ -35,27 +35,21 @@ const addTableRow = (myStu) => {
         tbMain.appendChild(trow);
     }
 };
-const t = $("trTemp");
 const getDataRow = (h) => {
-    if ('content' in document.createElement('template')) {
-        let newTd = t.content.querySelectorAll("td");
-        const {recordId, paymentType, isIncome, money, remark, payDate} = h;
-        /*=====向模板中写入内容=====*/
-        newTd[0].textContent = isIncome ? "收入" : "支出";
-        newTd[1].textContent = paymentTypeMap.get(paymentType);
-        newTd[2].textContent = money;
-        newTd[3].textContent = remark;
-        newTd[4].textContent = payDate;
-        // 克隆新行并设置事件
-        let clone = document.importNode(t.content, true);
-        // 删除事件
-        const delBtn = clone.querySelectorAll("button.del-btn")[0];
-        delBtn.addEventListener('click', () => deleteById(recordId));
-        // 修改事件
-        const updBtn = clone.querySelectorAll("button.upd-btn")[0];
-        updBtn.addEventListener('click', () => jsonToForm(h));
-        return clone;
-    }
+    const {recordId, paymentType, isIncome, money, remark, payDate} = h;
+    // 创建行
+    let newRow = document.createElement('tr');
+    newRow.innerHTML = `<td>${paymentTypeMap.get(paymentType)}</td>
+    <td><span class="${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${money}</span></td>
+    <td>${remark}</td>
+    <td>${payDate}</td>
+    <td><button class="del-btn" type="button"><img src="svg/trash.svg" alt="del"></button>
+        <button class="upd-btn" type="button"><img src="svg/pencil-square.svg" alt="edit"></button></td>`;
+    // 按钮事件
+    newRow.querySelector('.del-btn').addEventListener('click', () => deleteById(recordId));
+    newRow.querySelector('.upd-btn').addEventListener('click', () => jsonToForm(h));
+
+    return newRow;
 };
 // 通过id删除单个
 const deleteById = async (id) => {

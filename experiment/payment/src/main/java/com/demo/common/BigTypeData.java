@@ -15,7 +15,7 @@ public class BigTypeData {
             new BigType(3, "居住"),
             new BigType(4, "娱乐"),
             new BigType(5, "学习"),
-            new BigType(6, "通讯"),
+            new BigType(6, "日常"),
             new BigType(7, "购物"),
             new BigType(8, "医疗"),
             new BigType(9, "工资"),
