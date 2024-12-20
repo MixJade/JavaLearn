@@ -1,12 +1,12 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
+import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * <p>
@@ -46,10 +46,8 @@ public class PaymentRecordController {
     }
 
     @GetMapping
-    public List<PaymentRecord> getAll() {
-        return paymentRecordService.lambdaQuery()
-                .orderByAsc(PaymentRecord::getPayDate)
-                .list();
+    public IPage<PaymentRecordDto> getAll(int pageNum, int pageSize) {
+        return paymentRecordService.getByPage(pageNum, pageSize);
     }
 
     @GetMapping("/{id}")

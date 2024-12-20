@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.PaymentRecordMapper">
 
+    <select id="getByPage" resultType="com.demo.model.dto.PaymentRecordDto">
+        SELECT pr.record_id, pr.payment_type, pr.is_income, pr.money, pr.pay_date, pr.remark, pd.key_name
+        FROM payment_record pr
+                 LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
+        ORDER BY pr.pay_date
+    </select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.demo.mapper;
 
-import com.demo.model.entity.PaymentRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.demo.model.dto.PaymentRecordDto;
+import com.demo.model.entity.PaymentRecord;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,4 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
+    IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page);
 }

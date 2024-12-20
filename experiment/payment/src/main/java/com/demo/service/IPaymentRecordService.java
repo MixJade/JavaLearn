@@ -1,7 +1,9 @@
 package com.demo.service;
 
-import com.demo.model.entity.PaymentRecord;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.demo.model.dto.PaymentRecordDto;
+import com.demo.model.entity.PaymentRecord;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPaymentRecordService extends IService<PaymentRecord> {
 
+    IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize);
 }

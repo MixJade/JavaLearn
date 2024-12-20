@@ -1,7 +1,7 @@
 package com.demo.mapper;
 
-import com.demo.model.entity.PaymentDict;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.demo.model.entity.PaymentDict;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

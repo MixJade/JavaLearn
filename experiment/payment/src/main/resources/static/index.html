@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>记账管理</title>
     <link href="assert/payCurl.min.css" rel="stylesheet">
+    <link href="assert/pageNav.min.css" rel="stylesheet">
 </head>
 <body>
 <!--搜索框-->
@@ -74,6 +75,28 @@
         </div>
     </form>
 </dialog>
+<!-- 分页条 -->
+<nav id="pageNav">
+    <label class="paTxt" for="paSize" id="paTex1">
+        <small>页面大小</small>
+        <select id="paSize" onclick="getAll()">
+            <option selected value="7">7</option>
+            <option value="10">10</option>
+            <option value="13">13</option>
+        </select>
+    </label>
+    <ul>
+        <li>
+            <span class="pa-btn" id="addPa" onclick="addPaNum(true)">&lt;</span>
+        </li>
+        <li id="pageStrip">
+        </li>
+        <li>
+            <span class="pa-btn" id="reducePa" onclick="addPaNum(false)">&gt;</span>
+        </li>
+    </ul>
+    <small class="paTxt">共<span id="dataNum">0</span>条数据</small>
+</nav>
 </body>
 <script src="assert/myTus.js"></script>
 <script src="assert/payCurl.js"></script>

@@ -6,7 +6,6 @@ window.onload = () => {
 /**
  * 组装支付类型下拉框
  */
-const paymentTypeMap = new Map(); // 用于展示的字典
 let paymentTypeInOp = ""; // 收入列表
 let paymentTypeOutOp = ""; // 支出列表
 const paymentTypeSel = $('paymentType')
@@ -27,7 +26,6 @@ const getOpGroup = (respElement) => {
     let optGroup = `<optgroup label="${typeName}">`
     for (const paymentDict of paymentDictList) {
         const {paymentType, keyName} = paymentDict
-        paymentTypeMap.set(paymentType, keyName)
         optGroup += `<option value="${paymentType}">${keyName}</option>`
     }
     optGroup += `</optgroup>`
@@ -45,10 +43,14 @@ const inComeChange = (flag) => {
 
 const getAll = () => {
     const stuName = $("searchInput").value;
+    const pageSize = paSize.value;
     if (stuName == null || stuName === '') {
-        fetch('/paymentRecord')
+        fetch(`/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}`)
             .then(response => response.json())
-            .then(resp => addTableRow(resp))
+            .then(resp => {
+                firstLoadPa(resp["total"], resp["pages"])
+                addTableRow(resp["records"])
+            })
             .catch((error) => console.error('Error:', error));
     }
 };
@@ -62,10 +64,10 @@ const addTableRow = (myStu) => {
     }
 };
 const getDataRow = (h) => {
-    const {recordId, paymentType, isIncome, money, remark, payDate} = h;
+    const {recordId, keyName, isIncome, money, remark, payDate} = h;
     // 创建行
     let newRow = document.createElement('tr');
-    newRow.innerHTML = `<td>${paymentTypeMap.get(paymentType)}</td>
+    newRow.innerHTML = `<td>${keyName}</td>
     <td><span class="${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${money}</span></td>
     <td>${remark}</td>
     <td>${payDate}</td>
@@ -99,8 +101,6 @@ const closeDialog = () => {
 
 // 设置表单标题(添加)
 const setPopTitle = () => {
-    const addPetForm = $('addPetForm');
-    addPetForm.reset();
     $('recordId').value = ''
     const legend = $('dialogTit');
     legend.innerText = "添加记录"
@@ -170,5 +170,52 @@ const commonResp = (resp) => {
         showTus2(resp["msg"])
     } else {
         showTus2("服务器无响应")
+    }
+}
+
+const paSize = $("paSize") // 调整大小的选择框
+const pageStrip = $("pageStrip") // 分页条(存储页码)
+const dataNumSpan = $("dataNum") // 分页条(存储页码)
+let nowPage = 1; // 当前页码
+/**
+ * 初始化分页条
+ * @param dataNum 数据长度
+ * @param pageNum 页码数
+ */
+const firstLoadPa = (dataNum, pageNum) => {
+    pageStrip.innerHTML = ''
+    dataNumSpan.innerText = dataNum
+    for (let i = 1; i < pageNum + 1; i++) {
+        pageStrip.innerHTML += `<span onclick="cutPage(${i})">${i}</span>`
+    }
+    // 选中指定子元素
+    const paOneList = pageStrip.getElementsByTagName("span");
+    paOneList[nowPage - 1].classList.add("active")
+}
+
+/**
+ * 点击页码操作(也是分页条核心方法)
+ * @param paNum 当前页码的索引
+ */
+const cutPage = (paNum) => {
+    if (paNum === nowPage) return;
+    const paOneList = pageStrip.getElementsByTagName("span");
+    paOneList[nowPage - 1].classList.remove("active")
+    paOneList[paNum - 1].classList.add("active")
+    nowPage = paNum
+    getAll()
+}
+
+/**
+ * 向前后翻页
+ * @param isLeft
+ */
+const addPaNum = (isLeft) => {
+    if (isLeft) {
+        if (nowPage === 1) return;
+        cutPage(nowPage - 1)
+    } else {
+        if (nowPage === pageStrip.getElementsByTagName("span").length) return;
+        cutPage(nowPage + 1)
     }
 }
