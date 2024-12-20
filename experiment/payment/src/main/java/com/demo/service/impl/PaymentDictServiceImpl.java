@@ -1,10 +1,12 @@
 package com.demo.service.impl;
 
-import com.demo.model.entity.PaymentDict;
-import com.demo.mapper.PaymentDictMapper;
-import com.demo.service.IPaymentDictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.demo.mapper.PaymentDictMapper;
+import com.demo.model.entity.PaymentDict;
+import com.demo.service.IPaymentDictService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, PaymentDict> implements IPaymentDictService {
 
+    @Override
+    public List<PaymentDict> getOption() {
+        return lambdaQuery()
+                .select(PaymentDict::getPaymentType, PaymentDict::getKeyName, PaymentDict::getIsIncome)
+                .list();
+    }
 }

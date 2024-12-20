@@ -1,11 +1,22 @@
 window.onload = () => {
+    getPayType()
     getAll()
 };
-const $ = (id) => {
-    return document.getElementById(id);
-}
 
-
+const paymentTypeMap = new Map();
+const getPayType = () => {
+    fetch('/paymentDict/option')
+        .then(response => response.json())
+        .then(resp => {
+            const paymentTypeSel = $('paymentType')
+            for (let respElement of resp) {
+                const {paymentType, keyName} = respElement
+                paymentTypeMap.set(paymentType, keyName)
+                paymentTypeSel.innerHTML += `<option value="${paymentType}">${keyName}</option>`
+            }
+        })
+        .catch((error) => console.error('Error:', error));
+};
 const getAll = () => {
     const stuName = $("searchInput").value;
     if (stuName == null || stuName === '') {
@@ -28,11 +39,10 @@ const t = $("trTemp");
 const getDataRow = (h) => {
     if ('content' in document.createElement('template')) {
         let newTd = t.content.querySelectorAll("td");
-        console.log(newTd.length)
         const {recordId, paymentType, isIncome, money, remark, payDate} = h;
         /*=====向模板中写入内容=====*/
-        newTd[0].textContent = paymentType;
-        newTd[1].textContent = isIncome ? "收入" : "支出";
+        newTd[0].textContent = isIncome ? "收入" : "支出";
+        newTd[1].textContent = paymentTypeMap.get(paymentType);
         newTd[2].textContent = money;
         newTd[3].textContent = remark;
         newTd[4].textContent = payDate;
@@ -66,56 +76,6 @@ const closeDialog = () => {
     dialog.close()
 };
 
-
-const sureDelModal = $("sureDelModal"); // 确认删除模态框
-const sureDelBtn = $("sureDelBtn"); // 确认删除按钮
-const confirmDel = () => {
-    sureDelModal.showModal();
-    return new Promise((resolve) => {
-        sureDelModal.addEventListener('close', () => {
-            resolve(false);
-        });
-        sureDelBtn.onclick = () => {
-            resolve(true);
-            sureDelModal.close()
-        }
-    })
-};
-const cancelDel = () => {
-    sureDelModal.close()
-};
-
-// 吐司消息
-const showTus = (text) => {
-    if ('content' in document.createElement('template')) {
-        let t = $('tus-temp'),
-            tSpan = t.content.querySelectorAll('span');
-        let myTus = $('myTus');
-        tSpan[0].textContent = text;
-        // 克隆新行并插入
-        let clone = document.importNode(t.content, true);
-        myTus.appendChild(clone);
-        // 设定4秒后删除这个元素
-        setTimeout(() => {
-            myTus.removeChild(myTus.firstElementChild);
-        }, 4000);
-    }
-};
-const showTus2 = (text) => {
-    if ('content' in document.createElement('template')) {
-        let t = $('tus-temp2'),
-            tSpan = t.content.querySelectorAll('span');
-        let myTus = $('myTus');
-        tSpan[0].textContent = text;
-        // 克隆新行并插入
-        let clone = document.importNode(t.content, true);
-        myTus.appendChild(clone);
-        // 设定4秒后删除这个元素
-        setTimeout(() => {
-            myTus.removeChild(myTus.firstElementChild);
-        }, 4000);
-    }
-};
 
 // 设置表单标题(添加)
 const setPopTitle = () => {

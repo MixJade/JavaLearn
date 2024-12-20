@@ -57,6 +57,11 @@ public class PaymentDictController {
         return BigTypeData.getBigTypes();
     }
 
+    @GetMapping("/option")
+    public List<PaymentDict> getOption() {
+        return paymentDictService.getOption();
+    }
+
     @GetMapping("/{id}")
     public PaymentDict getById(@PathVariable Integer id) {
         return paymentDictService.getById(id);

@@ -3,6 +3,8 @@ package com.demo.service;
 import com.demo.model.entity.PaymentDict;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 收支类型表 服务类
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPaymentDictService extends IService<PaymentDict> {
 
+    // 获取选项值
+    List<PaymentDict> getOption();
 }

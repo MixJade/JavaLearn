@@ -16,14 +16,12 @@ public class BigTypeData {
             new BigType(4, "娱乐"),
             new BigType(5, "学习"),
             new BigType(6, "通讯"),
-            new BigType(7, "日用品"),
-            new BigType(8, "购物"),
-            new BigType(9, "医疗"),
-            new BigType(10, "工资"),
-            new BigType(11, "借款"),
-            new BigType(12, "理财"),
-            new BigType(13, "其他收入"),
-            new BigType(14, "其他支出")
+            new BigType(7, "购物"),
+            new BigType(8, "医疗"),
+            new BigType(9, "工资"),
+            new BigType(10, "借款"),
+            new BigType(11, "理财"),
+            new BigType(12, "其他")
     );
 
     public static List<BigType> getBigTypes() {

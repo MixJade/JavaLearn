@@ -13,21 +13,19 @@
         <button class="btn-line-suc" type="submit" onclick="getAll()">Search</button>
     </form>
     <div>
-        <button type="button" class="my-btn btn-success" onclick="showDialog()">添加记录</button>
-        <button type="button" class="my-btn btn-secondary" onclick="window.location.href = '/payType.html'">收支类型
-        </button>
+        <button type="button" class="my-btn btn-success" onclick="showDialog()">添加字典</button>
+        <button type="button" class="my-btn" onclick="window.location.href = '/'">返回</button>
     </div>
 </section>
 <!-- 表格 -->
 <table class="my-table">
-    <caption>收支记录</caption>
+    <caption>收支类型</caption>
     <thead>
     <tr>
         <th>收支</th>
-        <th>类型</th>
-        <th>金额</th>
+        <th>大类</th>
+        <th>名称</th>
         <th>备注</th>
-        <th>付费时间</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -39,12 +37,8 @@
 <dialog class="myDialog" id="myDialog">
     <form class="myForm" id="addPetForm">
         <fieldset>
-            <legend id="dialogTit">添加记录</legend>
-            <input type="hidden" id="recordId">
-            <div class="form-row">
-                <label for="paymentType">收支类型</label>
-                <select id="paymentType"></select>
-            </div>
+            <legend id="dialogTit">添加字典</legend>
+            <input type="hidden" id="paymentType">
             <div class="form-row">
                 <label>收支</label>
                 <div style="display: inline-block">
@@ -55,17 +49,17 @@
                 </div>
             </div>
             <div class="form-row">
-                <label for="money">金额(绝对值)</label>
-                <input id="money" type="number" step="0.1" min="0.01" max="10000"
-                       value="1">
+                <label for="bigType">大类</label>
+                <select id="bigType" autocomplete="off">
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="keyName">名称</label>
+                <input id="keyName" type="text" autocomplete="off">
             </div>
             <div class="form-row">
                 <label for="remark">备注</label>
-                <input id="remark" type="text">
-            </div>
-            <div class="form-row">
-                <label for="payDate">付费时间</label>
-                <input id="payDate" type="date">
+                <input id="remark" type="text" autocomplete="off">
             </div>
         </fieldset>
         <div class="form-footer">
@@ -75,20 +69,6 @@
     </form>
 </dialog>
 </body>
-<!--表格：一行-->
-<template id="trTemp">
-    <tr>
-        <td>收支</td>
-        <td>类型</td>
-        <td>金额</td>
-        <td>备注</td>
-        <td>付费时间</td>
-        <td>
-            <button class="del-btn" type="button"><img src="svg/trash.svg" alt="del"></button>
-            <button class="upd-btn" type="button"><img src="svg/pencil-square.svg" alt="edit"></button>
-        </td>
-    </tr>
-</template>
 <script src="assert/myTus.js"></script>
-<script src="assert/payCurl.js"></script>
+<script src="assert/payType.js"></script>
 </html>
