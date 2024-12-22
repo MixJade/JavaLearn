@@ -10,7 +10,9 @@
 <!--搜索框-->
 <section class="mySearch">
     <form role="search" onsubmit="return false">
-        <input type="search" placeholder="名字" aria-label="Search" id="searchInput">
+        <select aria-label="Search" id="bigTypeSearch" onchange="getAll()"></select>
+        <label for="beginDate">起始日期</label><input type="date" id="beginDate" onchange="getAll()">
+        <label for="endDate">终止日期</label><input type="date" id="endDate" onchange="getAll()">
         <button class="btn-line-suc" type="submit" onclick="getAll()">Search</button>
     </form>
     <div>

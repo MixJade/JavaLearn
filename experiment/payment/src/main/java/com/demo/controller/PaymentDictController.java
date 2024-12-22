@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import com.demo.common.BigTypeData;
 import com.demo.common.Result;
+import com.demo.model.dto.PaymentDictDto;
 import com.demo.model.entity.PaymentDict;
 import com.demo.model.vo.BigType;
 import com.demo.model.vo.TwoTypeOption;
@@ -49,10 +50,8 @@ public class PaymentDictController {
     }
 
     @GetMapping
-    public List<PaymentDict> getAll() {
-        return paymentDictService.lambdaQuery()
-                .orderByAsc(PaymentDict::getBigType)
-                .list();
+    public List<PaymentDictDto> getAll(Integer bigType) {
+        return paymentDictService.getAllByBigType(bigType);
     }
 
     @GetMapping("/bigType")

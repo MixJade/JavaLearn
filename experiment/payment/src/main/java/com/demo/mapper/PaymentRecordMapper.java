@@ -17,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
-    IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page);
+    IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page, Integer bigType, String beginDate, String endDate);
 }

@@ -5,7 +5,18 @@
     <select id="getByPage" resultType="com.demo.model.dto.PaymentRecordDto">
         SELECT pr.record_id, pr.payment_type, pr.is_income, pr.money, pr.pay_date, pr.remark, pd.key_name
         FROM payment_record pr
-                 LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
+        LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
+        <where>
+            <if test="bigType != null and bigType != 0">
+                AND pd.big_type = #{bigType}
+            </if>
+            <if test="beginDate != null and beginDate != ''">
+                AND pr.pay_date &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND pr.pay_date &lt;= #{endDate}
+            </if>
+        </where>
         ORDER BY pr.pay_date
     </select>
 </mapper>

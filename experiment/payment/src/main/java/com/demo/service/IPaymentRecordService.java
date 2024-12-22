@@ -15,5 +15,5 @@ import com.demo.model.entity.PaymentRecord;
  */
 public interface IPaymentRecordService extends IService<PaymentRecord> {
 
-    IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize);
+    IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, String beginDate, String endDate);
 }

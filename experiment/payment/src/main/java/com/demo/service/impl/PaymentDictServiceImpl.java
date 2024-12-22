@@ -3,6 +3,7 @@ package com.demo.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentDictMapper;
+import com.demo.model.dto.PaymentDictDto;
 import com.demo.model.entity.PaymentDict;
 import com.demo.model.vo.TypeOption;
 import com.demo.service.IPaymentDictService;
@@ -45,5 +46,10 @@ public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, Payme
             }
         }
         return typeOptions;
+    }
+
+    @Override
+    public List<PaymentDictDto> getAllByBigType(Integer bigType) {
+        return baseMapper.getAllByBigType(bigType);
     }
 }

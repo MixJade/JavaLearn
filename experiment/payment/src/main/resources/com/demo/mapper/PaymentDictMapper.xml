@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.PaymentDictMapper">
 
+    <select id="getAllByBigType" resultType="com.demo.model.dto.PaymentDictDto">
+        SELECT pd.payment_type, key_name, pd.is_income, big_type, pd.remark,COUNT(pr.record_id) AS recordNum
+        FROM payment_dict pd
+        LEFT JOIN payment_record pr on pd.payment_type = pr.payment_type
+        <if test="bigType != null and bigType != 0">
+            WHERE pd.big_type = #{bigType}
+        </if>
+        GROUP BY pd.payment_type,key_name, pd.is_income, big_type, pd.remark
+        ORDER BY big_type
+    </select>
 </mapper>

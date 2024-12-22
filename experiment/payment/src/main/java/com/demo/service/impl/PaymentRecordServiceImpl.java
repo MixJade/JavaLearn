@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, PaymentRecord> implements IPaymentRecordService {
     @Override
-    public IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize) {
-        return baseMapper.getByPage(new Page<>(pageNum, pageSize));
+    public IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, String beginDate, String endDate) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize), bigType, beginDate, endDate);
     }
 }

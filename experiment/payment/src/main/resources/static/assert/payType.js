@@ -3,7 +3,9 @@ window.onload = () => {
     getAll()
 };
 const bigTypeMap = new Map();
+const bigTypeSearch = $("bigTypeSearch");
 const getBigType = () => {
+    bigTypeSearch.innerHTML = `<option value=""> </option>`
     fetch('/paymentDict/bigType')
         .then(response => response.json())
         .then(resp => {
@@ -12,19 +14,17 @@ const getBigType = () => {
                 const {typeKey, typeName} = respElement
                 bigTypeMap.set(typeKey, typeName)
                 bigType.innerHTML += `<option value="${typeKey}">${typeName}</option>`
+                bigTypeSearch.innerHTML += `<option value="${typeKey}">${typeName}</option>`
             }
         })
         .catch((error) => console.error('Error:', error));
 }
 
 const getAll = () => {
-    const stuName = $("searchInput").value;
-    if (stuName == null || stuName === '') {
-        fetch('/paymentDict')
-            .then(response => response.json())
-            .then(resp => addTableRow(resp))
-            .catch((error) => console.error('Error:', error));
-    }
+    fetch('/paymentDict?bigType=' + bigTypeSearch.value)
+        .then(response => response.json())
+        .then(resp => addTableRow(resp))
+        .catch((error) => console.error('Error:', error));
 };
 // 传来的json变成表格
 const addTableRow = (myStu) => {
@@ -37,7 +37,7 @@ const addTableRow = (myStu) => {
 };
 
 const getDataRow = (h) => {
-    const {paymentType, keyName, isIncome, bigType, remark} = h;
+    const {paymentType, keyName, isIncome, bigType, remark, recordNum} = h;
     // 创建行
     let newRow = document.createElement('tr');
     newRow.innerHTML = `
@@ -45,16 +45,21 @@ const getDataRow = (h) => {
     <td>${bigTypeMap.get(bigType)}</td>
     <td>${keyName}</td>
     <td>${remark}</td>
+    <td>${recordNum}</td>
     <td><button class="del-btn" type="button"><img src="svg/trash.svg" alt="del"></button>
         <button class="upd-btn" type="button"><img src="svg/pencil-square.svg" alt="edit"></button></td>`;
     // 按钮事件
-    newRow.querySelector('.del-btn').addEventListener('click', () => deleteById(paymentType));
+    newRow.querySelector('.del-btn').addEventListener('click', () => deleteById(paymentType, recordNum));
     newRow.querySelector('.upd-btn').addEventListener('click', () => jsonToForm(h));
 
     return newRow;
 };
 // 通过id删除单个
-const deleteById = async (id) => {
+const deleteById = async (id, recordNum) => {
+    if (recordNum > 0) {
+        showTus2("数量大于0,不可删除")
+        return;
+    }
     if (await confirmDel()) {
         fetch("/paymentDict/" + id, {method: 'DELETE'})
             .then(resp => resp.json())

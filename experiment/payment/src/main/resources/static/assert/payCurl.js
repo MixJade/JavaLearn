@@ -1,5 +1,6 @@
 window.onload = () => {
     getPayType()
+    getBigType()
     getAll()
 };
 
@@ -21,6 +22,19 @@ const getPayType = () => {
         })
         .catch((error) => console.error('Error:', error));
 };
+const bigTypeSearch = $("bigTypeSearch");
+const getBigType = () => {
+    bigTypeSearch.innerHTML = `<option value=""> </option>`
+    fetch('/paymentDict/bigType')
+        .then(response => response.json())
+        .then(resp => {
+            for (let respElement of resp) {
+                const {typeKey, typeName} = respElement
+                bigTypeSearch.innerHTML += `<option value="${typeKey}">${typeName}</option>`
+            }
+        })
+        .catch((error) => console.error('Error:', error));
+}
 const getOpGroup = (respElement) => {
     const {typeName, paymentDictList} = respElement
     let optGroup = `<optgroup label="${typeName}">`
@@ -41,18 +55,21 @@ const inComeChange = (flag) => {
     else paymentTypeSel.innerHTML = paymentTypeOutOp
 }
 
+const beginDate = $("beginDate")
+const endDate = $("endDate")
 const getAll = () => {
-    const stuName = $("searchInput").value;
+    const bigTypeVal = bigTypeSearch.value;
+    const beginDateVal = beginDate.value;
+    const endDateVal = endDate.value;
     const pageSize = paSize.value;
-    if (stuName == null || stuName === '') {
-        fetch(`/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}`)
-            .then(response => response.json())
-            .then(resp => {
-                firstLoadPa(resp["total"], resp["pages"])
-                addTableRow(resp["records"])
-            })
-            .catch((error) => console.error('Error:', error));
-    }
+    // 拼接参数
+    fetch(`/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}&bigType=${bigTypeVal}&beginDate=${beginDateVal}&endDate=${endDateVal}`)
+        .then(response => response.json())
+        .then(resp => {
+            firstLoadPa(resp["total"], resp["pages"])
+            addTableRow(resp["records"])
+        })
+        .catch((error) => console.error('Error:', error));
 };
 // 传来的json变成表格
 const addTableRow = (myStu) => {

@@ -9,7 +9,7 @@
 <!--搜索框-->
 <section class="mySearch">
     <form role="search" onsubmit="return false">
-        <input type="search" placeholder="名字" aria-label="Search" id="searchInput">
+        <select aria-label="Search" id="bigTypeSearch" onchange="getAll()"></select>
         <button class="btn-line-suc" type="submit" onclick="getAll()">Search</button>
     </form>
     <div>
@@ -26,6 +26,7 @@
         <th>大类</th>
         <th>名称</th>
         <th>备注</th>
+        <th>数量</th>
         <th>操作</th>
     </tr>
     </thead>
