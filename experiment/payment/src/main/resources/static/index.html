@@ -82,7 +82,7 @@
 <nav id="pageNav">
     <label class="paTxt" for="paSize" id="paTex1">
         <small>页面大小</small>
-        <select id="paSize" onclick="getAll()">
+        <select id="paSize" onchange="getAll()">
             <option selected value="10">10</option>
             <option value="13">13</option>
             <option value="16">16</option>
@@ -92,7 +92,7 @@
         <li>
             <span class="pa-btn" id="addPa" onclick="addPaNum(true)">&lt;</span>
         </li>
-        <li id="pageStrip">
+        <li id="paNum">
         </li>
         <li>
             <span class="pa-btn" id="reducePa" onclick="addPaNum(false)">&gt;</span>
