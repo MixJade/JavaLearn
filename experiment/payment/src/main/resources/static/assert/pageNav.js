@@ -1,6 +1,8 @@
 const paSize = $("paSize") // 调整大小的选择框
 const paNum = $("paNum") // 分页条(存储页码)
 const dataNumSpan = $("dataNum") // 数据长度展示
+const addPa = $("addPa") // 向前翻页按钮
+const reducePa = $("reducePa") // 向后翻页按钮
 let nowPage = 1; // 当前页码
 let pageNumMax = 1; // 当前页码最大值
 /**
@@ -33,6 +35,9 @@ const cutPage = (paNum) => {
     if (paNum === nowPage) return;
     nowPage = paNum
     getAll()
+    // 处理前进后退按钮
+    addPa.style.display = (paNum === 1) ? 'none' : 'inline-block'
+    reducePa.style.display = (paNum === pageNumMax) ? 'none' : 'inline-block'
 }
 
 /**
