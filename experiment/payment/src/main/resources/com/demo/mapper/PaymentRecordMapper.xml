@@ -17,6 +17,6 @@
                 AND pr.pay_date &lt;= #{endDate}
             </if>
         </where>
-        ORDER BY pr.pay_date
+        ORDER BY pr.pay_date,pr.record_id
     </select>
 </mapper>
