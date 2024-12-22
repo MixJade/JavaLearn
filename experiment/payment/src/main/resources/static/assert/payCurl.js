@@ -115,10 +115,12 @@ const closeDialog = () => {
     dialog.close()
 };
 
-
+const recordIdInput = $('recordId');
+const remarkInput = $('remark');
 // 设置表单标题(添加)
 const setPopTitle = () => {
-    $('recordId').value = ''
+    recordIdInput.value = ''
+    remarkInput.value = ''
     const legend = $('dialogTit');
     legend.innerText = "添加记录"
 };
@@ -149,30 +151,31 @@ const submitForm = () => {
     }
 };
 
+const payDateInput = $('payDate')
 //表单数据转json
 const formToJson = () => {
     return {
-        "recordId": $('recordId').value,
+        "recordId": recordIdInput.value,
         "paymentType": $('paymentType').value,
         "isIncome": $("isIncome_1").checked ? 1 : 0,
         "money": $('money').value,
-        "payDate": $('payDate').value,
-        "remark": $('remark').value
+        "payDate": payDateInput.value,
+        "remark": remarkInput.value
     };
 };
 
 //json数据转表单
 const jsonToForm = (h) => {
     const {recordId, paymentType, isIncome, money, payDate, remark} = h;
-    $('recordId').value = recordId;
+    recordIdInput.value = recordId;
     $('paymentType').value = paymentType;
     if (isIncome === 1)
         $("isIncome_1").checked = true;
     else
         $("isIncome_2").checked = true;
     $('money').value = money;
-    $('remark').value = remark;
-    $('payDate').value = payDate;
+    remarkInput.value = remark;
+    payDateInput.value = payDate;
     // 展示模态框
     $('dialogTit').innerText = "修改记录"
     dialog.showModal();
@@ -188,4 +191,12 @@ const commonResp = (resp) => {
     } else {
         showTus2("服务器无响应")
     }
+}
+
+// 添加时日期加一天
+const dateAddWhenAdd = () => {
+    if (payDateInput.value === '') return;
+    const date = new Date(payDateInput.value);
+    date.setDate(date.getDate() + 1);
+    payDateInput.value = date.toISOString().slice(0, 10);
 }

@@ -69,6 +69,7 @@
             <div class="form-row">
                 <label for="payDate">付费时间</label>
                 <input id="payDate" type="date">
+                <button type="button" onclick="dateAddWhenAdd()">+1天</button>
             </div>
         </fieldset>
         <div class="form-footer">
@@ -82,9 +83,9 @@
     <label class="paTxt" for="paSize" id="paTex1">
         <small>页面大小</small>
         <select id="paSize" onclick="getAll()">
-            <option selected value="7">7</option>
-            <option value="10">10</option>
+            <option selected value="10">10</option>
             <option value="13">13</option>
+            <option value="16">16</option>
         </select>
     </label>
     <ul>
