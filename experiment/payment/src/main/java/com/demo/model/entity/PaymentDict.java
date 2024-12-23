@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author MixJade
- * @since 2024-12-20
+ * @since 2024-12-23
  */
 @TableName("payment_dict")
 @SuppressWarnings("unused")
@@ -43,9 +43,9 @@ public class PaymentDict implements Serializable {
     private Integer bigType;
 
     /**
-     * 备注
+     * 分类颜色
      */
-    private String remark;
+    private String color;
 
     public Integer getPaymentType() {
         return paymentType;
@@ -79,12 +79,12 @@ public class PaymentDict implements Serializable {
         this.bigType = bigType;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getColor() {
+        return color;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class PaymentDict implements Serializable {
                 ", keyName = " + keyName +
                 ", isIncome = " + isIncome +
                 ", bigType = " + bigType +
-                ", remark = " + remark +
+                ", color = " + color +
                 "}";
     }
 }

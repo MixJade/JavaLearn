@@ -117,10 +117,10 @@ const addTableRow = (myStu) => {
     }
 };
 const getDataRow = (h) => {
-    const {recordId, keyName, isIncome, money, remark, payDate} = h;
+    const {recordId, keyName, color, isIncome, money, remark, payDate} = h;
     // 创建行
     let newRow = document.createElement('tr');
-    newRow.innerHTML = `<td>${keyName}</td>
+    newRow.innerHTML = `<td style="color: ${color};font-weight: bolder">${keyName}</td>
     <td><span class="${isIncome ? 'in' : 'out'}">${isIncome ? '+' : '-'}${money}</span></td>
     <td>${remark}</td>
     <td>${payDate}</td>

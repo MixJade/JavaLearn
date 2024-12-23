@@ -14,7 +14,7 @@ const writeMonthCard = (monthMap) => {
         if (monthMap.has(i)) {
             const {moneyOut, moneyIn, money} = monthMap.get(i);
             twelveCard.innerHTML += `<div><h2>${i}月</h2>
-        <p>收支：<span class="${money > 0 ? 'in' : 'out'}">${money > 0 ? '+' : '-'}${money}</span></p>
+        <p>收支：<span class="${money > 0 ? 'in' : 'out'}">${money > 0 ? '+' : ''}${money}</span></p>
         <hr>
         <p>支出：<span class="out">-${moneyOut}</span>&nbsp&nbsp&nbsp&nbsp&nbsp收入：<span class="in">+${moneyIn}</span></p>
         <hr>

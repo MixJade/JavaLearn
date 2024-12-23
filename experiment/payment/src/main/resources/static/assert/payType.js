@@ -37,14 +37,14 @@ const addTableRow = (myStu) => {
 };
 
 const getDataRow = (h) => {
-    const {paymentType, keyName, isIncome, bigType, remark, recordNum} = h;
+    const {paymentType, keyName, isIncome, bigType, color, recordNum} = h;
     // 创建行
     let newRow = document.createElement('tr');
     newRow.innerHTML = `
     <td>${isIncome ? '<span class="in">收入</span>' : '<span class="out">支出</span>'}</td>
     <td>${bigTypeMap.get(bigType)}</td>
-    <td>${keyName}</td>
-    <td>${remark}</td>
+    <td style="color: ${color};font-weight: bolder">${keyName}</td>
+    <td>${color}</td>
     <td>${recordNum}</td>
     <td><button class="del-btn" type="button"><img src="svg/trash.svg" alt="del"></button>
         <button class="upd-btn" type="button"><img src="svg/pencil-square.svg" alt="edit"></button></td>`;
@@ -120,13 +120,13 @@ const formToJson = () => {
         "keyName": $('keyName').value,
         "isIncome": $("isIncome_1").checked ? 1 : 0,
         "bigType": $('bigType').value,
-        "remark": $('remark').value
+        "color": $('color').value
     };
 };
 
 //json数据转表单
 const jsonToForm = (h) => {
-    const {paymentType, keyName, isIncome, bigType, remark} = h;
+    const {paymentType, keyName, isIncome, bigType, color} = h;
     $('paymentType').value = paymentType;
     $('keyName').value = keyName;
     if (isIncome === 1)
@@ -134,7 +134,7 @@ const jsonToForm = (h) => {
     else
         $("isIncome_2").checked = true;
     $('bigType').value = bigType;
-    $('remark').value = remark;
+    $('color').value = color;
     // 展示模态框
     $('dialogTit').innerText = "修改字典"
     dialog.showModal();

@@ -14,6 +14,9 @@ const firstLoadPa = (dataNum, pageNum) => {
     dataNumSpan.innerText = dataNum
     pageNumMax = pageNum
     paNum.innerHTML = `<span onclick="jumpPage(${pageNum})" style="width:64px;border-radius:12px">${nowPage}/${pageNum}</span>`
+    // 处理前进后退按钮
+    addPa.style.display = (nowPage === 1) ? 'none' : 'inline-block'
+    reducePa.style.display = (nowPage === pageNum) ? 'none' : 'inline-block'
 }
 
 /**
@@ -35,9 +38,6 @@ const cutPage = (paNum) => {
     if (paNum === nowPage) return;
     nowPage = paNum
     getAll()
-    // 处理前进后退按钮
-    addPa.style.display = (paNum === 1) ? 'none' : 'inline-block'
-    reducePa.style.display = (paNum === pageNumMax) ? 'none' : 'inline-block'
 }
 
 /**
