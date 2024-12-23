@@ -13,7 +13,7 @@ let pageNumMax = 1; // 当前页码最大值
 const firstLoadPa = (dataNum, pageNum) => {
     dataNumSpan.innerText = dataNum
     pageNumMax = pageNum
-    paNum.innerHTML = `<span onclick="jumpPage(${pageNum})">${nowPage}</span>`
+    paNum.innerHTML = `<span onclick="jumpPage(${pageNum})" style="width:64px;border-radius:12px">${nowPage}/${pageNum}</span>`
 }
 
 /**
@@ -22,7 +22,7 @@ const firstLoadPa = (dataNum, pageNum) => {
  */
 const jumpPage = (pageNum) => {
     let num = prompt(`输入要跳转页码(最大${pageNum})`, "1");
-    // 提示用户输入一个数字，如果用户不输入任何内容，输入字段默认会显示"1"
+    if (num == null || num === '0') return;
     num = Number(num); // 将输入的字符串转换为数字格式
     cutPage(num)
 }
