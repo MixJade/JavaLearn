@@ -1,8 +1,44 @@
 window.onload = () => {
     getPayType()
     getBigType()
-    getAll()
+    // 看是否有页面传参
+    const queryParam = getQueryParams()["month"];
+    if (queryParam !== undefined) getStartAndEndOfMonth(queryParam)
+    getAll();
 };
+
+/**
+ * 获取Get传参
+ */
+const getQueryParams = () => {
+    const queryString = window.location.search.substring(1);
+    const params = {};
+    const queries = queryString.split("&");
+
+    for (let i = 0; i < queries.length; i++) {
+        const pair = queries[i].split('=');
+        params[pair[0]] = decodeURIComponent(pair[1] || '');
+    }
+    return params;
+}
+
+/**
+ * 设置一月的第一天和最后一天
+ *
+ * @param monthStr 形如 2024-1 或 2024-1-1
+ */
+const getStartAndEndOfMonth = (monthStr) => {
+    const dateStr = monthStr.split("-");
+    // 本月第一天
+    const startDateV = new Date(dateStr[0], dateStr[1] - 1, 1);
+    startDateV.setHours(8) //东八时区
+    // 本月最后一天
+    const endDateV = new Date(dateStr[0], dateStr[1], 0);
+    endDateV.setHours(8) //东八时区
+    // 设值
+    beginDate.value = startDateV.toISOString().slice(0, 10);
+    endDate.value = endDateV.toISOString().slice(0, 10);
+}
 
 /**
  * 组装支付类型下拉框
