@@ -19,4 +19,15 @@
         </where>
         ORDER BY pr.pay_date,pr.record_id
     </select>
+
+    <!--获取一年中各个月份的收支总结-->
+    <select id="getMonthDataByYear" resultType="com.demo.model.dto.MonthPayData">
+        SELECT MONTH(pay_date)                  AS month,
+               SUM(IF(is_income = 0, money, 0)) AS money_out,
+               SUM(IF(is_income = 1, money, 0)) AS money_in
+        FROM payment_record
+        WHERE YEAR(pay_date) = #{year}
+        GROUP BY MONTH(pay_date)
+        ORDER BY month
+    </select>
 </mapper>

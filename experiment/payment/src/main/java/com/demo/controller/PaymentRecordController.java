@@ -2,11 +2,14 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
+import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -54,4 +57,15 @@ public class PaymentRecordController {
     public PaymentRecord getById(@PathVariable Integer id) {
         return paymentRecordService.getById(id);
     }
+
+    /**
+     * 获取一年中各个月份的收支总结
+     *
+     * @param year 年份 2024
+     */
+    @GetMapping("/month")
+    public List<MonthPayData> getMonthDataByYear(Integer year) {
+        return paymentRecordService.getMonthDataByYear(year);
+    }
+
 }
