@@ -20,7 +20,7 @@ const writeMonthCard = (monthMap) => {
         <hr>
         <button type="button">柱状图</button>
         <button type="button">饼状图</button>
-        <button type="button">日历图</button>
+        <button type="button" onclick="jumpCalendar(${i})">日历图</button>
         <button type="button" onclick="jumpIndex(${i})">收支记录</button></div>`
         } else {
             twelveCard.innerHTML += `<div><h2>${i}月</h2></div>`
@@ -34,4 +34,10 @@ const writeMonthCard = (monthMap) => {
  */
 const jumpIndex = (month) => {
     window.location.href = `/index.html?month=2024-${month}`
+}
+/**
+ * 打开对应月份的天数记录
+ */
+const jumpCalendar = (month) => {
+    window.location.href = `/calendar.html?month=2024-${month}`
 }

@@ -29,15 +29,23 @@ const getQueryParams = () => {
  */
 const getStartAndEndOfMonth = (monthStr) => {
     const dateStr = monthStr.split("-");
-    // 本月第一天
-    const startDateV = new Date(dateStr[0], dateStr[1] - 1, 1);
-    startDateV.setHours(8) //东八时区
-    // 本月最后一天
-    const endDateV = new Date(dateStr[0], dateStr[1], 0);
-    endDateV.setHours(8) //东八时区
-    // 设值
-    beginDate.value = startDateV.toISOString().slice(0, 10);
-    endDate.value = endDateV.toISOString().slice(0, 10);
+    if (dateStr.length === 2) {
+        // 只有年+月
+        // 本月第一天
+        const startDateV = new Date(dateStr[0], dateStr[1] - 1, 1);
+        startDateV.setHours(8) //东八时区
+        // 本月最后一天
+        const endDateV = new Date(dateStr[0], dateStr[1], 0);
+        endDateV.setHours(8) //东八时区
+        // 设值
+        beginDate.value = startDateV.toISOString().slice(0, 10);
+        endDate.value = endDateV.toISOString().slice(0, 10);
+    } else {
+        // 有 年+月+日
+        const clickDate = `${dateStr[0]}-${String(dateStr[1]).padStart(2, '0')}-${String(dateStr[2]).padStart(2, '0')}`
+        beginDate.value = clickDate;
+        endDate.value = clickDate;
+    }
 }
 
 /**
