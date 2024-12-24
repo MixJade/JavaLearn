@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
+import com.demo.model.dto.DayPayData;
 import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
@@ -66,6 +67,17 @@ public class PaymentRecordController {
     @GetMapping("/month")
     public List<MonthPayData> getMonthDataByYear(Integer year) {
         return paymentRecordService.getMonthDataByYear(year);
+    }
+
+    /**
+     * 获取一月中每天的收支总结
+     *
+     * @param year  年份 2024
+     * @param month 月份 01
+     */
+    @GetMapping("/day")
+    public List<DayPayData> getDayDataByMonth(Integer year, Integer month) {
+        return paymentRecordService.getDayDataByMonth(year, month);
     }
 
 }

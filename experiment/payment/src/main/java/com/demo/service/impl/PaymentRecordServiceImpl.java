@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.mapper.PaymentRecordMapper;
+import com.demo.model.dto.DayPayData;
 import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
@@ -34,5 +35,10 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             mpd.setMoney(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
         return monthDataByYear;
+    }
+
+    @Override
+    public List<DayPayData> getDayDataByMonth(Integer year, Integer month) {
+        return baseMapper.getDayDataByMonth(year, month);
     }
 }
