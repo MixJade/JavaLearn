@@ -7,42 +7,15 @@ import java.math.BigDecimal;
  */
 @SuppressWarnings("unused")
 public class ChartDo {
-    private Integer paymentType;
-
-    /**
-     * 类型名称
-     */
-    private String keyName;
-
-    /**
-     * 分类颜色
-     */
-    private String color;
-
+    private Integer bigType;
     private BigDecimal money;
 
-    public Integer getPaymentType() {
-        return paymentType;
+    public Integer getBigType() {
+        return bigType;
     }
 
-    public void setPaymentType(Integer paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public String getKeyName() {
-        return keyName;
-    }
-
-    public void setKeyName(String keyName) {
-        this.keyName = keyName;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
+    public void setBigType(Integer bigType) {
+        this.bigType = bigType;
     }
 
     public BigDecimal getMoney() {

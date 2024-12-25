@@ -37,4 +37,28 @@ public class BigTypeData {
         }
         return bigTypeMap;
     }
+
+    /**
+     * 获取大类对应的颜色
+     *
+     * @param bigType 大类主键
+     * @return 颜色代码
+     */
+    public static String getBigTypeColor(int bigType) {
+        return switch (bigType) {
+            case 1 -> "#FF4500"; // 橙色
+            case 2 -> "#1E90FF"; // 天蓝色
+            case 3 -> "#6B8E23"; // 橄榄色
+            case 4 -> "#FF1493"; // 深粉色
+            case 5 -> "#800080"; // 紫色
+            case 6 -> "#008000"; // 绿色
+            case 7 -> "#B59900"; // 金色
+            case 8 -> "#FF6347"; // 番茄色
+            case 9 -> "#00A9A9"; // 青色
+            case 10 -> "#A52A2A"; // 棕色
+            case 11 -> "#000080"; // 深蓝色
+            case 12 -> "#696969"; // 暗灰色
+            default -> "#409EFF"; // 默认蓝色
+        };
+    }
 }

@@ -3,6 +3,7 @@ package com.demo.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentRecordMapper;
 import com.demo.model.dto.ChartDo;
 import com.demo.model.dto.DayPayData;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -53,11 +55,16 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         List<String> labels = new ArrayList<>(),
                 colors = new ArrayList<>();
         List<BigDecimal> moneys = new ArrayList<>();
+        // 获取大类map
+        Map<Integer, String> bigTypeMap = BigTypeData.getMap();
+        // 组装大类数据
         for (ChartDo chartDo : pieChart) {
-            labels.add(chartDo.getKeyName());
-            colors.add(chartDo.getColor());
+            labels.add(bigTypeMap.get(chartDo.getBigType()));
+            colors.add(BigTypeData.getBigTypeColor(chartDo.getBigType()));
             moneys.add(chartDo.getMoney());
         }
-        return new ChartVo(labels, colors, moneys);
+        // 查询当月总支出
+        BigDecimal outMoney = baseMapper.getPayByMonth(year, month);
+        return new ChartVo(labels, colors, moneys, outMoney);
     }
 }

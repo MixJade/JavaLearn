@@ -1,5 +1,6 @@
 window.onload = () => {
     const dateH1 = document.getElementById("dateH1");
+    const outSpan = document.getElementById("outSpan");
     // 看是否有页面传参
     const queryParam = getQueryParams()["month"];
     if (queryParam !== undefined) {
@@ -8,7 +9,8 @@ window.onload = () => {
         fetch(`/paymentRecord/pieChart?year=${dateStr[0]}&month=${dateStr[1]}`)
             .then(response => response.json())
             .then(resp => {
-                const {labels, colors, moneys} = resp;
+                const {labels, colors, moneys, outMoney} = resp;
+                outSpan.innerText = `-${outMoney}`
                 drawChart(labels, colors, moneys)
             })
             .catch((error) => console.error('Error:', error));
@@ -46,7 +48,7 @@ const drawChart = (labels, colors, moneys) => {
         data: {
             labels: labels,
             datasets: [{
-                label: 'pay',
+                label: '支出',
                 data: moneys,
                 backgroundColor: colors,
                 borderColor: colors,

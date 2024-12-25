@@ -45,13 +45,21 @@
     </select>
     <!-- 获取一月的饼图数据-->
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
-        SELECT pd.payment_type, key_name, color, SUM(money) AS money
+        SELECT big_type, SUM(money) AS money
         FROM payment_record pd
                  LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
         WHERE pd.is_income = 0
           AND YEAR(pay_date) = #{year}
           AND MONTH(pay_date) = #{month}
-        GROUP BY payment_type
-        ORDER BY SUM(money)
+        GROUP BY big_type
+        ORDER BY money
+    </select>
+    <!-- 获取某月的总支出-->
+    <select id="getPayByMonth" resultType="java.math.BigDecimal">
+        SELECT SUM(money)
+        FROM payment_record
+        WHERE is_income = 0
+          AND YEAR(pay_date) = #{year}
+          AND MONTH(pay_date) = #{month}
     </select>
 </mapper>

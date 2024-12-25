@@ -9,6 +9,7 @@ import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,4 +30,6 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
     List<DayPayData> getDayDataByMonth(Integer year, Integer month);
 
     List<ChartDo> getPieChart(Integer year, Integer month);
+
+    BigDecimal getPayByMonth(Integer year, Integer month);
 }
