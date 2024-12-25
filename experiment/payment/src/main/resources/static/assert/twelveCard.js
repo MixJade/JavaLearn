@@ -8,6 +8,7 @@ window.onload = () => {
         .catch((error) => console.error('Error:', error));
 }
 
+let year = 2024;
 const twelveCard = document.getElementById("twelveCard");
 const writeMonthCard = (monthMap) => {
     for (let i = 1; i < 13; i++) {
@@ -18,8 +19,7 @@ const writeMonthCard = (monthMap) => {
         <hr>
         <p>支出：<span class="out">-${moneyOut}</span>&nbsp&nbsp&nbsp&nbsp&nbsp收入：<span class="in">+${moneyIn}</span></p>
         <hr>
-        <button type="button">柱状图</button>
-        <button type="button">饼状图</button>
+        <button type="button" onclick="jumpToChart(${i})">饼状图</button>
         <button type="button" onclick="jumpCalendar(${i})">日历图</button>
         <button type="button" onclick="jumpIndex(${i})">收支记录</button></div>`
         } else {
@@ -33,11 +33,17 @@ const writeMonthCard = (monthMap) => {
  * @param month 月份数字，如12
  */
 const jumpIndex = (month) => {
-    window.location.href = `/index.html?month=2024-${month}`
+    window.location.href = `/index.html?month=${year}-${month}`
 }
 /**
  * 打开对应月份的天数记录
  */
 const jumpCalendar = (month) => {
-    window.location.href = `/calendar.html?month=2024-${month}`
+    window.location.href = `/calendar.html?month=${year}-${month}`
+}
+/**
+ * 打开对应月份的绘图
+ */
+const jumpToChart = (month) => {
+    window.location.href = `/monthChart.html?month=${year}-${month}`
 }

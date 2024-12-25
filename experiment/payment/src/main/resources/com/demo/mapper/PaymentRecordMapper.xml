@@ -43,4 +43,15 @@
         GROUP BY pay_date
         ORDER BY pay_date;
     </select>
+    <!-- 获取一月的饼图数据-->
+    <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
+        SELECT pd.payment_type, key_name, color, SUM(money) AS money
+        FROM payment_record pd
+                 LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
+        WHERE pd.is_income = 0
+          AND YEAR(pay_date) = #{year}
+          AND MONTH(pay_date) = #{month}
+        GROUP BY payment_type
+        ORDER BY SUM(money)
+    </select>
 </mapper>

@@ -8,21 +8,6 @@ window.onload = () => {
 };
 
 /**
- * 获取Get传参
- */
-const getQueryParams = () => {
-    const queryString = window.location.search.substring(1);
-    const params = {};
-    const queries = queryString.split("&");
-
-    for (let i = 0; i < queries.length; i++) {
-        const pair = queries[i].split('=');
-        params[pair[0]] = decodeURIComponent(pair[1] || '');
-    }
-    return params;
-}
-
-/**
  * 设置一月的第一天和最后一天
  *
  * @param monthStr 形如 2024-1 或 2024-1-1

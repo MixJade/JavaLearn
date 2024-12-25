@@ -2,6 +2,7 @@ package com.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.demo.model.dto.ChartDo;
 import com.demo.model.dto.DayPayData;
 import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
@@ -26,4 +27,6 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
     List<MonthPayData> getMonthDataByYear(Integer year);
 
     List<DayPayData> getDayDataByMonth(Integer year, Integer month);
+
+    List<ChartDo> getPieChart(Integer year, Integer month);
 }

@@ -6,6 +6,7 @@ import com.demo.model.dto.DayPayData;
 import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
+import com.demo.model.vo.ChartVo;
 
 import java.util.List;
 
@@ -35,4 +36,12 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param month 月份 01
      */
     List<DayPayData> getDayDataByMonth(Integer year, Integer month);
+
+    /**
+     * 获取一月的饼图数据
+     *
+     * @param year  年份 2024
+     * @param month 月份 01
+     */
+    ChartVo getPieChart(Integer year, Integer month);
 }

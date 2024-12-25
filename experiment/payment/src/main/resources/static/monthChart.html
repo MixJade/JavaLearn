@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>测试Chart</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #barDiv {
+            width: 1200px;
+            height: 500px;
+            position: relative;
+            left: 50%;
+            margin-left: -600px;
+        }
+
+        #pieDiv {
+            width: 500px;
+            height: 500px;
+            position: relative;
+            left: 50%;
+            margin-left: -250px;
+        }
+    </style>
+</head>
+<body>
+<h1 id="dateH1">2024-1</h1>
+<h2>柱状图</h2>
+<!--需要在外面加上宽高限制-->
+<div id="barDiv">
+    <canvas id="barChart"></canvas>
+</div>
+<h2>饼状图</h2>
+<!--需要在外面加上宽高限制-->
+<div id="pieDiv">
+    <canvas id="pieChart"></canvas>
+</div>
+</body>
+<script src="assert/chart.min.js"></script>
+<script src="assert/getQueryParams.js"></script>
+<script src="assert/monthChart.js"></script>
+</html>
