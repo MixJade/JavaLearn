@@ -11,6 +11,7 @@ import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
+import com.demo.model.vo.MonthLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,21 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             mpd.setMoney(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
         return monthDataByYear;
+    }
+
+    @Override
+    public MonthLineVo getMonthLineDataByYear(Integer year) {
+        List<MonthPayData> monthDataByYear = baseMapper.getMonthDataByYear(year);
+        List<BigDecimal> moneyOut = new ArrayList<>(),
+                moneyIn = new ArrayList<>(),
+                money = new ArrayList<>();
+        // 拆分成三条数据线
+        for (MonthPayData mpd : monthDataByYear) {
+            moneyOut.add(mpd.getMoneyOut());
+            moneyIn.add(mpd.getMoneyIn());
+            money.add(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
+        }
+        return new MonthLineVo(moneyOut, moneyIn, money);
     }
 
     @Override

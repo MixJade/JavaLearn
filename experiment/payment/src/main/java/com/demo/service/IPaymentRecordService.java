@@ -7,6 +7,7 @@ import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
+import com.demo.model.vo.MonthLineVo;
 
 import java.util.List;
 
@@ -28,6 +29,13 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param year 年份 2024
      */
     List<MonthPayData> getMonthDataByYear(Integer year);
+
+    /**
+     * 获取一年中各个月份的收支总结(用于线形图)
+     *
+     * @param year 年份 2024
+     */
+    MonthLineVo getMonthLineDataByYear(Integer year);
 
     /**
      * 获取一月中每天的收支总结

@@ -7,6 +7,7 @@ import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
+import com.demo.model.vo.MonthLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +69,16 @@ public class PaymentRecordController {
     @GetMapping("/month")
     public List<MonthPayData> getMonthDataByYear(Integer year) {
         return paymentRecordService.getMonthDataByYear(year);
+    }
+
+    /**
+     * 获取一年中各个月份的收支总结(用于线形图)
+     *
+     * @param year 年份 2024
+     */
+    @GetMapping("/monthLine")
+    public MonthLineVo getMonthLineDataByYear(Integer year) {
+        return paymentRecordService.getMonthLineDataByYear(year);
     }
 
     /**

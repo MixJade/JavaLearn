@@ -47,3 +47,9 @@ const jumpCalendar = (month) => {
 const jumpToChart = (month) => {
     window.location.href = `/monthChart.html?month=${year}-${month}`
 }
+/**
+ * 打开一年的折线图
+ */
+const jumpToYearChart = () => {
+    window.location.href = `/yearChart.html?year=${year}`
+}
