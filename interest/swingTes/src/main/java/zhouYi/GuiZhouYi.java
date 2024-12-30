@@ -17,6 +17,7 @@ import java.util.Random;
 
 public class GuiZhouYi extends JFrame implements ActionListener {
     private final JTextField resultText;
+    private final JTextField number1, number2, number3;
     private final JTextArea resultArea;
 
     public static void main(String[] args) {
@@ -46,9 +47,23 @@ public class GuiZhouYi extends JFrame implements ActionListener {
         resultArea.setBorder(border);
         centerPanel.add(resultArea);
 
+        // 下方面板
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(new JLabel("数字起卦"));
+        number1 = new JTextField(3);
+        number2 = new JTextField(3);
+        number3 = new JTextField(3);
+        bottomPanel.add(number1);
+        bottomPanel.add(number2);
+        bottomPanel.add(number3);
+        JButton numberBtn = new JButton("求余");
+        numberBtn.addActionListener(this);
+        bottomPanel.add(numberBtn);
+
         // 布局设置
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
         // 窗口设置
         setSize(580, 280);
         setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
@@ -59,8 +74,22 @@ public class GuiZhouYi extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Random rand = new Random();
-        int randInt = rand.nextInt(64); // 生成0-63之间的数
+        int randInt;
+        if ("求余".equals(e.getActionCommand())) {
+            if (isThreeInt(number1.getText()) && isThreeInt(number2.getText()) && isThreeInt(number3.getText())) {
+                int num1 = Integer.parseInt(number1.getText()) % 4;
+                int num2 = Integer.parseInt(number2.getText()) % 4;
+                int num3 = Integer.parseInt(number3.getText()) % 4;
+                System.out.println(num1 + " " + num2 + " " + num3);
+                randInt = (num1 << 4) + (num2 << 2) + num3;
+            } else {
+                JOptionPane.showMessageDialog(this, "请输入三个三位数", "出错", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            Random rand = new Random();
+            randInt = rand.nextInt(64); // 生成0-63之间的数
+        }
         // 读取xml文件
         List<Gua> guaList = getGua();
         Gua gua = guaList.get(randInt);
@@ -95,6 +124,22 @@ public class GuiZhouYi extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "对应的XML不见了", "最终结果", JOptionPane.ERROR_MESSAGE);
         }
         return guaList;
+    }
+
+    /**
+     * 检验一个字符串是否为三位数字
+     *
+     * @param str 数字字符串
+     * @return 是三位数字
+     */
+    private boolean isThreeInt(String str) {
+        if (str.length() != 3)
+            return false;
+        for (int i = 0; i < 3; i++) {
+            if (!Character.isDigit(str.charAt(i)))
+                return false;
+        }
+        return true;
     }
 }
 
