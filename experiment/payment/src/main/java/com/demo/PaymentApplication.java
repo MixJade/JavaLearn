@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @SpringBootApplication
 public class PaymentApplication {
@@ -19,7 +19,10 @@ public class PaymentApplication {
             InetAddress ip01 = InetAddress.getLocalHost();
             //noinspection HttpUrlsUsage
             log.info("局域IP: http://{}:23043", ip01.getHostAddress());
-        } catch (UnknownHostException e) {
+
+            // 假定当前服务只在window系统运行,在启动之后默认打开浏览器(打包时解开注释)
+            // Runtime.getRuntime().exec("cmd /c start http://localhost:23043");
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
