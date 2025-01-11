@@ -6,8 +6,10 @@
     <link href="assert/twelveCard.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>2024</h1>
+<h1 id="yearH1">2024年</h1>
+<button type="button" onclick="addYear(false)">-1年</button>
 <button type="button" onclick="jumpToYearChart()">当年图表分析</button>
+<button type="button" onclick="addYear(true)">+1年</button>
 <div id="twelveCard">
 </div>
 </body>

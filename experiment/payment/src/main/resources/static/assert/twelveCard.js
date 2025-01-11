@@ -1,5 +1,7 @@
-window.onload = () => {
-    fetch(`/paymentRecord/month?year=2024`)
+window.onload = () => getYearMonth();
+
+const getYearMonth = () => {
+    fetch(`/paymentRecord/month?year=${year}`)
         .then(response => response.json())
         .then(resp => {
             let monthMap = new Map(resp.map(i => [i.month, i]));
@@ -26,6 +28,30 @@ const writeMonthCard = (monthMap) => {
             twelveCard.innerHTML += `<div><h2>${i}月</h2></div>`
         }
     }
+}
+
+const yearH1 = document.getElementById("yearH1");
+/**
+ * 添加或减少年数
+ * @param isAdd
+ */
+const addYear = (isAdd) => {
+    if (isAdd) {
+        if (year === 2025) {
+            alert("最大2025年")
+            return;
+        }
+        year++;
+    } else {
+        if (year === 2024) {
+            alert("最小2024年")
+            return;
+        }
+        year--;
+    }
+    yearH1.innerText = year + "年";
+    twelveCard.innerHTML = ""
+    getYearMonth();
 }
 
 /**
