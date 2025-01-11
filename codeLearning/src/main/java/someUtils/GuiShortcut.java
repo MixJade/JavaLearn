@@ -60,7 +60,7 @@ public class GuiShortcut extends JFrame implements ActionListener {
             File myFile = new File(e.getActionCommand());
             Desktop.getDesktop().open(myFile);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "目标文件夹不存在", "警告", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "目标文件夹不存在\n" + e.getActionCommand(), "警告", JOptionPane.WARNING_MESSAGE);
         }
     }
 
