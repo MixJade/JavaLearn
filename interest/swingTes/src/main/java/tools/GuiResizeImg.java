@@ -1,4 +1,4 @@
-package someUtils;
+package tools;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -68,7 +68,7 @@ public class GuiResizeImg extends JFrame implements ActionListener {
             public void drop(DropTargetDropEvent tde) {
                 try {
                     tde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);// 接收拖拽来的数据
-                    java.util.List<File> list = new ArrayList<>();
+                    List<File> list = new ArrayList<>();
                     Object tranData = tde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     if (tranData instanceof List<?> tranList) {
                         tranList.forEach(o -> {
