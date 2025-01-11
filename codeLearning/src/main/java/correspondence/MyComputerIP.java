@@ -1,6 +1,8 @@
 package correspondence;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
@@ -8,12 +10,23 @@ import java.net.UnknownHostException;
  */
 public class MyComputerIP {
     public static void main(String[] args) {
-        System.out.println("Hello World");
         try {
             InetAddress hostIp = InetAddress.getLocalHost();
-            System.out.println("本机名称：" + hostIp.getHostName() + "\n地址为：" + hostIp.getHostAddress());
+            System.out.println("本机名称: " + hostIp.getHostName());
+            System.out.println("IP地址:  " + hostIp.getHostAddress());
+
+            // 附加：获取Mac地址
+            NetworkInterface network = NetworkInterface.getByInetAddress(hostIp);
+            byte[] mac = network.getHardwareAddress();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+            }
+            System.out.println("MAC地址: " + sb);
         } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
+            System.out.println("IP地址获取失败");
+        } catch (SocketException e) {
+            System.out.println("Mac地址获取失败");
         }
     }
 }
