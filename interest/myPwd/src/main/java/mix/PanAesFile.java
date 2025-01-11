@@ -102,7 +102,7 @@ public class PanAesFile extends JPanel implements ActionListener {
             JFileChooser fileChooser = new JFileChooser("../");
             fileChooser.setDialogTitle("请选择待加解密的文件");
             // 创建一个FileNameExtensionFilter，只接受".md"和".txt"后缀的文件
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("md & txt", "md", "txt");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("md & txt & enc", "md", "txt", "enc");
             fileChooser.setFileFilter(filter);
             // 打开一个文件对话框
             int returnValue = fileChooser.showOpenDialog(null);
