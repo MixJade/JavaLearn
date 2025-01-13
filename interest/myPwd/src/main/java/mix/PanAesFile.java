@@ -8,8 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import static mix.PwdAES.decryptFile;
-import static mix.PwdAES.encryptFile;
+import static mix.PwdAES.*;
 
 /**
  * AES文件加密
@@ -37,10 +36,12 @@ public class PanAesFile extends JPanel implements ActionListener {
         // 两个按钮
         JButton openDialogBtn = new JButton("选择文件"),
                 inBtn = new JButton("AES加密"),
-                outBtn = new JButton("AES解密");
+                outBtn = new JButton("AES解密"),
+                reWriteBtn = new JButton("密文写回");
         rightPanel.add(openDialogBtn);
         rightPanel.add(inBtn);
         rightPanel.add(outBtn);
+        rightPanel.add(reWriteBtn);
         // 添加监听器
         openDialogBtn.setActionCommand("CHOOSE_FILE");
         openDialogBtn.addActionListener(this);
@@ -48,6 +49,8 @@ public class PanAesFile extends JPanel implements ActionListener {
         inBtn.addActionListener(this);
         outBtn.setActionCommand("AES_DEC");
         outBtn.addActionListener(this);
+        reWriteBtn.setActionCommand("RE_WRITE");
+        reWriteBtn.addActionListener(this);
 
         // 左边区域
         JPanel leftPanel = new JPanel();
@@ -110,6 +113,7 @@ public class PanAesFile extends JPanel implements ActionListener {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 // 用户选中的文件
                 selectedFile = fileChooser.getSelectedFile();
+                showArea.setEditable(false);
                 showArea.setText("选中的文件名：" + selectedFile.getName() + "\n" + selectedFile.getPath());
             }
             return;
@@ -125,6 +129,10 @@ public class PanAesFile extends JPanel implements ActionListener {
         }
         if ("AES_ENC".equals(e.getActionCommand())) {
             // 加密
+            if (selectedFile.getName().endsWith(".enc")) {
+                JOptionPane.showMessageDialog(null, "不可二次加密", "写回结果", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             boolean encryptSuc = encryptFile(key, iv, selectedFile);
             if (encryptSuc)
                 showArea.setText("文件加密成功:" + selectedFile.getPath() + ".enc");
@@ -133,6 +141,22 @@ public class PanAesFile extends JPanel implements ActionListener {
         } else if ("AES_DEC".equals(e.getActionCommand())) {
             // 解密
             showArea.setText(decryptFile(key, iv, selectedFile));
+            showArea.setEditable(true);
+        } else if ("RE_WRITE".equals(e.getActionCommand())) {
+            // 密文写回
+            if (selectedFile.getName().endsWith(".enc")) {
+                String areaText = showArea.getText();
+                if (areaText.startsWith("选中的文件名")) {
+                    JOptionPane.showMessageDialog(null, "请先解密", "散玉说", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                // 开始写回
+                boolean reWriteSuc = reWriteEncFile(key, iv, selectedFile, areaText);
+                if (reWriteSuc)
+                    JOptionPane.showMessageDialog(null, "写回密文成功", "写回结果", JOptionPane.INFORMATION_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(null, "写回密文失败", "写回结果", JOptionPane.ERROR_MESSAGE);
+            } else JOptionPane.showMessageDialog(null, "请选择密文", "散玉说", JOptionPane.ERROR_MESSAGE);
         } else {
             // 重置
             showArea.setText("");

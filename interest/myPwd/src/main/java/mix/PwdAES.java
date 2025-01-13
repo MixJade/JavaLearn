@@ -187,4 +187,33 @@ public class PwdAES {
             return "解密失败";
         }
     }
+
+
+    /**
+     * 使用AES将解密后的文本写回密文
+     *
+     * @param keyStr    密钥
+     * @param ivStr     初始化向量
+     * @param encFile   密文文件
+     * @param originStr 解密后的文本
+     * @return 写回成功
+     * @since 2025-01-13 13:58:46
+     */
+    public static boolean reWriteEncFile(String keyStr, String ivStr, File encFile, String originStr) {
+        // 处理密钥
+        SecretKey key = new SecretKeySpec(padKeyString(keyStr), "AES");
+        // 处理向量
+        IvParameterSpec iv = new IvParameterSpec(padIvString(ivStr));
+        // 创建一个写入指定文件数据的文件输出流
+        try (FileOutputStream outputStream = new FileOutputStream(encFile)) {
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+            byte[] encrypted = cipher.doFinal(originStr.getBytes(StandardCharsets.UTF_8));
+            // 把二进制数据写入文件
+            outputStream.write(encrypted);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
