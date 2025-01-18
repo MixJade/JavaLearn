@@ -59,7 +59,7 @@ const addYear = (isAdd) => {
  * @param month 月份数字，如12
  */
 const jumpIndex = (month) => {
-    window.location.href = `/index.html?month=${year}-${month}`
+    window.location.href = `/payCurl.html?month=${year}-${month}`
 }
 /**
  * 打开对应月份的天数记录

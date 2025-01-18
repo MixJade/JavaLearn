@@ -148,5 +148,5 @@ const getDayOfFirstDate = () => {
 }
 
 const jumpToIndex = (date) => {
-    window.location.href = `/index.html?month=${date}`
+    window.location.href = `/payCurl.html?month=${date}`
 }
