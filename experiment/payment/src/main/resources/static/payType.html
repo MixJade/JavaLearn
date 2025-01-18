@@ -55,8 +55,9 @@
             </div>
             <div class="form-row">
                 <label for="bigType">大类</label>
-                <select id="bigType" autocomplete="off">
+                <select id="bigType" autocomplete="off" onchange="changeBigTypeColor()">
                 </select>
+                <span id="bigTypeColor">#000000</span>
             </div>
             <div class="form-row">
                 <label for="keyName">名称</label>

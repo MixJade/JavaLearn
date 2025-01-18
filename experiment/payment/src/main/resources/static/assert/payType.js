@@ -140,6 +140,47 @@ const jsonToForm = (h) => {
     dialog.showModal();
 };
 
+// 选择大类时，改变字典颜色
+const changeBigTypeColor = () => {
+    const colorTxt = bigTypeToColor($('bigType').value);
+    const bigTypeColor = $('bigTypeColor')
+    bigTypeColor.innerText = colorTxt;
+    bigTypeColor.style.color = colorTxt;
+    $('color').value = colorTxt;
+}
+
+// 获取大类颜色
+const bigTypeToColor = bigType => {
+    switch (bigType) {
+        case '1':
+            return "#FF4500"; // 橙色
+        case '2':
+            return "#1E90FF"; // 天蓝色
+        case '3':
+            return "#6B8E23"; // 橄榄色
+        case '4':
+            return "#FF1493"; // 深粉色
+        case '5':
+            return "#800080"; // 紫色
+        case '6':
+            return "#008000"; // 绿色
+        case '7':
+            return "#B59900"; // 金色
+        case '8':
+            return "#FF6347"; // 番茄色
+        case '9':
+            return "#00A9A9"; // 青色
+        case '10':
+            return "#A52A2A"; // 棕色
+        case '11':
+            return "#000080"; // 深蓝色
+        case '12':
+            return "#696969"; // 暗灰色
+        default:
+            return "#409EFF"; // 默认蓝色
+    }
+};
+
 // 删改增操作通用解析
 const commonResp = (resp) => {
     if (resp["code"] === 1) {

@@ -39,7 +39,7 @@ public class BigTypeData {
     }
 
     /**
-     * 获取大类对应的颜色
+     * 获取大类对应的颜色(此事在js文件亦有记载)
      *
      * @param bigType 大类主键
      * @return 颜色代码
