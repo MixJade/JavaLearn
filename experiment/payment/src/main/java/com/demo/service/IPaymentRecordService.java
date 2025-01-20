@@ -7,7 +7,7 @@ import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
-import com.demo.model.vo.MonthLineVo;
+import com.demo.model.vo.YearLineVo;
 
 import java.util.List;
 
@@ -28,14 +28,14 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      *
      * @param year 年份 2024
      */
-    List<MonthPayData> getMonthDataByYear(Integer year);
+    List<MonthPayData> getYearMonthByYear(Integer year);
 
     /**
      * 获取一年中各个月份的收支总结(用于线形图)
      *
      * @param year 年份 2024
      */
-    MonthLineVo getMonthLineDataByYear(Integer year);
+    YearLineVo getYearLineByYear(Integer year);
 
     /**
      * 获取一月中每天的收支总结
@@ -43,13 +43,13 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param year  年份 2024
      * @param month 月份 01
      */
-    List<DayPayData> getDayDataByMonth(Integer year, Integer month);
+    List<DayPayData> getMonthDayByMonth(Integer year, Integer month);
 
     /**
      * 获取一月的饼图数据
      *
      * @param year  年份 2024
-     * @param month 月份 01
+     * @param month 月份 01 (传0视为查询一年的饼图数据)
      */
     ChartVo getPieChart(Integer year, Integer month);
 }

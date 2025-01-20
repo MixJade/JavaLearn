@@ -22,7 +22,7 @@
     </select>
 
     <!--获取一年中各个月份的收支总结-->
-    <select id="getMonthDataByYear" resultType="com.demo.model.dto.MonthPayData">
+    <select id="getYearMonthByYear" resultType="com.demo.model.dto.MonthPayData">
         SELECT MONTH(pay_date)                  AS month,
                SUM(IF(is_income = 0, money, 0)) AS money_out,
                SUM(IF(is_income = 1, money, 0)) AS money_in
@@ -32,7 +32,7 @@
         ORDER BY month
     </select>
     <!--获取一月中每天的收支总结-->
-    <select id="getDayDataByMonth" resultType="com.demo.model.dto.DayPayData">
+    <select id="getMonthDayByMonth" resultType="com.demo.model.dto.DayPayData">
         SELECT pay_date,
                COUNT(*)                         as pay_count,
                SUM(IF(is_income = 0, money, 0)) AS money_out,
@@ -47,10 +47,12 @@
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
         SELECT big_type, SUM(money) AS money
         FROM payment_record pd
-                 LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
+        LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
         WHERE pd.is_income = 0
-          AND YEAR(pay_date) = #{year}
-          AND MONTH(pay_date) = #{month}
+        AND YEAR(pay_date) = #{year}
+        <if test="month != 0">
+            AND MONTH(pay_date) = #{month}
+        </if>
         GROUP BY big_type
         ORDER BY money
     </select>
@@ -59,7 +61,9 @@
         SELECT SUM(money)
         FROM payment_record
         WHERE is_income = 0
-          AND YEAR(pay_date) = #{year}
-          AND MONTH(pay_date) = #{month}
+        AND YEAR(pay_date) = #{year}
+        <if test="month != 0">
+            AND MONTH(pay_date) = #{month}
+        </if>
     </select>
 </mapper>

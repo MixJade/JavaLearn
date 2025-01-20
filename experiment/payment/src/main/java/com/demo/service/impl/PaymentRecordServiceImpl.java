@@ -11,7 +11,7 @@ import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
-import com.demo.model.vo.MonthLineVo;
+import com.demo.model.vo.YearLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +36,8 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public List<MonthPayData> getMonthDataByYear(Integer year) {
-        List<MonthPayData> monthDataByYear = baseMapper.getMonthDataByYear(year);
+    public List<MonthPayData> getYearMonthByYear(Integer year) {
+        List<MonthPayData> monthDataByYear = baseMapper.getYearMonthByYear(year);
         for (MonthPayData mpd : monthDataByYear) {
             mpd.setMoney(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
@@ -45,8 +45,8 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public MonthLineVo getMonthLineDataByYear(Integer year) {
-        List<MonthPayData> monthDataByYear = baseMapper.getMonthDataByYear(year);
+    public YearLineVo getYearLineByYear(Integer year) {
+        List<MonthPayData> monthDataByYear = baseMapper.getYearMonthByYear(year);
         List<BigDecimal> moneyOut = new ArrayList<>(),
                 moneyIn = new ArrayList<>(),
                 money = new ArrayList<>();
@@ -56,12 +56,12 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             moneyIn.add(mpd.getMoneyIn());
             money.add(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
-        return new MonthLineVo(moneyOut, moneyIn, money);
+        return new YearLineVo(moneyOut, moneyIn, money);
     }
 
     @Override
-    public List<DayPayData> getDayDataByMonth(Integer year, Integer month) {
-        return baseMapper.getDayDataByMonth(year, month);
+    public List<DayPayData> getMonthDayByMonth(Integer year, Integer month) {
+        return baseMapper.getMonthDayByMonth(year, month);
     }
 
     @Override

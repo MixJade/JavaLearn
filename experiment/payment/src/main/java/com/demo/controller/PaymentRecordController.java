@@ -7,7 +7,7 @@ import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
-import com.demo.model.vo.MonthLineVo;
+import com.demo.model.vo.YearLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,9 +66,9 @@ public class PaymentRecordController {
      *
      * @param year 年份 2024
      */
-    @GetMapping("/month")
-    public List<MonthPayData> getMonthDataByYear(Integer year) {
-        return paymentRecordService.getMonthDataByYear(year);
+    @GetMapping("/yearMonth")
+    public List<MonthPayData> getYearMonthByYear(Integer year) {
+        return paymentRecordService.getYearMonthByYear(year);
     }
 
     /**
@@ -76,9 +76,19 @@ public class PaymentRecordController {
      *
      * @param year 年份 2024
      */
-    @GetMapping("/monthLine")
-    public MonthLineVo getMonthLineDataByYear(Integer year) {
-        return paymentRecordService.getMonthLineDataByYear(year);
+    @GetMapping("/yearLine")
+    public YearLineVo getYearLineByYear(Integer year) {
+        return paymentRecordService.getYearLineByYear(year);
+    }
+
+    /**
+     * 获取一年中各个月份的消费成分(用于饼状图)
+     *
+     * @param year 年份 2024
+     */
+    @GetMapping("/yearPie")
+    public ChartVo getYearPieByYear(Integer year) {
+        return paymentRecordService.getPieChart(year, 0);
     }
 
     /**
@@ -87,9 +97,9 @@ public class PaymentRecordController {
      * @param year  年份 2024
      * @param month 月份 01
      */
-    @GetMapping("/day")
-    public List<DayPayData> getDayDataByMonth(Integer year, Integer month) {
-        return paymentRecordService.getDayDataByMonth(year, month);
+    @GetMapping("/monthDay")
+    public List<DayPayData> getMonthDayByMonth(Integer year, Integer month) {
+        return paymentRecordService.getMonthDayByMonth(year, month);
     }
 
     /**
@@ -98,8 +108,8 @@ public class PaymentRecordController {
      * @param year  年份 2024
      * @param month 月份 01
      */
-    @GetMapping("/pieChart")
-    public ChartVo getPieChart(Integer year, Integer month) {
+    @GetMapping("/monthPie")
+    public ChartVo getMonthPie(Integer year, Integer month) {
         return paymentRecordService.getPieChart(year, month);
     }
 }

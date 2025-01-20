@@ -1,7 +1,7 @@
 window.onload = () => getYearMonth();
 
 const getYearMonth = () => {
-    fetch(`/paymentRecord/month?year=${year}`)
+    fetch(`/paymentRecord/yearMonth?year=${year}`)
         .then(response => response.json())
         .then(resp => {
             let monthMap = new Map(resp.map(i => [i.month, i]));
@@ -65,17 +65,23 @@ const jumpIndex = (month) => {
  * 打开对应月份的天数记录
  */
 const jumpCalendar = (month) => {
-    window.location.href = `/calendar.html?month=${year}-${month}`
+    window.location.href = `/monthDay.html?month=${year}-${month}`
 }
 /**
  * 打开对应月份的绘图
  */
 const jumpToChart = (month) => {
-    window.location.href = `/monthChart.html?month=${year}-${month}`
+    window.location.href = `/monthPie.html?month=${year}-${month}`
 }
 /**
  * 打开一年的折线图
  */
-const jumpToYearChart = () => {
-    window.location.href = `/yearChart.html?year=${year}`
+const jumpToYearLine = () => {
+    window.location.href = `/yearLine.html?year=${year}`
+}
+/**
+ * 打开一年的饼状图
+ */
+const jumpToYearPie = () => {
+    window.location.href = `/yearPie.html?year=${year}`
 }

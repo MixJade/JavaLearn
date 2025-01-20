@@ -25,9 +25,9 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
     IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page, Integer bigType, String beginDate, String endDate);
 
-    List<MonthPayData> getMonthDataByYear(Integer year);
+    List<MonthPayData> getYearMonthByYear(Integer year);
 
-    List<DayPayData> getDayDataByMonth(Integer year, Integer month);
+    List<DayPayData> getMonthDayByMonth(Integer year, Integer month);
 
     List<ChartDo> getPieChart(Integer year, Integer month);
 

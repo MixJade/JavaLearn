@@ -6,7 +6,7 @@ window.onload = () => {
     if (queryParam !== undefined) {
         dateH1.innerText = queryParam
         const dateStr = queryParam.split("-");
-        fetch(`/paymentRecord/pieChart?year=${dateStr[0]}&month=${dateStr[1]}`)
+        fetch(`/paymentRecord/monthPie?year=${dateStr[0]}&month=${dateStr[1]}`)
             .then(response => response.json())
             .then(resp => {
                 const {labels, colors, moneys, outMoney} = resp;
