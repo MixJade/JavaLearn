@@ -1,8 +1,10 @@
+const $ = id => document.getElementById(id);
 window.onload = () => {
     // 看是否有页面传参
     const queryParam = getQueryParams()["year"];
     if (queryParam !== undefined) {
-        document.getElementById("yearH1").innerText = queryParam;
+        // 获取折线图数据
+        $("yearH1").innerText = queryParam;
         fetch(`/paymentRecord/yearLine?year=${queryParam}`)
             .then(response => response.json())
             .then(resp => {
@@ -10,11 +12,22 @@ window.onload = () => {
                 drawLine(moneyOut, moneyIn, money)
             })
             .catch((error) => console.error('Error:', error));
+        // 获取总收入支出数据
+        fetch(`/paymentRecord/yearMoney?year=${queryParam}`)
+            .then(response => response.json())
+            .then(resp => {
+                const {moneyOut, moneyIn, money} = resp;
+                $('yearMoney').innerHTML = `
+        年收入：<span style="color: #17bd17">+${moneyIn}</span>&nbsp&nbsp
+        年支出：<span style="color: #c45656">-${moneyOut}</span><br>
+        净收入：<span style="color: ${money > 0 ? '#c45656' : '#17bd17'}">${money > 0 ? '+' : ''}${money}</span>`
+            })
+            .catch((error) => console.error('Error:', error));
     }
 }
 
 const drawLine = (moneyOut, moneyIn, money) => {
-    const ctx = document.getElementById('lineChart').getContext('2d');
+    const ctx = $('lineChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {

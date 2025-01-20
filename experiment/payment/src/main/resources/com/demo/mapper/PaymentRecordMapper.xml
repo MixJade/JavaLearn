@@ -31,6 +31,13 @@
         GROUP BY MONTH(pay_date)
         ORDER BY month
     </select>
+    <!-- 获取一年的收支总结-->
+    <select id="getYearMoney" resultType="com.demo.model.dto.YearPayData">
+        SELECT SUM(IF(is_income = 0, money, 0)) AS money_out,
+               SUM(IF(is_income = 1, money, 0)) AS money_in
+        FROM payment_record
+        WHERE YEAR(pay_date) = #{year}
+    </select>
     <!--获取一月中每天的收支总结-->
     <select id="getMonthDayByMonth" resultType="com.demo.model.dto.DayPayData">
         SELECT pay_date,

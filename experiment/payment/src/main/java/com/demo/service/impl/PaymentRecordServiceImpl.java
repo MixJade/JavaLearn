@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentRecordMapper;
-import com.demo.model.dto.ChartDo;
-import com.demo.model.dto.DayPayData;
-import com.demo.model.dto.MonthPayData;
-import com.demo.model.dto.PaymentRecordDto;
+import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
 import com.demo.model.vo.YearLineVo;
@@ -57,6 +54,13 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             money.add(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
         return new YearLineVo(moneyOut, moneyIn, money);
+    }
+
+    @Override
+    public YearPayData getYearMoney(Integer year) {
+        YearPayData ym = baseMapper.getYearMoney(year);
+        ym.setMoney(ym.getMoneyIn().subtract(ym.getMoneyOut()));
+        return ym;
     }
 
     @Override
