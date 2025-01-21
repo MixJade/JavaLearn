@@ -85,3 +85,9 @@ const jumpToYearLine = () => {
 const jumpToYearPie = () => {
     window.location.href = `/yearPie.html?year=${year}`
 }
+/**
+ * 打开一年的报告
+ */
+const jumpToYearReport = () => {
+    window.location.href = `/yearReport.html?year=${year}`
+}

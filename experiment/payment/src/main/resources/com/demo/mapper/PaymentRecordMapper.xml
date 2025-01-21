@@ -73,4 +73,28 @@
             AND MONTH(pay_date) = #{month}
         </if>
     </select>
+    <!-- 获取一年中平均每个月的收入支出-->
+    <select id="getYearAvgMonth" resultType="java.math.BigDecimal">
+        SELECT ROUND(AVG(sum_money), 2)
+        FROM (SELECT SUM(money) AS sum_money
+              FROM payment_record
+              WHERE YEAR(pay_date) = #{year}
+                AND is_income = #{isIncome}
+              GROUP BY MONTH(pay_date)) AS monthly_sums
+    </select>
+    <!-- 一年的食宿支出-->
+    <select id="getYearLifeMoney" resultType="java.math.BigDecimal">
+        SELECT SUM(pr.money)
+        FROM payment_record pr
+                 LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
+        WHERE pd.big_type IN (1, 3, 6)
+          AND pr.is_income = 0
+          AND YEAR(pr.pay_date) = #{year}
+    </select>
+    <!-- 一年中平均每天的食宿支出-->
+    <select id="getPayDayCount" resultType="java.math.BigDecimal">
+        SELECT COUNT(DISTINCT pay_date)
+        FROM payment_record
+        WHERE YEAR(pay_date) = #{year}
+    </select>
 </mapper>

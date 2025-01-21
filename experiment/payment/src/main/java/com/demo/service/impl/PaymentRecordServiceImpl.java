@@ -13,6 +13,7 @@ import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +59,27 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
 
     @Override
     public YearPayData getYearMoney(Integer year) {
+        // 一年的总收入、支出
         YearPayData ym = baseMapper.getYearMoney(year);
         ym.setMoney(ym.getMoneyIn().subtract(ym.getMoneyOut()));
+        // 一年的月平均消费
+        BigDecimal monthAvgMoneyIn = baseMapper.getYearAvgMonth(year, true);
+        BigDecimal monthAvgMoneyOut = baseMapper.getYearAvgMonth(year, false);
+        ym.setMonthAvgMoneyIn(monthAvgMoneyIn);
+        ym.setMonthAvgMoneyOut(monthAvgMoneyOut);
+        ym.setMonthAvgMoney(monthAvgMoneyIn.subtract(monthAvgMoneyOut));
+        // 一年的食宿支出
+        BigDecimal lifeMoney = baseMapper.getYearLifeMoney(year);
+        ym.setLifeMoney(lifeMoney);
+        // 劳动回报比(总收入/支出)
+        ym.setWorkRatio(ym.getMoneyIn().divide(ym.getMoneyOut(), 2, RoundingMode.HALF_UP));
+        // 食宿花费比例
+        ym.setLifeRatio(lifeMoney.divide(ym.getMoneyOut(), 2, RoundingMode.HALF_UP));
+        // 平均食宿花费
+        BigDecimal payDayCount = baseMapper.getPayDayCount(year);
+        ym.setLifeDayPay(lifeMoney.divide(payDayCount, 2, RoundingMode.HALF_UP));
+        // 当前食宿水平可存续天数
+        ym.setLifeDay(ym.getMoney().divide(ym.getLifeDayPay(), 2, RoundingMode.HALF_UP));
         return ym;
     }
 

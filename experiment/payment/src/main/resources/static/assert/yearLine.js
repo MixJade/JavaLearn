@@ -12,17 +12,6 @@ window.onload = () => {
                 drawLine(moneyOut, moneyIn, money)
             })
             .catch((error) => console.error('Error:', error));
-        // 获取总收入支出数据
-        fetch(`/paymentRecord/yearMoney?year=${queryParam}`)
-            .then(response => response.json())
-            .then(resp => {
-                const {moneyOut, moneyIn, money} = resp;
-                $('yearMoney').innerHTML = `
-        年收入：<span style="color: #17bd17">+${moneyIn}</span>&nbsp&nbsp
-        年支出：<span style="color: #c45656">-${moneyOut}</span><br>
-        净收入：<span style="color: ${money > 0 ? '#c45656' : '#17bd17'}">${money > 0 ? '+' : ''}${money}</span>`
-            })
-            .catch((error) => console.error('Error:', error));
     }
 }
 

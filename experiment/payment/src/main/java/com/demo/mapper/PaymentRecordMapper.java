@@ -31,4 +31,8 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
     BigDecimal getPayByMonth(Integer year, Integer month);
 
+    BigDecimal getYearAvgMonth(Integer year, boolean isIncome);
+
+    BigDecimal getYearLifeMoney(Integer year);
+    BigDecimal getPayDayCount(Integer year);
 }
