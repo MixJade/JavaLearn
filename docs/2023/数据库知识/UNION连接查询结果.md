@@ -33,3 +33,9 @@ SELECT column_name(s) FROM table2
 ORDER BY column_name(s);
 ```
 注意，ORDER BY 子句必须放在最后一个SELECT语句之后，它将按照顺序对整个结果集进行排序，而不仅仅是最后一个SELECT语句返回的结果。如果需要对每个SELECT语句返回的结果分别排序，那么就需要对每个SELECT语句单独使用ORDER BY。
+
+## 四、关于UNION去重
+
+`UNION` 操作符会自动去重，也就是说它会去除查询结果中的重复行。如有两个查询 `a` 和 `b`，那么 `UNION` 会去掉重复的行，包括 `b` 中的重复行，即使这些重复行在 `a` 中不存在。
+
+比如有两个查询A和B，A返回结果1,2，而B返回结果3,3。当使用UNION来连接这两个查询时，结果将会是1,2,3
