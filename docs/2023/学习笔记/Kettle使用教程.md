@@ -114,3 +114,9 @@ Kettle的转换过程可以使用一个单独的数据库，该数据库包括�
 
 1. kettle资源库
 2. 贴源/转换/交付层的表，(直接在这个数据库中进行作业)
+
+## 九、漏洞修复
+
+1. jetty漏洞：有的kettle版本过低，其所带的jetty.jar会有远程执行漏洞，升级其版本就好。
+
+   [kettle自带jetty漏洞处理](https://blog.csdn.net/zhaodecang/article/details/143146098)
