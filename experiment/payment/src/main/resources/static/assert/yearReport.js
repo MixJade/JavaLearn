@@ -17,8 +17,7 @@ window.onload = () => {
                     lifeMoney,
                     workRatio,
                     lifeRatio,
-                    lifeDayPay,
-                    lifeDay
+                    lifeDayPay
                 } = resp;
                 // 年度
                 $('yearMoney').innerHTML = `
@@ -36,7 +35,6 @@ window.onload = () => {
                 劳动回报比: ${workRatio}<br>
                 食宿花费占总消费比例: ${lifeRatio}<br>
                 平均每天食宿花费: ${lifeDayPay}<br>
-                当前食宿水平可持续天数: ${lifeDay}
                 `
             })
             .catch((error) => console.error('Error:', error));

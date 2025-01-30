@@ -17,7 +17,6 @@ public class YearPayData {
     private BigDecimal workRatio;// 劳动回报比(总收入/支出)
     private BigDecimal lifeRatio;// 食宿花费占总消费比例
     private BigDecimal lifeDayPay;// 平均每天食宿花费
-    private BigDecimal lifeDay;// 当前食宿水平可持续天数
 
     public BigDecimal getMoneyOut() {
         return moneyOut;
@@ -97,13 +96,5 @@ public class YearPayData {
 
     public void setLifeDayPay(BigDecimal lifeDayPay) {
         this.lifeDayPay = lifeDayPay;
-    }
-
-    public BigDecimal getLifeDay() {
-        return lifeDay;
-    }
-
-    public void setLifeDay(BigDecimal lifeDay) {
-        this.lifeDay = lifeDay;
     }
 }

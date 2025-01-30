@@ -78,8 +78,6 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         // 平均食宿花费
         BigDecimal payDayCount = baseMapper.getPayDayCount(year);
         ym.setLifeDayPay(lifeMoney.divide(payDayCount, 2, RoundingMode.HALF_UP));
-        // 当前食宿水平可存续天数
-        ym.setLifeDay(ym.getMoney().divide(ym.getLifeDayPay(), 2, RoundingMode.HALF_UP));
         return ym;
     }
 
