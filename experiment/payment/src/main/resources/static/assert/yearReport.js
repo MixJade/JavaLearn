@@ -19,6 +19,7 @@ window.onload = () => {
                     lifeRatio,
                     lifeDayPay
                 } = resp;
+                $('yearH1').innerText = queryParam;
                 // 年度
                 $('yearMoney').innerHTML = `
         年收入：<span class="in">+${moneyIn}</span>&nbsp&nbsp

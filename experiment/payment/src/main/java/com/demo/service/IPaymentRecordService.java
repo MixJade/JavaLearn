@@ -9,6 +9,7 @@ import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
 import com.demo.model.vo.YearLineVo;
+import com.demo.model.vo.YearTypeLineVo;
 
 import java.util.List;
 
@@ -37,6 +38,8 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param year 年份 2024
      */
     YearLineVo getYearLineByYear(Integer year);
+
+    YearTypeLineVo getYearTypeLineInteger(Integer year);
 
     /**
      * 获取一年的收支总结

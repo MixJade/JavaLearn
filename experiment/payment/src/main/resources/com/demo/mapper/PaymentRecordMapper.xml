@@ -31,6 +31,22 @@
         GROUP BY MONTH(pay_date)
         ORDER BY month
     </select>
+    <!-- 获取一年中每月各种类型支出-->
+    <select id="getYearTypeMonth" resultType="com.demo.model.dto.MonthTypePay">
+        SELECT MONTH(pay_date)                    AS month,
+               SUM(IF(pd.big_type = 1, money, 0)) AS eat,
+               SUM(IF(pd.big_type = 2, money, 0)) AS run,
+               SUM(IF(pd.big_type = 3, money, 0)) AS home,
+               SUM(IF(pd.big_type = 4, money, 0)) AS play,
+               SUM(IF(pd.big_type = 6, money, 0)) AS life,
+               SUM(IF(pd.big_type = 7, money, 0)) AS buy,
+               SUM(IF(pd.big_type = 9, money, 0)) AS salary
+        FROM payment_record pr
+                 LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
+        WHERE YEAR(pay_date) = #{year}
+        GROUP BY MONTH(pay_date)
+        ORDER BY month
+    </select>
     <!-- 获取一年的收支总结-->
     <select id="getYearMoney" resultType="com.demo.model.dto.YearPayData">
         SELECT SUM(IF(is_income = 0, money, 0)) AS money_out,

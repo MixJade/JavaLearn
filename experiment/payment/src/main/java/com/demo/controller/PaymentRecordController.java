@@ -9,6 +9,7 @@ import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
 import com.demo.model.vo.YearLineVo;
+import com.demo.model.vo.YearTypeLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +81,16 @@ public class PaymentRecordController {
     @GetMapping("/yearLine")
     public YearLineVo getYearLineByYear(Integer year) {
         return paymentRecordService.getYearLineByYear(year);
+    }
+
+    /**
+     * 获取一年中每月各种类型支出(用于线形图)
+     *
+     * @param year 年份 2024
+     */
+    @GetMapping("/yearTypeLLine")
+    public YearTypeLineVo getYearTypeLineInteger(Integer year) {
+        return paymentRecordService.getYearTypeLineInteger(year);
     }
 
     /**

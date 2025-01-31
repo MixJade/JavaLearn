@@ -9,6 +9,7 @@ import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
 import com.demo.model.vo.YearLineVo;
+import com.demo.model.vo.YearTypeLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,29 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             money.add(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
         return new YearLineVo(moneyOut, moneyIn, money);
+    }
+
+    @Override
+    public YearTypeLineVo getYearTypeLineInteger(Integer year) {
+        List<MonthTypePay> monthTypePays = baseMapper.getYearTypeMonth(year);
+        List<BigDecimal> eat = new ArrayList<>(),
+                run = new ArrayList<>(),
+                home = new ArrayList<>(),
+                play = new ArrayList<>(),
+                life = new ArrayList<>(),
+                buy = new ArrayList<>(),
+                salary = new ArrayList<>();
+        // 拆分成三条数据线
+        for (MonthTypePay mpd : monthTypePays) {
+            eat.add(mpd.getEat());
+            run.add(mpd.getRun());
+            home.add(mpd.getHome());
+            play.add(mpd.getPlay());
+            life.add(mpd.getLife());
+            buy.add(mpd.getBuy());
+            salary.add(mpd.getSalary());
+        }
+        return new YearTypeLineVo(eat, run, home, play, life, buy, salary);
     }
 
     @Override
