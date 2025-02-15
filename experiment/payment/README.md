@@ -11,3 +11,9 @@
 ```shell
 java -jar payment-0.0.1-SNAPSHOT.jar
 ```
+
+## 数据清除
+
+```sql
+TRUNCATE TABLE payment_record;
+```
