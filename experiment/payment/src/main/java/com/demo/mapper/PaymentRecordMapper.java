@@ -36,4 +36,7 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
     BigDecimal getYearLifeMoney(Integer year);
     BigDecimal getPayDayCount(Integer year);
+
+    // 查询对应数据库的数据(可以只指定年)
+    List<PaymentRecord> getRecordsByMonth(Integer year, Integer month);
 }

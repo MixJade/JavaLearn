@@ -63,4 +63,12 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param month 月份 01 (传0视为查询一年的饼图数据)
      */
     ChartVo getPieChart(Integer year, Integer month);
+
+    /**
+     * 获取一月的sql
+     *
+     * @param year  年份 2024
+     * @param month 月份 01 (传0视为查询一年数据)
+     */
+    String generateInsertSql(Integer year, Integer month);
 }

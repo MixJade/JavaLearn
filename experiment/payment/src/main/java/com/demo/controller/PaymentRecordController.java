@@ -12,8 +12,14 @@ import com.demo.model.vo.YearLineVo;
 import com.demo.model.vo.YearTypeLineVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -134,5 +140,30 @@ public class PaymentRecordController {
     @GetMapping("/monthPie")
     public ChartVo getMonthPie(Integer year, Integer month) {
         return paymentRecordService.getPieChart(year, month);
+    }
+
+    /**
+     * 下载一月的sql
+     *
+     * @param year  年份 2024
+     * @param month 月份 01
+     */
+    @GetMapping("/downInsertSql")
+    public ResponseEntity<byte[]> downInsertSql(Integer year, Integer month) {
+        // 要放入文件的字符串
+        String insertSql = paymentRecordService.generateInsertSql(year, month);
+        // 将字符串转换为字节数组
+        byte[] fileContent = insertSql.getBytes(StandardCharsets.UTF_8);
+        // 文件名称
+        String fileName = "消费数据(" + year + "年" + (month == 0 ? "" : month + "月") + ").sql";
+        // 对文件名进行 URL 编码
+        fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+        // 设置响应头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", fileName);
+        headers.setContentLength(fileContent.length);
+        // 返回响应实体
+        return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
     }
 }

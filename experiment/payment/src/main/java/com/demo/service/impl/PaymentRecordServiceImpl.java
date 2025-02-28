@@ -129,4 +129,39 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         BigDecimal outMoney = baseMapper.getPayByMonth(year, month);
         return new ChartVo(labels, colors, moneys, outMoney);
     }
+
+    @Override
+    public String generateInsertSql(Integer year, Integer month) {
+        // 查询数据库中的所有数据
+        List<PaymentRecord> paymentRecords = baseMapper.getRecordsByMonth(year, month);
+
+        if (paymentRecords.isEmpty()) {
+            return "";
+        }
+
+        StringBuilder insertStatement = new StringBuilder();
+        insertStatement.append("insert into payment_record (record_id, payment_type, is_income, money, pay_date, remark)")
+                .append("\nvalues");
+
+        for (int i = 0; i < paymentRecords.size(); i++) {
+            PaymentRecord pr = paymentRecords.get(i);
+            // 定义每行数据的模板字符串
+            String rowTemplate = "(%d, %d, %d, %.2f, '%s', '%s')";
+            // 格式化每行数据
+            String rowData = String.format(rowTemplate,
+                    pr.getRecordId(),
+                    pr.getPaymentType(),
+                    pr.getIsIncome() ? 1 : 0,
+                    pr.getMoney(),
+                    pr.getPayDate(),
+                    pr.getRemark());
+
+            insertStatement.append(rowData);
+            // 行尾字符串
+            if (i < paymentRecords.size() - 1)
+                insertStatement.append(",\n       ");
+            else insertStatement.append(";");
+        }
+        return insertStatement.toString();
+    }
 }
