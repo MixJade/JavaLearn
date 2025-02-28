@@ -30,8 +30,8 @@ import java.util.Map;
 @Service
 public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, PaymentRecord> implements IPaymentRecordService {
     @Override
-    public IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, String beginDate, String endDate) {
-        return baseMapper.getByPage(new Page<>(pageNum, pageSize), bigType, beginDate, endDate);
+    public IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, Integer paymentType, String beginDate, String endDate) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize), bigType, paymentType, beginDate, endDate);
     }
 
     @Override
@@ -114,20 +114,23 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     public ChartVo getPieChart(Integer year, Integer month) {
         List<ChartDo> pieChart = baseMapper.getPieChart(year, month);
         // 转变为前端能直接用的数据结构
+        List<Integer> bigTypes = new ArrayList<>();
         List<String> labels = new ArrayList<>(),
                 colors = new ArrayList<>();
         List<BigDecimal> moneys = new ArrayList<>();
         // 获取大类map
         Map<Integer, String> bigTypeMap = BigTypeData.getMap();
+        Map<Integer, String> bigTypeColorMap = BigTypeData.getColorMap();
         // 组装大类数据
         for (ChartDo chartDo : pieChart) {
+            bigTypes.add(chartDo.getBigType());
             labels.add(bigTypeMap.get(chartDo.getBigType()));
-            colors.add(BigTypeData.getBigTypeColor(chartDo.getBigType()));
+            colors.add(bigTypeColorMap.get(chartDo.getBigType()));
             moneys.add(chartDo.getMoney());
         }
         // 查询当月总支出
         BigDecimal outMoney = baseMapper.getPayByMonth(year, month);
-        return new ChartVo(labels, colors, moneys, outMoney);
+        return new ChartVo(bigTypes, labels, colors, moneys, outMoney);
     }
 
     @Override

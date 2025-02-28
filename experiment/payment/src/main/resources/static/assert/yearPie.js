@@ -6,15 +6,15 @@ window.onload = () => {
         fetch(`/paymentRecord/yearPie?year=${queryParam}`)
             .then(response => response.json())
             .then(resp => {
-                const {labels, colors, moneys, outMoney} = resp;
+                const {bigTypes, labels, colors, moneys, outMoney} = resp;
                 document.getElementById("outSpan").innerText = `-${outMoney}`;
-                drawChart(labels, colors, moneys)
+                drawChart(bigTypes, labels, colors, moneys)
             })
             .catch((error) => console.error('Error:', error));
     }
 }
 
-const drawChart = (labels, colors, moneys) => {
+const drawChart = (bigTypes, labels, colors, moneys) => {
     // 柱状图
     const ctxBar = document.getElementById('barChart').getContext('2d');
     new Chart(ctxBar, {
@@ -33,6 +33,16 @@ const drawChart = (labels, colors, moneys) => {
             scales: {
                 y: {
                     beginAtZero: true
+                }
+            },
+            onClick: function (event, elements) {
+                if (elements.length > 0) {
+                    const firstElement = elements[0];
+                    const datasetIndex = firstElement.datasetIndex;
+                    const index = firstElement.index;
+                    const label = this.data.labels[index];
+                    const value = this.data.datasets[datasetIndex].data[index];
+                    alert(`你点击了 ${label}，钱 ${value} id ${bigTypes[index]}`);
                 }
             }
         }

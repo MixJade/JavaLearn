@@ -20,7 +20,7 @@ import java.util.List;
 @Mapper
 public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
-    IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page, Integer bigType, String beginDate, String endDate);
+    IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page, Integer bigType, Integer paymentType, String beginDate, String endDate);
 
     List<MonthPayData> getYearMonthByYear(Integer year);
     List<MonthTypePay> getYearTypeMonth(Integer year);

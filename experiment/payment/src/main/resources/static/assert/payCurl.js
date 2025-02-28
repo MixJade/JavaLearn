@@ -14,7 +14,18 @@ window.onload = () => {
  */
 const getStartAndEndOfMonth = (monthStr) => {
     const dateStr = monthStr.split("-");
-    if (dateStr.length === 2) {
+    if (dateStr.length === 1) {
+        // 只有年
+        // 本年第一天
+        const startDateV = new Date(dateStr[0], 0, 1);
+        startDateV.setHours(8) //东八时区
+        // 本年最后一天
+        const endDateV = new Date(dateStr[0],11, 31);
+        endDateV.setHours(8) //东八时区
+        // 设值
+        beginDate.value = startDateV.toISOString().slice(0, 10);
+        endDate.value = endDateV.toISOString().slice(0, 10);
+    } else if (dateStr.length === 2) {
         // 只有年+月
         // 本月第一天
         const startDateV = new Date(dateStr[0], dateStr[1] - 1, 1);
@@ -52,6 +63,8 @@ const getPayType = () => {
         .catch((error) => console.error('Error:', error));
 };
 const bigTypeSearch = $("bigTypeSearch");
+const paymentTypeSearch = $("paymentTypeSearch");
+const smallPayMay = new Map(); // 大类下的小类映射
 const getBigType = () => {
     bigTypeSearch.innerHTML = `<option value=""> </option>`
     fetch('/paymentDict/bigType')
@@ -63,9 +76,36 @@ const getBigType = () => {
             }
         })
         .catch((error) => console.error('Error:', error));
+    // 旁边的小分类
+    paymentTypeSearch.innerHTML = '<option value=""> </option>';
 }
+// 搜索框的大类变化
+const bigTypeChange = () => {
+    const bigType = bigTypeSearch.value;
+    if (bigType === "") return;
+    paymentTypeSearch.value = "";
+    const paymentDictList = smallPayMay.get(Number(bigType))
+    paymentTypeSearch.innerHTML = '<option value=""> </option>';
+    for (const paymentDict of paymentDictList) {
+        const {paymentType, keyName} = paymentDict
+        paymentTypeSearch.innerHTML += `<option value="${paymentType}">${keyName}</option>`
+    }
+    getAll();
+}
+// 组装表单中的下拉框，顺便组装查询表单所需的map
 const getOpGroup = (respElement) => {
-    const {typeName, paymentDictList} = respElement
+    const {bigType, typeName, paymentDictList} = respElement
+    // 放入map
+    if (smallPayMay.has(bigType)) {
+        // 如果键已经存在，将新列表与原列表合并
+        const existingList = smallPayMay.get(bigType);
+        const mergedList = existingList.concat(paymentDictList);
+        smallPayMay.set(bigType, mergedList);
+    } else {
+        // 如果键不存在，将键和列表作为新的键值对插入到 Map 中
+        smallPayMay.set(bigType, paymentDictList);
+    }
+    // 组装表单
     let optGroup = `<optgroup label="${typeName}">`
     for (const paymentDict of paymentDictList) {
         const {paymentType, keyName} = paymentDict
@@ -88,11 +128,12 @@ const beginDate = $("beginDate")
 const endDate = $("endDate")
 const getAll = () => {
     const bigTypeVal = bigTypeSearch.value;
+    const paymentTypeVal = paymentTypeSearch.value;
     const beginDateVal = beginDate.value;
     const endDateVal = endDate.value;
     const pageSize = paSize.value;
     // 拼接参数
-    fetch(`/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}&bigType=${bigTypeVal}&beginDate=${beginDateVal}&endDate=${endDateVal}`)
+    fetch(`/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}&bigType=${bigTypeVal}&paymentType=${paymentTypeVal}&beginDate=${beginDateVal}&endDate=${endDateVal}`)
         .then(response => response.json())
         .then(resp => {
             firstLoadPa(resp["total"], resp["pages"])

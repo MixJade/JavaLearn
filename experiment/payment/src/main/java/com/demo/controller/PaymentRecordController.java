@@ -60,8 +60,8 @@ public class PaymentRecordController {
     }
 
     @GetMapping
-    public IPage<PaymentRecordDto> getAll(int pageNum, int pageSize, Integer bigType, String beginDate, String endDate) {
-        return paymentRecordService.getByPage(pageNum, pageSize, bigType, beginDate, endDate);
+    public IPage<PaymentRecordDto> getAll(int pageNum, int pageSize, Integer bigType, Integer paymentType, String beginDate, String endDate) {
+        return paymentRecordService.getByPage(pageNum, pageSize, bigType, paymentType, beginDate, endDate);
     }
 
     @GetMapping("/{id}")

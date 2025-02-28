@@ -6,5 +6,6 @@ import java.util.List;
 /**
  * 图表展示类
  */
-public record ChartVo(List<String> labels, List<String> colors, List<BigDecimal> moneys, BigDecimal outMoney) {
+public record ChartVo(List<Integer> bigTypes, List<String> labels, List<String> colors, List<BigDecimal> moneys,
+                      BigDecimal outMoney) {
 }

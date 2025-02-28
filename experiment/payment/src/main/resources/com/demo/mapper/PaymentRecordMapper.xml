@@ -8,7 +8,10 @@
         FROM payment_record pr
         LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
         <where>
-            <if test="bigType != null and bigType != 0">
+            <if test="paymentType != null">
+                AND pr.payment_type = #{paymentType}
+            </if>
+            <if test="bigType != null and bigType != 0 and paymentType == null">
                 AND pd.big_type = #{bigType}
             </if>
             <if test="beginDate != null and beginDate != ''">

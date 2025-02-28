@@ -23,7 +23,7 @@ import java.util.List;
  */
 public interface IPaymentRecordService extends IService<PaymentRecord> {
 
-    IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, String beginDate, String endDate);
+    IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, Integer paymentType, String beginDate, String endDate);
 
     /**
      * 获取一年中各个月份的收支总结

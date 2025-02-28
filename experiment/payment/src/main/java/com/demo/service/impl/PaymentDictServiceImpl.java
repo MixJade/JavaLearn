@@ -42,7 +42,7 @@ public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, Payme
             paymentDictMap.computeIfAbsent(bigType, k -> new ArrayList<>()).add(paymentDict);
             // 只在第一次遇到大类时创建 TypeOption 然后放入列表的引用
             if (paymentDictMap.get(bigType).size() == 1) {
-                typeOptions.add(new TypeOption(bigTypeMap.get(bigType), paymentDictMap.get(bigType)));
+                typeOptions.add(new TypeOption(bigType, bigTypeMap.get(bigType), paymentDictMap.get(bigType)));
             }
         }
         return typeOptions;
