@@ -19,7 +19,7 @@ const writeMonthCard = (monthMap) => {
             twelveCard.innerHTML += `<div>
         <a class="downA" href="/paymentRecord/downInsertSql?year=${year}&month=${i}">导出</a>
         <h2>${i}月</h2>
-        <p>收支：<span class="${money > 0 ? 'in' : 'out'}">${money > 0 ? '+' : ''}${money}</span></p>
+        <p>盈余：<span class="${money > 0 ? 'in' : 'out'}">${money > 0 ? '+' : ''}${money}</span></p>
         <hr>
         <p>支出：<span class="out">-${moneyOut}</span>&nbsp&nbsp&nbsp&nbsp&nbsp收入：<span class="in">+${moneyIn}</span></p>
         <hr>

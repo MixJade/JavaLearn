@@ -11,7 +11,7 @@ public class MonthPayData {
     private BigDecimal moneyOut;// 支出
     private BigDecimal moneyIn;// 收入
 
-    private BigDecimal money;// 总收益
+    private BigDecimal money;// 盈余
 
     public Integer getMonth() {
         return month;

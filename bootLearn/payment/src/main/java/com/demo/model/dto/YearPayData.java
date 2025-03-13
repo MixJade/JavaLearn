@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class YearPayData {
     private BigDecimal moneyOut;// 总支出
     private BigDecimal moneyIn;// 总收入
-    private BigDecimal money;// 总收益
+    private BigDecimal money;// 盈余
     private BigDecimal monthAvgMoneyIn;// 月平均收入
     private BigDecimal monthAvgMoneyOut;// 月平均支出
     private BigDecimal monthAvgMoney;// 月平均收益

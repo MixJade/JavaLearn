@@ -45,7 +45,7 @@ const drawLine = (moneyOut, moneyIn, money) => {
                     fill: false
                 },
                 {
-                    label: '收支',
+                    label: '盈余',
                     data: money,
                     borderColor: 'rgb(21,183,218)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
