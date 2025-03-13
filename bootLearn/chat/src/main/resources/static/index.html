@@ -31,7 +31,7 @@
 
     $("#chatDiv").click(function () {
         $.get("/login/toLogin?user=" + $("#user").val(), function (res) {
-            if (res["flag"]) location.href = "main.html";
+            if (res["flag"]) location.href = "chat.html";
             else alert(res["msg"]);
         }, "json");
     })

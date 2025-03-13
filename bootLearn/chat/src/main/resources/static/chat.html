@@ -66,16 +66,16 @@
                 } else {
                     // 不是系统消息
                     // 判断是自己发的就设置特殊背景色
-                    let selfColor = ""
+                    let selfStyle = ""
                     if (res["userVo"]["username"] === username)
-                        selfColor = 'style="background-color:#B3E09C"'
+                        selfStyle = ' selfMsg'
                     // 转义消息(防止消息中带有html标签)
                     const messageText = $('<div>').text(res["message"]).html();
                     // 插入html中
-                    chatContent.append(`<div class="msgDiv">
+                    chatContent.append(`<div class="msgDiv${selfStyle}">
             <span class="msgUser">${res["userVo"]["username"]} ${res["sendTime"]}</span>
             <div class="msgImg" style="background-color: ${res["userVo"]["imgColor"]}">${res["userVo"]["simpleNm"]}</div>
-            <div class="msgContent" ${selfColor}>${messageText}</div></div>`)
+            <div class="msgContent">${messageText}</div></div>`)
                 }
             }
             // 关闭链接

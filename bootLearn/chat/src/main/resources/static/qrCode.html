@@ -32,9 +32,10 @@
     const qrCodeImg = $('#qrCodeImg') // 二维码图片
     const parseQRCodeText = $('#parseQRCodeText') // 二维码图片
     window.onload = () => {
-        const host = window.location.host;
-        qrCodeText.val(host)
-        qrCodeImg.attr('src', '/qrcode?url=' + host);
+        // 获取协议+主机名和端口
+        const urlText = window.location.protocol + '//' + window.location.host;
+        qrCodeText.val(urlText)
+        qrCodeImg.attr('src', '/qrcode?url=' + urlText);
     }
 
     // 生成二维码
