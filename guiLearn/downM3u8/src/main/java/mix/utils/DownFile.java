@@ -27,9 +27,7 @@ public class DownFile {
             conn.setRequestMethod("GET"); // 请求方法
             // 设置请求头
             conn.setRequestProperty("User-Agent", "Mozilla/5.0");
-            if (reqHeadList.size() > 0)
-                for (ReqHead reqHead : reqHeadList)
-                    conn.setRequestProperty(reqHead.key(), reqHead.value());
+            setReqHead(conn);
             conn.connect();
             try (InputStream is = conn.getInputStream();
                  OutputStream os = new FileOutputStream(filePath)) {
@@ -60,5 +58,16 @@ public class DownFile {
                 reqHeadList.add(new ReqHead(key, props.getProperty(key)));
         } catch (Exception ignored) {
         }
+    }
+
+    /**
+     * 为请求设置读取的请求头
+     *
+     * @param conn 连接对象
+     */
+    public static void setReqHead(HttpURLConnection conn) {
+        if (reqHeadList.size() > 0)
+            for (ReqHead reqHead : reqHeadList)
+                conn.setRequestProperty(reqHead.key(), reqHead.value());
     }
 }

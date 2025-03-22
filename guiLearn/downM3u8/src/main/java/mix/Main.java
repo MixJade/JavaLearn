@@ -3,6 +3,7 @@ package mix;
 import mix.view.Panel1;
 import mix.view.Panel2;
 import mix.view.Panel3;
+import mix.view.Panel5;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -41,11 +42,15 @@ public class Main extends JFrame {
         Panel3 panel3 = new Panel3(panel1);
         tabbedPane.addTab("转换电影", panel3);
 
+        // 创建面板3
+        Panel5 panel5 = new Panel5();
+        tabbedPane.addTab("下载工具", panel5);
+
         // 将选项卡面板添加到帧中
         add(tabbedPane);
 
         // 设置窗口为最佳大小
-        pack();
+        setSize(380, 200);
         // 启动窗口
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
