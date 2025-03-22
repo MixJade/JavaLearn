@@ -73,7 +73,7 @@ public class FileController {
         try {
             File file = new File(filePath);
             String fileLength = String.valueOf(file.length());
-            log.info("下载{}  文件大小{}", filename, fileLength);
+            log.info("下载{}  文件大小{}kb", filename, file.length() >> 10);
             FileInputStream fileInputStream = new FileInputStream(file);
             InputStreamResource resource = new InputStreamResource(fileInputStream);
             // 还需对文件名进行转码

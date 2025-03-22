@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>文件上传下载</title>
+    <link href="css/fileTes.min.css" rel="stylesheet">
 </head>
 <body>
 <h3>文件上传</h3>
@@ -10,12 +11,23 @@
 <button type="button" id="uploadBtn">确认上传</button>
 <div id="progressDiv" style="display: none;">
     <progress id="progressBar" max="100" value="0">0%</progress>
-    <span id="progressTxt">上传进度</span>
+    <span id="progressTxt">上传进度</span>kb
 </div>
 <hr>
 <h3>文件下载</h3>
 <ul id="downUl">
 </ul>
+<!--二维码模态框-->
+<dialog class="myDialog" id="myDialog">
+    <svg id="dialogCloseBtn" onclick="closeDialog()" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+        <line x1="25" y1="11" x2="11" y2="25" stroke="#fff" stroke-width="4"/>
+        <line x1="25" y1="25" x2="11" y2="11" stroke="#fff" stroke-width="4"/>
+    </svg>
+    <figure>
+        <img id="qrCode" src="" alt="qrCode">
+        <figcaption>下载链接二维码</figcaption>
+    </figure>
+</dialog>
 </body>
 <script src="js/jquery-3.6.3.min.js"></script>
 <script>
@@ -61,7 +73,7 @@
         console.log("已经上传了：" + per + "%");
         //在这里对页面的进度条进行操作
         progressBar.val(per)
-        progressTxt.text(evt.loaded + "/" + evt.total)
+        progressTxt.text((evt.loaded >> 10) + "/" + (evt.total >> 10))
     }
 
     // 输出可下载文件的列表
@@ -70,10 +82,24 @@
             const downUl = $('#downUl');
             downUl.html("")
             if (res.length > 0)
-                res.forEach(i => downUl.append(`<li><a href="/file/down/${i}">${i}</a></li>`))
+                res.forEach(i => downUl.append(`<li><a href="/file/down/${i}">${i}</a>
+                    <button type="button" onclick="showDialog('/file/down/${i}')">二维码</button></li>`))
             else
                 downUl.html("<li>暂无可下载资源</li>")
         })
     }
+
+    // 添加修改模态框
+    const dialog = document.getElementById("myDialog");
+    const qrCodeImg = $('#qrCode') // 二维码图片
+    const showDialog = (url) => {
+        // 获取协议+主机名和端口
+        const urlText = window.location.protocol + '//' + window.location.host;
+        qrCodeImg.attr('src', '/qrcode?url=' + urlText + url);
+        dialog.showModal();
+    };
+    const closeDialog = () => {
+        dialog.close()
+    };
 </script>
 </html>
