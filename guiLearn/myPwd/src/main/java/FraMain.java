@@ -26,6 +26,7 @@ public class FraMain extends JFrame {
         JPanel panRC4 = new PanRC4();
         JPanel panCaesar = new PanCaesar();
         JPanel panGenPwd = new PanGenPwd();
+        JPanel panBase64 = new PanBase64();
 
         // 将面板添加到选项卡面板中
         tabbedPane.addTab("AES", panAES);
@@ -33,6 +34,7 @@ public class FraMain extends JFrame {
         tabbedPane.addTab("PC4", panRC4);
         tabbedPane.addTab("凯撒", panCaesar);
         tabbedPane.addTab("生成密码", panGenPwd);
+        tabbedPane.addTab("Base64", panBase64);
 
         // 将选项卡面板添加到帧中
         add(tabbedPane);
