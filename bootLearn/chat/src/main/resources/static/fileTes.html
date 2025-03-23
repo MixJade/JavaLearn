@@ -82,8 +82,11 @@
             const downUl = $('#downUl');
             downUl.html("")
             if (res.length > 0)
-                res.forEach(i => downUl.append(`<li><a href="/file/down/${i}">${i}</a>
-                    <button type="button" onclick="showDialog('/file/down/${i}')">二维码</button></li>`))
+                res.forEach(i => {
+                    const {fileName, fileSize} = i;
+                    downUl.append(`<li><a href="/file/down/${fileName}">${fileName}</a> (${fileSize})
+                    <button type="button" onclick="showDialog('/file/down/${fileName}')">二维码</button></li>`)
+                })
             else
                 downUl.html("<li>暂无可下载资源</li>")
         })

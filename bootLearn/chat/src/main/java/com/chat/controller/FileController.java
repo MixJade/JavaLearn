@@ -1,5 +1,6 @@
 package com.chat.controller;
 
+import com.chat.pojo.FileInfo;
 import com.chat.pojo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,21 +95,21 @@ public class FileController {
      * @return chatFile的存在文件
      */
     @GetMapping("/getFileList")
-    public List<String> getFileList() {
-        List<String> fileNames = new ArrayList<>();
+    public List<FileInfo> getFileList() {
+        List<FileInfo> fileInfos = new ArrayList<>();
         // 检查对应目录是否存在
         File directory = new File(dirPath);
         if (directory.exists()) {
             // 存在则返回文件名列表
             File[] listOfFiles = directory.listFiles();
-            if (listOfFiles == null) return fileNames;
+            if (listOfFiles == null) return fileInfos;
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-                    fileNames.add(file.getName());
+                    fileInfos.add(new FileInfo(file.getName(), (file.length() >> 10) + "kb"));
                 }
             }
         }
-        return fileNames;
+        return fileInfos;
     }
 }
 
