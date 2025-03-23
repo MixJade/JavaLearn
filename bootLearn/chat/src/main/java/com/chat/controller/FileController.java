@@ -105,7 +105,7 @@ public class FileController {
             if (listOfFiles == null) return fileInfos;
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-                    fileInfos.add(new FileInfo(file.getName(), (file.length() >> 10) + "kb"));
+                    fileInfos.add(FileInfo.bu(file.getName(), file.length()));
                 }
             }
         }
