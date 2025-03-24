@@ -5,7 +5,7 @@ window.onload = () => {
     if (queryParam !== undefined) {
         // 获取折线图数据
         $("yearH1").innerText = queryParam;
-        fetch(`/paymentRecord/yearLine?year=${queryParam}`)
+        fetch(`/api/paymentRecord/yearLine?year=${queryParam}`)
             .then(response => response.json())
             .then(resp => {
                 const {moneyOut, moneyIn, money} = resp;
@@ -13,7 +13,7 @@ window.onload = () => {
             })
             .catch((error) => console.error('Error:', error));
         // 获取每月收支类型数据
-        fetch(`/paymentRecord/yearTypeLLine?year=${queryParam}`)
+        fetch(`/api/paymentRecord/yearTypeLLine?year=${queryParam}`)
             .then(response => response.json())
             .then(resp => {
                 const {eat, run, home, play, life, buy, salary} = resp;

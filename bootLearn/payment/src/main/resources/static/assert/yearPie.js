@@ -3,7 +3,7 @@ window.onload = () => {
     const queryParam = getQueryParams()["year"];
     if (queryParam !== undefined) {
         document.getElementById("yearH1").innerText = queryParam;
-        fetch(`/paymentRecord/yearPie?year=${queryParam}`)
+        fetch(`/api/paymentRecord/yearPie?year=${queryParam}`)
             .then(response => response.json())
             .then(resp => {
                 const {bigTypes, labels, colors, moneys, outMoney} = resp;

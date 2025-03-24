@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2024-12-20
  */
 @RestController
-@RequestMapping("/paymentDict")
+@RequestMapping("/api/paymentDict")
 public class PaymentDictController {
     private final IPaymentDictService paymentDictService;
 

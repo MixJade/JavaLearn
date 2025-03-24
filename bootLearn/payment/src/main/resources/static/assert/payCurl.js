@@ -51,7 +51,7 @@ let paymentTypeInOp = ""; // 收入列表
 let paymentTypeOutOp = ""; // 支出列表
 const paymentTypeSel = $('paymentType')
 const getPayType = () => {
-    fetch('/paymentDict/option')
+    fetch('/api/paymentDict/option')
         .then(response => response.json())
         .then(resp => {
             for (const respElement of resp["inList"])
@@ -67,7 +67,7 @@ const paymentTypeSearch = $("paymentTypeSearch");
 const smallPayMay = new Map(); // 大类下的小类映射
 const getBigType = () => {
     bigTypeSearch.innerHTML = `<option value=""> </option>`
-    fetch('/paymentDict/bigType')
+    fetch('/api/paymentDict/bigType')
         .then(response => response.json())
         .then(resp => {
             for (let respElement of resp) {
@@ -133,7 +133,7 @@ const getAll = () => {
     const endDateVal = endDate.value;
     const pageSize = paSize.value;
     // 拼接参数
-    fetch(`/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}&bigType=${bigTypeVal}&paymentType=${paymentTypeVal}&beginDate=${beginDateVal}&endDate=${endDateVal}`)
+    fetch(`/api/paymentRecord?pageNum=${nowPage}&pageSize=${pageSize}&bigType=${bigTypeVal}&paymentType=${paymentTypeVal}&beginDate=${beginDateVal}&endDate=${endDateVal}`)
         .then(response => response.json())
         .then(resp => {
             firstLoadPa(resp["total"], resp["pages"])
@@ -169,7 +169,7 @@ const getDataRow = (h) => {
 // 通过id删除单个
 const deleteById = async (id) => {
     if (await confirmDel()) {
-        fetch("/paymentRecord/" + id, {method: 'DELETE'})
+        fetch("/api/paymentRecord/" + id, {method: 'DELETE'})
             .then(resp => resp.json())
             .then((resp) => commonResp(resp));
     }
@@ -199,7 +199,7 @@ const setPopTitle = () => {
 const submitForm = () => {
     dialog.close()
     if ($('dialogTit').innerText === "修改记录") {
-        fetch('/paymentRecord', {
+        fetch('/api/paymentRecord', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ const submitForm = () => {
             .then(resp => resp.json())
             .then((resp) => commonResp(resp));
     } else {
-        fetch('/paymentRecord', {
+        fetch('/api/paymentRecord', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

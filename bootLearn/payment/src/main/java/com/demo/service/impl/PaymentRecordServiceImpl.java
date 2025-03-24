@@ -8,6 +8,7 @@ import com.demo.mapper.PaymentRecordMapper;
 import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
+import com.demo.model.vo.MonthPayVo;
 import com.demo.model.vo.YearLineVo;
 import com.demo.model.vo.YearTypeLineVo;
 import com.demo.service.IPaymentRecordService;
@@ -35,22 +36,43 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public List<MonthPayData> getYearMonthByYear(Integer year) {
-        List<MonthPayData> monthDataByYear = baseMapper.getYearMonthByYear(year);
-        for (MonthPayData mpd : monthDataByYear) {
+    public List<MonthPayVo> getYearMonthByYear(Integer year) {
+        List<MonthPayVo> monthDataByYear = baseMapper.getYearMonthByYear(year);
+        for (MonthPayVo mpd : monthDataByYear) {
             mpd.setMoney(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
         return monthDataByYear;
     }
 
     @Override
+    public List<List<MonthPayVo>> calendarMonth(Integer year) {
+        List<MonthPayVo> monthPayVos = baseMapper.getYearMonthByYear(year);
+        for (MonthPayVo mpd : monthPayVos) {
+            mpd.setMoney(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
+        }
+        // 将长度补齐到12
+        if (monthPayVos.size() < 12) {
+            for (int i = monthPayVos.size(); i < 12; i++) {
+                monthPayVos.add(new MonthPayVo(i));
+            }
+        }
+
+        // 将列表转换为二维列表，每个子列表长度为 3
+        List<List<MonthPayVo>> result = new ArrayList<>(4);
+        for (int i = 0; i < 12; i += 3) {
+            result.add(monthPayVos.subList(i, i + 3));
+        }
+        return result;
+    }
+
+    @Override
     public YearLineVo getYearLineByYear(Integer year) {
-        List<MonthPayData> monthDataByYear = baseMapper.getYearMonthByYear(year);
+        List<MonthPayVo> monthDataByYear = baseMapper.getYearMonthByYear(year);
         List<BigDecimal> moneyOut = new ArrayList<>(),
                 moneyIn = new ArrayList<>(),
                 money = new ArrayList<>();
         // 拆分成三条数据线
-        for (MonthPayData mpd : monthDataByYear) {
+        for (MonthPayVo mpd : monthDataByYear) {
             moneyOut.add(mpd.getMoneyOut());
             moneyIn.add(mpd.getMoneyIn());
             money.add(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));

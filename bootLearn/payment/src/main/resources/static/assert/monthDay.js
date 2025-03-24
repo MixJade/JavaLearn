@@ -47,7 +47,7 @@ const setDate = (yearVar, monthVar) => {
     month = monthVar;
     // the only place to do renders
     renderCurrentDate();
-    fetch(`/paymentRecord/monthDay?year=${yearVar}&month=${monthVar}`)
+    fetch(`/api/paymentRecord/monthDay?year=${yearVar}&month=${monthVar}`)
         .then(response => response.json())
         .then(resp => renderDates(resp))
         .catch((error) => console.error('Error:', error));

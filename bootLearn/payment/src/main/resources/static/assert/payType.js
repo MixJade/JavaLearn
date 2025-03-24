@@ -7,7 +7,7 @@ const bigTypeColorMap = new Map();
 const bigTypeSearch = $("bigTypeSearch");
 const getBigType = () => {
     bigTypeSearch.innerHTML = `<option value=""> </option>`
-    fetch('/paymentDict/bigType')
+    fetch('/api/paymentDict/bigType')
         .then(response => response.json())
         .then(resp => {
             const bigType = $('bigType')
@@ -23,7 +23,7 @@ const getBigType = () => {
 }
 
 const getAll = () => {
-    fetch('/paymentDict?bigType=' + bigTypeSearch.value)
+    fetch('/api/paymentDict?bigType=' + bigTypeSearch.value)
         .then(response => response.json())
         .then(resp => addTableRow(resp))
         .catch((error) => console.error('Error:', error));
@@ -63,7 +63,7 @@ const deleteById = async (id, recordNum) => {
         return;
     }
     if (await confirmDel()) {
-        fetch("/paymentDict/" + id, {method: 'DELETE'})
+        fetch("/api/paymentDict/" + id, {method: 'DELETE'})
             .then(resp => resp.json())
             .then((resp) => commonResp(resp));
     }
@@ -93,7 +93,7 @@ const setPopTitle = () => {
 const submitForm = () => {
     dialog.close()
     if ($('dialogTit').innerText === "修改字典") {
-        fetch('/paymentDict', {
+        fetch('/api/paymentDict', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ const submitForm = () => {
             .then(resp => resp.json())
             .then((resp) => commonResp(resp));
     } else {
-        fetch('/paymentDict', {
+        fetch('/api/paymentDict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

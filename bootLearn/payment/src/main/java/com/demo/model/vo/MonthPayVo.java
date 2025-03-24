@@ -1,4 +1,4 @@
-package com.demo.model.dto;
+package com.demo.model.vo;
 
 import java.math.BigDecimal;
 
@@ -6,12 +6,22 @@ import java.math.BigDecimal;
  * 每个月份的收支记录
  */
 @SuppressWarnings("unused")
-public class MonthPayData {
+public class MonthPayVo {
     private Integer month;// 月份
     private BigDecimal moneyOut;// 支出
     private BigDecimal moneyIn;// 收入
 
     private BigDecimal money;// 盈余
+
+    public MonthPayVo() {
+    }
+
+    public MonthPayVo(Integer month) {
+        this.month = month;
+        this.moneyOut = BigDecimal.valueOf(0);
+        this.moneyIn = BigDecimal.valueOf(0);
+        this.money = BigDecimal.valueOf(0);
+    }
 
     public Integer getMonth() {
         return month;

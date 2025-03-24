@@ -3,11 +3,11 @@ package com.demo.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.dto.DayPayData;
-import com.demo.model.dto.MonthPayData;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
+import com.demo.model.vo.MonthPayVo;
 import com.demo.model.vo.YearLineVo;
 import com.demo.model.vo.YearTypeLineVo;
 import com.demo.service.IPaymentRecordService;
@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2024-12-19
  */
 @RestController
-@RequestMapping("/paymentRecord")
+@RequestMapping("/api/paymentRecord")
 public class PaymentRecordController {
 
     private final IPaymentRecordService paymentRecordService;
@@ -74,8 +74,9 @@ public class PaymentRecordController {
      *
      * @param year 年份 2024
      */
+    @Deprecated
     @GetMapping("/yearMonth")
-    public List<MonthPayData> getYearMonthByYear(Integer year) {
+    public List<MonthPayVo> getYearMonthByYear(Integer year) {
         return paymentRecordService.getYearMonthByYear(year);
     }
 

@@ -21,7 +21,7 @@ public class PaymentApplication {
             log.info("局域IP: http://{}:23043", ip01.getHostAddress());
 
             // 假定当前服务只在window系统运行,在启动之后默认打开浏览器(服务端请注释)
-            Runtime.getRuntime().exec("cmd /c start http://localhost:23043");
+            // Runtime.getRuntime().exec("cmd /c start http://localhost:23043");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

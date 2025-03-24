@@ -4,7 +4,7 @@ window.onload = () => {
     const queryParam = getQueryParams()["year"];
     if (queryParam !== undefined) {
         // 获取总收入支出数据
-        fetch(`/paymentRecord/yearMoney?year=${queryParam}`)
+        fetch(`/api/paymentRecord/yearMoney?year=${queryParam}`)
             .then(response => response.json())
             .then(resp => {
                 const {

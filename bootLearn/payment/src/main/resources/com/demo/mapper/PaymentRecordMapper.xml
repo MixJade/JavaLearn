@@ -25,7 +25,7 @@
     </select>
 
     <!--获取一年中各个月份的收支总结-->
-    <select id="getYearMonthByYear" resultType="com.demo.model.dto.MonthPayData">
+    <select id="getYearMonthByYear" resultType="com.demo.model.vo.MonthPayVo">
         SELECT MONTH(pay_date)                  AS month,
                SUM(IF(is_income = 0, money, 0)) AS money_out,
                SUM(IF(is_income = 1, money, 0)) AS money_in

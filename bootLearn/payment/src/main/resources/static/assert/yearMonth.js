@@ -1,7 +1,7 @@
 window.onload = () => getYearMonth();
 
 const getYearMonth = () => {
-    fetch(`/paymentRecord/yearMonth?year=${year}`)
+    fetch(`/api/paymentRecord/yearMonth?year=${year}`)
         .then(response => response.json())
         .then(resp => {
             let monthMap = new Map(resp.map(i => [i.month, i]));
@@ -17,7 +17,7 @@ const writeMonthCard = (monthMap) => {
         if (monthMap.has(i)) {
             const {moneyOut, moneyIn, money} = monthMap.get(i);
             twelveCard.innerHTML += `<div>
-        <a class="downA" href="/paymentRecord/downInsertSql?year=${year}&month=${i}">导出</a>
+        <a class="downA" href="/api/paymentRecord/downInsertSql?year=${year}&month=${i}">导出</a>
         <h2>${i}月</h2>
         <p>盈余：<span class="${money > 0 ? 'in' : 'out'}">${money > 0 ? '+' : ''}${money}</span></p>
         <hr>

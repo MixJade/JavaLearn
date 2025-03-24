@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
+import com.demo.model.vo.MonthPayVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
     IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page, Integer bigType, Integer paymentType, String beginDate, String endDate);
 
-    List<MonthPayData> getYearMonthByYear(Integer year);
+    List<MonthPayVo> getYearMonthByYear(Integer year);
     List<MonthTypePay> getYearTypeMonth(Integer year);
     YearPayData getYearMoney(Integer year);
 
