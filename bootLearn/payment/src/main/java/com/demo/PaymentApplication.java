@@ -14,14 +14,14 @@ public class PaymentApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PaymentApplication.class, args);
-        log.info("本地IP: http://localhost:23043/");
+        log.info("本地IP: http://localhost:23045/");
         try {
             InetAddress ip01 = InetAddress.getLocalHost();
             //noinspection HttpUrlsUsage
-            log.info("局域IP: http://{}:23043", ip01.getHostAddress());
+            log.info("局域IP: http://{}:23045", ip01.getHostAddress());
 
             // 假定当前服务只在window系统运行,在启动之后默认打开浏览器(服务端请注释)
-            // Runtime.getRuntime().exec("cmd /c start http://localhost:23043");
+            // Runtime.getRuntime().exec("cmd /c start http://localhost:23045");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
