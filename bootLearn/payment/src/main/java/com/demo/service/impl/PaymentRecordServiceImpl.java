@@ -52,7 +52,7 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         }
         // 将长度补齐到12
         if (monthPayVos.size() < 12) {
-            for (int i = monthPayVos.size(); i < 12; i++) {
+            for (int i = monthPayVos.size() + 1; i < 13; i++) {
                 monthPayVos.add(new MonthPayVo(i));
             }
         }
