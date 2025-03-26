@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 
+import com.demo.model.vo.DayPayVo;
 import com.demo.model.vo.MonthPayVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class ChartController {
     }
 
     /**
-     * (日历图)获取各月份的收支总结
+     * (日历图)获取一年各月的收支总结
      *
      * @param year 年份 2024
      * @return 12个月的情况(3月1组, 共4组)
@@ -37,5 +38,17 @@ public class ChartController {
     @GetMapping("/calendarMonth")
     public List<List<MonthPayVo>> calendarMonth(Integer year) {
         return paymentRecordService.calendarMonth(year);
+    }
+
+    /**
+     * (日历图)获取一月每天的收支总结
+     *
+     * @param year  年份 2024
+     * @param month 月份 01
+     */
+    @Deprecated
+    @GetMapping("/calendarDay")
+    public List<List<DayPayVo>> calendarDay(Integer year, Integer month) {
+        return paymentRecordService.calendarDay(year, month);
     }
 }

@@ -58,16 +58,15 @@
         WHERE YEAR(pay_date) = #{year}
     </select>
     <!--获取一月中每天的收支总结-->
-    <select id="getMonthDayByMonth" resultType="com.demo.model.dto.DayPayData">
+    <select id="getMonthDayByMonth" resultType="com.demo.model.vo.DayPayVo">
         SELECT pay_date,
-               COUNT(*)                         as pay_count,
+               COUNT(*)                         AS pay_count,
                SUM(IF(is_income = 0, money, 0)) AS money_out,
                SUM(IF(is_income = 1, money, 0)) AS money_in
         FROM payment_record
         WHERE YEAR(pay_date) = #{year}
           AND MONTH(pay_date) = #{month}
-        GROUP BY pay_date
-        ORDER BY pay_date;
+        GROUP BY pay_date;
     </select>
     <!-- 获取一月的饼图数据-->
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">

@@ -2,7 +2,7 @@ package com.demo.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.demo.model.dto.DayPayData;
+import com.demo.model.vo.DayPayVo;
 import com.demo.model.dto.PaymentRecordDto;
 import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
@@ -58,12 +58,12 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
     YearPayData getYearMoney(Integer year);
 
     /**
-     * 获取一月中每天的收支总结
+     * (日历图)获取一月每天的收支总结
      *
      * @param year  年份 2024
      * @param month 月份 01
      */
-    List<DayPayData> getMonthDayByMonth(Integer year, Integer month);
+    List<List<DayPayVo>> calendarDay(Integer year, Integer month);
 
     /**
      * 获取一月的饼图数据

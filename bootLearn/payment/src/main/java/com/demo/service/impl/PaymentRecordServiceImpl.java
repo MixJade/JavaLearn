@@ -5,18 +5,21 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentRecordMapper;
-import com.demo.model.dto.*;
+import com.demo.model.dto.ChartDo;
+import com.demo.model.dto.MonthTypePay;
+import com.demo.model.dto.PaymentRecordDto;
+import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
-import com.demo.model.vo.ChartVo;
-import com.demo.model.vo.MonthPayVo;
-import com.demo.model.vo.YearLineVo;
-import com.demo.model.vo.YearTypeLineVo;
+import com.demo.model.vo.*;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,8 +131,68 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public List<DayPayData> getMonthDayByMonth(Integer year, Integer month) {
-        return baseMapper.getMonthDayByMonth(year, month);
+    public List<List<DayPayVo>> calendarDay(Integer year, Integer month) {
+        // 从数据库查询,转为map
+        List<DayPayVo> dayByMonth = baseMapper.getMonthDayByMonth(year, month);
+        Map<String, DayPayVo> payDataMap = new HashMap<>(dayByMonth.size());
+        for (DayPayVo payData : dayByMonth) {
+            payDataMap.put(payData.getPayDate(), payData);
+        }
+        // 创建当月1日的LocalDate对象
+        LocalDate date = LocalDate.of(year, month, 1);
+        // 获取该日期对应的星期几
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        // 将 DayOfWeek 的值转换为所需的数字表示（星期一返回 0，星期天返回 6）
+        int dayNumber = (dayOfWeek.getValue() + 6) % 7;
+
+
+        // 循环42次，组装一个六行七列的数据
+        List<DayPayVo> payDataList = new ArrayList<>(42);
+
+        // 获取上一个月的数字
+        LocalDate minusMonths = date.minusMonths(1);
+        int preMonth = minusMonths.getMonthValue();
+        int preYear = minusMonths.getYear();
+        // 获取上一个月的天数(+1为了循环)
+        int preMonthDayNum = minusMonths.lengthOfMonth() + 1;
+        // 组装上一个月的天数
+        if (dayNumber != 0)
+            for (int i = preMonthDayNum - dayNumber; i < preMonthDayNum; i++) {
+                payDataList.add(new DayPayVo(String.format("%d-%02d-%02d", preYear, preMonth, i), i, false));
+            }
+
+        // 获取当月天数
+        int nowMonthDayNum = date.lengthOfMonth();
+        // 组装当月天数
+        int monthIndex = dayNumber + nowMonthDayNum;
+        for (int i = 1; i < nowMonthDayNum + 1; i++) {
+            String dayStr = String.format("%d-%02d-%02d", year, month, i);
+            if (payDataMap.containsKey(dayStr)) {
+                DayPayVo payVo = payDataMap.get(dayStr);
+                payVo.setDayNum(i);
+                payDataList.add(payVo);
+            } else payDataList.add(new DayPayVo(dayStr, i, true));
+        }
+
+        // 获取下一个月的数字
+        int nextMonth = date.plusMonths(1).getMonthValue();
+        int nextYear = date.plusMonths(1).getYear();
+        // 组装下月天数
+        for (int i = 1; i < 43 - monthIndex; i++) {
+            payDataList.add(new DayPayVo(String.format("%d-%02d-%02d", nextYear, nextMonth, i), i, false));
+        }
+        // 转为6行7列的列表
+        List<List<DayPayVo>> result = new ArrayList<>(6);
+        int resIndex = 0;
+        for (int i = 0; i < 6; i++) {
+            List<DayPayVo> res_i = new ArrayList<>(7);
+            for (int j = 0; j < 7; j++) {
+                res_i.add(payDataList.get(resIndex));
+                resIndex++;
+            }
+            result.add(res_i);
+        }
+        return result;
     }
 
     @Override

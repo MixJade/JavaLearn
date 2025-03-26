@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
+import com.demo.model.vo.DayPayVo;
 import com.demo.model.vo.MonthPayVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -27,7 +28,7 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
     List<MonthTypePay> getYearTypeMonth(Integer year);
     YearPayData getYearMoney(Integer year);
 
-    List<DayPayData> getMonthDayByMonth(Integer year, Integer month);
+    List<DayPayVo> getMonthDayByMonth(Integer year, Integer month);
 
     List<ChartDo> getPieChart(Integer year, Integer month);
 
