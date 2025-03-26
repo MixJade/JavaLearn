@@ -156,7 +156,7 @@ public class PaymentRecordController {
         // 将字符串转换为字节数组
         byte[] fileContent = insertSql.getBytes(StandardCharsets.UTF_8);
         // 文件名称
-        String fileName = "消费数据(" + year + "年" + (month == 0 ? "" : month + "月") + ").sql";
+        String fileName = "paymentRecord(" + year + (month == 0 ? "" : "-" + month) + ").sql";
         // 对文件名进行 URL 编码
         fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
         // 设置响应头
