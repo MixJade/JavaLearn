@@ -2,11 +2,11 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
-import com.demo.model.dto.PaymentRecordDto;
+import com.demo.model.dto.PayRecordPageDto;
+import com.demo.model.vo.PayRecordVo;
 import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.ChartVo;
-import com.demo.model.vo.MonthPayVo;
 import com.demo.model.vo.YearLineVo;
 import com.demo.model.vo.YearTypeLineVo;
 import com.demo.service.IPaymentRecordService;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * <p>
@@ -58,25 +57,14 @@ public class PaymentRecordController {
         return Result.choice("修改", updateRes);
     }
 
-    @GetMapping
-    public IPage<PaymentRecordDto> getAll(int pageNum, int pageSize, Integer bigType, Integer paymentType, String beginDate, String endDate) {
-        return paymentRecordService.getByPage(pageNum, pageSize, bigType, paymentType, beginDate, endDate);
+    @PostMapping("/page")
+    public IPage<PayRecordVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody PayRecordPageDto payRecordPageDto) {
+        return paymentRecordService.getByPage(pageNum, pageSize, payRecordPageDto);
     }
 
     @GetMapping("/{id}")
     public PaymentRecord getById(@PathVariable Integer id) {
         return paymentRecordService.getById(id);
-    }
-
-    /**
-     * 获取一年中各个月份的收支总结
-     *
-     * @param year 年份 2024
-     */
-    @Deprecated
-    @GetMapping("/yearMonth")
-    public List<MonthPayVo> getYearMonthByYear(Integer year) {
-        return paymentRecordService.getYearMonthByYear(year);
     }
 
     /**

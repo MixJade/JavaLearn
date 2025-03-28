@@ -6,7 +6,9 @@ import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.DayPayVo;
 import com.demo.model.vo.MonthPayVo;
+import com.demo.model.vo.PayRecordVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,11 +23,12 @@ import java.util.List;
  */
 @Mapper
 public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
-
-    IPage<PaymentRecordDto> getByPage(IPage<PaymentRecordDto> page, Integer bigType, Integer paymentType, String beginDate, String endDate);
+    IPage<PayRecordVo> getByPage(IPage<PayRecordVo> page, @Param("dto") PayRecordPageDto payRecordPageDto);
 
     List<MonthPayVo> getYearMonthByYear(Integer year);
+
     List<MonthTypePay> getYearTypeMonth(Integer year);
+
     YearPayData getYearMoney(Integer year);
 
     List<DayPayVo> getMonthDayByMonth(Integer year, Integer month);

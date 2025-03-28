@@ -1,9 +1,9 @@
-package com.demo.model.dto;
+package com.demo.model.vo;
 
 import com.demo.model.entity.PaymentRecord;
 
 @SuppressWarnings("unused")
-public class PaymentRecordDto extends PaymentRecord {
+public class PayRecordVo extends PaymentRecord {
 
     /**
      * 收支类型名称

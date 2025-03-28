@@ -46,7 +46,6 @@ public class ChartController {
      * @param year  年份 2024
      * @param month 月份 01
      */
-    @Deprecated
     @GetMapping("/calendarDay")
     public List<List<DayPayVo>> calendarDay(Integer year, Integer month) {
         return paymentRecordService.calendarDay(year, month);

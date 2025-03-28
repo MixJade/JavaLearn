@@ -2,14 +2,11 @@ package com.demo.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.demo.model.vo.DayPayVo;
-import com.demo.model.dto.PaymentRecordDto;
+import com.demo.model.dto.PayRecordPageDto;
+import com.demo.model.vo.PayRecordVo;
 import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
-import com.demo.model.vo.ChartVo;
-import com.demo.model.vo.MonthPayVo;
-import com.demo.model.vo.YearLineVo;
-import com.demo.model.vo.YearTypeLineVo;
+import com.demo.model.vo.*;
 
 import java.util.List;
 
@@ -22,16 +19,7 @@ import java.util.List;
  * @since 2024-12-19
  */
 public interface IPaymentRecordService extends IService<PaymentRecord> {
-
-    IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, Integer paymentType, String beginDate, String endDate);
-
-    /**
-     * 获取一年中各个月份的收支总结
-     *
-     * @param year 年份 2024
-     */
-    @Deprecated
-    List<MonthPayVo> getYearMonthByYear(Integer year);
+    IPage<PayRecordVo> getByPage(int pageNum, int pageSize, PayRecordPageDto payRecordPageDto);
 
     /**
      * (日历图)获取各月份的收支总结

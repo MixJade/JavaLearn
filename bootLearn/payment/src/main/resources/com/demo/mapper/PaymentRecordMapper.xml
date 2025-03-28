@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.PaymentRecordMapper">
 
-    <select id="getByPage" resultType="com.demo.model.dto.PaymentRecordDto">
+    <select id="getByPage" resultType="com.demo.model.vo.PayRecordVo">
         SELECT pr.record_id, pr.payment_type, pr.is_income, pr.money, pr.pay_date, pr.remark,
         pd.key_name,pd.color
         FROM payment_record pr
         LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
         <where>
-            <if test="paymentType != null">
-                AND pr.payment_type = #{paymentType}
+            <if test="dto.paymentType != null and dto.paymentType != 0">
+                AND pr.payment_type = #{dto.paymentType}
             </if>
-            <if test="bigType != null and bigType != 0 and paymentType == null">
-                AND pd.big_type = #{bigType}
+            <if test="dto.bigType != null and dto.bigType != 0 and dto.paymentType == null">
+                AND pd.big_type = #{dto.bigType}
             </if>
-            <if test="beginDate != null and beginDate != ''">
-                AND pr.pay_date &gt;= #{beginDate}
+            <if test="dto.beginDate != null and dto.beginDate != ''">
+                AND pr.pay_date &gt;= #{dto.beginDate}
             </if>
-            <if test="endDate != null and endDate != ''">
-                AND pr.pay_date &lt;= #{endDate}
+            <if test="dto.endDate != null and dto.endDate != ''">
+                AND pr.pay_date &lt;= #{dto.endDate}
             </if>
         </where>
         ORDER BY pr.pay_date,pr.record_id

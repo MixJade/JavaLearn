@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentRecordMapper;
-import com.demo.model.dto.ChartDo;
-import com.demo.model.dto.MonthTypePay;
-import com.demo.model.dto.PaymentRecordDto;
-import com.demo.model.dto.YearPayData;
+import com.demo.model.dto.*;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.*;
 import com.demo.service.IPaymentRecordService;
@@ -34,17 +31,8 @@ import java.util.Map;
 @Service
 public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, PaymentRecord> implements IPaymentRecordService {
     @Override
-    public IPage<PaymentRecordDto> getByPage(int pageNum, int pageSize, Integer bigType, Integer paymentType, String beginDate, String endDate) {
-        return baseMapper.getByPage(new Page<>(pageNum, pageSize), bigType, paymentType, beginDate, endDate);
-    }
-
-    @Override
-    public List<MonthPayVo> getYearMonthByYear(Integer year) {
-        List<MonthPayVo> monthDataByYear = baseMapper.getYearMonthByYear(year);
-        for (MonthPayVo mpd : monthDataByYear) {
-            mpd.setMoney(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
-        }
-        return monthDataByYear;
+    public IPage<PayRecordVo> getByPage(int pageNum, int pageSize, PayRecordPageDto payRecordPageDto) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize), payRecordPageDto);
     }
 
     @Override
