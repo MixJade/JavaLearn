@@ -11,9 +11,9 @@ public class PayRecordVo extends PaymentRecord {
     private String keyName;
 
     /**
-     * 分类颜色
+     * 字典大类,存于代码
      */
-    private String color;
+    private Integer bigType;
 
     public String getKeyName() {
         return keyName;
@@ -23,11 +23,11 @@ public class PayRecordVo extends PaymentRecord {
         this.keyName = keyName;
     }
 
-    public String getColor() {
-        return color;
+    public Integer getBigType() {
+        return bigType;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setBigType(Integer bigType) {
+        this.bigType = bigType;
     }
 }
