@@ -4,7 +4,7 @@
 
     <select id="getByPage" resultType="com.demo.model.vo.PayRecordVo">
         SELECT pr.record_id, pr.payment_type, pr.is_income, pr.money, pr.pay_date, pr.remark,
-        pd.key_name,pd.big_type
+        pd.key_name,pd.color
         FROM payment_record pr
         LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
         <where>
