@@ -2,10 +2,11 @@ package com.demo.controller;
 
 import com.demo.common.BigTypeData;
 import com.demo.common.Result;
-import com.demo.model.dto.PaymentDictDto;
 import com.demo.model.entity.PaymentDict;
 import com.demo.model.vo.BigType;
-import com.demo.model.vo.TwoTypeOption;
+import com.demo.model.vo.PaymentDictVo;
+import com.demo.model.vo.TwoTypeOptVo;
+import com.demo.model.vo.TypeSelectVo;
 import com.demo.service.IPaymentDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class PaymentDictController {
     }
 
     @GetMapping
-    public List<PaymentDictDto> getAll(Integer bigType) {
+    public List<PaymentDictVo> getAll(Integer bigType) {
         return paymentDictService.getAllByBigType(bigType);
     }
 
@@ -59,12 +60,27 @@ public class PaymentDictController {
         return BigTypeData.getBigTypes();
     }
 
-    @GetMapping("/option")
-    public TwoTypeOption getOption() {
-        return new TwoTypeOption(
+    /**
+     * records页面表单的二级下拉框选项
+     *
+     * @return 二级下拉框数据(按收支区分)
+     */
+    @GetMapping("/twoOption")
+    public TwoTypeOptVo getTwoOption() {
+        return new TwoTypeOptVo(
                 paymentDictService.getOption(true),
                 paymentDictService.getOption(false)
         );
+    }
+
+    /**
+     * records页面查询二级下拉框选项
+     *
+     * @return 二级下拉框数据
+     */
+    @GetMapping("/option")
+    public List<TypeSelectVo> getOption() {
+        return paymentDictService.getOption(null);
     }
 
     @GetMapping("/{id}")

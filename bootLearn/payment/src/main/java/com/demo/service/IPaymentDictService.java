@@ -1,9 +1,9 @@
 package com.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.demo.model.dto.PaymentDictDto;
+import com.demo.model.vo.PaymentDictVo;
 import com.demo.model.entity.PaymentDict;
-import com.demo.model.vo.TypeOption;
+import com.demo.model.vo.TypeSelectVo;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface IPaymentDictService extends IService<PaymentDict> {
      * @param isIncome 是否收入
      * @return 收入大类+其下的小类
      */
-    List<TypeOption> getOption(boolean isIncome);
+    List<TypeSelectVo> getOption(Boolean isIncome);
 
     /**
      * 查询所有
@@ -31,5 +31,5 @@ public interface IPaymentDictService extends IService<PaymentDict> {
      * @param bigType 大类
      * @return 收入小类+对应收支数量
      */
-    List<PaymentDictDto> getAllByBigType(Integer bigType);
+    List<PaymentDictVo> getAllByBigType(Integer bigType);
 }

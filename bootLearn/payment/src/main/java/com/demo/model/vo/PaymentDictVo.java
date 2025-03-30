@@ -1,4 +1,4 @@
-package com.demo.model.dto;
+package com.demo.model.vo;
 
 import com.demo.model.entity.PaymentDict;
 
@@ -6,7 +6,7 @@ import com.demo.model.entity.PaymentDict;
  * 类型字典查询所用
  */
 @SuppressWarnings("unused")
-public class PaymentDictDto extends PaymentDict {
+public class PaymentDictVo extends PaymentDict {
     Integer recordNum;
 
     public Integer getRecordNum() {

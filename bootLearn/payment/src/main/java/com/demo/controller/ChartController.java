@@ -1,8 +1,8 @@
 package com.demo.controller;
 
 
-import com.demo.model.vo.DayPayVo;
-import com.demo.model.vo.MonthPayVo;
+import com.demo.model.chart.DayPayVo;
+import com.demo.model.chart.MonthPayVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

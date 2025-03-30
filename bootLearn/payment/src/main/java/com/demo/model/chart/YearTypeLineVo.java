@@ -1,4 +1,4 @@
-package com.demo.model.vo;
+package com.demo.model.chart;
 
 import java.math.BigDecimal;
 import java.util.List;

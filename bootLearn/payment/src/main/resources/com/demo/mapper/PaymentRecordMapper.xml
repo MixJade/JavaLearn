@@ -25,7 +25,7 @@
     </select>
 
     <!--获取一年中各个月份的收支总结-->
-    <select id="getYearMonthByYear" resultType="com.demo.model.vo.MonthPayVo">
+    <select id="getYearMonthByYear" resultType="com.demo.model.chart.MonthPayVo">
         SELECT MONTH(pay_date)                  AS month,
                SUM(IF(is_income = 0, money, 0)) AS money_out,
                SUM(IF(is_income = 1, money, 0)) AS money_in
@@ -58,7 +58,7 @@
         WHERE YEAR(pay_date) = #{year}
     </select>
     <!--获取一月中每天的收支总结-->
-    <select id="getMonthDayByMonth" resultType="com.demo.model.vo.DayPayVo">
+    <select id="getMonthDayByMonth" resultType="com.demo.model.chart.DayPayVo">
         SELECT pay_date,
                COUNT(*)                         AS pay_count,
                SUM(IF(is_income = 0, money, 0)) AS money_out,
