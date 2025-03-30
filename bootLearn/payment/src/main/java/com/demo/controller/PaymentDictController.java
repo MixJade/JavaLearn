@@ -83,8 +83,4 @@ public class PaymentDictController {
         return paymentDictService.getOption(null);
     }
 
-    @GetMapping("/{id}")
-    public PaymentDict getById(@PathVariable Integer id) {
-        return paymentDictService.getById(id);
-    }
 }

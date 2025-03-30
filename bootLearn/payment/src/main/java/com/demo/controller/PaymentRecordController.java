@@ -62,11 +62,6 @@ public class PaymentRecordController {
         return paymentRecordService.getByPage(pageNum, pageSize, payRecordPageDto);
     }
 
-    @GetMapping("/{id}")
-    public PaymentRecord getById(@PathVariable Integer id) {
-        return paymentRecordService.getById(id);
-    }
-
     /**
      * 获取一年中各个月份的收支总结(用于线形图)
      *
