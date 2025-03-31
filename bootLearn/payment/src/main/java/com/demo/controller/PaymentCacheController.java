@@ -31,6 +31,11 @@ public class PaymentCacheController {
         return paymentCacheService.getByPage(pageNum, pageSize);
     }
 
+    @DeleteMapping("/delAll")
+    public Result delAll() {
+        return Result.choice("删除全部", paymentCacheService.delAll());
+    }
+
     @PostMapping("/upload-csv")
     public Result uploadCsv(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty())

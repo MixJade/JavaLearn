@@ -20,6 +20,13 @@ public interface IPaymentCacheService extends IService<PaymentCache> {
     IPage<PaymentCache> getByPage(int pageNum, int pageSize);
 
     /**
+     * 删除表中所有数据
+     *
+     * @return 删除成功
+     */
+    boolean delAll();
+
+    /**
      * 保存csv中的消费数据
      *
      * @param file 上传csv的二进制流

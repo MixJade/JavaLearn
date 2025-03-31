@@ -44,44 +44,46 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
 
     @Override
     @Transactional
+    public boolean delAll() {
+        return lambdaUpdate().remove();
+    }
+
+    @Override
+    @Transactional
     public boolean saveCsv(MultipartFile file) {
-        String csvSplitBy = ",";
-        String[] headers;
         // 定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d H:mm");
-
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             // 读取表头
-            headers = br.readLine().split(csvSplitBy);
-            log.info("表头:{}", Arrays.toString(headers));
+            log.info("表头:{}", Arrays.toString(br.readLine().split(",")));
             List<PaymentCache> paymentCacheList = new ArrayList<>();
             String line;
             while ((line = br.readLine()) != null) {
                 PaymentCache payCache = new PaymentCache();
-                String[] data = line.split(csvSplitBy);
+                List<String> csvLine = parseCsvLine(line);
                 // 0-付费时间
                 // 将字符串解析为 LocalDateTime 对象
-                LocalDateTime dateTime = LocalDateTime.parse(data[0], formatter);
+                LocalDateTime dateTime = LocalDateTime.parse(csvLine.get(0), formatter);
                 // 从 LocalDateTime 对象中提取 LocalDate 对象
                 LocalDate localDate = dateTime.toLocalDate();
                 payCache.setPayDate(localDate);
                 // 1-交易类型
-                payCache.setPayType(data[1]);
+                payCache.setPayType(csvLine.get(1));
                 // 2-交易对方
-                payCache.setPayMan(data[2]);
+                payCache.setPayMan(csvLine.get(2));
                 // 3-商品
-                payCache.setWareName(data[3]);
+                payCache.setWareName(csvLine.get(3));
                 // 4-收/支
-                payCache.setIsIncome("收入".equals(data[4]));
+                payCache.setIsIncome("收入".equals(csvLine.get(4)));
                 // 5-金额(去除符号)
-                String pureNumberStr = data[5].replaceAll("[^0-9.]", "");
+                String pureNumberStr = csvLine.get(5).replaceAll("[^0-9.]", "");
                 // 将处理后的字符串转换为 BigDecimal
                 BigDecimal amount = new BigDecimal(pureNumberStr);
                 payCache.setMoney(amount);
                 // 6-支付方式
-                payCache.setPayWay(data[6]);
+                payCache.setPayWay(csvLine.get(6));
                 // 7-当前状态
-                payCache.setPayState(data[7]);
+                payCache.setPayState(csvLine.get(7));
                 payCache.setIsDel(false);
                 paymentCacheList.add(payCache);
             }
@@ -95,5 +97,47 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * 解析csv的一行
+     *
+     * @param line csv的一行
+     * @return 每行的元素
+     */
+    private List<String> parseCsvLine(String line) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder currentField = new StringBuilder();
+        boolean inQuotes = false;
+        boolean escapeNextQuote = false;
+
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+
+            if (escapeNextQuote) {
+                // 处理转义双引号（两个双引号转义为一个）
+                currentField.append('"');
+                escapeNextQuote = false;
+                continue;
+            }
+
+            if (c == '"') {
+                if (inQuotes) {
+                    // 检查下一个字符是否也是双引号（转义）
+                    if (i + 1 < line.length() && line.charAt(i + 1) == '"') {
+                        escapeNextQuote = true;
+                        i++; // 跳过下一个字符
+                    } else inQuotes = false;
+                } else inQuotes = true;
+            } else if (c == ',' && !inQuotes) {
+                // 分割字段
+                fields.add(currentField.toString().trim());
+                currentField.setLength(0);
+            } else currentField.append(c);
+        }
+
+        // 添加最后一个字段
+        fields.add(currentField.toString().trim());
+        return fields;
     }
 }
