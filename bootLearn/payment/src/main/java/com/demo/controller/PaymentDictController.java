@@ -1,12 +1,11 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.BigTypeData;
 import com.demo.common.Result;
+import com.demo.model.dto.PayDictPageDto;
 import com.demo.model.entity.PaymentDict;
-import com.demo.model.vo.BigType;
-import com.demo.model.vo.PaymentDictVo;
-import com.demo.model.vo.TwoTypeOptVo;
-import com.demo.model.vo.TypeSelectVo;
+import com.demo.model.vo.*;
 import com.demo.service.IPaymentDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,9 +49,9 @@ public class PaymentDictController {
         return Result.choice("修改", updateRes);
     }
 
-    @GetMapping
-    public List<PaymentDictVo> getAll(Integer bigType) {
-        return paymentDictService.getAllByBigType(bigType);
+    @PostMapping("/page")
+    public IPage<PaymentDictVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody PayDictPageDto payDictPageDto) {
+        return paymentDictService.getByPage(pageNum, pageSize, payDictPageDto);
     }
 
     @GetMapping("/bigType")

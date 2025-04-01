@@ -1,8 +1,11 @@
 package com.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentDictMapper;
+import com.demo.model.dto.PayDictPageDto;
 import com.demo.model.vo.PaymentDictVo;
 import com.demo.model.entity.PaymentDict;
 import com.demo.model.vo.TypeSelectTwoVo;
@@ -47,7 +50,7 @@ public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, Payme
     }
 
     @Override
-    public List<PaymentDictVo> getAllByBigType(Integer bigType) {
-        return baseMapper.getAllByBigType(bigType);
+    public IPage<PaymentDictVo> getByPage(int pageNum, int pageSize, PayDictPageDto payDictPageDto) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize), payDictPageDto);
     }
 }

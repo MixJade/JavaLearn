@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.PaymentDictMapper">
-    <!--查询支付类型页面所用-->
-    <select id="getAllByBigType" resultType="com.demo.model.vo.PaymentDictVo">
-        SELECT pd.payment_type, key_name, pd.is_income, big_type, pd.color,COUNT(pr.record_id) AS recordNum
-        FROM payment_dict pd
-        LEFT JOIN payment_record pr on pd.payment_type = pr.payment_type
-        <if test="bigType != null and bigType != 0">
-            WHERE pd.big_type = #{bigType}
-        </if>
-        GROUP BY pd.payment_type,key_name, pd.is_income, big_type, pd.color
-        ORDER BY big_type
-    </select>
     <!-- 获取所有的支付类型(二级下拉框所用)-->
     <select id="getSelectTwoVos" resultType="com.demo.model.vo.TypeSelectTwoVo">
         SELECT big_type AS one_key,payment_type AS two_key, key_name AS two_value
@@ -19,6 +8,24 @@
         <if test="isIncome != null">
             WHERE is_income = #{isIncome}
         </if>
+        ORDER BY big_type
+    </select>
+    <!--查询支付类型页面所用-->
+    <select id="getByPage" resultType="com.demo.model.vo.PaymentDictVo">
+        SELECT pd.payment_type, pd.key_name, pd.is_income, big_type, pd.color,COUNT(pr.record_id) AS
+        recordNum,pbt.key_name AS bigTypeName,pbt.color AS bigTypeColor
+        FROM payment_dict pd
+        LEFT JOIN payment_record pr on pd.payment_type = pr.payment_type
+        LEFT OUTER JOIN pay_big_type pbt on pbt.typeKey = pd.big_type
+        <where>
+            <if test="dto.bigType != null and dto.bigType != 0">
+                pd.big_type = #{dto.bigType}
+            </if>
+            <if test="dto.isIncome != null">
+                pd.is_income = #{dto.isIncome}
+            </if>
+        </where>
+        GROUP BY pd.payment_type,key_name, pd.is_income, big_type, pd.color,bigTypeName,bigTypeColor
         ORDER BY big_type
     </select>
 </mapper>

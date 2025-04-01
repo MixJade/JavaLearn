@@ -25,10 +25,12 @@ public class BigTypeData {
             new BigType(11, "形象", "#000080")
     );
 
+    @Deprecated
     public static List<BigType> getBigTypes() {
         return bigTypes;
     }
 
+    @Deprecated
     public static Map<Integer, String> getMap() {
         Map<Integer, String> bigTypeMap = new HashMap<>();
         for (BigType bigType : bigTypes) {
@@ -42,6 +44,7 @@ public class BigTypeData {
      *
      * @return 颜色代码
      */
+    @Deprecated
     public static Map<Integer, String> getColorMap() {
         Map<Integer, String> bigTypeMap = new HashMap<>();
         for (BigType bigType : bigTypes) {

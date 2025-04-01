@@ -1,8 +1,10 @@
 package com.demo.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.demo.model.vo.PaymentDictVo;
+import com.demo.model.dto.PayDictPageDto;
 import com.demo.model.entity.PaymentDict;
+import com.demo.model.vo.PaymentDictVo;
 import com.demo.model.vo.TypeSelectVo;
 
 import java.util.List;
@@ -28,8 +30,7 @@ public interface IPaymentDictService extends IService<PaymentDict> {
     /**
      * 查询所有
      *
-     * @param bigType 大类
      * @return 收入小类+对应收支数量
      */
-    List<PaymentDictVo> getAllByBigType(Integer bigType);
+    IPage<PaymentDictVo> getByPage(int pageNum, int pageSize, PayDictPageDto payDictPageDto);
 }
