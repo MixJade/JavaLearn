@@ -2,8 +2,10 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
+import com.demo.model.dto.CacheToRecordDto;
 import com.demo.model.entity.PaymentCache;
 import com.demo.service.IPaymentCacheService;
+import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -27,10 +29,12 @@ import java.io.InputStream;
 @RequestMapping("/api/paymentCache")
 public class PaymentCacheController {
     private final IPaymentCacheService paymentCacheService;
+    private final IPaymentRecordService paymentRecordService;
 
     @Autowired
-    public PaymentCacheController(IPaymentCacheService paymentCacheService) {
+    public PaymentCacheController(IPaymentCacheService paymentCacheService, IPaymentRecordService paymentRecordService) {
         this.paymentCacheService = paymentCacheService;
+        this.paymentRecordService = paymentRecordService;
     }
 
     @GetMapping
@@ -38,9 +42,25 @@ public class PaymentCacheController {
         return paymentCacheService.getByPage(pageNum, pageSize);
     }
 
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Integer id) {
+        boolean deleteRes = paymentCacheService.removeById(id);
+        return Result.choice("删除", deleteRes);
+    }
+
     @DeleteMapping("/delAll")
     public Result delAll() {
         return Result.choice("删除全部", paymentCacheService.delAll());
+    }
+
+    @PostMapping
+    public Result add(@RequestBody CacheToRecordDto cacheToRecordDto) {
+        boolean addRes = paymentRecordService.save(cacheToRecordDto);
+        paymentCacheService.lambdaUpdate()
+                .set(PaymentCache::getIsDel, true)
+                .eq(PaymentCache::getCacheId, cacheToRecordDto.getCacheId())
+                .update();
+        return Result.choice("添加", addRes);
     }
 
     /**

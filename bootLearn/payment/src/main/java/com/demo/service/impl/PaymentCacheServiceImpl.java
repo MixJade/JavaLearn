@@ -38,6 +38,7 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
     @Override
     public IPage<PaymentCache> getByPage(int pageNum, int pageSize) {
         return lambdaQuery()
+                .eq(PaymentCache::getIsDel, false)
                 .orderByAsc(PaymentCache::getPayDate)
                 .page(new Page<>(pageNum, pageSize));
     }
