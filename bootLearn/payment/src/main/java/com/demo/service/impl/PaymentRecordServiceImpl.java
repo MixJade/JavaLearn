@@ -3,12 +3,14 @@ package com.demo.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentRecordMapper;
 import com.demo.model.chart.*;
-import com.demo.model.dto.*;
+import com.demo.model.dto.ChartDo;
+import com.demo.model.dto.MonthTypePay;
+import com.demo.model.dto.PayRecordPageDto;
+import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
-import com.demo.model.vo.*;
+import com.demo.model.vo.PayRecordVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
@@ -192,14 +194,11 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         List<String> labels = new ArrayList<>(),
                 colors = new ArrayList<>();
         List<BigDecimal> moneys = new ArrayList<>();
-        // 获取大类map
-        Map<Integer, String> bigTypeMap = BigTypeData.getMap();
-        Map<Integer, String> bigTypeColorMap = BigTypeData.getColorMap();
         // 组装大类数据
         for (ChartDo chartDo : pieChart) {
             bigTypes.add(chartDo.getBigType());
-            labels.add(bigTypeMap.get(chartDo.getBigType()));
-            colors.add(bigTypeColorMap.get(chartDo.getBigType()));
+            labels.add(chartDo.getBigTypeName());
+            colors.add(chartDo.getBigTypeColor());
             moneys.add(chartDo.getMoney());
         }
         // 查询当月总支出

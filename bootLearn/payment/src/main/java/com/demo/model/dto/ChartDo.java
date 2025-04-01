@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 public class ChartDo {
     private Integer bigType;
     private BigDecimal money;
+    private String bigTypeName;
+    private String bigTypeColor;
+
 
     public Integer getBigType() {
         return bigType;
@@ -24,5 +27,21 @@ public class ChartDo {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public String getBigTypeName() {
+        return bigTypeName;
+    }
+
+    public void setBigTypeName(String bigTypeName) {
+        this.bigTypeName = bigTypeName;
+    }
+
+    public String getBigTypeColor() {
+        return bigTypeColor;
+    }
+
+    public void setBigTypeColor(String bigTypeColor) {
+        this.bigTypeColor = bigTypeColor;
     }
 }

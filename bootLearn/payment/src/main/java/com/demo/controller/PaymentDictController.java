@@ -1,9 +1,9 @@
 package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.demo.common.BigTypeData;
 import com.demo.common.Result;
 import com.demo.model.dto.PayDictPageDto;
+import com.demo.model.entity.BigType;
 import com.demo.model.entity.PaymentDict;
 import com.demo.model.vo.*;
 import com.demo.service.IPaymentDictService;
@@ -56,7 +56,7 @@ public class PaymentDictController {
 
     @GetMapping("/bigType")
     public List<BigType> getBigType() {
-        return BigTypeData.getBigTypes();
+        return paymentDictService.getBigTypes();
     }
 
     /**

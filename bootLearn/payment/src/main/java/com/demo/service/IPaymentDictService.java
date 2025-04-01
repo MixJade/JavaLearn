@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.demo.model.dto.PayDictPageDto;
 import com.demo.model.entity.PaymentDict;
+import com.demo.model.entity.BigType;
 import com.demo.model.vo.PaymentDictVo;
 import com.demo.model.vo.TypeSelectVo;
 
@@ -33,4 +34,9 @@ public interface IPaymentDictService extends IService<PaymentDict> {
      * @return 收入小类+对应收支数量
      */
     IPage<PaymentDictVo> getByPage(int pageNum, int pageSize, PayDictPageDto payDictPageDto);
+
+    /**
+     * 查询所有的大类
+     */
+    List<BigType> getBigTypes();
 }

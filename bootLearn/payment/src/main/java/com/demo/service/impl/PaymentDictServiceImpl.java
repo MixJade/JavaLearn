@@ -3,11 +3,11 @@ package com.demo.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.demo.common.BigTypeData;
 import com.demo.mapper.PaymentDictMapper;
 import com.demo.model.dto.PayDictPageDto;
-import com.demo.model.vo.PaymentDictVo;
+import com.demo.model.entity.BigType;
 import com.demo.model.entity.PaymentDict;
+import com.demo.model.vo.PaymentDictVo;
 import com.demo.model.vo.TypeSelectTwoVo;
 import com.demo.model.vo.TypeSelectVo;
 import com.demo.service.IPaymentDictService;
@@ -32,7 +32,12 @@ public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, Payme
     @Override
     public List<TypeSelectVo> getOption(Boolean isIncome) {
         List<TypeSelectTwoVo> typeSelectTwoVos = baseMapper.getSelectTwoVos(isIncome);
-        Map<Integer, String> bigTypeMap = BigTypeData.getMap();
+        // 查询大类
+        List<BigType> bigTypes = baseMapper.getBigTypes();
+        Map<Integer, String> bigTypeMap = new HashMap<>();
+        for (BigType bigType : bigTypes) {
+            bigTypeMap.put(bigType.typeKey(), bigType.typeName());
+        }
         Map<Integer, List<TypeSelectTwoVo>> twoKeyMap = new HashMap<>();
 
         // 直接在循环中进行分组和大类-小类的组装
@@ -52,5 +57,10 @@ public class PaymentDictServiceImpl extends ServiceImpl<PaymentDictMapper, Payme
     @Override
     public IPage<PaymentDictVo> getByPage(int pageNum, int pageSize, PayDictPageDto payDictPageDto) {
         return baseMapper.getByPage(new Page<>(pageNum, pageSize), payDictPageDto);
+    }
+
+    @Override
+    public List<BigType> getBigTypes() {
+        return baseMapper.getBigTypes();
     }
 }

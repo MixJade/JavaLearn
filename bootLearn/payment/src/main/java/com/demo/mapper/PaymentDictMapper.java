@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.model.dto.PayDictPageDto;
 import com.demo.model.entity.PaymentDict;
+import com.demo.model.entity.BigType;
 import com.demo.model.vo.PaymentDictVo;
 import com.demo.model.vo.TypeSelectTwoVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,4 +37,9 @@ public interface PaymentDictMapper extends BaseMapper<PaymentDict> {
      * @return 支付类型页面数据
      */
     IPage<PaymentDictVo> getByPage(Page<Object> page, @Param("dto") PayDictPageDto payDictPageDto);
+
+    /**
+     * 查询所有的大类
+     */
+    List<BigType> getBigTypes();
 }

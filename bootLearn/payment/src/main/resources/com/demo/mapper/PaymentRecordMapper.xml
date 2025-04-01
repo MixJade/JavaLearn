@@ -70,15 +70,16 @@
     </select>
     <!-- 获取一月的饼图数据-->
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
-        SELECT big_type, SUM(money) AS money
+        SELECT big_type, SUM(money) AS money,pbt.key_name AS bigTypeName,pbt.color AS bigTypeColor
         FROM payment_record pd
         LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
+        LEFT JOIN pay_big_type pbt on pbt.typeKey = p.big_type
         WHERE pd.is_income = 0
         AND YEAR(pay_date) = #{year}
         <if test="month != 0">
             AND MONTH(pay_date) = #{month}
         </if>
-        GROUP BY big_type
+        GROUP BY big_type,bigTypeName,bigTypeColor
         ORDER BY money
     </select>
     <!-- 获取某月的总支出-->

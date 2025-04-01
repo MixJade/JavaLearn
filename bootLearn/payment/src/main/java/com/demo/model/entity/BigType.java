@@ -1,4 +1,4 @@
-package com.demo.model.vo;
+package com.demo.model.entity;
 
 /**
  * 收支类型的大类

@@ -78,8 +78,6 @@ public class PaymentCacheController {
 
     /**
      * 下载一个样例csv
-     *
-     * @return
      */
     @GetMapping("/sample-csv")
     public ResponseEntity<byte[]> sampleCsv() {
