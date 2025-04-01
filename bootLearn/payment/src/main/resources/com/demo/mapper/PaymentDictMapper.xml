@@ -19,5 +19,6 @@
         <if test="isIncome != null">
             WHERE is_income = #{isIncome}
         </if>
+        ORDER BY big_type
     </select>
 </mapper>
