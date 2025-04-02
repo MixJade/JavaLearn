@@ -3,12 +3,8 @@ package com.demo.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.dto.PayRecordPageDto;
-import com.demo.model.vo.PayRecordVo;
-import com.demo.model.dto.YearPayData;
 import com.demo.model.entity.PaymentRecord;
-import com.demo.model.chart.ChartVo;
-import com.demo.model.chart.YearLineVo;
-import com.demo.model.chart.YearTypeLineVo;
+import com.demo.model.vo.PayRecordVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -60,57 +56,6 @@ public class PaymentRecordController {
     @PostMapping("/page")
     public IPage<PayRecordVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody PayRecordPageDto payRecordPageDto) {
         return paymentRecordService.getByPage(pageNum, pageSize, payRecordPageDto);
-    }
-
-    /**
-     * 获取一年中各个月份的收支总结(用于线形图)
-     *
-     * @param year 年份 2024
-     */
-    @GetMapping("/yearLine")
-    public YearLineVo getYearLineByYear(Integer year) {
-        return paymentRecordService.getYearLineByYear(year);
-    }
-
-    /**
-     * 获取一年中每月各种类型支出(用于线形图)
-     *
-     * @param year 年份 2024
-     */
-    @GetMapping("/yearTypeLLine")
-    public YearTypeLineVo getYearTypeLineInteger(Integer year) {
-        return paymentRecordService.getYearTypeLineInteger(year);
-    }
-
-    /**
-     * 获取一年中各个月份的消费成分(用于饼状图)
-     *
-     * @param year 年份 2024
-     */
-    @GetMapping("/yearPie")
-    public ChartVo getYearPieByYear(Integer year) {
-        return paymentRecordService.getPieChart(year, 0);
-    }
-
-    /**
-     * 获取一年的收支总结
-     *
-     * @param year 年份 2024
-     */
-    @GetMapping("/yearMoney")
-    public YearPayData getYearMoney(Integer year) {
-        return paymentRecordService.getYearMoney(year);
-    }
-
-    /**
-     * 获取一月的饼图数据
-     *
-     * @param year  年份 2024
-     * @param month 月份 01
-     */
-    @GetMapping("/monthPie")
-    public ChartVo getMonthPie(Integer year, Integer month) {
-        return paymentRecordService.getPieChart(year, month);
     }
 
     /**

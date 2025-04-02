@@ -34,24 +34,8 @@
         GROUP BY MONTH(pay_date)
         ORDER BY month
     </select>
-    <!-- 获取一年中每月各种类型支出-->
-    <select id="getYearTypeMonth" resultType="com.demo.model.dto.MonthTypePay">
-        SELECT MONTH(pay_date)                    AS month,
-               SUM(IF(pd.big_type = 1, money, 0)) AS eat,
-               SUM(IF(pd.big_type = 2, money, 0)) AS run,
-               SUM(IF(pd.big_type = 3, money, 0)) AS home,
-               SUM(IF(pd.big_type = 4, money, 0)) AS play,
-               SUM(IF(pd.big_type = 6, money, 0)) AS life,
-               SUM(IF(pd.big_type = 7, money, 0)) AS buy,
-               SUM(IF(pd.big_type = 9, money, 0)) AS salary
-        FROM payment_record pr
-                 LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
-        WHERE YEAR(pay_date) = #{year}
-        GROUP BY MONTH(pay_date)
-        ORDER BY month
-    </select>
     <!-- 获取一年的收支总结-->
-    <select id="getYearMoney" resultType="com.demo.model.dto.YearPayData">
+    <select id="getYearMoney" resultType="com.demo.model.dto.YearPayDo">
         SELECT SUM(IF(is_income = 0, money, 0)) AS money_out,
                SUM(IF(is_income = 1, money, 0)) AS money_in
         FROM payment_record
@@ -68,29 +52,19 @@
           AND MONTH(pay_date) = #{month}
         GROUP BY pay_date;
     </select>
-    <!-- 获取一月的饼图数据-->
+    <!-- 获取一月(或一年)的饼图数据-->
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
         SELECT big_type, SUM(money) AS money,pbt.key_name AS bigTypeName,pbt.color AS bigTypeColor
         FROM payment_record pd
         LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
         LEFT JOIN pay_big_type pbt on pbt.typeKey = p.big_type
-        WHERE pd.is_income = 0
+        WHERE pd.is_income = #{isIncome}
         AND YEAR(pay_date) = #{year}
         <if test="month != 0">
             AND MONTH(pay_date) = #{month}
         </if>
-        GROUP BY big_type,bigTypeName,bigTypeColor
+        GROUP BY big_type
         ORDER BY money
-    </select>
-    <!-- 获取某月的总支出-->
-    <select id="getPayByMonth" resultType="java.math.BigDecimal">
-        SELECT SUM(money)
-        FROM payment_record
-        WHERE is_income = 0
-        AND YEAR(pay_date) = #{year}
-        <if test="month != 0">
-            AND MONTH(pay_date) = #{month}
-        </if>
     </select>
     <!-- 获取一年中平均每个月的收入支出-->
     <select id="getYearAvgMonth" resultType="java.math.BigDecimal">

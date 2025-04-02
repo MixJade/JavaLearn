@@ -4,18 +4,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.mapper.PaymentRecordMapper;
-import com.demo.model.chart.*;
+import com.demo.model.chart.ChartVo;
+import com.demo.model.chart.DayPayVo;
+import com.demo.model.chart.MonthPayVo;
+import com.demo.model.chart.YearLineVo;
 import com.demo.model.dto.ChartDo;
-import com.demo.model.dto.MonthTypePay;
 import com.demo.model.dto.PayRecordPageDto;
-import com.demo.model.dto.YearPayData;
+import com.demo.model.dto.YearPayDo;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.PayRecordVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -71,36 +72,20 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             moneyIn.add(mpd.getMoneyIn());
             money.add(mpd.getMoneyIn().subtract(mpd.getMoneyOut()));
         }
-        return new YearLineVo(moneyOut, moneyIn, money);
+
+        // 附录：当年总收支、月份平均收支
+        YearPayDo yearMoney = getYearMoney(year);
+        return new YearLineVo(yearMoney, moneyOut, moneyIn, money);
     }
 
-    @Override
-    public YearTypeLineVo getYearTypeLineInteger(Integer year) {
-        List<MonthTypePay> monthTypePays = baseMapper.getYearTypeMonth(year);
-        List<BigDecimal> eat = new ArrayList<>(),
-                run = new ArrayList<>(),
-                home = new ArrayList<>(),
-                play = new ArrayList<>(),
-                life = new ArrayList<>(),
-                buy = new ArrayList<>(),
-                salary = new ArrayList<>();
-        // 拆分成三条数据线
-        for (MonthTypePay mpd : monthTypePays) {
-            eat.add(mpd.getEat());
-            run.add(mpd.getRun());
-            home.add(mpd.getHome());
-            play.add(mpd.getPlay());
-            life.add(mpd.getLife());
-            buy.add(mpd.getBuy());
-            salary.add(mpd.getSalary());
-        }
-        return new YearTypeLineVo(eat, run, home, play, life, buy, salary);
-    }
-
-    @Override
-    public YearPayData getYearMoney(Integer year) {
+    /**
+     * 获取一年的收支总结
+     *
+     * @param year 年份 2024
+     */
+    private YearPayDo getYearMoney(Integer year) {
         // 一年的总收入、支出
-        YearPayData ym = baseMapper.getYearMoney(year);
+        YearPayDo ym = baseMapper.getYearMoney(year);
         ym.setMoney(ym.getMoneyIn().subtract(ym.getMoneyOut()));
         // 一年的月平均消费
         BigDecimal monthAvgMoneyIn = baseMapper.getYearAvgMonth(year, true);
@@ -108,16 +93,6 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         ym.setMonthAvgMoneyIn(monthAvgMoneyIn);
         ym.setMonthAvgMoneyOut(monthAvgMoneyOut);
         ym.setMonthAvgMoney(monthAvgMoneyIn.subtract(monthAvgMoneyOut));
-        // 一年的食宿支出
-        BigDecimal lifeMoney = baseMapper.getYearLifeMoney(year);
-        ym.setLifeMoney(lifeMoney);
-        // 劳动回报比(总收入/支出)
-        ym.setWorkRatio(ym.getMoneyIn().divide(ym.getMoneyOut(), 2, RoundingMode.HALF_UP));
-        // 食宿花费比例
-        ym.setLifeRatio(lifeMoney.divide(ym.getMoneyOut(), 2, RoundingMode.HALF_UP));
-        // 平均食宿花费
-        BigDecimal payDayCount = baseMapper.getPayDayCount(year);
-        ym.setLifeDayPay(lifeMoney.divide(payDayCount, 2, RoundingMode.HALF_UP));
         return ym;
     }
 
@@ -187,8 +162,8 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public ChartVo getPieChart(Integer year, Integer month) {
-        List<ChartDo> pieChart = baseMapper.getPieChart(year, month);
+    public ChartVo getPieChart(Integer year, Integer month, Boolean isIncome) {
+        List<ChartDo> pieChart = baseMapper.getPieChart(year, month, isIncome);
         // 转变为前端能直接用的数据结构
         List<Integer> bigTypes = new ArrayList<>();
         List<String> labels = new ArrayList<>(),
@@ -201,9 +176,7 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             colors.add(chartDo.getBigTypeColor());
             moneys.add(chartDo.getMoney());
         }
-        // 查询当月总支出
-        BigDecimal outMoney = baseMapper.getPayByMonth(year, month);
-        return new ChartVo(bigTypes, labels, colors, moneys, outMoney);
+        return new ChartVo(bigTypes, labels, colors, moneys);
     }
 
     @Override
