@@ -75,6 +75,18 @@ public class ChartController {
     }
 
     /**
+     * 获取一年中某大类的具体情况(用于圆环图)
+     *
+     * @param year     年份 2024
+     * @param bigType  大类id
+     * @param isIncome 收/支
+     */
+    @GetMapping("/bigTypePie")
+    public ChartVo getBigTypePieByYear(Integer year, Integer bigType, Boolean isIncome) {
+        return paymentRecordService.getBigTypePieByYear(year, 0, bigType, isIncome);
+    }
+
+    /**
      * 获取一月的饼图数据
      *
      * @param year     年份 2024

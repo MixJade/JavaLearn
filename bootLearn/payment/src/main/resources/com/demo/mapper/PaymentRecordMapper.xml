@@ -75,22 +75,20 @@
                 AND is_income = #{isIncome}
               GROUP BY MONTH(pay_date)) AS monthly_sums
     </select>
-    <!-- 一年的食宿支出-->
-    <select id="getYearLifeMoney" resultType="java.math.BigDecimal">
-        SELECT SUM(pr.money)
-        FROM payment_record pr
-                 LEFT JOIN payment_dict pd on pr.payment_type = pd.payment_type
-        WHERE pd.big_type IN (1, 3, 6)
-          AND pr.is_income = 0
-          AND YEAR(pr.pay_date) = #{year}
+    <!--获取一月某大类的组成(用于环形图)-->
+    <select id="getBigTypePieByYear" resultType="com.demo.model.dto.BigTypePieDo">
+        SELECT p.payment_type,p.key_name, SUM(money) AS money
+        FROM payment_record pd
+        LEFT JOIN payment_dict p on pd.payment_type = p.payment_type
+        WHERE pd.is_income = #{isIncome}
+        AND YEAR(pay_date) = #{year}
+        <if test="month != 0">
+            AND MONTH(pay_date) = #{month}
+        </if>
+        AND p.big_type = #{bigType}
+        GROUP BY p.payment_type
     </select>
-    <!-- 一年中平均每天的食宿支出-->
-    <select id="getPayDayCount" resultType="java.math.BigDecimal">
-        SELECT COUNT(DISTINCT pay_date)
-        FROM payment_record
-        WHERE YEAR(pay_date) = #{year}
-    </select>
-    <!-- 查询对应数据库的数据-->
+    <!-- 查询对应数据库的数据(用于导出)-->
     <select id="getRecordsByMonth" resultType="com.demo.model.entity.PaymentRecord">
         SELECT *
         FROM payment_record

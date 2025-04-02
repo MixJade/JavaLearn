@@ -55,6 +55,17 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      */
     ChartVo getPieChart(Integer year, Integer month, Boolean isIncome);
 
+
+    /**
+     * 获取某大类的组成(用于环形图)
+     *
+     * @param year     年份 2024
+     * @param month    月份 01 (传0视为查询一年的饼图数据)
+     * @param bigType  大类id
+     * @param isIncome 收入/支出
+     */
+    ChartVo getBigTypePieByYear(Integer year, Integer month, Integer bigType, Boolean isIncome);
+
     /**
      * 获取一月的sql
      *

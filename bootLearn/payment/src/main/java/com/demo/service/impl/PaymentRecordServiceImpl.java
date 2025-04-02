@@ -8,6 +8,7 @@ import com.demo.model.chart.ChartVo;
 import com.demo.model.chart.DayPayVo;
 import com.demo.model.chart.MonthPayVo;
 import com.demo.model.chart.YearLineVo;
+import com.demo.model.dto.BigTypePieDo;
 import com.demo.model.dto.ChartDo;
 import com.demo.model.dto.PayRecordPageDto;
 import com.demo.model.dto.YearPayDo;
@@ -175,6 +176,24 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             labels.add(chartDo.getBigTypeName());
             colors.add(chartDo.getBigTypeColor());
             moneys.add(chartDo.getMoney());
+        }
+        return new ChartVo(bigTypes, labels, colors, moneys);
+    }
+
+    @Override
+    public ChartVo getBigTypePieByYear(Integer year, Integer month, Integer bigType, Boolean isIncome) {
+        List<BigTypePieDo> bigTypePieDos = baseMapper.getBigTypePieByYear(year, month, bigType, isIncome);
+        // 转变为前端能直接用的数据结构
+        List<Integer> bigTypes = new ArrayList<>();
+        List<String> labels = new ArrayList<>(),
+                colors = new ArrayList<>();
+        List<BigDecimal> moneys = new ArrayList<>();
+        // 组装大类数据
+        for (BigTypePieDo chartDo : bigTypePieDos) {
+            bigTypes.add(chartDo.paymentType());
+            labels.add(chartDo.keyName());
+            colors.add("#ccc");
+            moneys.add(chartDo.money());
         }
         return new ChartVo(bigTypes, labels, colors, moneys);
     }
