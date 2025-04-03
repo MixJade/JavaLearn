@@ -30,7 +30,7 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
 
     List<MonthPayVo> getYearMonthByYear(Integer year);
 
-    YearPayDo getYearMoney(Integer year);
+    YearPayDo getYearMoney(Integer year, Integer month);
 
     List<DayPayVo> getMonthDayByMonth(Integer year, Integer month);
 

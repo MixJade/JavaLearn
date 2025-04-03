@@ -7,6 +7,7 @@ import com.demo.model.chart.DayPayVo;
 import com.demo.model.chart.MonthPayVo;
 import com.demo.model.chart.YearLineVo;
 import com.demo.model.dto.PayRecordPageDto;
+import com.demo.model.dto.YearPayDo;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.PayRecordVo;
 
@@ -37,6 +38,14 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param year 年份 2024
      */
     YearLineVo getYearLineByYear(Integer year);
+
+    /**
+     * 获取一月的收支总结
+     *
+     * @param year  年份 2024
+     * @param month 月份 1
+     */
+    YearPayDo getMonthMoney(Integer year, Integer month);
 
     /**
      * (日历图)获取一月每天的收支总结

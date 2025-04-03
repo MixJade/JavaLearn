@@ -18,8 +18,10 @@ import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +88,7 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
      */
     private YearPayDo getYearMoney(Integer year) {
         // 一年的总收入、支出
-        YearPayDo ym = baseMapper.getYearMoney(year);
+        YearPayDo ym = baseMapper.getYearMoney(year, 0);
         ym.setMoney(ym.getMoneyIn().subtract(ym.getMoneyOut()));
         // 一年的月平均消费
         BigDecimal monthAvgMoneyIn = baseMapper.getYearAvgMonth(year, true);
@@ -94,6 +96,26 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
         ym.setMonthAvgMoneyIn(monthAvgMoneyIn);
         ym.setMonthAvgMoneyOut(monthAvgMoneyOut);
         ym.setMonthAvgMoney(monthAvgMoneyIn.subtract(monthAvgMoneyOut));
+        return ym;
+    }
+
+    @Override
+    public YearPayDo getMonthMoney(Integer year, Integer month) {
+        // 一月的总收入、支出
+        YearPayDo ym = baseMapper.getYearMoney(year, month);
+        ym.setMoney(ym.getMoneyIn().subtract(ym.getMoneyOut()));
+        // 获取当月天数
+        YearMonth yearMonth = YearMonth.of(year, month);
+        int daysInMonth = yearMonth.lengthOfMonth();
+        // 将 int 转换为 BigDecimal 类型
+        BigDecimal dayBD = BigDecimal.valueOf(daysInMonth);
+        // 一月的日平均消费
+        // 使用 divide 方法进行除法运算，保留两位小数，采用 CEILING 舍入模式
+        BigDecimal dayAvgMoneyIn = ym.getMoneyIn().divide(dayBD, 2, RoundingMode.CEILING);
+        BigDecimal dayAvgMoneyOut = ym.getMoneyOut().divide(dayBD, 2, RoundingMode.CEILING);
+        ym.setMonthAvgMoneyIn(dayAvgMoneyIn);
+        ym.setMonthAvgMoneyOut(dayAvgMoneyOut);
+        ym.setMonthAvgMoney(dayAvgMoneyIn.subtract(dayAvgMoneyOut));
         return ym;
     }
 

@@ -5,6 +5,7 @@ import com.demo.model.chart.ChartVo;
 import com.demo.model.chart.DayPayVo;
 import com.demo.model.chart.MonthPayVo;
 import com.demo.model.chart.YearLineVo;
+import com.demo.model.dto.YearPayDo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,7 +88,7 @@ public class ChartController {
     }
 
     /**
-     * 获取一月的饼图数据
+     * 获取一月中不同大类收/支情况(用于饼、柱图)
      *
      * @param year     年份 2024
      * @param month    月份 01
@@ -96,5 +97,29 @@ public class ChartController {
     @GetMapping("/monthPie")
     public ChartVo getMonthPie(Integer year, Integer month, Boolean isIncome) {
         return paymentRecordService.getPieChart(year, month, isIncome);
+    }
+
+    /**
+     * 获取一月的收支总结(用于月度报告)
+     *
+     * @param year  年份 2024
+     * @param month 月份 1
+     */
+    @GetMapping("/monthMoney")
+    public YearPayDo getMonthMoney(Integer year, Integer month) {
+        return paymentRecordService.getMonthMoney(year, month);
+    }
+
+    /**
+     * 获取一月中某大类的具体情况(用于圆环图)
+     *
+     * @param year     年份 2024
+     * @param month    月份 01
+     * @param bigType  大类id
+     * @param isIncome 收/支
+     */
+    @GetMapping("/bigTypePieMonth")
+    public ChartVo getBigTypePieByMonth(Integer year, Integer month, Integer bigType, Boolean isIncome) {
+        return paymentRecordService.getBigTypePieByYear(year, month, bigType, isIncome);
     }
 }
