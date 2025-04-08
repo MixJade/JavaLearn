@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,9 +45,9 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
     }
 
     @Override
-    @Transactional
     public boolean delAll() {
-        return lambdaUpdate().remove();
+        baseMapper.truncateCache();
+        return true;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
     public boolean saveCsv(MultipartFile file) {
         // 定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d H:mm");
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             // 读取表头
             log.info("表头:{}", Arrays.toString(br.readLine().split(",")));
             List<PaymentCache> paymentCacheList = new ArrayList<>();

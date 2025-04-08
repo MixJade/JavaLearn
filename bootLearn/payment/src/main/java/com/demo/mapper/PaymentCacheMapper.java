@@ -15,4 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaymentCacheMapper extends BaseMapper<PaymentCache> {
 
+    // 清除所有缓存(包括重置计数器)
+    void truncateCache();
 }
