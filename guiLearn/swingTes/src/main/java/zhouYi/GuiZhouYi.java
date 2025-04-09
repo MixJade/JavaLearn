@@ -1,5 +1,6 @@
 package zhouYi;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -11,8 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GuiZhouYi extends JFrame implements ActionListener {
@@ -21,6 +20,7 @@ public class GuiZhouYi extends JFrame implements ActionListener {
     private final JTextArea resultArea;
 
     public static void main(String[] args) {
+        FlatLightLaf.setup();
         new GuiZhouYi();
     }
 
@@ -74,56 +74,72 @@ public class GuiZhouYi extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        int randInt;
+        int num1, num2, num3;
         if ("求余".equals(e.getActionCommand())) {
             if (isThreeInt(number1.getText()) && isThreeInt(number2.getText()) && isThreeInt(number3.getText())) {
-                int num1 = Integer.parseInt(number1.getText()) % 4;
-                int num2 = Integer.parseInt(number2.getText()) % 4;
-                int num3 = Integer.parseInt(number3.getText()) % 4;
-                System.out.println(num1 + " " + num2 + " " + num3);
-                randInt = (num1 << 4) + (num2 << 2) + num3;
+                num1 = Integer.parseInt(number1.getText()) % 8;
+                num2 = Integer.parseInt(number2.getText()) % 8;
+                num3 = Integer.parseInt(number3.getText()) % 6;
             } else {
                 JOptionPane.showMessageDialog(this, "请输入三个三位数", "出错", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         } else {
             Random rand = new Random();
-            randInt = rand.nextInt(64); // 生成0-63之间的数
+            num1 = rand.nextInt(8); // 生成0-7之间的数
+            num2 = rand.nextInt(8); // 生成0-7之间的数
+            num3 = rand.nextInt(6); // 生成0-7之间的数
         }
         // 读取xml文件
-        List<Gua> guaList = getGua();
-        Gua gua = guaList.get(randInt);
+        Gua gua = getGua(String.valueOf(num1), String.valueOf(num2), String.valueOf(num3));
         resultText.setText(gua.name());
-        resultArea.setText(gua.context());
+        resultArea.setText(gua.name() + "\n" + gua.context());
     }
 
     /**
-     * 从xml文件中读取卦象与卦辞
+     * 从xml文件中读取指定卦象与卦辞
+     *
+     * @param above 上卦索引(0-7)
+     * @param below 下卦索引(0-7)
+     * @param yao   爻辞索引(0-5)
      */
-    private List<Gua> getGua() {
-        List<Gua> guaList = new ArrayList<>();
+    private Gua getGua(String above, String below, String yao) {
         try (var in = getClass().getResourceAsStream("64gua.xml")) {
             Document doc = DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder()
                     .parse(in);
+            // 规范化文档
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("Gua");
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                // 获取指定索引的节点
-                Node nNode = nList.item(temp);
-                // 获取节点下对应的元素
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element e = (Element) nNode;
-                    // 取出每一个值
-                    guaList.add(new Gua(
-                            e.getAttribute("name"),
-                            e.getTextContent()));
+            // 获取所有 Gua 元素
+            NodeList guaList = doc.getElementsByTagName("Gua");
+            // 遍历 Gua 元素
+            for (int i = 0; i < guaList.getLength(); i++) {
+                Node guaNode = guaList.item(i);
+                if (guaNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element guaElement = (Element) guaNode;
+                    // 检查 Gua 元素的 above 和 below 属性
+                    if (above.equals(guaElement.getAttribute("above")) && below.equals(guaElement.getAttribute("below"))) {
+                        // 获取 Gua 元素下所有 yao 元素
+                        NodeList yaoList = guaElement.getElementsByTagName("yao");
+                        // 遍历 yao 元素
+                        for (int j = 0; j < yaoList.getLength(); j++) {
+                            Node yaoNode = yaoList.item(j);
+                            if (yaoNode.getNodeType() == Node.ELEMENT_NODE) {
+                                Element yaoElement = (Element) yaoNode;
+                                // 检查 yao 元素的 num 属性
+                                if (yao.equals(yaoElement.getAttribute("num")))
+                                    // 获取 yao 元素的文本内容
+                                    return new Gua(guaElement.getAttribute("name"), yaoElement.getTextContent());
+                            }
+                        }
+                    }
                 }
             }
+            return new Gua("异常", "未找到对应卦辞");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "对应的XML不见了", "最终结果", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return new Gua("异常", "出现异常");
         }
-        return guaList;
     }
 
     /**
