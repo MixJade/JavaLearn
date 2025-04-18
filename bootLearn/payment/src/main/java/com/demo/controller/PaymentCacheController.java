@@ -82,7 +82,7 @@ public class PaymentCacheController {
     @GetMapping("/sample-csv")
     public ResponseEntity<byte[]> sampleCsv() {
         // 加载资源文件
-        ClassPathResource resource = new ClassPathResource("static/sample/WxPaymentSamples.csv");
+        ClassPathResource resource = new ClassPathResource("templates/WxPaymentSamples.csv");
 
         // 设置响应头
         HttpHeaders headers = new HttpHeaders();

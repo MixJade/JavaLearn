@@ -10,5 +10,5 @@ target/
 *.iml
 *.ipr
 
-# 隐藏启动脚本,因为其内容是定制化的
-src/main/java/启动项目.cmd
+# 不跟踪前端资源
+src/main/resources/static
