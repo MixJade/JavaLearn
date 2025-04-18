@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 通信类
  */
-@ServerEndpoint(value = "/chat", configurator = HttpSessionEndpoint.class)
+@ServerEndpoint(value = "/ws/chat", configurator = HttpSessionEndpoint.class)
 @Component
 public class ChatEndpoint {
     private static final Logger log = LoggerFactory.getLogger(ChatEndpoint.class);

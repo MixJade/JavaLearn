@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 在登录页面所调用的接口
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/login")
 public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);

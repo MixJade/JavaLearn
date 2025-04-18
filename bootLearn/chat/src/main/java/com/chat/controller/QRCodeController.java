@@ -10,10 +10,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -25,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/qrcode")
 public class QRCodeController {
     private static final Logger log = LoggerFactory.getLogger(QRCodeController.class);
 
@@ -34,7 +32,7 @@ public class QRCodeController {
      * @param url 需要二维码包含的内容
      * @return 二维码图片
      */
-    @GetMapping(value = "/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] generateQRCode(@RequestParam String url) {
         int width = 300;
         int height = 300;
@@ -47,7 +45,7 @@ public class QRCodeController {
      * @param qrFile 二维码图片
      * @return 二维码内容
      */
-    @PostMapping(value = "/qrcode")
+    @PostMapping
     public String parseQRCode(MultipartFile qrFile) {
         if (qrFile == null) return "请选择图片";
         String qrCodeText = parseQRCodeText(qrFile);

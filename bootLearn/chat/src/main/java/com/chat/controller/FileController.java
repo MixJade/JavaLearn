@@ -24,7 +24,7 @@ import java.util.List;
  * 文件上传下载所调用的接口
  */
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/api/file")
 public class FileController {
     private static final Logger log = LoggerFactory.getLogger(FileController.class);
     private static final String dirPath = Paths.get("").toAbsolutePath() + "\\chatFile\\";
@@ -36,7 +36,7 @@ public class FileController {
      * @return 上传成功
      */
     @PostMapping("/upload")
-    public Result upload(MultipartFile myFile) {
+    public Result upload(@RequestParam("file") MultipartFile myFile) {
         if (myFile == null) return new Result(false, "请选择文件");
         // 检查对应目录是否存在
         File directory = new File(dirPath);

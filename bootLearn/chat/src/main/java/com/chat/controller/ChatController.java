@@ -14,7 +14,7 @@ import java.util.Set;
  * 在聊天过程中所调用的接口
  */
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/api/chat")
 public class ChatController {
     @GetMapping("/getUsername")
     public String getUsername(HttpSession session) {
