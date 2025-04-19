@@ -1,7 +1,9 @@
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
 
 /**
  * 在打包之前,复制前端代码一起打包
@@ -17,9 +19,13 @@ public class BeforeBuild {
         if (sourceFolder.exists() && sourceFolder.isDirectory()) {
             System.out.println("dist文件夹存在。");
             File destFolder = new File(resourcesPath);
+            if (destFolder.exists()) {
+                System.out.println("删除旧前端目录");
+                deleteFolderRecursively(destFolder.toPath());
+            }
 
             // 确保目标目录存在
-            if (!destFolder.exists() && !destFolder.mkdirs()) {
+            if (!destFolder.mkdirs()) {
                 System.err.println("无法创建目标目录: " + destFolder.getAbsolutePath());
                 return;
             }
@@ -41,6 +47,26 @@ public class BeforeBuild {
             }
         } else {
             System.out.println("dist文件夹不存在。");
+        }
+    }
+
+    /**
+     * 递归删除文件夹及其所有子内容
+     *
+     * @param folder 要删除的文件夹路径
+     */
+    public static void deleteFolderRecursively(Path folder) {
+        try (Stream<Path> walk = Files.walk(folder)) {
+            walk.sorted((p1, p2) -> -p1.compareTo(p2))
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            System.err.println("删除文件或文件夹 " + path + " 时出错: " + e.getMessage());
+                        }
+                    });
+        } catch (IOException e) {
+            System.err.println("删除文件夹时IO异常:" + e.getMessage());
         }
     }
 
