@@ -74,7 +74,7 @@ public class FileController {
         try {
             File file = new File(filePath);
             String fileLength = String.valueOf(file.length());
-            log.info("下载{}  文件大小{}kb", filename, file.length() >> 10);
+            log.info("下载{}  文件大小{}", filename, sizeCal(file.length()));
             FileInputStream fileInputStream = new FileInputStream(file);
             InputStreamResource resource = new InputStreamResource(fileInputStream);
             // 还需对文件名进行转码
@@ -105,11 +105,36 @@ public class FileController {
             if (listOfFiles == null) return fileInfos;
             for (File file : listOfFiles) {
                 if (file.isFile()) {
-                    fileInfos.add(FileInfo.bu(file.getName(), file.length()));
+                    fileInfos.add(new FileInfo(file.getName(), sizeCal(file.length())));
                 }
             }
         }
         return fileInfos;
+    }
+
+    /**
+     * 计算文件大小
+     *
+     * @param length 文件字节长度
+     * @return 文件通俗意义大小
+     */
+    private static String sizeCal(long length) {
+        String fileSize;
+        if (length < (1 << 10))
+            // 小于1kb则以b为单位
+            fileSize = length + "B";
+        else if (length < (1 << 20)) {
+            // 小于1mb则kb单位
+            long intPart = length >> 10; //整数部分
+            long decPart = (length - (intPart << 10)) * 100 >> 10; // 小数部分(x100保留两位小数)
+            fileSize = intPart + "." + decPart + "KB";
+        } else {
+            // 其余mb单位
+            long intPart = length >> 20; //整数部分
+            long decPart = (length - (intPart << 20)) * 100 >> 20; // 小数部分(x100保留两位小数)
+            fileSize = intPart + "." + decPart + "MB";
+        }
+        return fileSize;
     }
 }
 
