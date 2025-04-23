@@ -16,6 +16,7 @@ import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.PayRecordVo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -253,5 +256,65 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             else insertStatement.append(";");
         }
         return insertStatement.toString();
+    }
+
+    @Override
+    @Transactional
+    public boolean runSqlStr(String sqlCont) {
+        List<PaymentRecord> recordList = readSql(sqlCont);
+        return saveOrUpdateBatch(recordList);
+    }
+
+    private List<PaymentRecord> readSql(String sqlCont) {
+        List<PaymentRecord> readRes = new ArrayList<>();
+        // 提取所有括号内的内容
+        Pattern pattern = Pattern.compile("\\(([^)]+)\\)");
+        Matcher matcher = pattern.matcher(sqlCont);
+        List<String> valueLines = new ArrayList<>();
+
+        while (matcher.find()) {
+            valueLines.add(matcher.group(1)); // 获取括号内的内容，不含括号
+        }
+
+        // 解析每行数据
+        List<List<String>> allValues = new ArrayList<>();
+        for (String line : valueLines)
+            allValues.add(parseLine(line));
+        allValues.remove(0); // 移除头
+        // 遍历输出结果
+        for (List<String> row : allValues) {
+            PaymentRecord pr = new PaymentRecord();
+            pr.setRecordId(Integer.valueOf(row.get(0)));
+            pr.setPaymentType(Integer.valueOf(row.get(1)));
+            pr.setIsIncome("1".equals(row.get(2)));
+            pr.setMoney(new BigDecimal(row.get(3)));
+            pr.setPayDate(LocalDate.parse(row.get(4)));
+            pr.setRemark(row.get(5));
+            readRes.add(pr);
+        }
+        return readRes;
+    }
+
+    // 解析单行数据，处理单引号和逗号
+    private List<String> parseLine(String line) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuote = false;
+
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (c == '\'') {
+                inQuote = !inQuote; // 切换引号状态
+            } else if (c == ',' && !inQuote) {
+                // 遇到逗号且不在引号内，分割字段
+                fields.add(current.toString().trim());
+                current.setLength(0); // 清空当前字段
+            } else {
+                current.append(c);
+            }
+        }
+        // 添加最后一个字段
+        fields.add(current.toString().trim());
+        return fields;
     }
 }

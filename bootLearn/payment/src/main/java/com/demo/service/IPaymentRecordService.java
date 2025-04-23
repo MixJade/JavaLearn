@@ -82,4 +82,12 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
      * @param month 月份 01 (传0视为查询一年数据)
      */
     String generateInsertSql(Integer year, Integer month);
+
+    /**
+     * 运行插入sql的脚本
+     *
+     * @param sqlCont 脚本的内容
+     * @return 运行成功
+     */
+    boolean runSqlStr(String sqlCont);
 }

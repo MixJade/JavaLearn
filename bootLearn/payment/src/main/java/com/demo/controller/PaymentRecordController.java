@@ -12,7 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -81,5 +86,38 @@ public class PaymentRecordController {
         headers.setContentLength(fileContent.length);
         // 返回响应实体
         return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+    }
+
+    /**
+     * 上穿并保存csv中的消费数据
+     *
+     * @param file 上传csv的二进制流
+     * @return 保存成功
+     */
+    @PostMapping("/upload-sql")
+    public Result uploadCsv(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty())
+            return Result.error("请上传一个SQL文件");
+        String sqlCont = readMultipartFileContent(file);
+        String expectedStart = "insert into payment_record (record_id, payment_type, is_income, money, pay_date, remark)";
+        if (sqlCont.trim().toLowerCase().startsWith(expectedStart.toLowerCase())) {
+            return Result.choice("SQL导入", paymentRecordService.runSqlStr(sqlCont));
+        } else {
+            return Result.error("上传sql文件不合规范");
+        }
+    }
+
+    private String readMultipartFileContent(MultipartFile file) {
+        StringBuilder content = new StringBuilder();
+        try (InputStream inputStream = file.getInputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content.toString();
     }
 }
