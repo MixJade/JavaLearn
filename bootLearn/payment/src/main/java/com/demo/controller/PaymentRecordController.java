@@ -110,7 +110,7 @@ public class PaymentRecordController {
     private String readMultipartFileContent(MultipartFile file) {
         StringBuilder content = new StringBuilder();
         try (InputStream inputStream = file.getInputStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
