@@ -8,6 +8,10 @@ spring:
   main:
     banner-mode: off
 
+logging:
+  pattern:
+    dateformat: HH:mm:ss
+
 mybatis-plus:
   global-config:
     banner: false
