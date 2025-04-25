@@ -1,8 +1,9 @@
-package com.demo;
+package testJson;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * 封装JackSon工具
@@ -15,7 +16,7 @@ public class JsonUtil {
     public static String objToStr(Object o) {
         try {
             return objectMapper.writeValueAsString(o);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             System.err.println("Json转String出错");
             return "";
         }
@@ -25,7 +26,7 @@ public class JsonUtil {
     public static <T> T strToObj(String s, Class<T> valueType) {
         try {
             return objectMapper.readValue(s, valueType);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             System.err.println("String转Json出错");
             return null;
         }
@@ -34,7 +35,7 @@ public class JsonUtil {
     public static <T> T strToObj(String s, TypeReference<T> valueTypeRef) {
         try {
             return objectMapper.readValue(s, valueTypeRef);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             System.err.println("String转Json出错");
             return null;
         }

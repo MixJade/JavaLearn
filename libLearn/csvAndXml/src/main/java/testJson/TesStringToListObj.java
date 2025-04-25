@@ -1,4 +1,4 @@
-package com.demo;
+package testJson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 

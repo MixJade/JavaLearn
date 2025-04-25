@@ -1,4 +1,4 @@
-package com.demo.readJsData;
+package testJson.readJsData;
 
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public class TestReadJsData {
     public static void main(String[] args) throws IOException {
-        String string = Files.readString(Path.of("src/test/java/com/demo/readJsData/测试的JS文件.js"));
+        String string = Files.readString(Path.of("src/main/java/testJson/readJsData/测试的JS文件.js"));
         // System.out.println(string);
         Pattern p = Pattern.compile("(?<=const myData = )([\\s\\S]*?)(?=;)");
         Matcher m = p.matcher(string);
