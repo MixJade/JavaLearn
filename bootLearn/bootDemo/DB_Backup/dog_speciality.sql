@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS dog_speciality;
+
 create table dog_speciality
 (
     speciality_id   int auto_increment comment '狗的特质主键'

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS dog;
+
 create table dog
 (
     dog_id   int(20) auto_increment comment '狗的主键'
