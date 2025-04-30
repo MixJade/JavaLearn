@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.dto.CacheToRecordDto;
+import com.demo.model.dto.PayCachePageDto;
 import com.demo.model.entity.PaymentCache;
 import com.demo.service.IPaymentCacheService;
 import com.demo.service.IPaymentRecordService;
@@ -37,9 +38,9 @@ public class PaymentCacheController {
         this.paymentRecordService = paymentRecordService;
     }
 
-    @GetMapping
-    public IPage<PaymentCache> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
-        return paymentCacheService.getByPage(pageNum, pageSize);
+    @PostMapping("/page")
+    public IPage<PaymentCache> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody PayCachePageDto payCachePageDto) {
+        return paymentCacheService.getByPage(pageNum, pageSize, payCachePageDto);
     }
 
     @DeleteMapping("/{id}")
@@ -53,8 +54,8 @@ public class PaymentCacheController {
         return Result.choice("删除全部", paymentCacheService.delAll());
     }
 
-    @PostMapping
-    public Result add(@RequestBody CacheToRecordDto cacheToRecordDto) {
+    @PostMapping("/addRec")
+    public Result addRec(@RequestBody CacheToRecordDto cacheToRecordDto) {
         boolean addRes = paymentRecordService.save(cacheToRecordDto);
         paymentCacheService.lambdaUpdate()
                 .set(PaymentCache::getIsDel, true)

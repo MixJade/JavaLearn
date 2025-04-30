@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.PaymentCacheMapper">
+    <!-- 分页查询-->
+    <select id="getByPage" resultType="com.demo.model.entity.PaymentCache">
+        SELECT cache_id,
+        pay_date,
+        pay_time,
+        pay_type,
+        pay_man,
+        ware_name,
+        is_income,
+        pay_way,
+        pay_state,
+        money
+        FROM payment_cache
+        WHERE is_del = 0
+        <if test="dto.payMan != null and dto.payMan != ''">
+            <bind name="payMan" value="'%'+dto.payMan+'%'"/>
+            AND pay_man like #{payMan}
+        </if>
+        <if test="dto.wareName != null and dto.wareName != ''">
+            <bind name="wareName" value="'%'+dto.wareName+'%'"/>
+            AND ware_name like #{wareName}
+        </if>
+        ORDER BY pay_date, pay_time
+    </select>
 
     <!-- 清除所有缓存(包括重置计数器)-->
     <delete id="truncateCache">

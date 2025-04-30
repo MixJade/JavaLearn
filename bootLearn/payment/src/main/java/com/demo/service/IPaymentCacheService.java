@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.demo.model.dto.PayCachePageDto;
 import com.demo.model.entity.PaymentCache;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public interface IPaymentCacheService extends IService<PaymentCache> {
     /**
      * 分页查询缓存数据
      */
-    IPage<PaymentCache> getByPage(int pageNum, int pageSize);
+    IPage<PaymentCache> getByPage(int pageNum, int pageSize, PayCachePageDto payCachePageDto);
 
     /**
      * 删除表中所有数据

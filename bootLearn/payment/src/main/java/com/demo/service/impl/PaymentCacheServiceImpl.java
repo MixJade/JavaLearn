@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.mapper.PaymentCacheMapper;
+import com.demo.model.dto.PayCachePageDto;
 import com.demo.model.entity.PaymentCache;
 import com.demo.service.IPaymentCacheService;
 import org.slf4j.Logger;
@@ -37,12 +38,8 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
     private static final Logger log = LoggerFactory.getLogger(PaymentCacheServiceImpl.class);
 
     @Override
-    public IPage<PaymentCache> getByPage(int pageNum, int pageSize) {
-        return lambdaQuery()
-                .eq(PaymentCache::getIsDel, false)
-                .orderByAsc(PaymentCache::getPayDate)
-                .orderByAsc(PaymentCache::getPayTime)
-                .page(new Page<>(pageNum, pageSize));
+    public IPage<PaymentCache> getByPage(int pageNum, int pageSize, PayCachePageDto payCachePageDto) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize), payCachePageDto);
     }
 
     @Override
