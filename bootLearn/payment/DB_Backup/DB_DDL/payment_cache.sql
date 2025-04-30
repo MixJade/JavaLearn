@@ -2,7 +2,8 @@ create table payment_cache
 (
     cache_id  int auto_increment comment '缓存主键'
         primary key,
-    pay_date  date           default '2023-01-01' not null comment '付费时间',
+    pay_date  date           default '2023-01-01' not null comment '付费日期',
+    pay_time  varchar(5)     default '00:00'      not null comment '付费时间',
     pay_type  varchar(50)    default '无'         not null comment '交易类型',
     pay_man   varchar(50)    default '无'         not null comment '交易对方',
     ware_name varchar(50)    default '无'         not null comment '商品名称',

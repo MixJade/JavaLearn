@@ -86,15 +86,4 @@ public class PaymentDict implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
-
-    @Override
-    public String toString() {
-        return "PaymentDict{" +
-                "paymentType = " + paymentType +
-                ", keyName = " + keyName +
-                ", isIncome = " + isIncome +
-                ", bigType = " + bigType +
-                ", color = " + color +
-                "}";
-    }
 }

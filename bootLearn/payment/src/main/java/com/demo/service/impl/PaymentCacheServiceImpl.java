@@ -41,6 +41,7 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
         return lambdaQuery()
                 .eq(PaymentCache::getIsDel, false)
                 .orderByAsc(PaymentCache::getPayDate)
+                .orderByAsc(PaymentCache::getPayTime)
                 .page(new Page<>(pageNum, pageSize));
     }
 
@@ -55,6 +56,8 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
     public boolean saveCsv(MultipartFile file) {
         // 定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d H:mm");
+        // 定义时间格式(用于入库)
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH:mm");
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             // 读取表头
             log.info("表头:{}", Arrays.toString(br.readLine().split(",")));
@@ -69,6 +72,9 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
                 // 从 LocalDateTime 对象中提取 LocalDate 对象
                 LocalDate localDate = dateTime.toLocalDate();
                 payCache.setPayDate(localDate);
+                // 提取小时分钟
+                String hourTime = dateTime.format(formatter2);
+                payCache.setPayTime(hourTime);
                 // 1-交易类型
                 payCache.setPayType(csvLine.get(1));
                 // 2-交易对方

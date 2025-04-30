@@ -15,7 +15,7 @@ import java.time.LocalDate;
  * </p>
  *
  * @author MixJade
- * @since 2025-03-31
+ * @since 2025-04-30
  */
 @TableName("payment_cache")
 @SuppressWarnings("unused")
@@ -30,9 +30,14 @@ public class PaymentCache implements Serializable {
     private Integer cacheId;
 
     /**
-     * 付费时间
+     * 付费日期
      */
     private LocalDate payDate;
+
+    /**
+     * 付费时间
+     */
+    private String payTime;
 
     /**
      * 交易类型
@@ -88,6 +93,14 @@ public class PaymentCache implements Serializable {
 
     public void setPayDate(LocalDate payDate) {
         this.payDate = payDate;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
     }
 
     public String getPayType() {
@@ -152,21 +165,5 @@ public class PaymentCache implements Serializable {
 
     public void setIsDel(Boolean isDel) {
         this.isDel = isDel;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentCache{" +
-                "cacheId = " + cacheId +
-                ", payDate = " + payDate +
-                ", payType = " + payType +
-                ", payMan = " + payMan +
-                ", wareName = " + wareName +
-                ", isIncome = " + isIncome +
-                ", payWay = " + payWay +
-                ", payState = " + payState +
-                ", money = " + money +
-                ", isDel = " + isDel +
-                "}";
     }
 }

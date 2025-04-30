@@ -101,16 +101,4 @@ public class PaymentRecord implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    @Override
-    public String toString() {
-        return "PaymentRecord{" +
-                "recordId = " + recordId +
-                ", paymentType = " + paymentType +
-                ", isIncome = " + isIncome +
-                ", money = " + money +
-                ", payDate = " + payDate +
-                ", remark = " + remark +
-                "}";
-    }
 }
