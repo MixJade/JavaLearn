@@ -15,8 +15,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <!--表明编译器会支持 Java 17 的语法特性-->
+        <maven.compiler.source>17</maven.compiler.source>
+        <!--生成的字节码能在 Java 17 及以上版本的 JVM 上运行-->
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
