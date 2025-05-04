@@ -7,7 +7,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
-@WebServlet("/hello")
+@WebServlet("/api/hello")
 public class ServletAttempt implements Servlet {
     private static int reqNum = 0;
 

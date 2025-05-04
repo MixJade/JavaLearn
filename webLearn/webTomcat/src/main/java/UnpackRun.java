@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 在打包时执行的脚本
+ * 在打包时执行的脚本(需先编译,然后执行此文件,再打包)
  *
  * @since 2025-05-05 01:01:55
  */
@@ -30,6 +30,13 @@ public class UnpackRun {
         if ("target".equals(outDir)) outDir = absolutePath + "\\" + outDir;
         handleLocalFile(absolutePath);
         System.out.println("Tomcat所在绝对路径: " + tomcatPath);
+        // 检查是否执行过
+        File checkFile = new File("target/ROOT/WEB-INF/web.xml");
+        if (checkFile.exists()) {
+            System.out.println("========当前脚本已执行,跳过========\n");
+            return;
+        }
+        // 复制资源文件
         writeServer(absolutePath);
         writeStartBat(absolutePath);
         System.out.println("========开始复制资源========");
@@ -120,11 +127,18 @@ public class UnpackRun {
     public static void copyWebXml() {
         String sourceFilePath = "template/web.xml";
         String targetFilePath = "target/ROOT/WEB-INF/web.xml";
+        // 创建文件夹
+        File parentDir = (new File(targetFilePath)).getParentFile();
+
         Path sourcePath = Paths.get(sourceFilePath);
         Path destinationPath = Paths.get(targetFilePath);
         try {
-            Files.copy(sourcePath, destinationPath);
-            System.out.println("web.xml 复制成功");
+            if (parentDir.mkdirs()) {
+                Files.copy(sourcePath, destinationPath);
+                System.out.println("web.xml 复制成功");
+            } else {
+                System.err.println("target/ROOT/WEB-INF 目录已存在，请检查");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -35,7 +35,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <!-- 排除特定类 -->
+                    <!-- 排除特定类,多个则逗号分割 -->
                     <packagingExcludes>
                         WEB-INF/classes/UnpackRun.class
                     </packagingExcludes>
@@ -49,7 +49,8 @@
                 <executions>
                     <execution>
                         <id>run-java-script</id>
-                        <phase>package</phase>
+                        <!--介于compile和package之间-->
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>java</goal>
                         </goals>
