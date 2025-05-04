@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 在打包时执行的脚本(需先编译,然后执行此文件,再打包)
+ * 在打包时执行的脚本
  *
  * @since 2025-05-05 01:01:55
  */
