@@ -37,7 +37,9 @@
                 <configuration>
                     <!-- 排除特定类,多个则逗号分割 -->
                     <packagingExcludes>
-                        WEB-INF/classes/UnpackRun.class
+                        WEB-INF/classes/pack/UnpackRun.class,
+                        WEB-INF/classes/pack/PackConfig.class,
+                        WEB-INF/classes/pack/AfterPack.class
                     </packagingExcludes>
                 </configuration>
             </plugin>
@@ -55,7 +57,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>UnpackRun</mainClass>
+                            <mainClass>pack.UnpackRun</mainClass>
                         </configuration>
                     </execution>
                 </executions>

@@ -1,3 +1,5 @@
+package pack;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,8 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 在打包时执行的脚本
@@ -14,22 +14,13 @@ import java.util.regex.Pattern;
  * @since 2025-05-05 01:01:55
  */
 public class UnpackRun {
-    /**
-     * 这里不允许修改(除了第一次运行)，后续请修改pack-local.iml
-     */
-    private static String tomcatPath = "C:/tomcat/apache-tomcat-9.0.104";
-    private static String staticPath = "../../../TsLearn/ship-demo/dist";
-    private static String outDir = "target"; // 最后war要运行的路径
-
     public static void main(String[] args) {
         System.out.println("\n========MixJade自制打包脚本========");
         // 获取当前工作目录的绝对路径
         String absolutePath = System.getProperty("user.dir");
         // 打印绝对路径
         System.out.println("当前所在绝对路径: " + absolutePath);
-        if ("target".equals(outDir)) outDir = absolutePath + "\\" + outDir;
-        handleLocalFile(absolutePath);
-        System.out.println("Tomcat所在绝对路径: " + tomcatPath);
+        System.out.println("Tomcat所在绝对路径: " + PackConfig.TOMCAT_PATH);
         // 检查是否执行过
         File checkFile = new File("target/ROOT/WEB-INF/web.xml");
         if (checkFile.exists()) {
@@ -44,53 +35,12 @@ public class UnpackRun {
         copyStatic();
     }
 
-    /**
-     * 处理本地配置文件
-     *
-     * @param directoryPath 当前java执行路径
-     */
-    private static void handleLocalFile(String directoryPath) {
-        File localFile = new File(directoryPath, "pack-local.iml");
-        try {
-            if (localFile.exists()) {
-                // 读取文件
-                String strXml = Files.readString(localFile.toPath());
-                Pattern p1 = Pattern.compile("(?<=<tomcatPath>).+(?=</tomcatPath>)");
-                Pattern p2 = Pattern.compile("(?<=<staticPath>).+(?=</staticPath>)");
-                Pattern p3 = Pattern.compile("(?<=<outDir>).+(?=</outDir>)");
-                Matcher m1 = p1.matcher(strXml);
-                Matcher m2 = p2.matcher(strXml);
-                Matcher m3 = p3.matcher(strXml);
-                while (m1.find() && m2.find() && m3.find()) {
-                    tomcatPath = m1.group();
-                    staticPath = m2.group();
-                    outDir = m3.group();
-                }
-            } else {
-                // 创建文件
-                if (localFile.createNewFile()) {
-                    // 写入配置
-                    try (FileWriter fw = new FileWriter(localFile)) {
-                        fw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                "\n<tomcatPath>" + tomcatPath + "</tomcatPath>" +
-                                "\n<staticPath>" + staticPath + "</staticPath>" +
-                                "\n<outDir>" + outDir + "</outDir>");
-                    }
-                    System.out.println("本地配置文件已创建：" + localFile.getAbsolutePath());
-                } else {
-                    System.out.println("无法创建文件。");
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("发生 I/O 错误：" + e.getMessage());
-        }
-    }
-
     private static void writeServer(String directoryPath) {
         File serverFile = new File(directoryPath, "template/server.xml");
         try {
             String serverStr = Files.readString(serverFile.toPath());
-            serverStr = serverStr.replace("C:\\MyCode\\JavaLearn\\webLearn\\webTomcat\\target", outDir);
+            serverStr = serverStr.replace("C:\\MyCode\\JavaLearn\\webLearn\\webTomcat\\target", PackConfig.OUT_DIR)
+                    .replace("7841", PackConfig.WEB_PORT);
             File newServerFile = new File(directoryPath, "target/server.xml");
             if (newServerFile.createNewFile()) {
                 // 写入配置
@@ -107,8 +57,8 @@ public class UnpackRun {
         File startBatFile = new File(directoryPath, "template/startWar.bat");
         try {
             String startBatStr = Files.readString(startBatFile.toPath());
-            startBatStr = startBatStr.replace("C:\\MyCode\\JavaLearn\\webLearn\\webTomcat", outDir)
-                    .replace("C:\\tomcat\\apache-tomcat-9.0.104", tomcatPath);
+            startBatStr = startBatStr.replace("C:\\MyCode\\JavaLearn\\webLearn\\webTomcat", PackConfig.OUT_DIR)
+                    .replace("C:\\tomcat\\apache-tomcat-9.0.104", PackConfig.TOMCAT_PATH);
             File newServerFile = new File(directoryPath, "target/startWar.bat");
             if (newServerFile.createNewFile()) {
                 // 写入配置
@@ -149,7 +99,7 @@ public class UnpackRun {
      */
     private static void copyStatic() {
         String resourcesPath = "target/ROOT";
-        File sourceFolder = new File(staticPath);
+        File sourceFolder = new File(PackConfig.STATIC_PATH);
 
         if (sourceFolder.exists() && sourceFolder.isDirectory()) {
             System.out.println("dist文件夹存在。");

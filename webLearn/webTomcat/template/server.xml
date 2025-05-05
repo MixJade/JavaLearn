@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Server port="8005" shutdown="SHUTDOWN">
     <Service name="Catalina">
-        <!-- 端口设置为7841(使用1024到65535之间的端口号) -->
+        <!-- 端口7841 -->
         <Connector port="7841" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"/>
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="C:\MyCode\JavaLearn\webLearn\webTomcat\target" unpackWARs="true"

@@ -1,5 +1,7 @@
 package com.demo;
 
+import pack.PackConfig;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -16,8 +18,8 @@ public class AppStartupListener implements ServletContextListener {
         try {
             InetAddress ip01 = InetAddress.getLocalHost();
             //noinspection HttpUrlsUsage
-            System.out.println("局域IP: http://" + ip01.getHostAddress() + ":7841");
-            Runtime.getRuntime().exec("cmd /c start http://localhost:7841");
+            System.out.println("局域IP: http://" + ip01.getHostAddress() + ":" + PackConfig.WEB_PORT);
+            Runtime.getRuntime().exec("cmd /c start http://localhost:" + PackConfig.WEB_PORT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
