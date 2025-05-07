@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.mapper.PaymentRecordMapper;
-import com.demo.model.chart.*;
+import com.demo.model.chart.ChartVo;
+import com.demo.model.chart.DayPayVo;
+import com.demo.model.chart.MonthPayVo;
+import com.demo.model.chart.YearLineVo;
 import com.demo.model.dto.BigTypePieDo;
 import com.demo.model.dto.ChartDo;
 import com.demo.model.dto.PayRecordPageDto;
@@ -182,20 +185,6 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             result.add(res_i);
         }
         return result;
-    }
-
-    @Override
-    public DayPayBarVo barDay(Integer year, Integer month) {
-        List<DayPayBarDo> payBarDos = baseMapper.getMonthBarDayByMonth(year, month);
-        List<String> labels = new ArrayList<>();
-        List<BigDecimal> moneyOuts = new ArrayList<>(),
-                moneyIns = new ArrayList<>();
-        for (DayPayBarDo payBarDo : payBarDos) {
-            labels.add(payBarDo.label());
-            moneyOuts.add(payBarDo.moneyOut());
-            moneyIns.add(payBarDo.moneyIn());
-        }
-        return new DayPayBarVo(labels, moneyOuts, moneyIns);
     }
 
     @Override
