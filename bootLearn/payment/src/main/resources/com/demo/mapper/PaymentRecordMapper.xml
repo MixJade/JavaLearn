@@ -53,7 +53,7 @@
         FROM payment_record
         WHERE YEAR(pay_date) = #{year}
           AND MONTH(pay_date) = #{month}
-        GROUP BY pay_date;
+        GROUP BY pay_date
     </select>
     <!-- 获取一月(或一年)的饼图数据-->
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
