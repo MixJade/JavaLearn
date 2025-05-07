@@ -1,10 +1,7 @@
 package com.demo.controller;
 
 
-import com.demo.model.chart.ChartVo;
-import com.demo.model.chart.DayPayVo;
-import com.demo.model.chart.MonthPayVo;
-import com.demo.model.chart.YearLineVo;
+import com.demo.model.chart.*;
 import com.demo.model.dto.YearPayDo;
 import com.demo.service.IPaymentRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +49,17 @@ public class ChartController {
     @GetMapping("/calendarDay")
     public List<List<DayPayVo>> calendarDay(Integer year, Integer month) {
         return paymentRecordService.calendarDay(year, month);
+    }
+
+    /**
+     * (柱状图)获取一月每天的收支总结
+     *
+     * @param year  年份 2024
+     * @param month 月份 01
+     */
+    @GetMapping("/barDay")
+    public DayPayBarVo barDay(Integer year, Integer month) {
+        return paymentRecordService.barDay(year, month);
     }
 
     /**

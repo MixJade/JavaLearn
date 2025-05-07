@@ -53,7 +53,16 @@
         FROM payment_record
         WHERE YEAR(pay_date) = #{year}
           AND MONTH(pay_date) = #{month}
-        GROUP BY pay_date;
+        GROUP BY pay_date
+    </select>
+    <select id="getMonthBarDayByMonth" resultType="com.demo.model.chart.DayPayBarDo">
+        SELECT DATE_FORMAT(pay_date, '%m%d')    AS pay_date,
+               SUM(IF(is_income = 0, money, 0)) AS money_out,
+               SUM(IF(is_income = 1, money, 0)) AS money_in
+        FROM payment_record
+        WHERE YEAR(pay_date) = #{year}
+          AND MONTH(pay_date) = #{month}
+        GROUP BY pay_date
     </select>
     <!-- 获取一月(或一年)的饼图数据-->
     <select id="getPieChart" resultType="com.demo.model.dto.ChartDo">
