@@ -51,6 +51,7 @@ public class GuiZhouYi extends JFrame implements ActionListener {
         JPanel centerPanel = new JPanel();
         resultArea = new JTextArea(7, 48);
         resultArea.setEditable(false);
+        resultArea.setLineWrap(true); // 允许换行
         // 创建边框
         Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3);
         resultArea.setBorder(border);
@@ -97,12 +98,12 @@ public class GuiZhouYi extends JFrame implements ActionListener {
             Random rand = new Random();
             num1 = rand.nextInt(8); // 生成0-7之间的数
             num2 = rand.nextInt(8); // 生成0-7之间的数
-            num3 = rand.nextInt(6); // 生成0-7之间的数
+            num3 = rand.nextInt(6); // 生成0-5之间的数
         }
         // 读取xml文件
         Gua gua = getGua(String.valueOf(num1), String.valueOf(num2), String.valueOf(num3));
         resultText.setText(gua.name());
-        resultArea.setText(gua.name() + "\n" + gua.context());
+        resultArea.setText(gua.name() + "\n" + gua.context().trim().replace("《象》", "\n《象》"));
     }
 
     /**
