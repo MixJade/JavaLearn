@@ -1,17 +1,18 @@
-package zhouYi;
-
 import com.formdev.flatlaf.FlatLightLaf;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 public class GuiZhouYi extends JFrame implements ActionListener {
@@ -26,6 +27,14 @@ public class GuiZhouYi extends JFrame implements ActionListener {
 
     public GuiZhouYi() {
         setTitle("六十四卦");
+        // 设置图标
+        try (InputStream favor = getClass().getResourceAsStream("favor.jpg")) {
+            if (favor != null) {
+                ImageIcon icon = new ImageIcon(ImageIO.read(favor));
+                setIconImage(icon.getImage());
+            }
+        } catch (IOException ignored) {
+        }
         // 使用东西南北布局
         setLayout(new BorderLayout());
 
