@@ -183,6 +183,7 @@ public class Panel2 extends JPanel implements ActionListener {
         if (downTsData.getErrCount() > 0) {
             JOptionPane.showMessageDialog(null, "有部分ts下载失败,请重下", "错误", JOptionPane.ERROR_MESSAGE);
             saveTsBtn.setText("重下失败Ts");
+            downTsData.writeDealItemToFile();
             saveTsBtn.setEnabled(true);
         } else
             JOptionPane.showMessageDialog(null, "ts下载完毕", "反馈", JOptionPane.INFORMATION_MESSAGE);
