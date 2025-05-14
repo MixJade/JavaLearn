@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.PrjItemMapper">
+    <select id="getByPage" resultType="com.demo.model.vo.PrjItemVo">
+        SELECT a.item_id,
+        a.item_name,
+        a.remark,
+        a.color,
+        COUNT(b.memo_id) AS recordNum
+        FROM prj_item a
+        LEFT JOIN memo_sql b on a.item_id = b.item_id AND b.is_del = 0
+        WHERE a.is_del = 0
+        <if test="dto.itemName != null and dto.itemName != ''">
+            <bind name="itemName" value="'%'+dto.itemName+'%'"/>
+            AND a.item_name like #{itemName}
+        </if>
+        GROUP BY a.item_id, a.item_name, a.remark, a.color
+    </select>
+</mapper>

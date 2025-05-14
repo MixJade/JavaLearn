@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.MemoSqlMapper">
+    <select id="getByPage" resultType="com.demo.model.entity.MemoSql">
+        SELECT memo_id, memo_name, remark
+        FROM memo_sql
+        WHERE is_del = 0
+        <if test="dto.itemId != null and dto.itemId != 0">
+            AND item_id = #{itemId}
+        </if>
+        <if test="dto.memoName != null and dto.memoName != ''">
+            <bind name="memoName" value="'%'+dto.memoName+'%'"/>
+            AND memo_name like #{memoName}
+        </if>
+        <if test="dto.remark != null and dto.remark != ''">
+            <bind name="remark" value="'%'+dto.remark+'%'"/>
+            AND remark like #{remark}
+        </if>
+    </select>
+</mapper>

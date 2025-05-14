@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/memo?useSSL=true
+    username: root
+    password: MC@:(==ni2024
+  main:
+    banner-mode: off
+
+server:
+  port: 23041
+
+logging:
+  pattern:
+    dateformat: HH:mm:ss
+
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: isDel
+      logic-not-delete-value: 0
+  mapper-locations: classpath:com/demo/mapper/*.xml
+  # 下面是打开sql语句输出
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
