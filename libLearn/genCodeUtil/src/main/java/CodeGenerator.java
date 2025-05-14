@@ -1,9 +1,7 @@
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.TemplateType;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.fill.Column;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collections;
@@ -14,7 +12,6 @@ import java.util.Collections;
  * @since 2023-8-22 22:02
  */
 public class CodeGenerator {
-
     public static void main(String[] args) {
         FastAutoGenerator.create(MyConfig.url, MyConfig.username, MyConfig.password)
                 // ============全局配置============
