@@ -22,6 +22,7 @@ public class DownFile {
      */
     public static boolean downFromWeb(String webUrl, String filePath) {
         try {
+            // System.out.println(webUrl);
             URL url = new URL(webUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET"); // 请求方法
