@@ -28,6 +28,8 @@ public class ServletAttempt implements Servlet {
         // 设置响应的内容类型为 HTML
         servletResponse.setContentType("text/html;charset=UTF-8");
         reqNum++;
+        System.out.println("客户端IP地址: " + servletRequest.getRemoteAddr());
+        System.out.println("客户端端口: " + servletRequest.getRemotePort());
         servletResponse.getWriter().write("<h1>Yes_Sir_This_Page</h1>访问次数" + reqNum
                 + "<br>客户端IP地址: " + servletRequest.getRemoteAddr()
                 + "<br>客户端端口: " + servletRequest.getRemotePort()
