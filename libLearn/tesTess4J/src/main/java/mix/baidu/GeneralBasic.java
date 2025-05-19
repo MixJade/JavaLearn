@@ -1,15 +1,22 @@
 package mix.baidu;
 
+import mix.baidu.model.NormARes;
+import mix.baidu.model.NormRes;
 import mix.baidu.utils.Base64Util;
 import mix.baidu.utils.FileUtil;
 import mix.baidu.utils.HttpUtil;
+import mix.jade.JsonUtil;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
-* 通用文字识别
-*/
+ * 通用文字识别
+ */
 public class GeneralBasic {
     public static String generalBasic() {
         // 请求url
@@ -22,13 +29,26 @@ public class GeneralBasic {
             String imgParam = URLEncoder.encode(imgStr, StandardCharsets.UTF_8);
 
             String param = "image=" + imgParam;
-
-            // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
-            String accessToken = "[access_token]";
-
-            String result = HttpUtil.post(url, accessToken, param);
-            System.out.println(result);
-            return result;
+            Path tokenPath = Paths.get(ApiKey.TOKEN_FILE);
+            if (Files.exists(tokenPath)) {
+                // 文件存在
+                List<String> lines = Files.readAllLines(tokenPath);
+                String accessToken = lines.get(0);
+                System.out.println(accessToken);
+                // 发起请求
+                String result = HttpUtil.post(url, accessToken, param);
+                NormRes normRes = JsonUtil.strToObj(result, NormRes.class);
+                StringBuilder resStr = new StringBuilder();
+                if (normRes != null) {
+                    for (NormARes aRes : normRes.words_result()) {
+                        resStr.append(aRes.words()).append("\n");
+                    }
+                }
+                return resStr.toString();
+            } else {
+                System.err.println("暂无token");
+                return "暂无token";
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,6 +56,6 @@ public class GeneralBasic {
     }
 
     public static void main(String[] args) {
-        GeneralBasic.generalBasic();
+        System.out.println(generalBasic());
     }
 }
