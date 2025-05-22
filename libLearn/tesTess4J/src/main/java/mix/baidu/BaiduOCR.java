@@ -53,6 +53,8 @@ public class BaiduOCR {
                 String accessToken = lines.get(0);
                 // 发起请求
                 String result = post(url, accessToken, param);
+                if (result.contains("error_code"))
+                    return "无效Token";
                 NormRes normRes = JsonUtil.strToObj(result, NormRes.class);
                 StringBuilder resStr = new StringBuilder();
                 if (normRes != null) {
