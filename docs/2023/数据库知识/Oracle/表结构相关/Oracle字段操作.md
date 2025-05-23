@@ -77,3 +77,19 @@ ALTER TABLE your_table DROP COLUMN your_column;
 ```sql
 ALTER TABLE your_table RENAME COLUMN new_column TO your_column;
 ```
+
+## 四、查询某列是否存在
+
+> 2025-05-23 09:29:55
+
+* Oracle 默认将对象名（表名、列名）存储为大写，因此条件中需使用大写形式
+
+```sql
+SELECT COUNT(*)
+FROM USER_TAB_COLUMNS
+WHERE TABLE_NAME = '表名' -- 替换为实际表名（大写）
+  AND COLUMN_NAME = '列名'; -- 替换为实际列名（大写）
+  
+-- 如果结果为1，表示存在该列；结果为0则表示不存在
+```
+
