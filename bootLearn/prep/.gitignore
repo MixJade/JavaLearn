@@ -1,0 +1,8 @@
+target/
+
+### IntelliJ IDEA ###
+.idea
+*.iml
+
+# 不跟踪前端资源
+src/main/resources/static
