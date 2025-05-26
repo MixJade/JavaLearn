@@ -72,6 +72,7 @@ create table question
     question_id    int auto_increment comment '题目主键'
         primary key,
     paper_id       int  not null comment '试卷主键',
+    quest_type     int  not null default 1 comment '题目类型,1选择,2填空,3大题',
     quest_content  text not null comment '题目内容',
     quest_analysis text comment '题目解析',
     quest_no       int  not null default 1 comment '题目序号(也是文件夹名)',
@@ -127,8 +128,9 @@ create table question_record
         primary key,
     record_id       int not null comment '试卷记录主键',
     question_id     int not null comment '题目主键',
+    quest_type      int not null comment '题目类型,1选择,2填空,3大题',
     quest_no        int not null comment '题目序号',
-    op_name         varchar(1) comment '选项(A,B,略)',
-    correct_op_name varchar(1) comment '正确选项(A,B,略)',
+    op_name         varchar(50) comment '选项(A,B,略,填空)',
+    correct_op_name varchar(50) comment '正确选项',
     score           int not null default 0 comment '得分'
 ) comment '题目记录表';
