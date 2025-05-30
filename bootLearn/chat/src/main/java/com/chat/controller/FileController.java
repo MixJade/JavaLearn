@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +40,7 @@ public class FileController {
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile myFile) {
         if (myFile == null) return new Result(false, "请选择文件");
-        // 检查对应目录是否存在
-        File directory = new File(dirPath);
-        if (!directory.exists()) {
-            boolean mkdir = directory.mkdir();
-            log.info("创建文件夹：{}", mkdir ? "成功" : "失败");
-        }
+        checkFileDir();
         // 开始转存
         String filePath = dirPath + myFile.getOriginalFilename();
         try {
@@ -60,6 +57,74 @@ public class FileController {
             log.warn("转存图片失败");
             return new Result(false, "上传失败");
         }
+    }
+
+
+    /**
+     * 聊天页面粘贴图片触发上传
+     *
+     * @param myFile 上传的二进制流
+     * @return 保存成功
+     */
+    @PostMapping("/upPasteImg")
+    public Result upPasteImg(@RequestParam("file") MultipartFile myFile) {
+        if (myFile == null) return new Result(false, "请选择文件");
+        checkFileDir();
+        if (myFile.getOriginalFilename() == null) {
+            return new Result(false, "生成文件名失败");
+        }
+        // 开始转存
+        String genFileNm = "paste" + genFileName(myFile.getOriginalFilename());
+        String filePath = dirPath + genFileNm;
+        try {
+            File newFile = new File(filePath);
+            // 防止覆盖
+            if (newFile.exists()) {
+                log.info("已存在文件:{}", filePath);
+                return new Result(false, "文件已存在");
+            }
+            myFile.transferTo(newFile);//转存临时文件
+            log.info("文件转存至:{}", filePath);
+            return new Result(true, genFileNm);
+        } catch (IOException e) {
+            log.warn("转存图片失败");
+            return new Result(false, "上传失败");
+        }
+    }
+
+    /**
+     * 检查上传文件的文件夹是否存在
+     */
+    private static void checkFileDir() {
+        // 检查对应目录是否存在
+        File directory = new File(dirPath);
+        if (!directory.exists()) {
+            boolean mkdir = directory.mkdir();
+            log.info("创建文件夹：{}", mkdir ? "成功" : "失败");
+        }
+    }
+
+
+    /**
+     * 根据文件名生成一个新的文件名
+     *
+     * @param fileName 原始文件名
+     * @return 生成文件名
+     */
+    private static String genFileName(String fileName) {
+        // 获取当前日期和时间
+        LocalDateTime now = LocalDateTime.now();
+        // 定义日期时间格式：月日时分秒
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddHHmmss");
+        String formattedDateTime = now.format(formatter);
+        // 提取文件扩展名
+        String extension = "";
+        int lastIndexOfDot = fileName.lastIndexOf('.');
+        if (lastIndexOfDot != -1) {
+            extension = fileName.substring(lastIndexOfDot);
+        }
+        // 组合结果
+        return formattedDateTime + extension;
     }
 
     /**
