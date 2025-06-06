@@ -21,3 +21,8 @@ mybatis-plus:
   # 下面是打开sql语句输出
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+prep:
+  # 图源文件路径，斜杠结尾
+  dir:
+    ../../../prepDir/

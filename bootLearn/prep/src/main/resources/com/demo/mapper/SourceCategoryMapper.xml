@@ -3,8 +3,17 @@
 <mapper namespace="com.demo.mapper.SourceCategoryMapper">
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.SourceCategory">
-        SELECT 
-        category_id, category_name, folder_name, remark, create_time
+        SELECT category_id,
+               category_name,
+               folder_name,
+               remark,
+               create_time
         FROM source_category
+    </select>
+    <!--查询旧的文件夹名称-->
+    <select id="queryFolderName" resultType="java.lang.String">
+        SELECT folder_name
+        FROM source_category
+        WHERE category_id = #{categoryId}
     </select>
 </mapper>

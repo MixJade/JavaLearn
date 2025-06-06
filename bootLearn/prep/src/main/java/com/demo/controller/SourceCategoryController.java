@@ -27,20 +27,17 @@ public class SourceCategoryController {
 
     @PostMapping
     public Result add(@RequestBody SourceCategory sourceCategory) {
-        boolean addRes = sourceCategoryService.save(sourceCategory);
-        return Result.choice("添加", addRes);
+        return sourceCategoryService.saveCate(sourceCategory);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        boolean deleteRes = sourceCategoryService.removeById(id);
-        return Result.choice("删除", deleteRes);
+        return sourceCategoryService.removeCate(id);
     }
 
     @PutMapping
     public Result update(@RequestBody SourceCategory sourceCategory) {
-        boolean updateRes = sourceCategoryService.updateById(sourceCategory);
-        return Result.choice("修改", updateRes);
+        return sourceCategoryService.updateCate(sourceCategory);
     }
 
     @GetMapping("/page")

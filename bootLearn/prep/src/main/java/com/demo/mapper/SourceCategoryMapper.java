@@ -16,4 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SourceCategoryMapper extends BaseMapper<SourceCategory> {
     IPage<SourceCategory> getByPage(IPage<SourceCategory> page);
+
+    // 查询旧的文件夹名称
+    String queryFolderName(Integer categoryId);
 }
