@@ -1,5 +1,7 @@
 package ${package.ServiceImpl};
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 <#if table.serviceInterface>
@@ -18,5 +20,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}><#if table.serviceInterface> implements ${table.serviceName}</#if> {
-
+    @Override
+    public IPage<${entity}> getByPage(int pageNum, int pageSize) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize));
+    }
 }

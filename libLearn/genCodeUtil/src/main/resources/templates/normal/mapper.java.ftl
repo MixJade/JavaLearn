@@ -1,5 +1,6 @@
 package ${package.Mapper};
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
 <#if mapperAnnotationClass??>
@@ -18,5 +19,5 @@ import ${mapperAnnotationClass.name};
 @${mapperAnnotationClass.simpleName}
 </#if>
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
-
+    IPage<${entity}> getByPage(IPage<${entity}> page);
 }

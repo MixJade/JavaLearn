@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${package.Mapper}.${table.mapperName}">
-
 <#if enableCache>
     <!-- 开启二级缓存 -->
     <cache type="${cacheClassName}"/>
@@ -36,4 +35,10 @@
     </sql>
 
 </#if>
+    <!-- 分页查询-->
+    <select id="getByPage" resultType="${package.Entity}.${entity}">
+        SELECT <#list table.commonFields as field>${field.columnName},</#list>
+        ${table.fieldNames}
+        FROM ${table.name}
+    </select>
 </mapper>

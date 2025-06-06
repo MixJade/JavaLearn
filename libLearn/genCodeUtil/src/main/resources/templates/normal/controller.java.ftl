@@ -1,5 +1,6 @@
 package ${package.Controller};
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import ${package.Parent}.common.Result;
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
@@ -44,5 +45,10 @@ public class ${table.controllerName} {
     public Result update(@RequestBody ${entity} ${entityLower}) {
         boolean updateRes = ${serviceNameLower}.updateById(${entityLower});
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<${entity}> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return ${serviceNameLower}.getByPage(pageNum, pageSize);
     }
 }

@@ -1,7 +1,8 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import ${superServiceClassPackage};
+import ${package.Entity}.${entity};
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import ${superServiceClassPackage};
  * @since ${date}
  */
 public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
-
+    IPage<${entity}> getByPage(int pageNum, int pageSize);
 }
