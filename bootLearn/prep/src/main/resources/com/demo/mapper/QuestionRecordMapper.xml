@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.QuestionRecordMapper">
-
+    <!-- 分页查询-->
+    <select id="getByPage" resultType="com.demo.model.entity.QuestionRecord">
+        SELECT 
+        quest_record_id, record_id, question_id, quest_no, op_name, correct_op_name, score
+        FROM question_record
+    </select>
 </mapper>

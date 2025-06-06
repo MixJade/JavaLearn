@@ -1,7 +1,8 @@
 package com.demo.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.entity.PaperRecord;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PaperRecordMapper extends BaseMapper<PaperRecord> {
-
+    IPage<PaperRecord> getByPage(IPage<PaperRecord> page);
 }

@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.QuestionRecord;
 import com.demo.service.IQuestionRecordService;
@@ -40,5 +41,10 @@ public class QuestionRecordController {
     public Result update(@RequestBody QuestionRecord questionRecord) {
         boolean updateRes = questionRecordService.updateById(questionRecord);
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<QuestionRecord> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return questionRecordService.getByPage(pageNum, pageSize);
     }
 }

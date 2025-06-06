@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.SourceCategory;
 import com.demo.service.ISourceCategoryService;
@@ -40,5 +41,10 @@ public class SourceCategoryController {
     public Result update(@RequestBody SourceCategory sourceCategory) {
         boolean updateRes = sourceCategoryService.updateById(sourceCategory);
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<SourceCategory> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return sourceCategoryService.getByPage(pageNum, pageSize);
     }
 }

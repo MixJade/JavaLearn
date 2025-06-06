@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.ImageSource;
 import com.demo.service.IImageSourceService;
@@ -40,5 +41,10 @@ public class ImageSourceController {
     public Result update(@RequestBody ImageSource imageSource) {
         boolean updateRes = imageSourceService.updateById(imageSource);
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<ImageSource> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return imageSourceService.getByPage(pageNum, pageSize);
     }
 }

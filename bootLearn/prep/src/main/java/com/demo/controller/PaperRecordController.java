@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.PaperRecord;
 import com.demo.service.IPaperRecordService;
@@ -40,5 +41,10 @@ public class PaperRecordController {
     public Result update(@RequestBody PaperRecord paperRecord) {
         boolean updateRes = paperRecordService.updateById(paperRecord);
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<PaperRecord> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return paperRecordService.getByPage(pageNum, pageSize);
     }
 }

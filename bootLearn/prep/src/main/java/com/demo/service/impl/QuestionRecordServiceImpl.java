@@ -1,9 +1,11 @@
 package com.demo.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.demo.mapper.QuestionRecordMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.model.entity.QuestionRecord;
+import com.demo.mapper.QuestionRecordMapper;
 import com.demo.service.IQuestionRecordService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +18,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class QuestionRecordServiceImpl extends ServiceImpl<QuestionRecordMapper, QuestionRecord> implements IQuestionRecordService {
-
+    @Override
+    public IPage<QuestionRecord> getByPage(int pageNum, int pageSize) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize));
+    }
 }

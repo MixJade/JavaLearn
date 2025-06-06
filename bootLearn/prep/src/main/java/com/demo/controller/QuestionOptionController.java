@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.QuestionOption;
 import com.demo.service.IQuestionOptionService;
@@ -40,5 +41,10 @@ public class QuestionOptionController {
     public Result update(@RequestBody QuestionOption questionOption) {
         boolean updateRes = questionOptionService.updateById(questionOption);
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<QuestionOption> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return questionOptionService.getByPage(pageNum, pageSize);
     }
 }

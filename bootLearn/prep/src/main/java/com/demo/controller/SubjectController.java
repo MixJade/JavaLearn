@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.Subject;
 import com.demo.service.ISubjectService;
@@ -40,5 +41,10 @@ public class SubjectController {
     public Result update(@RequestBody Subject subject) {
         boolean updateRes = subjectService.updateById(subject);
         return Result.choice("修改", updateRes);
+    }
+
+    @GetMapping("/page")
+    public IPage<Subject> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return subjectService.getByPage(pageNum, pageSize);
     }
 }

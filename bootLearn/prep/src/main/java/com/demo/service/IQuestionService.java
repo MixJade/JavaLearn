@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.demo.model.entity.Question;
 
@@ -12,5 +13,5 @@ import com.demo.model.entity.Question;
  * @since 2025-06-06
  */
 public interface IQuestionService extends IService<Question> {
-
+    IPage<Question> getByPage(int pageNum, int pageSize);
 }

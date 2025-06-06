@@ -1,9 +1,11 @@
 package com.demo.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.demo.mapper.SourceCategoryMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.model.entity.SourceCategory;
+import com.demo.mapper.SourceCategoryMapper;
 import com.demo.service.ISourceCategoryService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +18,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper, SourceCategory> implements ISourceCategoryService {
-
+    @Override
+    public IPage<SourceCategory> getByPage(int pageNum, int pageSize) {
+        return baseMapper.getByPage(new Page<>(pageNum, pageSize));
+    }
 }
