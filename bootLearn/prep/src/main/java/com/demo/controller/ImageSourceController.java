@@ -6,6 +6,7 @@ import com.demo.model.entity.ImageSource;
 import com.demo.service.IImageSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -46,5 +47,16 @@ public class ImageSourceController {
     @GetMapping("/page")
     public IPage<ImageSource> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
         return imageSourceService.getByPage(pageNum, pageSize);
+    }
+
+    /**
+     * 保存图片
+     *
+     * @param file   图片数据
+     * @param cateId 文件夹主键
+     */
+    @PostMapping("/uploadImg")
+    public Result uploadImg(@RequestParam("file") MultipartFile file, @RequestParam int cateId) {
+        return imageSourceService.saveImg(file, cateId);
     }
 }

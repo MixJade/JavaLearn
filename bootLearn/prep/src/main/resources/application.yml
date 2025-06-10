@@ -25,4 +25,4 @@ mybatis-plus:
 prep:
   # 图源文件路径，斜杠结尾
   dir:
-    ../../../prepDir/
+    C:\MyCode\prepDir\
