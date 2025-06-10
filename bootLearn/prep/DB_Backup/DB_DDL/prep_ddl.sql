@@ -21,6 +21,7 @@ create table image_source
     file_name   varchar(20) not null comment '文件名称',
     category_id int         not null comment '题源分类主键',
     remark      varchar(50) comment '备注',
+    upload_time datetime comment '上传时间',
     ocr_result  text comment '文字识别结果',
     ocr_time    datetime DEFAULT NULL COMMENT '识别时间'
 ) comment '题源图片表';

@@ -4,7 +4,7 @@
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.ImageSource">
         SELECT 
-        source_id, file_name, category_id, remark, ocr_result, ocr_time
+        source_id, file_name, category_id, remark, ocr_time
         FROM image_source
     </select>
 </mapper>

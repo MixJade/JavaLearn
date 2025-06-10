@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-06
+ * @since 2025-06-10
  */
 @TableName("image_source")
 @SuppressWarnings("unused")
@@ -42,6 +42,11 @@ public class ImageSource implements Serializable {
      * 备注
      */
     private String remark;
+
+    /**
+     * 上传时间
+     */
+    private LocalDateTime uploadTime;
 
     /**
      * 文字识别结果
@@ -83,6 +88,14 @@ public class ImageSource implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public LocalDateTime getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(LocalDateTime uploadTime) {
+        this.uploadTime = uploadTime;
     }
 
     public String getOcrResult() {
