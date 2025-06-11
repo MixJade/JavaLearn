@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.Result;
 import com.demo.mapper.SourceCategoryMapper;
 import com.demo.model.entity.SourceCategory;
+import com.demo.model.vo.SourceCateVo;
 import com.demo.service.ISourceCategoryService;
 import com.demo.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
     private String prepDir;
 
     @Override
-    public IPage<SourceCategory> getByPage(int pageNum, int pageSize) {
+    public IPage<SourceCateVo> getByPage(int pageNum, int pageSize) {
         return baseMapper.getByPage(new Page<>(pageNum, pageSize));
     }
 
@@ -65,6 +66,10 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
 
     @Override
     public Result removeCate(Integer id) {
+        // 查询下方文件数
+        int imgNUm = baseMapper.queryImgNum(id);
+        if (imgNUm > 0) return Result.error("其下存在文件，不可删除");
+        // 然后才是删除文件夹
         String oldFolderName = baseMapper.queryFolderName(id);
         File file = new File(prepDir + oldFolderName);
         if (file.exists()) {

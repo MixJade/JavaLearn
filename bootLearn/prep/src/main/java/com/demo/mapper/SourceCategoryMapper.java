@@ -1,8 +1,9 @@
 package com.demo.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.entity.SourceCategory;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.demo.model.vo.SourceCateVo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,8 +16,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SourceCategoryMapper extends BaseMapper<SourceCategory> {
-    IPage<SourceCategory> getByPage(IPage<SourceCategory> page);
+    IPage<SourceCateVo> getByPage(IPage<SourceCateVo> page);
 
     // 查询旧的文件夹名称
     String queryFolderName(Integer categoryId);
+
+    // 查询大类下的文件数量
+    int queryImgNum(Integer id);
 }

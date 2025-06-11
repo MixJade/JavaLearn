@@ -8,6 +8,7 @@ import com.demo.mapper.ImageSourceMapper;
 import com.demo.mapper.SourceCategoryMapper;
 import com.demo.model.dto.ImgSourceDto;
 import com.demo.model.entity.ImageSource;
+import com.demo.model.vo.ImgSourceVo;
 import com.demo.service.IImageSourceService;
 import com.demo.service.OcrService;
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class ImageSourceServiceImpl extends ServiceImpl<ImageSourceMapper, Image
     }
 
     @Override
-    public IPage<ImageSource> getByPage(int pageNum, int pageSize, ImgSourceDto imgSourceDto) {
+    public IPage<ImgSourceVo> getByPage(int pageNum, int pageSize, ImgSourceDto imgSourceDto) {
         return baseMapper.getByPage(new Page<>(pageNum, pageSize), imgSourceDto);
     }
 

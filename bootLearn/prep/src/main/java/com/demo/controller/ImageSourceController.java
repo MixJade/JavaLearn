@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.dto.ImgSourceDto;
 import com.demo.model.entity.ImageSource;
+import com.demo.model.vo.ImgSourceVo;
 import com.demo.service.IImageSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class ImageSourceController {
     }
 
     @PostMapping("/page")
-    public IPage<ImageSource> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody ImgSourceDto imgSourceDto) {
+    public IPage<ImgSourceVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody ImgSourceDto imgSourceDto) {
         return imageSourceService.getByPage(pageNum, pageSize, imgSourceDto);
     }
 

@@ -2,18 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.SourceCategoryMapper">
     <!-- 分页查询-->
-    <select id="getByPage" resultType="com.demo.model.entity.SourceCategory">
-        SELECT category_id,
-               category_name,
-               folder_name,
-               remark,
-               create_time
-        FROM source_category
+    <select id="getByPage" resultType="com.demo.model.vo.SourceCateVo">
+        SELECT a.category_id,
+               a.category_name,
+               a.folder_name,
+               a.remark,
+               a.create_time,
+               COUNT(b.source_id) over (PARTITION BY a.category_id) AS recordNum
+        FROM source_category a
+                 LEFT JOIN image_source b on a.category_id = b.category_id
     </select>
-    <!--查询旧的文件夹名称-->
+    <!-- 查询旧的文件夹名称-->
     <select id="queryFolderName" resultType="java.lang.String">
         SELECT folder_name
         FROM source_category
+        WHERE category_id = #{categoryId}
+    </select>
+    <!-- 查询大类下的文件数量-->
+    <select id="queryImgNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM image_source
         WHERE category_id = #{categoryId}
     </select>
 </mapper>
