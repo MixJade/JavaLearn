@@ -3,8 +3,13 @@
 <mapper namespace="com.demo.mapper.ImageSourceMapper">
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.ImageSource">
-        SELECT 
-        source_id, file_name, category_id, remark, ocr_time
+        SELECT source_id,
+               file_name,
+               category_id,
+               remark,
+               upload_time,
+               ocr_time
         FROM image_source
+        WHERE category_id = #{dto.categoryId}
     </select>
 </mapper>

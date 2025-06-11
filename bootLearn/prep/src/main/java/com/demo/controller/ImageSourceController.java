@@ -2,11 +2,14 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
+import com.demo.model.dto.ImgSourceDto;
 import com.demo.model.entity.ImageSource;
 import com.demo.service.IImageSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -28,6 +31,7 @@ public class ImageSourceController {
 
     @PostMapping
     public Result add(@RequestBody ImageSource imageSource) {
+        imageSource.setUploadTime(LocalDateTime.now());
         boolean addRes = imageSourceService.save(imageSource);
         return Result.choice("添加", addRes);
     }
@@ -44,9 +48,9 @@ public class ImageSourceController {
         return Result.choice("修改", updateRes);
     }
 
-    @GetMapping("/page")
-    public IPage<ImageSource> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
-        return imageSourceService.getByPage(pageNum, pageSize);
+    @PostMapping("/page")
+    public IPage<ImageSource> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody ImgSourceDto imgSourceDto) {
+        return imageSourceService.getByPage(pageNum, pageSize, imgSourceDto);
     }
 
     /**
@@ -58,5 +62,15 @@ public class ImageSourceController {
     @PostMapping("/uploadImg")
     public Result uploadImg(@RequestParam("file") MultipartFile file, @RequestParam int cateId) {
         return imageSourceService.saveImg(file, cateId);
+    }
+
+    /**
+     * 识别图片文字
+     *
+     * @param id   图片主键
+     */
+    @GetMapping("/{id}")
+    public Result ocr(@PathVariable Integer id) {
+        return imageSourceService.ocr(id);
     }
 }
