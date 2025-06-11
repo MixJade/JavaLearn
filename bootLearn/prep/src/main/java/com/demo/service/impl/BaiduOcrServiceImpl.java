@@ -96,9 +96,8 @@ public class BaiduOcrServiceImpl implements OcrService {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            String result = response.body();
-            log.error("请求结果：" + result);
-            return result;
+            // log.info("请求结果：" + response.body());
+            return response.body();
         } catch (Exception e) {
             return "Http请求错误";
         }

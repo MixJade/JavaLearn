@@ -69,7 +69,7 @@ public class ImageSourceController {
      *
      * @param id   图片主键
      */
-    @GetMapping("/{id}")
+    @GetMapping("/ocr/{id}")
     public Result ocr(@PathVariable Integer id) {
         return imageSourceService.ocr(id);
     }
