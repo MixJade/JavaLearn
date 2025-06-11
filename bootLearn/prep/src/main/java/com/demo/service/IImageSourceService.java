@@ -33,4 +33,11 @@ public interface IImageSourceService extends IService<ImageSource> {
      * @param id 图片主键
      */
     Result ocr(Integer id);
+
+    /**
+     * 获取图片路径
+     *
+     * @param id 图片主键
+     */
+    String getImgPath(Integer id);
 }

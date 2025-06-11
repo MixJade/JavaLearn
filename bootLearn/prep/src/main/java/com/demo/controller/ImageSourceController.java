@@ -6,10 +6,12 @@ import com.demo.model.dto.ImgSourceDto;
 import com.demo.model.entity.ImageSource;
 import com.demo.model.vo.ImgSourceVo;
 import com.demo.service.IImageSourceService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.time.LocalDateTime;
 
 /**
@@ -54,6 +56,11 @@ public class ImageSourceController {
         return imageSourceService.getByPage(pageNum, pageSize, imgSourceDto);
     }
 
+    @GetMapping("/{id}")
+    public ImageSource detail(@PathVariable Integer id) {
+        return imageSourceService.getById(id);
+    }
+
     /**
      * 保存图片
      *
@@ -67,11 +74,28 @@ public class ImageSourceController {
 
     /**
      * 识别图片文字
-     *
-     * @param id   图片主键
      */
     @GetMapping("/ocr/{id}")
     public Result ocr(@PathVariable Integer id) {
         return imageSourceService.ocr(id);
+    }
+
+    /**
+     * 图源展示
+     */
+    @GetMapping("/img/{id}")
+    public void img(@PathVariable Integer id, HttpServletResponse response) {
+        if (id == 0) return; // 防止初始化的时候被调用
+        String filePath = imageSourceService.getImgPath(id);
+        try (var fis = new FileInputStream(filePath); var ops = response.getOutputStream()) {
+            response.setContentType("image/jpeg");
+            int len;
+            byte[] bytes = new byte[1024];
+            while ((len = fis.read(bytes)) != -1) {
+                ops.write(bytes, 0, len);
+                ops.flush();
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

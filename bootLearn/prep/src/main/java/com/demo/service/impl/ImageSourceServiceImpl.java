@@ -78,15 +78,20 @@ public class ImageSourceServiceImpl extends ServiceImpl<ImageSourceMapper, Image
 
     @Override
     public Result ocr(Integer id) {
-        ImageSource source = lambdaQuery().select(ImageSource::getCategoryId, ImageSource::getFileName)
-                .eq(ImageSource::getSourceId, id)
-                .one();
-        String folderName = sourceCategoryMapper.queryFolderName(source.getCategoryId());
-        String ocrRes = ocrService.normalOCR(prepDir + folderName + "\\" + source.getFileName());
+        String ocrRes = ocrService.normalOCR(getImgPath(id));
         lambdaUpdate().set(ImageSource::getOcrResult, ocrRes)
                 .set(ImageSource::getOcrTime, LocalDateTime.now())
                 .eq(ImageSource::getSourceId, id)
                 .update();
         return new Result(1, ocrRes);
+    }
+
+    @Override
+    public String getImgPath(Integer id) {
+        ImageSource source = lambdaQuery().select(ImageSource::getCategoryId, ImageSource::getFileName)
+                .eq(ImageSource::getSourceId, id)
+                .one();
+        String folderName = sourceCategoryMapper.queryFolderName(source.getCategoryId());
+        return prepDir + folderName + "\\" + source.getFileName();
     }
 }

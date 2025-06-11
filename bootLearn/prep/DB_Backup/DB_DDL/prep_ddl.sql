@@ -18,7 +18,7 @@ create table image_source
 (
     source_id   int auto_increment comment '题源主键'
         primary key,
-    file_name   varchar(20) not null comment '文件名称',
+    file_name   varchar(30) not null comment '文件名称',
     category_id int         not null comment '题源分类主键',
     remark      varchar(50) comment '备注',
     upload_time datetime comment '上传时间',
