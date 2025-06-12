@@ -43,7 +43,6 @@ create table exam_subject
     subject_name    varchar(20)                  not null comment '科目名称',
     exam_start_date date comment '正式考试日期',
     folder_name     varchar(20)                  not null comment '文件夹名称',
-    theme_color     varchar(7) default '#409eff' not null comment '主题色',
     create_date     date comment '创建日期'
 ) comment '科目表';
 

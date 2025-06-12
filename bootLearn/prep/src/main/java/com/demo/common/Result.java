@@ -18,4 +18,8 @@ public record Result(int code, String msg) {
     public static Result error(String msg) {
         return new Result(0, msg);
     }
+
+    public static Result suc(String msg) {
+        return new Result(1, msg);
+    }
 }

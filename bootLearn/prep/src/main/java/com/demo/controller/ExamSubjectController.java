@@ -27,20 +27,17 @@ public class ExamSubjectController {
 
     @PostMapping
     public Result add(@RequestBody ExamSubject examSubject) {
-        boolean addRes = examSubjectService.save(examSubject);
-        return Result.choice("添加", addRes);
+        return examSubjectService.addSubject(examSubject);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        boolean deleteRes = examSubjectService.removeById(id);
-        return Result.choice("删除", deleteRes);
+        return examSubjectService.delSubject(id);
     }
 
     @PutMapping
     public Result update(@RequestBody ExamSubject examSubject) {
-        boolean updateRes = examSubjectService.updateById(examSubject);
-        return Result.choice("修改", updateRes);
+        return examSubjectService.updSubject(examSubject);
     }
 
     @GetMapping("/page")

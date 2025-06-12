@@ -12,7 +12,6 @@ import com.demo.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.time.LocalDate;
 
 /**
@@ -35,13 +34,8 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
 
     @Override
     public Result saveCate(SourceCategory sourceCategory) {
-        File sourceFolder = new File(prepDir + sourceCategory.getFolderName());
-        if (sourceFolder.exists()) {
-            return Result.error("对应文件夹已存在");
-        } else {
-            boolean mkdir = sourceFolder.mkdir();
-            if (!mkdir) return Result.error("新建文件夹失败");
-        }
+        Result folderRes = FileUtil.creatFolder(prepDir, sourceCategory.getFolderName());
+        if (folderRes.code() == 0) return folderRes;
         // 入库
         sourceCategory.setCreateDate(LocalDate.now());
         return Result.choice("新增", this.save(sourceCategory));
@@ -51,16 +45,8 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
     public Result updateCate(SourceCategory sourceCategory) {
         String oldFolderName = baseMapper.queryFolderName(sourceCategory.getCategoryId());
         String folderName = sourceCategory.getFolderName();
-        if (folderName == null || folderName.isBlank())
-            return Result.error("文件夹名称不能为空");
-        if (!oldFolderName.equals(folderName)) {
-            File oldDir = new File(prepDir + oldFolderName);
-            if (oldDir.exists()) {
-                File newDir = new File(prepDir + folderName);
-                boolean renameTo = oldDir.renameTo(newDir);
-                if (!renameTo) return Result.error("文件夹更名失败");
-            } else return Result.error("旧文件夹不存在，请确认");
-        }
+        Result folderRes = FileUtil.updateFolderName(prepDir, oldFolderName, folderName);
+        if (folderRes.code() == 0) return folderRes;
         return Result.choice("修改", this.updateById(sourceCategory));
     }
 
@@ -71,10 +57,7 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
         if (imgNUm > 0) return Result.error("其下存在文件，不可删除");
         // 然后才是删除文件夹
         String oldFolderName = baseMapper.queryFolderName(id);
-        File file = new File(prepDir + oldFolderName);
-        if (file.exists()) {
-            FileUtil.deleteFolderRecursively(file.toPath());
-        }
+        FileUtil.deleteFolder(prepDir, oldFolderName);
         return Result.choice("删除", this.removeById(id));
     }
 }

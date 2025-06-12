@@ -69,7 +69,7 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
                 log.info("文件已转存:" + dest.getPath());
             }
             // 返回文件名
-            return new Result(1, fileName);
+            return Result.suc(fileName);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.error("文件转存失败");
@@ -83,7 +83,7 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
                 .set(SourceImage::getOcrTime, LocalDateTime.now())
                 .eq(SourceImage::getImageId, id)
                 .update();
-        return new Result(1, ocrRes);
+        return Result.suc(ocrRes);
     }
 
     @Override

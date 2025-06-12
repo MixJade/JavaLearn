@@ -43,11 +43,6 @@ public class ExamSubject implements Serializable {
     private String folderName;
 
     /**
-     * 主题色
-     */
-    private String themeColor;
-
-    /**
      * 创建日期
      */
     private LocalDate createDate;
@@ -82,14 +77,6 @@ public class ExamSubject implements Serializable {
 
     public void setFolderName(String folderName) {
         this.folderName = folderName;
-    }
-
-    public String getThemeColor() {
-        return themeColor;
-    }
-
-    public void setThemeColor(String themeColor) {
-        this.themeColor = themeColor;
     }
 
     public LocalDate getCreateDate() {
