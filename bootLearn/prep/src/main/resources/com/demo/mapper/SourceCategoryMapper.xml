@@ -8,9 +8,14 @@
                a.folder_name,
                a.remark,
                a.create_time,
-               COUNT(b.source_id) over (PARTITION BY a.category_id) AS recordNum
+               COUNT(b.source_id) AS recordNum
         FROM source_category a
-                 LEFT JOIN image_source b on a.category_id = b.category_id
+                 LEFT JOIN image_source b ON a.category_id = b.category_id
+        GROUP BY a.category_id,
+                 a.category_name,
+                 a.folder_name,
+                 a.remark,
+                 a.create_time
     </select>
     <!-- 查询旧的文件夹名称-->
     <select id="queryFolderName" resultType="java.lang.String">
