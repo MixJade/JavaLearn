@@ -3,8 +3,12 @@
 <mapper namespace="com.demo.mapper.ExamQuestOptMapper">
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.ExamQuestOpt">
-        SELECT 
-        opt_id, quest_id, op_content, is_correct, op_no, op_name
+        SELECT opt_id,
+               quest_id,
+               opt_cont,
+               is_correct,
+               opt_no,
+               opt_name
         FROM exam_quest_opt
     </select>
 </mapper>

@@ -3,8 +3,9 @@ package com.demo.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
+
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -47,9 +48,19 @@ public class ExamQuest implements Serializable {
     private String questAnalysis;
 
     /**
-     * 题目序号(也是文件夹名)
+     * 题目序号
      */
     private Integer questNo;
+
+    /**
+     * 存在图片
+     */
+    private Boolean haveImg;
+
+    /**
+     * 图片名称
+     */
+    private String imgName;
 
     /**
      * 分值
@@ -102,6 +113,22 @@ public class ExamQuest implements Serializable {
 
     public void setQuestNo(Integer questNo) {
         this.questNo = questNo;
+    }
+
+    public Boolean getHaveImg() {
+        return haveImg;
+    }
+
+    public void setHaveImg(Boolean haveImg) {
+        this.haveImg = haveImg;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
     public Integer getScore() {

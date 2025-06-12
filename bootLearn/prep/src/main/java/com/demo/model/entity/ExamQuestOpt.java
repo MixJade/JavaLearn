@@ -3,8 +3,9 @@ package com.demo.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
+
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -34,7 +35,17 @@ public class ExamQuestOpt implements Serializable {
     /**
      * 选项内容
      */
-    private String opContent;
+    private String optCont;
+
+    /**
+     * 存在图片
+     */
+    private Boolean haveImg;
+
+    /**
+     * 图片名称
+     */
+    private String imgName;
 
     /**
      * 是否正确选项
@@ -44,12 +55,12 @@ public class ExamQuestOpt implements Serializable {
     /**
      * 选项排序(1,2,3)
      */
-    private Integer opNo;
+    private Integer optNo;
 
     /**
      * 选项名称(A,B,C)
      */
-    private String opName;
+    private String optName;
 
     public Integer getOptId() {
         return optId;
@@ -67,12 +78,28 @@ public class ExamQuestOpt implements Serializable {
         this.questId = questId;
     }
 
-    public String getOpContent() {
-        return opContent;
+    public String getOptCont() {
+        return optCont;
     }
 
-    public void setOpContent(String opContent) {
-        this.opContent = opContent;
+    public void setOptCont(String optCont) {
+        this.optCont = optCont;
+    }
+
+    public Boolean getHaveImg() {
+        return haveImg;
+    }
+
+    public void setHaveImg(Boolean haveImg) {
+        this.haveImg = haveImg;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
     public Boolean getIsCorrect() {
@@ -83,19 +110,19 @@ public class ExamQuestOpt implements Serializable {
         this.isCorrect = isCorrect;
     }
 
-    public Integer getOpNo() {
-        return opNo;
+    public Integer getOptNo() {
+        return optNo;
     }
 
-    public void setOpNo(Integer opNo) {
-        this.opNo = opNo;
+    public void setOptNo(Integer optNo) {
+        this.optNo = optNo;
     }
 
-    public String getOpName() {
-        return opName;
+    public String getOptName() {
+        return optName;
     }
 
-    public void setOpName(String opName) {
-        this.opName = opName;
+    public void setOptName(String optName) {
+        this.optName = optName;
     }
 }

@@ -70,12 +70,14 @@ create table exam_quest
 (
     quest_id       int auto_increment comment '题目主键'
         primary key,
-    paper_id       int  not null comment '试卷主键',
-    quest_type     int  not null default 1 comment '题目类型,1选择,2填空,3大题',
-    quest_content  text not null comment '题目内容',
+    paper_id       int         not null comment '试卷主键',
+    quest_type     int         not null default 1 comment '题目类型,1选择,2填空,3大题',
+    quest_content  text        not null comment '题目内容',
     quest_analysis text comment '题目解析',
-    quest_no       int  not null default 1 comment '题目序号(也是文件夹名)',
-    score          int  not null default 0 comment '分值'
+    quest_no       int         not null default 1 comment '题目序号',
+    have_img       tinyint(1)  not null default 0 comment '存在图片',
+    img_name       varchar(30) null     default 0 comment '图片名称',
+    score          int         not null default 0 comment '分值'
 ) comment '题目表';
 
 # 为'题目表'关联外键
@@ -89,11 +91,13 @@ create table exam_quest_opt
 (
     opt_id     int auto_increment comment '选项主键'
         primary key,
-    quest_id   int        not null comment '题目主键',
-    op_content text       not null comment '选项内容',
-    is_correct tinyint(1) not null default 0 comment '是否正确选项',
-    op_no      int        not null default 1 comment '选项排序(1,2,3)',
-    op_name    varchar(1) not null comment '选项名称(A,B,C)'
+    quest_id   int         not null comment '题目主键',
+    opt_cont   text        not null comment '选项内容',
+    have_img   tinyint(1)  not null default 0 comment '存在图片',
+    img_name   varchar(30) null     default 0 comment '图片名称',
+    is_correct tinyint(1)  not null default 0 comment '是否正确选项',
+    opt_no     int         not null default 1 comment '选项排序(1,2,3)',
+    opt_name   varchar(1)  not null comment '选项名称(A,B,C)'
 ) comment '题目选项表';
 
 # 为'题目选项表'关联外键
