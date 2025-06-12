@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -43,7 +43,7 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
             if (!mkdir) return Result.error("新建文件夹失败");
         }
         // 入库
-        sourceCategory.setCreateTime(LocalDateTime.now());
+        sourceCategory.setCreateDate(LocalDate.now());
         return Result.choice("新增", this.save(sourceCategory));
     }
 

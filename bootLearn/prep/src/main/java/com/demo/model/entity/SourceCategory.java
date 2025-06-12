@@ -3,10 +3,9 @@ package com.demo.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.io.Serial;
 
 /**
  * <p>
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-06
+ * @since 2025-06-12
  */
 @TableName("source_category")
 @SuppressWarnings("unused")
@@ -44,9 +43,9 @@ public class SourceCategory implements Serializable {
     private String remark;
 
     /**
-     * 创建时间
+     * 创建日期
      */
-    private LocalDateTime createTime;
+    private LocalDate createDate;
 
     public Integer getCategoryId() {
         return categoryId;
@@ -80,11 +79,11 @@ public class SourceCategory implements Serializable {
         this.remark = remark;
     }
 
-    public LocalDateTime getCreateTime() {
-        return createTime;
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
     }
 }

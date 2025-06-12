@@ -7,15 +7,13 @@
                a.category_name,
                a.folder_name,
                a.remark,
-               a.create_time,
-               COUNT(b.source_id) AS recordNum
+               COUNT(b.image_id) AS recordNum
         FROM source_category a
-                 LEFT JOIN image_source b ON a.category_id = b.category_id
+                 LEFT JOIN source_image b ON a.category_id = b.category_id
         GROUP BY a.category_id,
                  a.category_name,
                  a.folder_name,
-                 a.remark,
-                 a.create_time
+                 a.remark
     </select>
     <!-- 查询旧的文件夹名称-->
     <select id="queryFolderName" resultType="java.lang.String">
@@ -26,7 +24,7 @@
     <!-- 查询大类下的文件数量-->
     <select id="queryImgNum" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM image_source
+        FROM source_image
         WHERE category_id = #{categoryId}
     </select>
 </mapper>
