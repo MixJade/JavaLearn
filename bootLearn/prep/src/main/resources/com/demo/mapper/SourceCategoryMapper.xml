@@ -6,6 +6,7 @@
         SELECT a.category_id,
                a.category_name,
                a.folder_name,
+               a.create_date,
                a.remark,
                COUNT(b.image_id) AS recordNum
         FROM source_category a
@@ -13,6 +14,7 @@
         GROUP BY a.category_id,
                  a.category_name,
                  a.folder_name,
+                 a.create_date,
                  a.remark
     </select>
     <!-- 查询旧的文件夹名称-->
