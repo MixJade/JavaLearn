@@ -3,8 +3,26 @@
 <mapper namespace="com.demo.mapper.ExamPaperMapper">
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.ExamPaper">
-        SELECT 
-        paper_id, subject_id, paper_name, folder_name, total_score, duration, create_date
+        SELECT paper_id,
+               subject_id,
+               paper_name,
+               folder_name,
+               total_score,
+               duration,
+               create_date
         FROM exam_paper
+        WHERE subject_id = #{dto.subjectId}
+    </select>
+    <!-- 查询旧的文件夹名称-->
+    <select id="queryFolderName" resultType="java.lang.String">
+        SELECT folder_name
+        FROM exam_paper
+        WHERE subject_id = #{id}
+    </select>
+    <!-- 查询大类下的文件数量-->
+    <select id="queryPaperNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM exam_quest
+        WHERE paper_id = #{id}
     </select>
 </mapper>

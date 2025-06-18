@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
+import com.demo.model.dto.ExamPaperDto;
 import com.demo.model.entity.ExamPaper;
 import com.demo.service.IExamPaperService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +28,21 @@ public class ExamPaperController {
 
     @PostMapping
     public Result add(@RequestBody ExamPaper examPaper) {
-        boolean addRes = examPaperService.save(examPaper);
-        return Result.choice("添加", addRes);
+        return examPaperService.addPaper(examPaper);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        boolean deleteRes = examPaperService.removeById(id);
-        return Result.choice("删除", deleteRes);
+        return examPaperService.delPaper(id);
     }
 
     @PutMapping
     public Result update(@RequestBody ExamPaper examPaper) {
-        boolean updateRes = examPaperService.updateById(examPaper);
-        return Result.choice("修改", updateRes);
+        return examPaperService.updPaper(examPaper);
     }
 
-    @GetMapping("/page")
-    public IPage<ExamPaper> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
-        return examPaperService.getByPage(pageNum, pageSize);
+    @PostMapping("/page")
+    public IPage<ExamPaper> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody ExamPaperDto examPaperDto) {
+        return examPaperService.getByPage(pageNum, pageSize, examPaperDto);
     }
 }

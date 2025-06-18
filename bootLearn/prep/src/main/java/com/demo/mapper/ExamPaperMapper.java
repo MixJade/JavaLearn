@@ -1,9 +1,11 @@
 package com.demo.mapper;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.demo.model.entity.ExamPaper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.demo.model.dto.ExamPaperDto;
+import com.demo.model.entity.ExamPaper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -15,5 +17,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
-    IPage<ExamPaper> getByPage(IPage<ExamPaper> page);
+    IPage<ExamPaper> getByPage(IPage<ExamPaper> page, @Param("dto") ExamPaperDto examPaperDto);
+
+    String queryFolderName(Integer id);
+
+    int queryPaperNum(Integer id);
 }
