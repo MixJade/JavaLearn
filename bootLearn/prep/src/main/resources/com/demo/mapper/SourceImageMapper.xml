@@ -13,4 +13,11 @@
                  LEFT JOIN source_category sc on sc.category_id = a.category_id
         WHERE a.category_id = #{dto.categoryId}
     </select>
+    <!--获取图片的路径-->
+    <select id="getImgPath" resultType="java.lang.String">
+        SELECT CONCAT_WS('\\', b.folder_name, a.file_name) AS img_path
+        FROM source_image a
+                 LEFT JOIN source_category b on b.category_id = a.category_id
+        WHERE a.image_id = #{id}
+    </select>
 </mapper>

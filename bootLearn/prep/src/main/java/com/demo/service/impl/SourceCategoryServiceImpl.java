@@ -8,8 +8,8 @@ import com.demo.mapper.SourceCategoryMapper;
 import com.demo.model.entity.SourceCategory;
 import com.demo.model.vo.SourceCateVo;
 import com.demo.service.ISourceCategoryService;
-import com.demo.utils.FileUtil;
-import org.springframework.beans.factory.annotation.Value;
+import com.demo.utils.MyFileUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,8 +24,12 @@ import java.time.LocalDate;
  */
 @Service
 public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper, SourceCategory> implements ISourceCategoryService {
-    @Value("${prep.dir}")
-    private String prepDir;
+    private final MyFileUtil fileUtil;
+
+    @Autowired
+    public SourceCategoryServiceImpl(MyFileUtil fileUtil) {
+        this.fileUtil = fileUtil;
+    }
 
     @Override
     public IPage<SourceCateVo> getByPage(int pageNum, int pageSize) {
@@ -34,7 +38,7 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
 
     @Override
     public Result saveCate(SourceCategory sourceCategory) {
-        Result folderRes = FileUtil.creatFolder(prepDir, sourceCategory.getFolderName());
+        Result folderRes = fileUtil.creatFolder(sourceCategory.getFolderName());
         if (folderRes.code() == 0) return folderRes;
         // 入库
         sourceCategory.setCreateDate(LocalDate.now());
@@ -45,7 +49,7 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
     public Result updateCate(SourceCategory sourceCategory) {
         String oldFolderName = baseMapper.queryFolderName(sourceCategory.getCategoryId());
         String folderName = sourceCategory.getFolderName();
-        Result folderRes = FileUtil.updateFolderName(prepDir, oldFolderName, folderName);
+        Result folderRes = fileUtil.updateFolderName(oldFolderName, folderName);
         if (folderRes.code() == 0) return folderRes;
         return Result.choice("修改", this.updateById(sourceCategory));
     }
@@ -57,7 +61,7 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
         if (imgNUm > 0) return Result.error("其下存在文件，不可删除");
         // 然后才是删除文件夹
         String oldFolderName = baseMapper.queryFolderName(id);
-        FileUtil.deleteFolder(prepDir, oldFolderName);
+        fileUtil.deleteFolder(oldFolderName);
         return Result.choice("删除", this.removeById(id));
     }
 }

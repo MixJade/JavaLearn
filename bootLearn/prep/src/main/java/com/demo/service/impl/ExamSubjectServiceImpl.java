@@ -7,8 +7,8 @@ import com.demo.common.Result;
 import com.demo.mapper.ExamSubjectMapper;
 import com.demo.model.entity.ExamSubject;
 import com.demo.service.IExamSubjectService;
-import com.demo.utils.FileUtil;
-import org.springframework.beans.factory.annotation.Value;
+import com.demo.utils.MyFileUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,8 +23,12 @@ import java.time.LocalDate;
  */
 @Service
 public class ExamSubjectServiceImpl extends ServiceImpl<ExamSubjectMapper, ExamSubject> implements IExamSubjectService {
-    @Value("${prep.dir}")
-    private String prepDir;
+    private final MyFileUtil fileUtil;
+
+    @Autowired
+    public ExamSubjectServiceImpl(MyFileUtil fileUtil) {
+        this.fileUtil = fileUtil;
+    }
 
     @Override
     public IPage<ExamSubject> getByPage(int pageNum, int pageSize) {
@@ -33,7 +37,7 @@ public class ExamSubjectServiceImpl extends ServiceImpl<ExamSubjectMapper, ExamS
 
     @Override
     public Result addSubject(ExamSubject examSubject) {
-        Result folderRes = FileUtil.creatFolder(prepDir, examSubject.getFolderName());
+        Result folderRes = fileUtil.creatFolder(examSubject.getFolderName());
         if (folderRes.code() == 0) return folderRes;
         // 入库
         examSubject.setCreateDate(LocalDate.now());
@@ -46,7 +50,7 @@ public class ExamSubjectServiceImpl extends ServiceImpl<ExamSubjectMapper, ExamS
         if (baseMapper.queryPaperNum(id) > 0) return Result.error("其下存在文件，不可删除");
         // 然后才是删除文件夹
         String oldFolderName = baseMapper.queryFolderName(id);
-        FileUtil.deleteFolder(prepDir, oldFolderName);
+        fileUtil.deleteFolder(oldFolderName);
         return Result.choice("删除", this.removeById(id));
     }
 
@@ -54,7 +58,7 @@ public class ExamSubjectServiceImpl extends ServiceImpl<ExamSubjectMapper, ExamS
     public Result updSubject(ExamSubject examSubject) {
         String oldFolderName = baseMapper.queryFolderName(examSubject.getSubjectId());
         String folderName = examSubject.getFolderName();
-        Result folderRes = FileUtil.updateFolderName(prepDir, oldFolderName, folderName);
+        Result folderRes = fileUtil.updateFolderName(oldFolderName, folderName);
         if (folderRes.code() == 0) return folderRes;
         return Result.choice("修改", this.updateById(examSubject));
     }

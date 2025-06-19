@@ -60,8 +60,7 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
             String fileName = file.getOriginalFilename();
             log.info("上传文件:{}，文件夹id:{}", fileName, cateId);
             // 转存文件到指定目录
-            String uploadDir = prepDir + folderName; // 需替换为实际的目录路径
-            File dest = new File(uploadDir + "\\" + fileName);
+            File dest = new File(prepDir + "\\" + folderName + "\\" + fileName);
             // 不存在就保存
             // 文件如果存在，可能是之前的数据被删了但图片没删，就不做强校验
             if (!dest.exists()) {
@@ -88,10 +87,6 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
 
     @Override
     public String getImgPath(Integer id) {
-        SourceImage source = lambdaQuery().select(SourceImage::getCategoryId, SourceImage::getFileName)
-                .eq(SourceImage::getImageId, id)
-                .one();
-        String folderName = sourceCategoryMapper.queryFolderName(source.getCategoryId());
-        return prepDir + folderName + "\\" + source.getFileName();
+        return prepDir + "\\" + baseMapper.getImgPath(id);
     }
 }

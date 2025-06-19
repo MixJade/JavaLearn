@@ -19,4 +19,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface SourceImageMapper extends BaseMapper<SourceImage> {
     IPage<SourceImgVo> getByPage(IPage<SourceImgVo> page, @Param("dto") SourceImgDto sourceImgDto);
+
+    String getImgPath(Integer id);
 }
