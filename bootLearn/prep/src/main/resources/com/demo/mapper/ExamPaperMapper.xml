@@ -4,21 +4,18 @@
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.ExamPaper">
         SELECT paper_id,
-               subject_id,
                paper_name,
                folder_name,
                total_score,
                duration,
                create_date
         FROM exam_paper
-        WHERE subject_id = #{dto.subjectId}
     </select>
     <!-- 查询旧的文件夹名称-->
     <select id="queryFolderName" resultType="java.lang.String">
-        SELECT CONCAT_WS('\\', b.folder_name, a.folder_name) AS folder_name
-        FROM exam_paper a
-                 LEFT JOIN exam_subject b on b.subject_id = a.subject_id
-        WHERE a.paper_id = #{id}
+        SELECT folder_name
+        FROM exam_paper
+        WHERE paper_id = #{id}
     </select>
     <!-- 查询大类下的文件数量-->
     <select id="queryPaperNum" resultType="java.lang.Integer">

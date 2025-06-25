@@ -28,11 +28,6 @@ public class ExamPaper implements Serializable {
     private Integer paperId;
 
     /**
-     * 科目主键
-     */
-    private Integer subjectId;
-
-    /**
      * 试卷名称
      */
     private String paperName;
@@ -63,14 +58,6 @@ public class ExamPaper implements Serializable {
 
     public void setPaperId(Integer paperId) {
         this.paperId = paperId;
-    }
-
-    public Integer getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(Integer subjectId) {
-        this.subjectId = subjectId;
     }
 
     public String getPaperName() {

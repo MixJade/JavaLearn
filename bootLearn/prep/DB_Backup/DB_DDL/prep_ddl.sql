@@ -40,30 +40,23 @@ create table exam_subject
 (
     subject_id      int auto_increment comment '科目主键'
         primary key,
-    subject_name    varchar(20)                  not null comment '科目名称',
+    subject_name    varchar(20) not null comment '科目名称',
     exam_start_date date comment '正式考试日期',
-    folder_name     varchar(20)                  not null comment '文件夹名称',
+    register_date   date comment '报名日期',
     create_date     date comment '创建日期'
 ) comment '科目表';
 
-# 试卷表 科目下的试卷
+# 试卷表
 create table exam_paper
 (
     paper_id    int auto_increment comment '试卷主键'
         primary key,
-    subject_id  int         not null comment '科目主键',
     paper_name  varchar(20) not null comment '试卷名称',
     folder_name varchar(20) not null comment '文件夹名称',
     total_score int         not null default 0 comment '总分(自动计算)',
     duration    int         not null default 0 comment '考试时长(秒)',
     create_date date comment '创建日期'
 ) comment '试卷表';
-
-# 为'试卷表'关联外键
-ALTER TABLE exam_paper
-    ADD CONSTRAINT fk_paper_subject
-        FOREIGN KEY (subject_id) REFERENCES exam_subject (subject_id)
-            ON DELETE RESTRICT;
 
 # 题目表 试卷的题目和解析
 create table exam_quest

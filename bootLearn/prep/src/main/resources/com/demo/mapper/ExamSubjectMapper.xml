@@ -6,20 +6,7 @@
         SELECT subject_id,
                subject_name,
                exam_start_date,
-               folder_name,
-               create_date
+               register_date
         FROM exam_subject
-    </select>
-    <!-- 查询旧的文件夹名称-->
-    <select id="queryFolderName" resultType="java.lang.String">
-        SELECT folder_name
-        FROM exam_subject
-        WHERE subject_id = #{id}
-    </select>
-    <!-- 查询大类下的文件数量-->
-    <select id="queryPaperNum" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        FROM exam_paper
-        WHERE subject_id = #{id}
     </select>
 </mapper>

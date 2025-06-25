@@ -2,7 +2,6 @@ package com.demo.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
-import com.demo.model.dto.ExamPaperDto;
 import com.demo.model.entity.ExamPaper;
 import com.demo.service.IExamPaperService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class ExamPaperController {
         return examPaperService.updPaper(examPaper);
     }
 
-    @PostMapping("/page")
-    public IPage<ExamPaper> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody ExamPaperDto examPaperDto) {
-        return examPaperService.getByPage(pageNum, pageSize, examPaperDto);
+    @GetMapping("/page")
+    public IPage<ExamPaper> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        return examPaperService.getByPage(pageNum, pageSize);
     }
 }

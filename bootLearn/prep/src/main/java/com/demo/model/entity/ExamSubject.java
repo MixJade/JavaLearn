@@ -13,7 +13,7 @@ import java.io.Serial;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-12
+ * @since 2025-06-25
  */
 @TableName("exam_subject")
 @SuppressWarnings("unused")
@@ -38,9 +38,9 @@ public class ExamSubject implements Serializable {
     private LocalDate examStartDate;
 
     /**
-     * 文件夹名称
+     * 报名日期
      */
-    private String folderName;
+    private LocalDate registerDate;
 
     /**
      * 创建日期
@@ -71,12 +71,12 @@ public class ExamSubject implements Serializable {
         this.examStartDate = examStartDate;
     }
 
-    public String getFolderName() {
-        return folderName;
+    public LocalDate getRegisterDate() {
+        return registerDate;
     }
 
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
+    public void setRegisterDate(LocalDate registerDate) {
+        this.registerDate = registerDate;
     }
 
     public LocalDate getCreateDate() {

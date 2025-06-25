@@ -7,13 +7,15 @@ import com.demo.service.IExamSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 /**
  * <p>
  * 科目表 前端控制器
  * </p>
  *
  * @author MixJade
- * @since 2025-06-12
+ * @since 2025-06-25
  */
 @RestController
 @RequestMapping("/api/examSubject")
@@ -27,17 +29,21 @@ public class ExamSubjectController {
 
     @PostMapping
     public Result add(@RequestBody ExamSubject examSubject) {
-        return examSubjectService.addSubject(examSubject);
+        examSubject.setCreateDate(LocalDate.now());
+        boolean addRes = examSubjectService.save(examSubject);
+        return Result.choice("添加", addRes);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        return examSubjectService.delSubject(id);
+        boolean deleteRes = examSubjectService.removeById(id);
+        return Result.choice("删除", deleteRes);
     }
 
     @PutMapping
     public Result update(@RequestBody ExamSubject examSubject) {
-        return examSubjectService.updSubject(examSubject);
+        boolean updateRes = examSubjectService.updateById(examSubject);
+        return Result.choice("修改", updateRes);
     }
 
     @GetMapping("/page")
