@@ -35,7 +35,7 @@ ALTER TABLE source_image
 # 题目编辑 模块
 # ================================================================================
 
-# 科目表 考试科目，如：软件设计师
+# 科目备忘表 记录考试科目的信息，如：软件设计师 20250811报名 20251121考试
 create table exam_subject
 (
     subject_id      int auto_increment comment '科目主键'
@@ -44,7 +44,7 @@ create table exam_subject
     exam_start_date date comment '正式考试日期',
     register_date   date comment '报名日期',
     create_date     date comment '创建日期'
-) comment '科目表';
+) comment '科目备忘表';
 
 # 试卷表
 create table exam_paper
@@ -52,11 +52,18 @@ create table exam_paper
     paper_id    int auto_increment comment '试卷主键'
         primary key,
     paper_name  varchar(20) not null comment '试卷名称',
+    category_id int comment '题源分类主键',
     folder_name varchar(20) not null comment '文件夹名称',
     total_score int         not null default 0 comment '总分(自动计算)',
     duration    int         not null default 0 comment '考试时长(秒)',
     create_date date comment '创建日期'
 ) comment '试卷表';
+
+# 为'试卷表'关联外键
+ALTER TABLE exam_paper
+    ADD CONSTRAINT fk_exam_category
+        FOREIGN KEY (category_id) REFERENCES source_category (category_id)
+            ON DELETE RESTRICT;
 
 # 题目表 试卷的题目和解析
 create table exam_quest
@@ -69,7 +76,7 @@ create table exam_quest
     quest_analysis text comment '题目解析',
     quest_no       int         not null default 1 comment '题目序号',
     have_img       tinyint(1)  not null default 0 comment '存在图片',
-    img_name       varchar(30) null     default 0 comment '图片名称',
+    img_name       varchar(30) null comment '图片名称',
     score          int         not null default 0 comment '分值'
 ) comment '题目表';
 
@@ -87,7 +94,7 @@ create table exam_quest_opt
     quest_id   int         not null comment '题目主键',
     opt_cont   text        not null comment '选项内容',
     have_img   tinyint(1)  not null default 0 comment '存在图片',
-    img_name   varchar(30) null     default 0 comment '图片名称',
+    img_name   varchar(30) null comment '图片名称',
     is_correct tinyint(1)  not null default 0 comment '是否正确选项',
     opt_no     int         not null default 1 comment '选项排序(1,2,3)',
     opt_name   varchar(1)  not null comment '选项名称(A,B,C)'
