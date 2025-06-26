@@ -3,6 +3,7 @@ package com.demo.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.entity.ExamPaper;
+import com.demo.model.vo.ExamPaperVo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,7 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
-    IPage<ExamPaper> getByPage(IPage<ExamPaper> page);
+    IPage<ExamPaperVo> getByPage(IPage<ExamPaper> page);
 
     String queryFolderName(Integer id);
 

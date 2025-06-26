@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.ExamPaper;
+import com.demo.model.vo.ExamPaperVo;
 import com.demo.service.IExamPaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class ExamPaperController {
     }
 
     @GetMapping("/page")
-    public IPage<ExamPaper> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+    public IPage<ExamPaperVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
         return examPaperService.getByPage(pageNum, pageSize);
     }
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.Result;
 import com.demo.mapper.ExamPaperMapper;
 import com.demo.model.entity.ExamPaper;
+import com.demo.model.vo.ExamPaperVo;
 import com.demo.service.IExamPaperService;
 import com.demo.utils.MyFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
 
 
     @Override
-    public IPage<ExamPaper> getByPage(int pageNum, int pageSize) {
+    public IPage<ExamPaperVo> getByPage(int pageNum, int pageSize) {
         return baseMapper.getByPage(new Page<>(pageNum, pageSize));
     }
 

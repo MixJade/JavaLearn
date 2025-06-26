@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.Result;
 import com.demo.mapper.SourceCategoryMapper;
 import com.demo.model.entity.SourceCategory;
+import com.demo.model.vo.CateLabelVo;
 import com.demo.model.vo.SourceCateVo;
 import com.demo.service.ISourceCategoryService;
 import com.demo.utils.MyFileUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * <p>
@@ -63,5 +65,10 @@ public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper,
         String oldFolderName = baseMapper.queryFolderName(id);
         fileUtil.deleteFolder(oldFolderName);
         return Result.choice("删除", this.removeById(id));
+    }
+
+    @Override
+    public List<CateLabelVo> getCateLabel() {
+        return baseMapper.getCateLabel();
     }
 }

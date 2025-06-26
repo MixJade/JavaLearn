@@ -29,4 +29,10 @@
         FROM source_image
         WHERE category_id = #{categoryId}
     </select>
+    <!--查询题源分类的下拉框-->
+    <select id="getCateLabel" resultType="com.demo.model.vo.CateLabelVo">
+        SELECT category_id,
+               category_name
+        FROM source_category
+    </select>
 </mapper>

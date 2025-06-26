@@ -3,10 +3,13 @@ package com.demo.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.SourceCategory;
+import com.demo.model.vo.CateLabelVo;
 import com.demo.model.vo.SourceCateVo;
 import com.demo.service.ISourceCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -45,4 +48,10 @@ public class SourceCategoryController {
     public IPage<SourceCateVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
         return sourceCategoryService.getByPage(pageNum, pageSize);
     }
+
+    @GetMapping("/label")
+    public List<CateLabelVo> getCateLabel() {
+        return sourceCategoryService.getCateLabel();
+    }
+
 }
