@@ -5,6 +5,7 @@
     <select id="getByPage" resultType="com.demo.model.entity.ExamPaper">
         SELECT paper_id,
                paper_name,
+               category_id,
                folder_name,
                total_score,
                duration,

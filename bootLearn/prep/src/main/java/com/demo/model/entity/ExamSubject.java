@@ -9,7 +9,7 @@ import java.io.Serial;
 
 /**
  * <p>
- * 科目表
+ * 科目备忘表
  * </p>
  *
  * @author MixJade
