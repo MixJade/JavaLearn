@@ -6,10 +6,22 @@
         SELECT quest_id,
                paper_id,
                quest_type,
-               quest_content,
-               quest_analysis,
                quest_no,
                score
         FROM exam_quest
+        WHERE paper_id = #{dto.paperId}
+    </select>
+    <!-- 通过题目id查询题源id-->
+    <select id="queryCateId" resultType="java.lang.Integer">
+        SELECT ep.category_id
+        FROM exam_quest eq
+                 LEFT JOIN exam_paper ep on ep.paper_id = eq.paper_id
+        WHERE quest_id = #{questId}
+    </select>
+    <!--通过题源主键查询图片列表-->
+    <select id="queryImgListByCate" resultType="com.demo.model.vo.QuestImgVo">
+        SELECT image_id, file_name
+        FROM source_image
+        WHERE category_id = #{cateId}
     </select>
 </mapper>
