@@ -76,12 +76,11 @@ public interface IPaymentRecordService extends IService<PaymentRecord> {
     ChartVo getBigTypePieByYear(Integer year, Integer month, Integer bigType, Boolean isIncome);
 
     /**
-     * 获取一月的sql
+     * 获取一年的sql
      *
-     * @param year  年份 2024
-     * @param month 月份 01 (传0视为查询一年数据)
+     * @param year 年份 2024
      */
-    String generateInsertSql(Integer year, Integer month);
+    String generateInsertSql(Integer year);
 
     /**
      * 运行插入sql的脚本

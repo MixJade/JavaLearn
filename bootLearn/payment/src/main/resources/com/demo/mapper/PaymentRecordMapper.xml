@@ -100,8 +100,5 @@
         SELECT *
         FROM payment_record
         WHERE YEAR(pay_date) = #{year}
-        <if test="month != 0">
-            AND MONTH(pay_date) = #{month}
-        </if>
     </select>
 </mapper>

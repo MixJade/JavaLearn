@@ -41,6 +41,6 @@ public interface PaymentRecordMapper extends BaseMapper<PaymentRecord> {
     // 获取一月某大类的组成(用于环形图)
     List<BigTypePieDo> getBigTypePieByYear(Integer year, Integer month, Integer bigType, Boolean isIncome);
 
-    // 查询对应数据库的数据(可以只指定年)(用于导出)
-    List<PaymentRecord> getRecordsByMonth(Integer year, Integer month);
+    // 查询对应数据库的数据(指定年)(用于导出)
+    List<PaymentRecord> getRecordsByMonth(Integer year);
 }

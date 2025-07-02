@@ -64,19 +64,18 @@ public class PaymentRecordController {
     }
 
     /**
-     * 下载一月的sql
+     * 下载一年的sql
      *
-     * @param year  年份 2024
-     * @param month 月份 01
+     * @param year 年份 2024
      */
     @GetMapping("/downInsertSql")
-    public ResponseEntity<byte[]> downInsertSql(Integer year, Integer month) {
+    public ResponseEntity<byte[]> downInsertSql(Integer year) {
         // 要放入文件的字符串
-        String insertSql = paymentRecordService.generateInsertSql(year, month);
+        String insertSql = paymentRecordService.generateInsertSql(year);
         // 将字符串转换为字节数组
         byte[] fileContent = insertSql.getBytes(StandardCharsets.UTF_8);
         // 文件名称
-        String fileName = "paymentRecord(" + year + (month == 0 ? "" : "-" + month) + ").sql";
+        String fileName = "paymentRecord(" + year + ").sql";
         // 对文件名进行 URL 编码
         fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
         // 设置响应头

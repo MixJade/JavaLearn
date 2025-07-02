@@ -224,9 +224,9 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public String generateInsertSql(Integer year, Integer month) {
+    public String generateInsertSql(Integer year) {
         // 查询数据库中的所有数据
-        List<PaymentRecord> paymentRecords = baseMapper.getRecordsByMonth(year, month);
+        List<PaymentRecord> paymentRecords = baseMapper.getRecordsByMonth(year);
 
         if (paymentRecords.isEmpty()) {
             return "";
