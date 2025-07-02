@@ -20,6 +20,10 @@
             <if test="dto.endDate != null and dto.endDate != ''">
                 AND pr.pay_date &lt;= #{dto.endDate}
             </if>
+            <if test="dto.remark != null and dto.remark != ''">
+                <bind name="remark" value="'%'+dto.remark+'%'"/>
+                AND pr.remark like #{remark}
+            </if>
         </where>
         ORDER BY pr.pay_date,pr.record_id
     </select>

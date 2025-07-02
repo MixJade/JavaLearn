@@ -5,5 +5,5 @@ package com.demo.model.dto;
  *
  * @since 2025-03-28 11:12:34
  */
-public record PayRecordPageDto(Integer bigType, Integer paymentType, String beginDate, String endDate) {
+public record PayRecordPageDto(Integer bigType, Integer paymentType, String beginDate, String endDate, String remark) {
 }
