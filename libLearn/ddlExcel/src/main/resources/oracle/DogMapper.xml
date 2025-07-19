@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.mapper.DogMapper">
+    <!--查询表的DDL-->
+    <select id="queryTableDDL" resultType="work.model.entity.TableDDL">
+        SELECT cols.COLUMN_ID                                    AS columnId,
+               cols.column_name                                  AS columnName,
+               CASE
+                   WHEN cols.data_type = 'NVARCHAR2' THEN cols.data_type || '(' || cols.data_length / 2 || ')'
+                   WHEN cols.data_type = 'NUMBER' THEN
+                       CASE
+                           WHEN cols.DATA_SCALE = 0 THEN cols.data_type || '(' || cols.DATA_PRECISION || ')'
+                           ELSE cols.data_type || '(' || cols.DATA_PRECISION || ',' || cols.DATA_SCALE || ')'
+                           END
+                   WHEN cols.data_type = 'CHAR' THEN cols.data_type
+                   WHEN cols.data_type = 'DATE' THEN cols.data_type
+                   ELSE cols.data_type || '(' || cols.data_length || ')'
+                   END                                           AS dataType,
+               comm.comments                                     AS comments,
+               CASE WHEN pk.column_name IS NOT NULL THEN 'Y' END AS isPri,
+               CASE WHEN cols.nullable = 'N' THEN 'Y' END        AS isNotNull
+        FROM user_tab_columns cols
+                 LEFT JOIN
+             user_col_comments comm
+             ON cols.table_name = comm.table_name AND cols.column_name = comm.column_name
+                 LEFT JOIN
+             (SELECT cols.table_name, cols.column_name
+              FROM user_constraints cons,
+                   user_cons_columns cols
+              WHERE cons.constraint_type = 'P'
+                AND cons.constraint_name = cols.constraint_name
+                AND cons.owner = cols.owner) pk
+             ON cols.table_name = pk.table_name AND cols.column_name = pk.column_name
+        WHERE cols.table_name = #{tableName}
+        ORDER BY cols.column_id
+    </select>
+    <!--查询表的名称-->
+    <select id="queryTableName" resultType="work.model.entity.TableName">
+        SELECT TABLE_NAME AS tableName, COMMENTS
+        FROM USER_TAB_COMMENTS
+        WHERE TABLE_NAME = #{tableName}
+    </select>
+</mapper>

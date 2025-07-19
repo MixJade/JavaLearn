@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.mapper.DogMapper">
+    <!--查询表的DDL-->
+    <select id="queryTableDDL" resultType="work.model.entity.TableDDL">
+        SELECT ORDINAL_POSITION                   AS columnId,
+               COLUMN_NAME                        AS columnName,
+               CASE
+                   WHEN data_type = 'varchar' THEN CONCAT(data_type, '(', CHARACTER_MAXIMUM_LENGTH, ')')
+                   WHEN data_type = 'nvarchar' THEN CONCAT(data_type, '(', CHARACTER_MAXIMUM_LENGTH, ')')
+                   WHEN data_type = 'tinyint' THEN CONCAT(data_type, '(1)')
+                   WHEN data_type = 'double' THEN CONCAT(data_type, '(', NUMERIC_PRECISION, ',', NUMERIC_SCALE, ')')
+                   WHEN data_type = 'decimal' THEN CONCAT(data_type, '(', NUMERIC_PRECISION, ',', NUMERIC_SCALE, ')')
+                   ELSE data_type
+                   END                            AS dataType,
+               COLUMN_COMMENT                     AS comments,
+               IF(COLUMN_KEY = 'PRI', 'Y', NULL)  AS isPri,
+               IF(IS_NULLABLE = 'YES', NULL, 'Y') AS isNotNull
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = #{tableName}
+    </select>
+    <!--查询表的名称-->
+    <select id="queryTableName" resultType="work.model.entity.TableName">
+        SELECT TABLE_NAME    AS tableName,
+               TABLE_COMMENT AS comments
+        FROM information_schema.TABLES
+        WHERE TABLE_NAME = #{tableName}
+    </select>
+</mapper>
