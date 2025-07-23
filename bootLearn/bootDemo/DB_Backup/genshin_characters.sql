@@ -1,55 +1,55 @@
 -- 创建原神角色综合信息表
 create table genshin_characters
 (
-    role_id               int primary key comment '角色ID',
-    role_name             varchar(100) not null comment '角色名称',
-    level_current         int          not null comment '角色当前等级',
-    constellation_num     int          not null comment '角色命座层数',
-    fetter_level          int          not null comment '角色好感度等级',
+    role_id           int primary key comment '角色ID',
+    role_name         varchar(100) not null comment '角色名称',
+    level_current     int          not null comment '角色当前等级',
+    constellation_num int          not null comment '角色命座层数',
+    fetter_level      int          not null comment '角色好感度等级',
 
     -- 武器信息
-    weapon_name           varchar(100) comment '武器名称',
-    weapon_rarity         int comment '武器星级',
-    weapon_level          int comment '武器等级',
+    weapon_name       varchar(100) comment '武器名称',
+    weapon_rarity     int comment '武器星级',
+    weapon_level      int comment '武器等级',
 
     -- 技能信息
-    normal_attack_name    varchar(100) comment '普通攻击名称',
-    normal_attack_level   int comment '普通攻击等级',
-    elemental_skill_name  varchar(100) comment '元素技能名称',
-    elemental_skill_level int comment '元素技能等级',
-    elemental_burst_name  varchar(100) comment '元素爆发名称',
-    elemental_burst_level int comment '元素爆发等级',
+    skill_1_name      varchar(100) comment '普通攻击名称',
+    skill_1_level     int comment '普通攻击等级',
+    skill_2_name      varchar(100) comment '元素技能名称',
+    skill_2_level     int comment '元素技能等级',
+    skill_3_name      varchar(100) comment '元素爆发名称',
+    skill_3_level     int comment '元素爆发等级',
 
     -- 生之花
-    flower_name           varchar(100) comment '生之花名称',
-    flower_rarity         int comment '生之花品质',
-    flower_level          int comment '生之花等级',
+    flower_name       varchar(100) comment '生之花名称',
+    flower_rarity     int comment '生之花品质',
+    flower_level      int comment '生之花等级',
 
     -- 死之羽
-    plume_name            varchar(100) comment '死之羽名称',
-    plume_rarity          int comment '死之羽品质',
-    plume_level           int comment '死之羽等级',
+    plume_name        varchar(100) comment '死之羽名称',
+    plume_rarity      int comment '死之羽品质',
+    plume_level       int comment '死之羽等级',
 
     -- 时之沙
-    sands_name            varchar(100) comment '时之沙名称',
-    sands_rarity          int comment '时之沙品质',
-    sands_level           int comment '时之沙等级',
+    sands_name        varchar(100) comment '时之沙名称',
+    sands_rarity      int comment '时之沙品质',
+    sands_level       int comment '时之沙等级',
 
     -- 空之杯
-    goblet_name           varchar(100) comment '空之杯名称',
-    goblet_rarity         int comment '空之杯品质',
-    goblet_level          int comment '空之杯等级',
+    goblet_name       varchar(100) comment '空之杯名称',
+    goblet_rarity     int comment '空之杯品质',
+    goblet_level      int comment '空之杯等级',
 
     -- 理之冠
-    circlet_name          varchar(100) comment '理之冠名称',
-    circlet_rarity        int comment '理之冠品质',
-    circlet_level         int comment '理之冠等级'
+    circlet_name      varchar(100) comment '理之冠名称',
+    circlet_rarity    int comment '理之冠品质',
+    circlet_level     int comment '理之冠等级'
 ) comment ='原神角色综合信息表';
 
 INSERT INTO genshin_characters (role_id, role_name, level_current, constellation_num, fetter_level, weapon_name,
                                 weapon_rarity,
-                                weapon_level, normal_attack_name, normal_attack_level, elemental_skill_name,
-                                elemental_skill_level, elemental_burst_name, elemental_burst_level, flower_name,
+                                weapon_level, skill_1_name, skill_1_level, skill_2_name, skill_2_level,
+                                skill_3_name, skill_3_level, flower_name,
                                 flower_rarity, flower_level, plume_name, plume_rarity, plume_level, sands_name,
                                 sands_rarity, sands_level, goblet_name, goblet_rarity, goblet_level, circlet_name,
                                 circlet_rarity, circlet_level)
@@ -110,7 +110,7 @@ VALUES (10000114, '丝柯克', 90, 0, 8, '雾切之回光', 5, 90, '极恶技·�
         5, 20, '魔女常燃之羽', 5, 20, '魔女破灭之时', 5, 20, '吟游者之壶', 5, 20, '焦灼的魔女帽', 5, 20),
        (10000042, '刻晴', 90, 6, 10, '匣里龙吟', 4, 90, '云来剑法', 10, '星斗归位', 10, '天街巡游', 10, '雷鸟的怜悯', 5,
         20, '雷灾的孑遗', 5, 20, '雷霆的时计', 5, 20, '角斗士的酣醉', 5, 20, '唤雷的头冠', 5, 20),
-       (10000041, '莫娜', 90, 3, 10, '西风秘典', 4, 90, '因果点破', 6, '水中幻愿', 9, '虚实流动', 1, '角斗士的留恋', 5,
+       (10000041, '莫娜', 90, 3, 10, '西风秘典', 4, 90, '因果点破', 6, '水中幻愿', 9, '星命定轨', 9, '角斗士的留恋', 5,
         20, '宗室之翎', 5, 20, '沉金的岁月', 5, 20, '角斗士的酣醉', 5, 20, '沙王的投影', 5, 20),
        (10000038, '阿贝多', 90, 0, 10, '辰砂之纺锤', 4, 90, '西风剑术·白', 6, '创生法·拟造阳华', 10, '诞生式·大地之潮',
         6, '荣花之期', 5, 20, '华馆之羽', 5, 20, '众生之谣', 5, 20, '吟游者之壶', 5, 20, '形骸之笠', 5, 20),
@@ -133,7 +133,7 @@ VALUES (10000114, '丝柯克', 90, 0, 8, '雾切之回光', 5, 90, '极恶技·�
         5, 20, '宗室之翎', 5, 20, '宗室时计', 5, 20, '宗室银瓮', 5, 20, '宗室面具', 5, 20),
        (10000003, '琴', 90, 3, 10, '天目影打刀', 4, 90, '西风剑术', 9, '风压剑', 9, '蒲公英之风', 9, '远方的少女之心',
         5, 20, '琴师的箭羽', 5, 20, '少女苦短的良辰', 5, 20, '少女片刻的闲暇', 5, 20, '少女易逝的芳颜', 5, 20),
-       (10000002, '神里绫华', 90, 0, 10, '厄水之祸', 4, 90, '神里流·倾', 9, '神里流·冰华', 9, '神里流·霰步', 1,
+       (10000002, '神里绫华', 90, 0, 10, '厄水之祸', 4, 90, '神里流·倾', 9, '神里流·冰华', 9, '神里流·霜灭', 9,
         '明威之镡', 5, 20, '角斗士的归宿', 5, 20, '雷云之笼', 5, 20, '角斗士的酣醉', 5, 20, '角斗士的凯旋', 5, 20),
        (10000113, '伊法', 90, 1, 9, '试作金珀', 4, 90, '祛风妙仪', 1, '空天疾护', 1, '复合镇静域', 1, '驯兽师的护符', 5,
         12, '巡山客的信标', 5, 12, '秘术家的金盘', 5, 20, '游学者的爪杯', 5, 12, '魔战士的羽面', 5, 12),
