@@ -15,6 +15,7 @@ import com.demo.model.dto.YearPayDo;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.PayRecordVo;
 import com.demo.service.IPaymentRecordService;
+import com.demo.utils.CsvUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -224,7 +223,7 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
     }
 
     @Override
-    public String generateInsertSql(Integer year) {
+    public String generateInsertCsv(Integer year) {
         // 查询数据库中的所有数据
         List<PaymentRecord> paymentRecords = baseMapper.getRecordsByMonth(year);
 
@@ -232,14 +231,23 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             return "";
         }
 
-        StringBuilder insertStatement = new StringBuilder();
-        insertStatement.append("insert into payment_record (record_id, payment_type, is_income, money, pay_date, remark)")
-                .append("\nvalues");
+        StringBuilder csvStatement = new StringBuilder();
+        csvStatement.append("record_id,payment_type,is_income,money,pay_date,remark")
+                .append("\n");
 
-        for (int i = 0; i < paymentRecords.size(); i++) {
-            PaymentRecord pr = paymentRecords.get(i);
+        for (PaymentRecord pr : paymentRecords) {
             // 定义每行数据的模板字符串
-            String rowTemplate = "(%d, %d, %d, %.2f, '%s', '%s')";
+            String rowTemplate = "%d,%d,%d,%.2f,%s,%s\n";
+            String remark = pr.getRemark();
+            String remarkVal;
+            if (remark == null) {
+                // 处理null值
+                remarkVal = "";
+            } else {
+                // 处理包含英文逗号的情况，用双引号包裹
+                if (remark.contains(",")) remarkVal = "\"" + remark + "\"";
+                else remarkVal = remark;
+            }
             // 格式化每行数据
             String rowData = String.format(rowTemplate,
                     pr.getRecordId(),
@@ -247,42 +255,20 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
                     pr.getIsIncome() ? 1 : 0,
                     pr.getMoney(),
                     pr.getPayDate(),
-                    pr.getRemark());
-
-            insertStatement.append(rowData);
-            // 行尾字符串
-            if (i < paymentRecords.size() - 1)
-                insertStatement.append(",\n       ");
-            else insertStatement.append(";");
+                    remarkVal);
+            csvStatement.append(rowData);
         }
-        return insertStatement.toString();
+        return csvStatement.toString();
     }
 
     @Override
     @Transactional
-    public boolean runSqlStr(String sqlCont) {
-        List<PaymentRecord> recordList = readSql(sqlCont);
-        return saveOrUpdateBatch(recordList);
-    }
-
-    private List<PaymentRecord> readSql(String sqlCont) {
-        List<PaymentRecord> readRes = new ArrayList<>();
-        // 提取所有括号内的内容
-        Pattern pattern = Pattern.compile("\\(([^)]+)\\)");
-        Matcher matcher = pattern.matcher(sqlCont);
-        List<String> valueLines = new ArrayList<>();
-
-        while (matcher.find()) {
-            valueLines.add(matcher.group(1)); // 获取括号内的内容，不含括号
-        }
-
-        // 解析每行数据
-        List<List<String>> allValues = new ArrayList<>();
-        for (String line : valueLines)
-            allValues.add(parseLine(line));
-        allValues.remove(0); // 移除头
-        // 遍历输出结果
-        for (List<String> row : allValues) {
+    public boolean saveCsvStr(List<String> csvCont) {
+        List<PaymentRecord> recordList = new ArrayList<>();
+        csvCont.remove(0); // 移除头
+        // 提取所有内容
+        for (String line : csvCont) {
+            List<String> row = CsvUtil.parseCsvLine(line);
             PaymentRecord pr = new PaymentRecord();
             pr.setRecordId(Integer.valueOf(row.get(0)));
             pr.setPaymentType(Integer.valueOf(row.get(1)));
@@ -290,31 +276,8 @@ public class PaymentRecordServiceImpl extends ServiceImpl<PaymentRecordMapper, P
             pr.setMoney(new BigDecimal(row.get(3)));
             pr.setPayDate(LocalDate.parse(row.get(4)));
             pr.setRemark(row.get(5));
-            readRes.add(pr);
+            recordList.add(pr);
         }
-        return readRes;
-    }
-
-    // 解析单行数据，处理单引号和逗号
-    private List<String> parseLine(String line) {
-        List<String> fields = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
-        boolean inQuote = false;
-
-        for (int i = 0; i < line.length(); i++) {
-            char c = line.charAt(i);
-            if (c == '\'') {
-                inQuote = !inQuote; // 切换引号状态
-            } else if (c == ',' && !inQuote) {
-                // 遇到逗号且不在引号内，分割字段
-                fields.add(current.toString().trim());
-                current.setLength(0); // 清空当前字段
-            } else {
-                current.append(c);
-            }
-        }
-        // 添加最后一个字段
-        fields.add(current.toString().trim());
-        return fields;
+        return saveOrUpdateBatch(recordList);
     }
 }

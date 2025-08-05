@@ -6,6 +6,7 @@ import com.demo.model.dto.PayRecordPageDto;
 import com.demo.model.entity.PaymentRecord;
 import com.demo.model.vo.PayRecordVo;
 import com.demo.service.IPaymentRecordService;
+import com.demo.utils.CsvUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,12 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * <p>
@@ -64,18 +62,18 @@ public class PaymentRecordController {
     }
 
     /**
-     * 下载一年的sql
+     * 下载一年的csv
      *
      * @param year 年份 2024
      */
-    @GetMapping("/downInsertSql")
-    public ResponseEntity<byte[]> downInsertSql(Integer year) {
+    @GetMapping("/downInsertCsv")
+    public ResponseEntity<byte[]> downInsertCsv(Integer year) {
         // 要放入文件的字符串
-        String insertSql = paymentRecordService.generateInsertSql(year);
+        String insertSql = paymentRecordService.generateInsertCsv(year);
         // 将字符串转换为字节数组
         byte[] fileContent = insertSql.getBytes(StandardCharsets.UTF_8);
         // 文件名称
-        String fileName = "paymentRecord(" + year + ").sql";
+        String fileName = "paymentRecord(" + year + ").csv";
         // 对文件名进行 URL 编码
         fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
         // 设置响应头
@@ -88,35 +86,20 @@ public class PaymentRecordController {
     }
 
     /**
-     * 上穿并保存csv中的消费数据
+     * 保存csv中的消费数据
      *
      * @param file 上传csv的二进制流
      * @return 保存成功
      */
-    @PostMapping("/upload-sql")
+    @PostMapping("/upload-csv")
     public Result uploadCsv(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty())
-            return Result.error("请上传一个SQL文件");
-        String sqlCont = readMultipartFileContent(file);
-        String expectedStart = "insert into payment_record (record_id, payment_type, is_income, money, pay_date, remark)";
-        if (sqlCont.trim().toLowerCase().startsWith(expectedStart.toLowerCase())) {
-            return Result.choice("SQL导入", paymentRecordService.runSqlStr(sqlCont));
+        if (file.isEmpty()) return Result.error("请上传一个CSV文件");
+        List<String> csvCont = CsvUtil.readCsvFile(file);
+        String expectedStart = "record_id,payment_type,is_income,money,pay_date,remark";
+        if (csvCont.size() > 0 && csvCont.get(0).startsWith(expectedStart.toLowerCase())) {
+            return Result.choice("消费数据导入", paymentRecordService.saveCsvStr(csvCont));
         } else {
-            return Result.error("上传sql文件不合规范");
+            return Result.error("上传csv文件不合规范");
         }
-    }
-
-    private String readMultipartFileContent(MultipartFile file) {
-        StringBuilder content = new StringBuilder();
-        try (InputStream inputStream = file.getInputStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return content.toString();
     }
 }
