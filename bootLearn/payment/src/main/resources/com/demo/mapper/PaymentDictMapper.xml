@@ -26,7 +26,7 @@
             </if>
         </where>
         GROUP BY pd.payment_type,key_name, pd.is_income, big_type, pd.color,bigTypeName,bigTypeColor
-        ORDER BY big_type
+        ORDER BY big_type,pd.payment_type
     </select>
     <select id="getBigTypes" resultType="com.demo.model.entity.BigType">
         SELECT typeKey, key_name, color, type_desc FROM pay_big_type
