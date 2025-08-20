@@ -13,7 +13,7 @@
     <!--查询支付类型页面所用-->
     <select id="getByPage" resultType="com.demo.model.vo.PaymentDictVo">
         SELECT pd.payment_type, pd.key_name, pd.is_income, big_type, pd.color,COUNT(pr.record_id) AS
-        recordNum,pbt.key_name AS bigTypeName,pbt.color AS bigTypeColor
+        recordNum,pbt.key_name AS bigTypeName,pbt.color AS bigTypeColor,pbt.type_desc
         FROM payment_dict pd
         LEFT JOIN payment_record pr on pd.payment_type = pr.payment_type
         LEFT OUTER JOIN pay_big_type pbt on pbt.typeKey = pd.big_type
@@ -29,6 +29,6 @@
         ORDER BY big_type
     </select>
     <select id="getBigTypes" resultType="com.demo.model.entity.BigType">
-        SELECT typeKey, key_name, color FROM pay_big_type
+        SELECT typeKey, key_name, color, type_desc FROM pay_big_type
     </select>
 </mapper>

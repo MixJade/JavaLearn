@@ -19,6 +19,10 @@ public class PaymentDictVo extends PaymentDict {
      * 大类颜色
      */
     private String bigTypeColor;
+    /**
+     * 大类描述
+     */
+    private String typeDesc;
 
     public Integer getRecordNum() {
         return recordNum;
@@ -42,5 +46,13 @@ public class PaymentDictVo extends PaymentDict {
 
     public void setBigTypeColor(String bigTypeColor) {
         this.bigTypeColor = bigTypeColor;
+    }
+
+    public String getTypeDesc() {
+        return typeDesc;
+    }
+
+    public void setTypeDesc(String typeDesc) {
+        this.typeDesc = typeDesc;
     }
 }
