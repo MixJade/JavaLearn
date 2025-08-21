@@ -34,7 +34,7 @@ public class DogMain {
                 "CMB_FAILED_NUMBER",
                 "CMB_SELECT_NUMBER",
         };
-        dogService.genTableDDL(DbType.Oracle, needOutTab, "产品表结构.xlsx");
+        dogService.genXlsxTableDDL(DbType.Oracle, needOutTab, "产品表结构.xlsx");
     }
 
     /**
@@ -48,7 +48,7 @@ public class DogMain {
                 "societys",
                 "dog",
         };
-        dogService.genTableDDL(DbType.MySQL, needOutTab, "PLAY数据库.xlsx");
+        dogService.genXlsxTableDDL(DbType.MySQL, needOutTab, "PLAY数据库.xlsx");
     }
 
     public static void main(String[] args) {

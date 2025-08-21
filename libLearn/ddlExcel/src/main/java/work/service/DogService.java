@@ -22,7 +22,7 @@ public class DogService {
      * @param needOutTab 需要输出的表名
      * @param xlsxName   输出xlsx的文件名
      */
-    public void genTableDDL(DbType dbType, String[] needOutTab, String xlsxName) {
+    public void genXlsxTableDDL(DbType dbType, String[] needOutTab, String xlsxName) {
         SqlSession session = SqlUtil.getFactory(dbType).openSession();
         DogMapper dogMapper = session.getMapper(DogMapper.class);
 
