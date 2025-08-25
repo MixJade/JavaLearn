@@ -1,7 +1,11 @@
 package work;
 
 import work.enums.DbType;
+import work.model.entity.TableName;
 import work.service.DogService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 狗工作的主要类，只在这里做区别配置
@@ -10,50 +14,16 @@ import work.service.DogService;
  * @since 2025-07-19
  */
 public class DogMain {
-    private final DogService dogService = new DogService();
-
-    /**
-     * 生成oracle中的表结构DDL
-     *
-     * @since 2025-07-19 12:38:36
-     */
-    private void genOracleDDL() {
-        String[] needOutTab = {
-                "BASE_CELL_INFO",
-                "BASE_COMPT_CELL_REL",
-                "BASE_COMPT_INFO",
-                "BASE_INVEST_TRGT",
-                "BASE_PRODUCT_STRATEGY",
-                "BASE_PROD_COMPT_REL",
-                "BASE_SCALE_COM_PRO",
-                "BASE_TP_INFO",
-                "PRODUCT_COOP_REL",
-                "PROD_DEF_VERSION",
-                "PROD_PLAN",
-                "PROD_PRODUCT_INFO",
-                "CMB_FAILED_NUMBER",
-                "CMB_SELECT_NUMBER",
-        };
-        dogService.genXlsxTableDDL(DbType.Oracle, needOutTab, "产品表结构.xlsx");
-    }
-
-    /**
-     * 生成mysql中的表结构DDL(测试用)
-     *
-     * @since 2025-07-19 21:12:23
-     */
-    private void genMySqlDDL() {
-        String[] needOutTab = {
-                "students",
-                "societys",
-                "dog",
-        };
-        dogService.genXlsxTableDDL(DbType.MySQL, needOutTab, "PLAY数据库.xlsx");
-    }
-
+    private static final DogService dogService = new DogService();
     public static void main(String[] args) {
-        DogMain dogMain = new DogMain();
-        // dogMain.genOracleDDL();
-        dogMain.genMySqlDDL();
+        List<TableName> needOutTab = new ArrayList<>();
+
+        // 需要输出DDL的表名称，以及注释(选填，没有查到表注释时才使用这里的)
+        needOutTab.add(new TableName("students", "学生表"));
+        needOutTab.add(new TableName("societys", "社团表"));
+        needOutTab.add(new TableName("dog", "")); // 数据库有表注释，可以不填
+
+        // 此处数据库类型可以选择MySQL、Oracle，但记得调整相应配置文件
+        dogService.genXlsxTableDDL(DbType.MySQL, needOutTab, "PLAY数据库.xlsx");
     }
 }

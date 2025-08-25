@@ -22,23 +22,27 @@ public class DogService {
      * @param needOutTab 需要输出的表名
      * @param xlsxName   输出xlsx的文件名
      */
-    public void genXlsxTableDDL(DbType dbType, String[] needOutTab, String xlsxName) {
+    public void genXlsxTableDDL(DbType dbType, List<TableName> needOutTab, String xlsxName) {
         SqlSession session = SqlUtil.getFactory(dbType).openSession();
         DogMapper dogMapper = session.getMapper(DogMapper.class);
 
         String[] header = {"序号", "字段名", "注释", "字段类型及精度", "是否主键", "是否非空"};
         List<SheetDo> sheetDoList = new ArrayList<>();
-        for (String tabName : needOutTab) {
+        for (TableName tabN : needOutTab) {
             // 表名称
-            TableName tableName = dogMapper.queryTableName(tabName);
+            TableName tableName = dogMapper.queryTableName(tabN.tableName());
             // 表字段
-            List<TableDDL> ddlList = dogMapper.queryTableDDL(tabName);
+            List<TableDDL> ddlList = dogMapper.queryTableDDL(tabN.tableName());
 
             // 填入Sheet
-            String sheetName = tableName.getTableName() + "(" + tableName.getComments() + ")";
+            String comments = tableName.comments();
+            if (comments == null || "".equals(comments)) {
+                comments = tabN.comments();
+            }
+            String sheetName = tableName.tableName() + "(" + comments + ")";
             List<String[]> ddlData = new ArrayList<>();
             for (TableDDL od : ddlList) {
-                ddlData.add(new String[]{od.getColumnId(), od.getColumnName(), od.getComments(), od.getDataType(), od.getIsPri(), od.getIsNotNull()}); //写入第一行
+                ddlData.add(new String[]{od.columnId(), od.columnName(), od.comments(), od.dataType(), od.isPri(), od.isNotNull()}); //写入第一行
             }
             sheetDoList.add(new SheetDo(sheetName, header, ddlData));
         }

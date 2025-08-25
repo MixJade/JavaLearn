@@ -2,24 +2,9 @@ package work.model.entity;
 
 /**
  * 表的名称
+ *
+ * @param tableName 表的英文名
+ * @param comments  表注释
  */
-public class TableName {
-    private String tableName; // 表的英文名
-    private String comments; // 表注释
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
+public record TableName(String tableName, String comments) {
 }
