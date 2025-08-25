@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class DogMain {
     private static final DogService dogService = new DogService();
+
     public static void main(String[] args) {
         List<TableName> needOutTab = new ArrayList<>();
 
@@ -28,5 +29,8 @@ public class DogMain {
 
         // 输出表结构的excel
         dogService.genXlsxTableDDL(dbType, needOutTab, "PLAY数据库.xlsx");
+
+        // 输出表结构的xml
+        dogService.genXmlTableDDL(dbType, needOutTab, "PLAY数据库.xml");
     }
 }

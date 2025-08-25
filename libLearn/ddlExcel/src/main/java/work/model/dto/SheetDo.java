@@ -1,4 +1,4 @@
-package work.model.excel;
+package work.model.dto;
 
 import java.util.List;
 

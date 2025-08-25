@@ -2,7 +2,7 @@ package work.utils;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import work.model.excel.SheetDo;
+import work.model.dto.SheetDo;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
