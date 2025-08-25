@@ -24,6 +24,9 @@ public class DogMain {
         needOutTab.add(new TableName("dog", "")); // 数据库有表注释，可以不填
 
         // 此处数据库类型可以选择MySQL、Oracle，但记得调整相应配置文件
-        dogService.genXlsxTableDDL(DbType.MySQL, needOutTab, "PLAY数据库.xlsx");
+        DbType dbType = DbType.MySQL;
+
+        // 输出表结构的excel
+        dogService.genXlsxTableDDL(dbType, needOutTab, "PLAY数据库.xlsx");
     }
 }
