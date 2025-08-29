@@ -38,7 +38,11 @@ public class SourceImageController {
 
     @PutMapping
     public Result update(@RequestBody SourceImage sourceImage) {
-        boolean updateRes = sourceImageService.updateById(sourceImage);
+        // 修改识别结果
+        boolean updateRes = sourceImageService.lambdaUpdate()
+                .set(SourceImage::getOcrResult, sourceImage.getOcrResult())
+                .eq(SourceImage::getImageId, sourceImage.getImageId())
+                .update();
         return Result.choice("修改", updateRes);
     }
 
@@ -49,7 +53,11 @@ public class SourceImageController {
 
     @GetMapping("/{id}")
     public SourceImage detail(@PathVariable Integer id) {
-        return sourceImageService.getById(id);
+        // 查询识别结果
+        return sourceImageService.lambdaQuery()
+                .select(SourceImage::getOcrResult)
+                .eq(SourceImage::getImageId, id)
+                .one();
     }
 
     /**
