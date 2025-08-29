@@ -9,7 +9,7 @@ create table source_category
         primary key,
     category_name varchar(20) not null comment '分类名称',
     remark        varchar(50) comment '备注',
-    create_date date comment '创建日期'
+    create_date   date comment '创建日期'
 ) comment '题源分类表';
 
 # 题源图片表 即图片文件夹下的图片
@@ -17,8 +17,8 @@ create table source_image
 (
     image_id    int auto_increment comment '图片主键'
         primary key,
-    file_name   varchar(30) comment '文件名称',
-    category_id int not null comment '题源分类主键',
+    file_end    varchar(5) not null comment '图片后缀',
+    category_id int         not null comment '题源分类主键',
     remark      varchar(50) comment '备注',
     ocr_result  text comment '文字识别结果',
     ocr_time    datetime DEFAULT NULL COMMENT '识别时间'

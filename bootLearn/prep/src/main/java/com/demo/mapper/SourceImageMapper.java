@@ -19,7 +19,7 @@ import org.apache.ibatis.annotations.Param;
 public interface SourceImageMapper extends BaseMapper<SourceImage> {
     IPage<SourceImage> getByPage(IPage<SourceImage> page, @Param("dto") SourceImgDto sourceImgDto);
 
-    String getImgName(Integer id);
+    String getImgEnd(Integer id);
 
     void insertSourceImg(SourceImage sourceImage);
 }

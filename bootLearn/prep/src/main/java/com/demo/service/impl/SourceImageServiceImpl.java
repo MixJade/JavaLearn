@@ -55,6 +55,7 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
             String fileName = file.getOriginalFilename();
             String suffix = fileName.substring(fileName.lastIndexOf("."));
             // 保存图片，并获得其主键
+            sourceImage.setFileEnd(suffix);
             baseMapper.insertSourceImg(sourceImage);
             // 得到文件名
             String imgFileName = "sou" + sourceImage.getImageId() + suffix;
@@ -66,10 +67,6 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
                 file.transferTo(dest);
                 log.info("文件已转存:" + dest.getPath());
             }
-            // 更新文件名
-            lambdaUpdate().set(SourceImage::getFileName, imgFileName)
-                    .eq(SourceImage::getImageId, sourceImage.getImageId())
-                    .update();
             // 返回文件名
             return Result.suc(imgFileName);
         } catch (IOException e) {
@@ -90,6 +87,6 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
 
     @Override
     public String getImgPath(Integer id) {
-        return prepDir + baseMapper.getImgName(id);
+        return prepDir + "sou" + id + baseMapper.getImgEnd(id);
     }
 }

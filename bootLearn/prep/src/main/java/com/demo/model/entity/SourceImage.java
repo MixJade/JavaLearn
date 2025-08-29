@@ -29,9 +29,9 @@ public class SourceImage implements Serializable {
     private Integer imageId;
 
     /**
-     * 文件名称
+     * 文件后缀
      */
-    private String fileName;
+    private String fileEnd;
 
     /**
      * 题源分类主键
@@ -61,12 +61,12 @@ public class SourceImage implements Serializable {
         this.imageId = imageId;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFileEnd() {
+        return fileEnd;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFileEnd(String fileEnd) {
+        this.fileEnd = fileEnd;
     }
 
     public Integer getCategoryId() {

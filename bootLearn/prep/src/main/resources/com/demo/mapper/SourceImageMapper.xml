@@ -4,7 +4,6 @@
     <!-- 分页查询-->
     <select id="getByPage" resultType="com.demo.model.entity.SourceImage">
         SELECT image_id,
-               file_name,
                category_id,
                remark,
                ocr_time
@@ -12,16 +11,16 @@
         WHERE category_id = #{dto.categoryId}
     </select>
 
-    <!--获取图片名称-->
-    <select id="getImgName" resultType="java.lang.String">
-        SELECT file_name
+    <!--获取图片后缀-->
+    <select id="getImgEnd" resultType="java.lang.String">
+        SELECT file_end
         FROM source_image
         WHERE image_id = #{id}
     </select>
 
     <insert id="insertSourceImg" useGeneratedKeys="true"
             keyProperty="imageId">
-        insert into source_image(category_id, remark)
-        values (#{categoryId}, #{remark})
+        insert into source_image(category_id, file_end, remark)
+        values (#{categoryId}, #{fileEnd}, #{remark})
     </insert>
 </mapper>
