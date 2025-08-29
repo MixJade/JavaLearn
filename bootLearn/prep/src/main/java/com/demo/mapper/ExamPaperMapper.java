@@ -17,8 +17,4 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
     IPage<ExamPaperVo> getByPage(IPage<ExamPaper> page);
-
-    String queryFolderName(Integer id);
-
-    int queryPaperNum(Integer id);
 }

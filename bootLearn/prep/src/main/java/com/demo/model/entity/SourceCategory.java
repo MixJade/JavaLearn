@@ -3,9 +3,10 @@ package com.demo.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.io.Serial;
 
 /**
  * <p>
@@ -13,7 +14,7 @@ import java.io.Serial;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-12
+ * @since 2025-08-29
  */
 @TableName("source_category")
 @SuppressWarnings("unused")
@@ -31,11 +32,6 @@ public class SourceCategory implements Serializable {
      * 分类名称
      */
     private String categoryName;
-
-    /**
-     * 文件夹名称
-     */
-    private String folderName;
 
     /**
      * 备注
@@ -61,14 +57,6 @@ public class SourceCategory implements Serializable {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public String getFolderName() {
-        return folderName;
-    }
-
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
     }
 
     public String getRemark() {

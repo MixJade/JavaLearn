@@ -8,7 +8,6 @@ create table source_category
     category_id   int auto_increment comment '题源分类主键'
         primary key,
     category_name varchar(20) not null comment '分类名称',
-    folder_name   varchar(20) not null comment '文件夹名称',
     remark        varchar(50) comment '备注',
     create_date date comment '创建日期'
 ) comment '题源分类表';
@@ -18,8 +17,8 @@ create table source_image
 (
     image_id    int auto_increment comment '图片主键'
         primary key,
-    file_name   varchar(30) not null comment '文件名称',
-    category_id int         not null comment '题源分类主键',
+    file_name   varchar(30) comment '文件名称',
+    category_id int not null comment '题源分类主键',
     remark      varchar(50) comment '备注',
     ocr_result  text comment '文字识别结果',
     ocr_time    datetime DEFAULT NULL COMMENT '识别时间'
@@ -53,7 +52,6 @@ create table exam_paper
         primary key,
     paper_name  varchar(20) not null comment '试卷名称',
     category_id int comment '题源分类主键',
-    folder_name varchar(20) not null comment '文件夹名称',
     total_score int         not null default 0 comment '总分(自动计算)',
     duration    int         not null default 0 comment '考试时长(秒)',
     create_date date comment '创建日期'

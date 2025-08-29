@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.Result;
-import com.demo.mapper.SourceCategoryMapper;
 import com.demo.mapper.SourceImageMapper;
 import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
-import com.demo.model.vo.SourceImgVo;
 import com.demo.service.ISourceImageService;
 import com.demo.service.OcrService;
 import org.slf4j.Logger;
@@ -35,32 +33,34 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
     private static final Logger log = LoggerFactory.getLogger(SourceImageServiceImpl.class);
     @Value("${prep.dir}")
     private String prepDir;
-    private final SourceCategoryMapper sourceCategoryMapper;
     private final OcrService ocrService;
 
     @Autowired
-    public SourceImageServiceImpl(SourceCategoryMapper sourceCategoryMapper, OcrService ocrService) {
-        this.sourceCategoryMapper = sourceCategoryMapper;
+    public SourceImageServiceImpl(OcrService ocrService) {
         this.ocrService = ocrService;
     }
 
     @Override
-    public IPage<SourceImgVo> getByPage(int pageNum, int pageSize, SourceImgDto sourceImgDto) {
+    public IPage<SourceImage> getByPage(int pageNum, int pageSize, SourceImgDto sourceImgDto) {
         return baseMapper.getByPage(new Page<>(pageNum, pageSize), sourceImgDto);
     }
 
     @Override
-    public Result saveImg(MultipartFile file, int cateId) {
+    public Result saveImg(MultipartFile file, SourceImage sourceImage) {
         if (file.isEmpty())
             return Result.error("请上传图片");
 
         try {
-            String folderName = sourceCategoryMapper.queryFolderName(cateId);
             // 打印上传文件的名称
+            // todo 获取后缀
             String fileName = file.getOriginalFilename();
-            log.info("上传文件:{}，文件夹id:{}", fileName, cateId);
+            log.info("上传文件:{}，文件夹id:{}", fileName, sourceImage.getCategoryId());
+            // 保存图片，并获得其主键
+            int imgId = baseMapper.insertSourceImg(sourceImage);
+            // 得到文件名
+            String imgFileName = "sou_" + sourceImage.getCategoryId() + "_" + imgId;
             // 转存文件到指定目录
-            File dest = new File(prepDir + "\\" + folderName + "\\" + fileName);
+            File dest = new File(prepDir + imgFileName);
             // 不存在就保存
             // 文件如果存在，可能是之前的数据被删了但图片没删，就不做强校验
             if (!dest.exists()) {
@@ -68,7 +68,7 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
                 log.info("文件已转存:" + dest.getPath());
             }
             // 返回文件名
-            return Result.suc(fileName);
+            return Result.suc(imgFileName);
         } catch (IOException e) {
             e.printStackTrace();
             return Result.error("文件转存失败");
@@ -87,6 +87,6 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
 
     @Override
     public String getImgPath(Integer id) {
-        return prepDir + "\\" + baseMapper.getImgPath(id);
+        return prepDir + baseMapper.getImgName(id);
     }
 }

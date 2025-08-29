@@ -23,9 +23,9 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 prep:
-  # 图源文件路径，非斜杠结尾
+  # 图源文件路径，斜杠结尾
   dir:
-    C:\MyCode\prepDir
+    C:\MyCode\prepDir\
   apiKey:
     apiKey
   secretKey:

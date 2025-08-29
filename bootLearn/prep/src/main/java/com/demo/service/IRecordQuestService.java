@@ -10,7 +10,7 @@ import com.demo.model.entity.RecordQuest;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-12
+ * @since 2025-08-29
  */
 public interface IRecordQuestService extends IService<RecordQuest> {
     IPage<RecordQuest> getByPage(int pageNum, int pageSize);

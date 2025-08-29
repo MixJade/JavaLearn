@@ -1,10 +1,9 @@
 package com.demo.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.demo.model.vo.SourceImgVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,7 +17,9 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface SourceImageMapper extends BaseMapper<SourceImage> {
-    IPage<SourceImgVo> getByPage(IPage<SourceImgVo> page, @Param("dto") SourceImgDto sourceImgDto);
+    IPage<SourceImage> getByPage(IPage<SourceImage> page, @Param("dto") SourceImgDto sourceImgDto);
 
-    String getImgPath(Integer id);
+    String getImgName(Integer id);
+
+    int insertSourceImg(SourceImage sourceImage);
 }

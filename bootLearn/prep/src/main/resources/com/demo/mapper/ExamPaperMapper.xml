@@ -6,24 +6,11 @@
         SELECT a.paper_id,
                a.paper_name,
                a.category_id,
-               a.folder_name,
                a.total_score,
                a.duration,
                a.create_date,
                sc.category_name
         FROM exam_paper a
                  LEFT JOIN source_category sc on sc.category_id = a.category_id
-    </select>
-    <!-- 查询旧的文件夹名称-->
-    <select id="queryFolderName" resultType="java.lang.String">
-        SELECT folder_name
-        FROM exam_paper
-        WHERE paper_id = #{id}
-    </select>
-    <!-- 查询大类下的文件数量-->
-    <select id="queryPaperNum" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        FROM exam_quest
-        WHERE paper_id = #{id}
     </select>
 </mapper>

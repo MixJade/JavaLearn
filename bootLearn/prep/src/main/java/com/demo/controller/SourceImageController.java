@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
-import com.demo.model.vo.SourceImgVo;
 import com.demo.service.ISourceImageService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,6 @@ public class SourceImageController {
         this.sourceImageService = sourceImageService;
     }
 
-    @PostMapping
-    public Result add(@RequestBody SourceImage sourceImage) {
-        boolean addRes = sourceImageService.save(sourceImage);
-        return Result.choice("添加", addRes);
-    }
-
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         boolean deleteRes = sourceImageService.removeById(id);
@@ -50,7 +43,7 @@ public class SourceImageController {
     }
 
     @PostMapping("/page")
-    public IPage<SourceImgVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody SourceImgDto sourceImgDto) {
+    public IPage<SourceImage> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody SourceImgDto sourceImgDto) {
         return sourceImageService.getByPage(pageNum, pageSize, sourceImgDto);
     }
 
@@ -63,11 +56,11 @@ public class SourceImageController {
      * 保存图片
      *
      * @param file   图片数据
-     * @param cateId 文件夹主键
+     * @param sourceImage 图片备注+分类
      */
     @PostMapping("/uploadImg")
-    public Result uploadImg(@RequestParam("file") MultipartFile file, @RequestParam int cateId) {
-        return sourceImageService.saveImg(file, cateId);
+    public Result uploadImg(@RequestParam("file") MultipartFile file, @RequestBody SourceImage sourceImage) {
+        return sourceImageService.saveImg(file, sourceImage);
     }
 
     /**

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 科目表 服务实现类
+ * 科目备忘表 服务实现类
  * </p>
  *
  * @author MixJade

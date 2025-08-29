@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-12
+ * @since 2025-08-29
  */
 @RestController
 @RequestMapping("/api/examPaper")
@@ -28,17 +28,20 @@ public class ExamPaperController {
 
     @PostMapping
     public Result add(@RequestBody ExamPaper examPaper) {
-        return examPaperService.addPaper(examPaper);
+        boolean addRes = examPaperService.save(examPaper);
+        return Result.choice("添加", addRes);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        return examPaperService.delPaper(id);
+        boolean deleteRes = examPaperService.removeById(id);
+        return Result.choice("删除", deleteRes);
     }
 
     @PutMapping
     public Result update(@RequestBody ExamPaper examPaper) {
-        return examPaperService.updPaper(examPaper);
+        boolean updateRes = examPaperService.updateById(examPaper);
+        return Result.choice("修改", updateRes);
     }
 
     @GetMapping("/page")

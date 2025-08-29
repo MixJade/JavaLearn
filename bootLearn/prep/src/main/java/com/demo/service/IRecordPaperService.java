@@ -10,7 +10,7 @@ import com.demo.model.entity.RecordPaper;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-12
+ * @since 2025-08-29
  */
 public interface IRecordPaperService extends IService<RecordPaper> {
     IPage<RecordPaper> getByPage(int pageNum, int pageSize);

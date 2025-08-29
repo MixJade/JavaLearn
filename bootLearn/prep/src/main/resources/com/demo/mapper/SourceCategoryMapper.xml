@@ -5,7 +5,6 @@
     <select id="getByPage" resultType="com.demo.model.vo.SourceCateVo">
         SELECT a.category_id,
                a.category_name,
-               a.folder_name,
                a.create_date,
                a.remark,
                COUNT(b.image_id) AS recordNum
@@ -13,21 +12,8 @@
                  LEFT JOIN source_image b ON a.category_id = b.category_id
         GROUP BY a.category_id,
                  a.category_name,
-                 a.folder_name,
                  a.create_date,
                  a.remark
-    </select>
-    <!-- 查询旧的文件夹名称-->
-    <select id="queryFolderName" resultType="java.lang.String">
-        SELECT folder_name
-        FROM source_category
-        WHERE category_id = #{categoryId}
-    </select>
-    <!-- 查询大类下的文件数量-->
-    <select id="queryImgNum" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        FROM source_image
-        WHERE category_id = #{categoryId}
     </select>
     <!--查询题源分类的下拉框-->
     <select id="getCateLabel" resultType="com.demo.model.vo.CateLabelVo">

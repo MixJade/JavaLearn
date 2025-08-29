@@ -3,10 +3,9 @@ package com.demo.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.io.Serial;
 
 /**
  * <p>
@@ -14,7 +13,7 @@ import java.time.LocalDate;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-26
+ * @since 2025-08-29
  */
 @TableName("exam_paper")
 @SuppressWarnings("unused")
@@ -37,11 +36,6 @@ public class ExamPaper implements Serializable {
      * 题源分类主键
      */
     private Integer categoryId;
-
-    /**
-     * 文件夹名称
-     */
-    private String folderName;
 
     /**
      * 总分(自动计算)
@@ -80,14 +74,6 @@ public class ExamPaper implements Serializable {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public String getFolderName() {
-        return folderName;
-    }
-
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
     }
 
     public Integer getTotalScore() {

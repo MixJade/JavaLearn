@@ -9,6 +9,7 @@ import com.demo.service.ISourceCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  * </p>
  *
  * @author MixJade
- * @since 2025-06-06
+ * @since 2025-08-29
  */
 @RestController
 @RequestMapping("/api/sourceCategory")
@@ -31,17 +32,21 @@ public class SourceCategoryController {
 
     @PostMapping
     public Result add(@RequestBody SourceCategory sourceCategory) {
-        return sourceCategoryService.saveCate(sourceCategory);
+        sourceCategory.setCreateDate(LocalDate.now());
+        boolean addRes = sourceCategoryService.save(sourceCategory);
+        return Result.choice("添加", addRes);
     }
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        return sourceCategoryService.removeCate(id);
+        boolean deleteRes = sourceCategoryService.removeById(id);
+        return Result.choice("删除", deleteRes);
     }
 
     @PutMapping
     public Result update(@RequestBody SourceCategory sourceCategory) {
-        return sourceCategoryService.updateCate(sourceCategory);
+        boolean updateRes = sourceCategoryService.updateById(sourceCategory);
+        return Result.choice("修改", updateRes);
     }
 
     @GetMapping("/page")

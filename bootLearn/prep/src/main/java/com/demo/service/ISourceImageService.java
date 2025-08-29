@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.demo.common.Result;
 import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
-import com.demo.model.vo.SourceImgVo;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -17,15 +16,15 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 2025-06-12
  */
 public interface ISourceImageService extends IService<SourceImage> {
-    IPage<SourceImgVo> getByPage(int pageNum, int pageSize, SourceImgDto sourceImgDto);
+    IPage<SourceImage> getByPage(int pageNum, int pageSize, SourceImgDto sourceImgDto);
 
     /**
      * 保存图片
      *
      * @param file   图片数据
-     * @param cateId 文件夹主键
+     * @param sourceImage 图片备注+分类
      */
-    Result saveImg(MultipartFile file, int cateId);
+    Result saveImg(MultipartFile file, SourceImage sourceImage);
 
     /**
      * 识别图片文字
