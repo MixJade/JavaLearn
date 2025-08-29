@@ -21,5 +21,5 @@ public interface SourceImageMapper extends BaseMapper<SourceImage> {
 
     String getImgName(Integer id);
 
-    int insertSourceImg(SourceImage sourceImage);
+    void insertSourceImg(SourceImage sourceImage);
 }

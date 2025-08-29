@@ -47,18 +47,17 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
 
     @Override
     public Result saveImg(MultipartFile file, SourceImage sourceImage) {
-        if (file.isEmpty())
+        if (file.isEmpty() || file.getOriginalFilename() == null)
             return Result.error("请上传图片");
 
         try {
             // 打印上传文件的名称
-            // todo 获取后缀
             String fileName = file.getOriginalFilename();
-            log.info("上传文件:{}，文件夹id:{}", fileName, sourceImage.getCategoryId());
+            String suffix = fileName.substring(fileName.lastIndexOf("."));
             // 保存图片，并获得其主键
-            int imgId = baseMapper.insertSourceImg(sourceImage);
+            baseMapper.insertSourceImg(sourceImage);
             // 得到文件名
-            String imgFileName = "sou_" + sourceImage.getCategoryId() + "_" + imgId;
+            String imgFileName = "sou" + sourceImage.getImageId() + suffix;
             // 转存文件到指定目录
             File dest = new File(prepDir + imgFileName);
             // 不存在就保存
@@ -67,6 +66,10 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
                 file.transferTo(dest);
                 log.info("文件已转存:" + dest.getPath());
             }
+            // 更新文件名
+            lambdaUpdate().set(SourceImage::getFileName, imgFileName)
+                    .eq(SourceImage::getImageId, sourceImage.getImageId())
+                    .update();
             // 返回文件名
             return Result.suc(imgFileName);
         } catch (IOException e) {

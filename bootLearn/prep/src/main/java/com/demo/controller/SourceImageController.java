@@ -56,11 +56,15 @@ public class SourceImageController {
      * 保存图片
      *
      * @param file   图片数据
-     * @param sourceImage 图片备注+分类
+     * @param cateId 分类ID
+     * @param remark 图片备注+分类
      */
     @PostMapping("/uploadImg")
-    public Result uploadImg(@RequestParam("file") MultipartFile file, @RequestBody SourceImage sourceImage) {
-        return sourceImageService.saveImg(file, sourceImage);
+    public Result uploadImg(@RequestParam("file") MultipartFile file, @RequestParam int cateId, @RequestParam String remark) {
+        SourceImage si = new SourceImage();
+        si.setCategoryId(cateId);
+        si.setRemark(remark);
+        return sourceImageService.saveImg(file, si);
     }
 
     /**

@@ -6,6 +6,9 @@ spring:
     password: MC@:(==ni2024
   main:
     banner-mode: off
+  servlet:
+    multipart:
+      max-file-size: 3MB # 让上传的文件可以为3MB
 
 server:
   port: 23046
