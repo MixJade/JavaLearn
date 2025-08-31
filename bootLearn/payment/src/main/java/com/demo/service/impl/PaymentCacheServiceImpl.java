@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,10 +49,8 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
     @Override
     @Transactional
     public boolean saveCsv(MultipartFile file) {
-        // 定义日期时间格式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d H:mm");
         // 定义时间格式(用于入库)
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter dbFormat = DateTimeFormatter.ofPattern("HH:mm");
         List<String> lines = CsvUtil.readCsvFile(file);
         // 读取表头
         log.info("表头:{}", Arrays.toString(lines.get(0).split(",")));
@@ -62,19 +61,23 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
             List<String> csvLine = CsvUtil.parseCsvLine(line);
             // 0-付费时间
             // 将字符串解析为 LocalDateTime 对象
-            LocalDateTime dateTime = LocalDateTime.parse(csvLine.get(0), formatter);
+            LocalDateTime dateTime = parseDateTime(csvLine.get(0));
             // 从 LocalDateTime 对象中提取 LocalDate 对象
             LocalDate localDate = dateTime.toLocalDate();
             payCache.setPayDate(localDate);
             // 提取小时分钟
-            String hourTime = dateTime.format(formatter2);
+            String hourTime = dateTime.format(dbFormat);
             payCache.setPayTime(hourTime);
             // 1-交易类型
             payCache.setPayType(csvLine.get(1));
             // 2-交易对方
             payCache.setPayMan(csvLine.get(2));
             // 3-商品
-            payCache.setWareName(csvLine.get(3));
+            String wareName = csvLine.get(3);
+            if (wareName.length() > 50) {
+                wareName = wareName.substring(0, 50);
+            }
+            payCache.setWareName(wareName);
             // 4-收/支
             payCache.setIsIncome("收入".equals(csvLine.get(4)));
             // 5-金额(去除符号)
@@ -90,5 +93,25 @@ public class PaymentCacheServiceImpl extends ServiceImpl<PaymentCacheMapper, Pay
             paymentCacheList.add(payCache);
         }
         return saveBatch(paymentCacheList);
+    }
+
+    // 定义可能的日期时间格式
+    private final DateTimeFormatter[] FORMATTERS = new DateTimeFormatter[]{
+            DateTimeFormatter.ofPattern("yyyy/M/d H:mm"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    };
+
+    private LocalDateTime parseDateTime(String dateTimeStr) {
+        // 尝试每种格式进行解析
+        for (DateTimeFormatter formatter : FORMATTERS) {
+            try {
+                return LocalDateTime.parse(dateTimeStr, formatter);
+            } catch (DateTimeParseException e) {
+                // 解析失败，尝试下一种格式
+            }
+        }
+
+        // 所有格式都尝试失败，抛出异常
+        throw new DateTimeParseException("无法解析日期时间: " + dateTimeStr, dateTimeStr, 0);
     }
 }
