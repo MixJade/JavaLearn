@@ -8,6 +8,8 @@ import com.demo.service.IExamPaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 /**
  * <p>
  * 试卷表 前端控制器
@@ -28,6 +30,7 @@ public class ExamPaperController {
 
     @PostMapping
     public Result add(@RequestBody ExamPaper examPaper) {
+        examPaper.setCreateDate(LocalDate.now());
         boolean addRes = examPaperService.save(examPaper);
         return Result.choice("添加", addRes);
     }

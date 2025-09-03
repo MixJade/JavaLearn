@@ -53,9 +53,9 @@ public class SourceImageController {
 
     @GetMapping("/{id}")
     public SourceImage detail(@PathVariable Integer id) {
-        // 查询识别结果
+        // 查询识别结果(加入id查询防止为空)
         return sourceImageService.lambdaQuery()
-                .select(SourceImage::getOcrResult)
+                .select(SourceImage::getImageId, SourceImage::getOcrResult)
                 .eq(SourceImage::getImageId, id)
                 .one();
     }
