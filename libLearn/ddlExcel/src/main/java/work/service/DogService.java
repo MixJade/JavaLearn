@@ -73,7 +73,7 @@ public class DogService {
             List<TableDDL> ddlList = dogMapper.queryTableDDL(tabN.tableName());
 
             // xml传参
-            if (tableName.comments().isEmpty()) {
+            if (tableName.comments() == null || tableName.comments().isEmpty()) {
                 tableName = tabN; // 若查出来的表注释为空,使用传参的注释
             }
             tabXmlDoList.add(new TabXmlDo(tableName, ddlList));
