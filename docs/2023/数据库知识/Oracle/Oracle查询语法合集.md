@@ -309,3 +309,16 @@ WHERE instr(',' || cl.dog_ids || ',', ',' || dl.dog_id || ',') > 0
 同时，为了防止出现`dog_id`为*12*的项匹配到`dogs_id`为*123*的项这种乌龙情况，故在匹配项的首尾都加上逗号防止匹配混乱。
 
 最终逻辑即：`,1,`(dog_id)是否在字符串`,1,2,`(dog_ids)中。
+
+## 十、FETCH FIRST取第一条
+
+* 一般配合`ORDER BY`排序使用
+* 比如“查所有叫旺财的狗中，出生日期最近的那条”
+
+```sql
+SELECT DOG_ID, DOG_NAME, DOG_BIRTHDAY
+FROM DOG_INF
+WHERE DOG_NAME = '旺财'
+ORDER BY DOG_BIRTHDAY DESC
+    FETCH FIRST 1 ROW ONLY;
+```

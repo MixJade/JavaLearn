@@ -42,3 +42,18 @@ SET teamID = (
 - `ORDER BY createTime`：在每个`dogID`内，根据`createTime`对数据进行排序。
 
 所以，这段SQL的全面解释是：在`Dog_and_Team`表中，对于每个`dogID`，都会生成一个行数字段`rn`，该字段代表了在相同的`dogID`内，根据`createTime`排序的顺序。
+
+## 三、不分组，只取第一个
+
+* 这里就不用子查询了，直接使用`FETCH FIRST 1 ROW ONLY`【等效于MySQL的`LIMIT 1`】
+
+* 比如“查所有叫旺财的狗中，出生日期最近的那条”
+
+```sql
+SELECT DOG_ID, DOG_NAME, DOG_BIRTHDAY
+FROM DOG_INF
+WHERE DOG_NAME = '旺财'
+ORDER BY DOG_BIRTHDAY DESC
+    FETCH FIRST 1 ROW ONLY;
+```
+
