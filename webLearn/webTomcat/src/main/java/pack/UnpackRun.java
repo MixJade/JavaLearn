@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 /**
- * 在打包时执行的脚本
+ * 在打包时执行的脚本(在执行后，需去maven-package来将项目打成war包)
  *
  * @since 2025-05-05 01:01:55
  */
@@ -33,6 +33,7 @@ public class UnpackRun {
         System.out.println("========开始复制资源========");
         copyWebXml();
         copyStatic();
+        System.out.println("执行完毕，需去maven-package来将项目打成war包");
     }
 
     private static void writeServer(String directoryPath) {
