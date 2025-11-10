@@ -1,4 +1,4 @@
-package aExample;
+package datebook;
 
 import org.junit.Test;
 

@@ -1,9 +1,9 @@
-package trial;
+package datebook;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class TestCalendar {
+public class DateAfterDays {
     public static void main(String[] args) {
         // 查看15天后的date对象
         Calendar expCalendar = Calendar.getInstance();

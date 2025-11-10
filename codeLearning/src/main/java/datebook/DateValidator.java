@@ -1,9 +1,8 @@
-package aExample;
+package datebook;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import java.util.regex.Pattern;
 
 /**
