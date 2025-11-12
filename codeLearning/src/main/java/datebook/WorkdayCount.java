@@ -65,17 +65,19 @@ public class WorkdayCount {
      * @param end   结束日期（如 2025-11-10）
      * @return 工作日总数
      */
-    public static long calculateWorkdays(LocalDate start, LocalDate end) {
+    private static void calculateWorkdays(LocalDate start, LocalDate end) {
         // 校验日期合法性：开始日期必须在结束日期之前
         if (start.isAfter(end)) {
             throw new IllegalArgumentException("开始日期不能晚于结束日期");
         }
 
-        long workdays = 0;
+        int allDays = 0;
+        int workdays = 0;
         LocalDate current = start;
 
         // 遍历从 start 到 end 的所有日期（含 start，含 end：用 isBefore(end.plusDays(1))）
         while (current.isBefore(end.plusDays(1))) {
+            allDays++;
             // 判断是否为工作日：
             // 1. 不是周末（周六/周日），且 2. 不是法定节假日，或 3. 是调休补班日
             boolean isWeekend = current.getDayOfWeek() == DayOfWeek.SATURDAY
@@ -89,7 +91,8 @@ public class WorkdayCount {
             current = current.plusDays(1);
         }
 
-        return workdays;
+        System.out.printf("%s 到 %s 的总天数：%d 天%n", start, end, allDays);
+        System.out.printf("%s 到 %s 的工作日数：%d 天%n", start, end, workdays);
     }
 
     // 测试：计算 2025-02-17 到 2025-11-10 的工作日
@@ -97,8 +100,7 @@ public class WorkdayCount {
         LocalDate start = LocalDate.of(2025, 2, 17);
         LocalDate end = LocalDate.of(2025, 11, 10);
 
-        long workdays = calculateWorkdays(start, end);
-        System.out.printf("2025-02-17 到 2025-11-10 的工作日数：%d 天%n", workdays);
         // 输出结果：184 天
+        calculateWorkdays(start, end);
     }
 }
