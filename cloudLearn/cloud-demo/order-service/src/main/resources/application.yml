@@ -1,0 +1,17 @@
+server:
+  port: 20232
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloud_demo_two?useSSL=false
+    username: root
+    password: MC@:(==ni2024
+mybatis:
+  type-aliases-package: mix.user.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    mix: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS

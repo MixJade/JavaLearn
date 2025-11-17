@@ -1,0 +1,7 @@
+### 1.用户服务是否启动
+GET http://localhost:20231/api/user/1
+Accept: application/json
+
+### 2.订单服务是否启动
+GET http://localhost:20232/api/order/101
+Accept: application/json

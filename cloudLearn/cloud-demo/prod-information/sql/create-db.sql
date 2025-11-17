@@ -1,0 +1,5 @@
+-- 创建数据库1
+CREATE DATABASE IF NOT EXISTS cloud_demo_one CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- 创建数据库2
+CREATE DATABASE IF NOT EXISTS cloud_demo_two CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
