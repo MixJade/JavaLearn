@@ -1,6 +1,16 @@
 server:
   port: 20231
 spring:
+  application:
+    name: user-service  # Nacos注册服务名
+  cloud:
+    nacos:
+      # 注册中心配置
+      discovery:
+        server-addr: 127.0.0.1:8848  # 同配置中心地址
+        namespace: 2abb2c43-42f3-4234-93cb-d88c34a7a083 # 与配置中心一致（环境隔离）
+        username: nacos
+        password: nacos
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/cloud_demo_one?useSSL=false
