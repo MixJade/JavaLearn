@@ -6,6 +6,7 @@
 - Ctrl + Alt + T 生成包围方式(比如try catch)
 - CTRL + Alt + L 格式化代码
 - Ctrl + Alt + V 提取变量
+- Ctrl + Alt + N 内联变量（选中变量名称即可）（也能内联方法）
 - CTRL + J 诸如sout之类的快捷代码
 - Ctrl + / 或 Ctrl + Shift + / 注释（// 或者/…/ ）
 
@@ -33,6 +34,7 @@
 - Ctrl + O 重写方法
 - Ctrl + I 实现方法
 - Alt + Enter 从选区提取方法
+- Ctrl + Alt + M 提取方法
 - Ctrl + W 选中代码，连续按会扩大选中范围
 
 ## **其他快捷键**
