@@ -2,11 +2,9 @@ package mix.user.controller;
 
 import mix.user.pojo.User;
 import mix.user.service.UserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

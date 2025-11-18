@@ -1,14 +1,16 @@
 package mix.order.feign;
 
-import lombok.extern.slf4j.Slf4j;
 import mix.order.pojo.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
-// 必须加 @Component，让 Spring 扫描为 Bean
-@Slf4j
+// 必须加@Component，注册为Bean
 @Component
 public class UserServiceFallback implements FallbackFactory<UserServiceFeignClient> {
+    private static final Logger log = LoggerFactory.getLogger(UserServiceFallback.class);
+
     @Override
     public UserServiceFeignClient create(Throwable cause) {
         log.error("异常原因:{}", cause.getMessage(), cause);

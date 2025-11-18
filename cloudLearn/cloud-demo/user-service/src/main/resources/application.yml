@@ -21,5 +21,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true # 下划线转驼峰
 logging:
+  level:
+    mix.user.mapper: debug # sql日志打印
   pattern:
-    dateformat: MM-dd HH:mm:ss:SSS
+    dateformat: MM-dd HH:mm:ss
