@@ -16,9 +16,10 @@
     <packaging>pom</packaging>
 
     <parent>
+        <!-- 此处管理所有springboot相关的版本-->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.9.RELEASE</version>
+        <version>3.5.0</version>
         <relativePath/>
     </parent>
 
@@ -26,14 +27,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2025.1.0-RC1</spring-cloud.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
         <mysql.version>8.0.30</mysql.version>
-        <mybatis.version>2.1.1</mybatis.version>
+        <mybatis.version>3.0.5</mybatis.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- springCloud -->
+            <!-- 引入后，可自动管理其子组件的版本，比如feign版本号默认是5.0.0-RC1 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

@@ -9,7 +9,7 @@ spring:
 mybatis:
   type-aliases-package: mix.user.pojo
   configuration:
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: true # 下划线转驼峰
 logging:
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
