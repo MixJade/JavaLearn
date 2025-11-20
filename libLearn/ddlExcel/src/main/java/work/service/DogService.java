@@ -27,8 +27,13 @@ public class DogService {
     public void genXlsxTableDDL(DbType dbType, List<TableName> needOutTab, String xlsxName) {
         SqlSession session = SqlUtil.getFactory(dbType).openSession();
         DogMapper dogMapper = session.getMapper(DogMapper.class);
-
+        // 第一个sheet页开头：表名目录
+        String[] tableHeader = {"序号", "表名", "注释"};
+        List<String[]> tableListData = new ArrayList<>();
+        int tableNum = 0;
+        // 各表字段的sheet页开头
         String[] header = {"序号", "字段名", "注释", "字段类型及精度", "是否主键", "是否非空"};
+        // 生成的sheet页数据
         List<SheetDo> sheetDoList = new ArrayList<>();
         for (TableName tabN : needOutTab) {
             // 表名称
@@ -42,6 +47,10 @@ public class DogService {
                 comments = tabN.comments();
             }
             String sheetName = tableName.tableName() + "(" + comments + ")";
+            // 记录在表目录
+            tableNum++;
+            tableListData.add(new String[]{String.valueOf(tableNum), tableName.tableName(), comments});
+            // 开始生成表字段
             List<String[]> ddlData = new ArrayList<>();
             for (TableDDL od : ddlList) {
                 ddlData.add(new String[]{od.columnId(), od.columnName(), od.comments(), od.dataType(), od.isPri(), od.isNotNull()}); //写入第一行
@@ -49,6 +58,9 @@ public class DogService {
             sheetDoList.add(new SheetDo(sheetName, header, ddlData));
         }
         session.close();
+
+        // 插入表目录在开头
+        sheetDoList.add(0, new SheetDo("表名目录", tableHeader, tableListData));
 
         // 生成xlsx
         ExcelGen.creatExcel(xlsxName, sheetDoList);
