@@ -41,7 +41,7 @@ public class GenSqlScr {
                 String fieldLen = type.substring(type.indexOf("(") + 1, type.indexOf(")"));
                 try {
                     int len = Integer.parseInt(fieldLen);
-                    return len <= 10 ? "int" : "decimal";
+                    return len <= 10 ? "int" : "decimal(" + fieldLen + ")";
                 } catch (NumberFormatException e) {
                     return "int";
                 }
@@ -204,7 +204,7 @@ public class GenSqlScr {
     public static void main(String[] args) {
         // 构建测试数据
         List<TableDDL> ddlList = new ArrayList<>();
-        ddlList.add(new TableDDL("1", "ID", "NUMBER(10)", "主键ID", "Y", "Y", null));
+        ddlList.add(new TableDDL("1", "ID", "NUMBER(19)", "主键ID", "Y", "Y", null));
         ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR2(50)", "用户姓名", "N", "Y", null));
         ddlList.add(new TableDDL("3", "AGE", "NUMBER(3)", "年龄", "N", "N", "12"));
         ddlList.add(new TableDDL("4", "BALANCE", "NUMBER(10,2)", "账户余额", "N", "N", null));
