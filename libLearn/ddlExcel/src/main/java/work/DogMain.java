@@ -32,5 +32,8 @@ public class DogMain {
 
         // 输出表结构的xml
         dogService.genXmlTableDDL(dbType, needOutTab, "PLAY数据库.xml");
+
+        // 输出表结构的SQL(目前只有oracle转mysql)
+        dogService.genSqlTableDDL(dbType, needOutTab, "PLAY建表语句.sql", DbType.MySQL);
     }
 }

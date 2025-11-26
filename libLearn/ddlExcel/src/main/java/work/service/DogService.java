@@ -8,6 +8,7 @@ import work.model.dto.TabXmlDo;
 import work.model.entity.TableDDL;
 import work.model.entity.TableName;
 import work.utils.ExcelGen;
+import work.utils.GenSqlScr;
 import work.utils.SqlUtil;
 import work.utils.TableXmlGen;
 
@@ -66,14 +67,8 @@ public class DogService {
         ExcelGen.creatExcel(xlsxName, sheetDoList);
     }
 
-    /**
-     * 输出表的结构为xml
-     *
-     * @param dbType     数据库类型
-     * @param needOutTab 需要输出的表名
-     * @param xmlName    输出xml的文件名
-     */
-    public void genXmlTableDDL(DbType dbType, List<TableName> needOutTab, String xmlName) {
+    // 从数据库中获取生成文件所需参数
+    private List<TabXmlDo> getTabXmlDoList(DbType dbType, List<TableName> needOutTab) {
         SqlSession session = SqlUtil.getFactory(dbType).openSession();
         DogMapper dogMapper = session.getMapper(DogMapper.class);
 
@@ -92,7 +87,38 @@ public class DogService {
         }
         session.close();
 
+        return tabXmlDoList;
+    }
+
+
+    /**
+     * 输出表的结构为xml
+     *
+     * @param dbType     数据库类型
+     * @param needOutTab 需要输出的表名
+     * @param xmlName    输出xml的文件名
+     */
+    public void genXmlTableDDL(DbType dbType, List<TableName> needOutTab, String xmlName) {
+        List<TabXmlDo> tabXmlDoList = getTabXmlDoList(dbType, needOutTab);
+
         // 生成xml
         TableXmlGen.creatXml(tabXmlDoList, xmlName);
+    }
+
+    /**
+     * 输出表的结构为建表语句SQL
+     *
+     * @param dbType     数据库类型
+     * @param needOutTab 需要输出的表名
+     * @param sqlName    输出的文件名
+     * @param targetDb   目标数据库类型
+     */
+    public void genSqlTableDDL(DbType dbType, List<TableName> needOutTab, String sqlName, DbType targetDb) {
+        List<TabXmlDo> tabXmlDoList = getTabXmlDoList(dbType, needOutTab);
+
+        if (dbType == DbType.Oracle && targetDb == DbType.MySQL) {
+            // 生成建表语句: Oracle转MySQL，并添加删表语句
+            GenSqlScr.tranOracleToMySql(tabXmlDoList, sqlName, true);
+        }
     }
 }
