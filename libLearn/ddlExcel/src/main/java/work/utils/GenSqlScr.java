@@ -17,13 +17,10 @@ public class GenSqlScr {
 
     // Oracle → MySQL 字段类型映射表（可根据实际需求扩展）
     private static String mapOracleTypeToMysql(String oracleDataType) {
-        if (oracleDataType == null || oracleDataType.isBlank()) {
-            return "varchar(50)"; // 默认类型，避免空指针
-        }
         String type = oracleDataType.trim().toUpperCase();
 
         // 字符串类型
-        if (type.startsWith("VARCHAR2") || type.startsWith("NVARCHAR2") || type.equals("CHAR")) {
+        if (type.startsWith("VARCHAR2") || type.startsWith("NVARCHAR2")) {
             // 提取长度（如 VARCHAR2(200) → 200）
             if (type.contains("(")) {
                 @SuppressWarnings("DuplicateExpressions")
@@ -31,6 +28,10 @@ public class GenSqlScr {
                 return "varchar(" + fieldLen + ")";
             }
             return "varchar(50)"; // 无长度时默认50
+        }
+        // 枚举类型
+        else if (type.equals("CHAR")) {
+            return "char";
         }
         // 整数类型
         else if (type.startsWith("NUMBER") && !type.contains(",")) {
