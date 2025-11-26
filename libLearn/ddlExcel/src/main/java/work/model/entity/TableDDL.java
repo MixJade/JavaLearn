@@ -9,7 +9,8 @@ package work.model.entity;
  * @param comments   注释
  * @param isPri      是否主键
  * @param isNotNull  是否非空
+ * @param defaultVal 默认值
  */
 public record TableDDL(String columnId, String columnName, String dataType, String comments, String isPri,
-                       String isNotNull) {
+                       String isNotNull,String defaultVal) {
 }

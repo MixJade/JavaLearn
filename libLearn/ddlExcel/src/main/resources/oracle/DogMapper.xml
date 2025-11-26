@@ -18,7 +18,8 @@
                    END                                           AS dataType,
                comm.comments                                     AS comments,
                CASE WHEN pk.column_name IS NOT NULL THEN 'Y' END AS isPri,
-               CASE WHEN cols.nullable = 'N' THEN 'Y' END        AS isNotNull
+               CASE WHEN cols.nullable = 'N' THEN 'Y' END        AS isNotNull,
+               cols.DATA_DEFAULT                                 AS defaultVal
         FROM user_tab_columns cols
                  LEFT JOIN
              user_col_comments comm

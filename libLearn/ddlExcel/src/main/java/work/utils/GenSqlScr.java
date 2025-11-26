@@ -128,8 +128,9 @@ public class GenSqlScr {
         String comment = ddl.comments() != null && !ddl.comments().isBlank()
                 ? " comment '" + ddl.comments().trim() + "'"
                 : "";
-
-        return columnName + " " + mysqlType + notNull + comment;
+        // 默认值
+        String defaultValue = buildDefaultValueSql(ddl.defaultVal(), mysqlType);
+        return columnName + " " + mysqlType + defaultValue + notNull + comment;
     }
 
     /**
@@ -149,17 +150,66 @@ public class GenSqlScr {
         return "primary key (" + String.join(", ", primaryColumns) + ")";
     }
 
+    /**
+     * 解析默认值，生成DEFAULT语法片段
+     */
+    private static String buildDefaultValueSql(String defaultValue, String mysqlType) {
+        // 1. 无默认值（null/空字符串），直接返回空
+        if (defaultValue == null || defaultValue.isBlank()) {
+            return "";
+        }
+
+        String trimmedDefault = defaultValue.trim();
+
+        // 2. 特殊默认值（无需加单引号，如函数、数值、布尔值）
+        // 匹配规则：数值、CURRENT_TIMESTAMP、NOW()、NULL 等
+        boolean isSpecialDefault =
+                trimmedDefault.matches("^\\d+$") // 纯数字（如 0、100）
+                        || trimmedDefault.matches("^\\d+\\.\\d+$") // 小数（如 10.20）
+                        || trimmedDefault.equalsIgnoreCase("CURRENT_TIMESTAMP")
+                        || trimmedDefault.equalsIgnoreCase("NOW()")
+                        || trimmedDefault.equalsIgnoreCase("NULL")
+                        || trimmedDefault.equalsIgnoreCase("TRUE")
+                        || trimmedDefault.equalsIgnoreCase("FALSE");
+
+        if (isSpecialDefault) {
+            return " default " + trimmedDefault;
+        }
+
+        // 3. 字符串类型默认值（需加单引号，同时转义内部单引号）
+        // 匹配字符类型：VARCHAR、CHAR、TEXT 等
+        boolean isStringType = mysqlType.startsWith("varchar")
+                || mysqlType.startsWith("char")
+                || mysqlType.contains("text");
+
+        // 4. 日期时间类型默认值（若输入是字符串格式，需加单引号，如 '2025-01-01'）
+        boolean isDateTimeType = mysqlType.equals("datetime");
+
+        if (isDateTimeType && "SYSDATE".equals(trimmedDefault)) {
+            return " default current_timestamp";
+        }
+
+        if (isStringType || isDateTimeType) {
+            // 转义单引号（如 "O'Neil" → "O''Neil"）
+            String escapedDefault = trimmedDefault.replace("'", "''");
+            return " default '" + escapedDefault + "'";
+        }
+
+        // 5. 其他类型（如 TINYINT、DECIMAL 等），默认加单引号（兜底处理）
+        return " default '" + trimmedDefault.replace("'", "''") + "'";
+    }
+
 
     // ------------------------------ 测试用例 ------------------------------
     public static void main(String[] args) {
         // 构建测试数据
         List<TableDDL> ddlList = new ArrayList<>();
-        ddlList.add(new TableDDL("1", "ID", "NUMBER(10)", "主键ID", "Y", "Y"));
-        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR2(50)", "用户姓名", "N", "Y"));
-        ddlList.add(new TableDDL("3", "AGE", "NUMBER(3)", "年龄", "N", "N"));
-        ddlList.add(new TableDDL("4", "BALANCE", "NUMBER(10,2)", "账户余额", "N", "N"));
-        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATE", "创建时间", "N", "Y"));
-        ddlList.add(new TableDDL("6", "REMARK", "CLOB", "备注信息", "N", "N"));
+        ddlList.add(new TableDDL("1", "ID", "NUMBER(10)", "主键ID", "Y", "Y", null));
+        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR2(50)", "用户姓名", "N", "Y", null));
+        ddlList.add(new TableDDL("3", "AGE", "NUMBER(3)", "年龄", "N", "N", "12"));
+        ddlList.add(new TableDDL("4", "BALANCE", "NUMBER(10,2)", "账户余额", "N", "N", null));
+        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATE", "创建时间", "N", "Y", "SYSDATE"));
+        ddlList.add(new TableDDL("6", "REMARK", "CLOB", "备注信息", "N", "N", null));
 
         TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), ddlList);
         // 生成建表语句

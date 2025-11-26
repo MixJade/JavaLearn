@@ -15,7 +15,8 @@
                    END                            AS dataType,
                COLUMN_COMMENT                     AS comments,
                IF(COLUMN_KEY = 'PRI', 'Y', NULL)  AS isPri,
-               IF(IS_NULLABLE = 'YES', NULL, 'Y') AS isNotNull
+               IF(IS_NULLABLE = 'YES', NULL, 'Y') AS isNotNull,
+               COLUMN_DEFAULT                     AS defaultVal
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_NAME = #{tableName}
     </select>

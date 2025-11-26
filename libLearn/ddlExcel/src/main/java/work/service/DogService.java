@@ -33,7 +33,7 @@ public class DogService {
         List<String[]> tableListData = new ArrayList<>();
         int tableNum = 0;
         // 各表字段的sheet页开头
-        String[] header = {"序号", "字段名", "注释", "字段类型及精度", "是否主键", "是否非空"};
+        String[] header = {"序号", "字段名", "注释", "字段类型及精度", "是否主键", "是否非空", "默认值"};
         // 生成的sheet页数据
         List<SheetDo> sheetDoList = new ArrayList<>();
         for (TableName tabN : needOutTab) {
@@ -54,7 +54,7 @@ public class DogService {
             // 开始生成表字段
             List<String[]> ddlData = new ArrayList<>();
             for (TableDDL od : ddlList) {
-                ddlData.add(new String[]{od.columnId(), od.columnName(), od.comments(), od.dataType(), od.isPri(), od.isNotNull()}); //写入第一行
+                ddlData.add(new String[]{od.columnId(), od.columnName(), od.comments(), od.dataType(), od.isPri(), od.isNotNull(), od.defaultVal()}); //写入第一行
             }
             sheetDoList.add(new SheetDo(sheetName, header, ddlData));
         }

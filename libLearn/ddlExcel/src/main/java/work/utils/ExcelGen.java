@@ -1,6 +1,7 @@
 package work.utils;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import work.model.dto.SheetDo;
 
@@ -29,8 +30,10 @@ public class ExcelGen {
             setBorderStyle(normalStyle);
 
             for (SheetDo sheetDo : sheetDos) {
+                // 使用POI工具类自动处理：替换非法字符 + 截断到31字符
+                String sheetName = WorkbookUtil.createSafeSheetName(sheetDo.sheetName());
                 // 创建sheet页并命名
-                Sheet se = workbook.createSheet(sheetDo.sheetName());
+                Sheet se = workbook.createSheet(sheetName);
                 createSheet(se, sheetDo.headers(), sheetDo.data(), headerStyle, normalStyle);
             }
 
