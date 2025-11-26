@@ -12,7 +12,11 @@
                            WHEN cols.DATA_SCALE = 0 THEN cols.data_type || '(' || cols.DATA_PRECISION || ')'
                            ELSE cols.data_type || '(' || cols.DATA_PRECISION || ',' || cols.DATA_SCALE || ')'
                            END
-                   WHEN cols.data_type = 'CHAR' THEN cols.data_type
+                   WHEN cols.data_type = 'CHAR' THEN
+                       CASE
+                           WHEN cols.data_length = 1 THEN 'CHAR'
+                           ELSE cols.data_type || '(' || cols.data_length || ')'
+                           END
                    WHEN cols.data_type = 'DATE' THEN cols.data_type
                    ELSE cols.data_type || '(' || cols.data_length || ')'
                    END                                           AS dataType,

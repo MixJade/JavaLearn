@@ -30,7 +30,12 @@ public class GenSqlScr {
             return "varchar(50)"; // 无长度时默认50
         }
         // 枚举类型
-        else if (type.equals("CHAR")) {
+        else if (type.startsWith("CHAR")) {
+            if (type.contains("(")) {
+                @SuppressWarnings("DuplicateExpressions")
+                String fieldLen = type.substring(type.indexOf("(") + 1, type.indexOf(")"));
+                return "char(" + fieldLen + ")";
+            }
             return "char";
         }
         // 整数类型
