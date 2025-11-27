@@ -1,3 +1,5 @@
+<#-- 声明变量，消除IDEA警告 -->
+<#-- @ftlvariable name="userList" type="java.util.List<entiy.User>" -->
 使用变量的index属性获取循环次数(从0开始)
 以及使用include引入其它模板
 <#list userList as user>
