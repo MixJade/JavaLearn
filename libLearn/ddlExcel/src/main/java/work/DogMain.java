@@ -1,11 +1,8 @@
 package work;
 
 import work.enums.DbType;
-import work.model.entity.TableName;
 import work.service.DogService;
-
-import java.util.ArrayList;
-import java.util.List;
+import work.service.DogServiceImpl;
 
 /**
  * 狗工作的主要类，只在这里做区别配置
@@ -14,26 +11,31 @@ import java.util.List;
  * @since 2025-07-19
  */
 public class DogMain {
-    private static final DogService dogService = new DogService();
+    private static final DogService dogService = new DogServiceImpl();
 
-    public static void main(String[] args) {
-        List<TableName> needOutTab = new ArrayList<>();
+    static class GenXlsx {
+        public static void main(String[] args) {
+            // 输出表结构的excel
+            String xlsxName = DogConfig.outFileName + ".xlsx";
+            dogService.genXlsxTableDDL(xlsxName);
+        }
+    }
 
-        // 需要输出DDL的表名称，以及注释(选填，没有查到表注释时才使用这里的)
-        needOutTab.add(new TableName("students", "学生表"));
-        needOutTab.add(new TableName("societys", "社团表"));
-        needOutTab.add(new TableName("dog", "")); // 数据库有表注释，可以不填
+    static class GenXml {
+        public static void main(String[] args) {
+            // 输出表结构的xml
+            String xmlName = DogConfig.outFileName + ".xml";
+            dogService.genXmlTableDDL(xmlName);
+        }
+    }
 
-        // 此处数据库类型可以选择MySQL、Oracle，但记得调整相应配置文件
-        DbType dbType = DbType.MySQL;
-
-        // 输出表结构的excel
-        dogService.genXlsxTableDDL(dbType, needOutTab, "PLAY数据库.xlsx");
-
-        // 输出表结构的xml
-        dogService.genXmlTableDDL(dbType, needOutTab, "PLAY数据库.xml");
-
-        // 输出表结构的SQL(目前只有oracle转mysql)
-        dogService.genSqlTableDDL(dbType, needOutTab, "PLAY建表语句.sql", DbType.MySQL);
+    static class GenSql {
+        public static void main(String[] args) {
+            // 输出表结构的SQL(目前只有oracle转mysql)
+            String sqlName = DogConfig.outFileName + ".sql";
+            // 目标数据库的格式
+            DbType targetDb = DbType.MySQL;
+            dogService.genSqlTableDDL(sqlName, targetDb);
+        }
     }
 }
