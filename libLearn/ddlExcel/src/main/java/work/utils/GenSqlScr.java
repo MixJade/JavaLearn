@@ -97,7 +97,7 @@ public class GenSqlScr {
 
             // 生成字段定义部分
             String columnsSql = tabXmlDo.tableDDLList().stream()
-                    .map(GenSqlScr::buildColumnSql)
+                    .map(GenSqlScr::buildColOracleToMysql)
                     .collect(Collectors.joining(",\n  "));
 
             // 生成主键约束部分
@@ -122,7 +122,7 @@ public class GenSqlScr {
     /**
      * 构建单个字段的 SQL 片段
      */
-    private static String buildColumnSql(TableDDL ddl) {
+    private static String buildColOracleToMysql(TableDDL ddl) {
         // 字段名转小写
         String columnName = ddl.columnName().trim().toLowerCase();
         // 字段类型（Oracle → MySQL 映射）
@@ -139,10 +139,10 @@ public class GenSqlScr {
     }
 
     /**
-     * 构建主键约束 SQL 片段
+     * MySql版：构建主键约束 SQL 片段
      */
     private static String buildPrimaryKeySql(List<TableDDL> ddlList) {
-        // 筛选所有主键字段（isPri 为 Y/YES/1 等）
+        // 筛选所有主键字段
         List<String> primaryColumns = ddlList.stream()
                 .filter(ddl -> "Y".equalsIgnoreCase(ddl.isPri()))
                 .map(ddl -> ddl.columnName().trim().toLowerCase())
@@ -156,7 +156,7 @@ public class GenSqlScr {
     }
 
     /**
-     * 解析默认值，生成DEFAULT语法片段
+     * MySql版：解析默认值，生成DEFAULT语法片段
      */
     private static String buildDefaultValueSql(String defaultValue, String mysqlType) {
         // 1. 无默认值（null/空字符串），直接返回空
