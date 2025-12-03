@@ -35,7 +35,7 @@ public class DogMain {
             String sqlName = DogConfig.outFileName + ".sql";
             // 目标数据库的格式
             DbType targetDb = DbType.MySQL;
-            dogService.genSqlTableDDL(sqlName, targetDb);
+            dogService.genSqlTableDDL(sqlName, targetDb, false);
         }
     }
 }

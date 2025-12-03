@@ -83,12 +83,12 @@ public class GenSqlScr {
     /**
      * 使用Oracle字段生成MySQL建表语句
      *
-     * @param tabXmlDos    生成所需表字段参数
-     * @param sqlName      生成的sql文件名称
-     * @param addDropTable 是否添加删表语句
+     * @param tabXmlDos  生成所需表字段参数
+     * @param sqlName    生成的sql文件名称
+     * @param addDropSql 是否添加删表语句
      * @return MySQL 建表 SQL
      */
-    public static void tranOracleToMySql(List<TabXmlDo> tabXmlDos, String sqlName, boolean addDropTable) {
+    public static void tranOracleToMySql(List<TabXmlDo> tabXmlDos, String sqlName, boolean addDropSql) {
         // 默认值处理
         String actualEngine = "InnoDB";
         StringBuilder result = new StringBuilder();
@@ -103,7 +103,7 @@ public class GenSqlScr {
             // 生成主键约束部分
             String primaryKeySql = buildPrimaryKeySql(tabXmlDo.tableDDLList());
             // 1. 生成删表语句（存在即删，避免重复创建报错）
-            String dropTableSql = addDropTable ? String.format("drop table if exists %s;\n", tableName) : "";
+            String dropTableSql = addDropSql ? String.format("drop table if exists %s;\n", tableName) : "";
             // 拼接完整建表语句
             result.append(String.format("\n%screate table %s (\n  %s%s\n) comment='%s' engine=%s;\n",
                     dropTableSql,
@@ -243,12 +243,12 @@ public class GenSqlScr {
     /**
      * 使用MySQL字段生成Oracle建表语句
      *
-     * @param tabXmlDos    生成所需表字段参数
-     * @param sqlName      生成的sql文件名称
-     * @param addDropTable 是否添加删表语句
+     * @param tabXmlDos  生成所需表字段参数
+     * @param sqlName    生成的sql文件名称
+     * @param addDropSql 是否添加删表语句
      * @return Oracle 建表 SQL
      */
-    public static void tranMysqlToOracle(List<TabXmlDo> tabXmlDos, String sqlName, boolean addDropTable) {
+    public static void tranMysqlToOracle(List<TabXmlDo> tabXmlDos, String sqlName, boolean addDropSql) {
         StringBuilder result = new StringBuilder();
         for (TabXmlDo tabXmlDo : tabXmlDos) {
             // 表名保持大写（Oracle习惯）
@@ -260,7 +260,7 @@ public class GenSqlScr {
             // 生成主键约束部分
             String primaryKeySql = buildPrimaryKeySqlOracle(tabXmlDo.tableDDLList());
             // 生成删表语句（存在即删）
-            String dropTableSql = addDropTable ? String.format("DROP TABLE %s PURGE;\n", tableName) : "";
+            String dropTableSql = addDropSql ? String.format("DROP TABLE %s PURGE;\n", tableName) : "";
             // 拼接完整建表语句（Oracle不指定engine，使用COMMENT ON语句）
             result.append(String.format("\n%sCREATE TABLE %s (\n  %s%s\n);\n",
                     dropTableSql,
