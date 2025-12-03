@@ -31,11 +31,20 @@ $ ssh -T git@github.com
 $ git remote add origin git@github.com:MixJade/MixJadeWarehouse.git
 $ git rm -r --cached .
 $ git remote
-$ git push -u origin master
-$ git pull --rebase origin master
+$ git push -u origin main
+$ git pull --rebase origin main
 ```
 
-git六连
+**设置远程跟踪分支**
+
+* 后续直接`git pull`就能拉取
+
+```bash
+$ git branch --set-upstream-to=origin/main main
+$ git pull
+```
+
+**git六连**
 
 ```bash
 $ git init
