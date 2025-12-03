@@ -114,9 +114,13 @@ public class DogServiceImpl implements DogService {
     public void genSqlTableDDL(String sqlName, DbType targetDb) {
         List<TabXmlDo> tabXmlDoList = getTabXmlDoList();
 
+        System.out.printf("\n开始生成建表语句，从【%s】到【%s】%n", DogConfig.dbType, targetDb);
         if (DogConfig.dbType == DbType.Oracle && targetDb == DbType.MySQL) {
             // 生成建表语句: Oracle转MySQL，并添加删表语句
             GenSqlScr.tranOracleToMySql(tabXmlDoList, sqlName, true);
+        } else if (DogConfig.dbType == DbType.MySQL && targetDb == DbType.Oracle) {
+            // 生成建表语句: MySQL转Oracle
+            GenSqlScr.tranMysqlToOracle(tabXmlDoList, sqlName, false);
         }
     }
 }
