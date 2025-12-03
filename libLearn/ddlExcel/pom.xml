@@ -43,6 +43,13 @@
             <artifactId>log4j-core</artifactId>
             <version>2.24.3</version>
         </dependency>
+        <!--单元测试框架-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -2,9 +2,7 @@ package work.utils;
 
 import work.model.dto.TabXmlDo;
 import work.model.entity.TableDDL;
-import work.model.entity.TableName;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -356,25 +354,5 @@ public class GenSqlScr {
         }
         // 其他类型兜底处理
         return " DEFAULT '" + trimmedDefault.replace("'", "''") + "'";
-    }
-
-
-    // ------------------------------ 测试用例 ------------------------------
-    public static void main(String[] args) {
-        // 构建测试数据
-        List<TableDDL> ddlList = new ArrayList<>();
-        ddlList.add(new TableDDL("1", "ID", "NUMBER(19)", "主键ID", "Y", "Y", null));
-        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR2(50)", "用户姓名", "N", "Y", null));
-        ddlList.add(new TableDDL("3", "AGE", "NUMBER(3)", "年龄", "N", "N", "12"));
-        ddlList.add(new TableDDL("4", "BALANCE", "NUMBER(10,2)", "账户余额", "N", "N", null));
-        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATE", "创建时间", "N", "Y", "SYSDATE"));
-        ddlList.add(new TableDDL("6", "REMARK", "CLOB", "备注信息", "N", "N", null));
-
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), ddlList);
-        // 生成建表语句
-        List<TabXmlDo> tabXmlDos = new ArrayList<>();
-        tabXmlDos.add(tabXmlDo);
-        tabXmlDos.add(tabXmlDo);
-        tranOracleToMySql(tabXmlDos, "测试建表语句.sql", false);
     }
 }
