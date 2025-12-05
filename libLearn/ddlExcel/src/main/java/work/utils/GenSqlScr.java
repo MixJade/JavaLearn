@@ -60,7 +60,7 @@ public class GenSqlScr {
             return "datetime";
         }
         // 大文本类型
-        else if (type.equals("CLOB") || type.equals("LONG")) {
+        else if (type.startsWith("CLOB") || type.equals("LONG")) {
             return "text";
         }
         // 二进制类型
