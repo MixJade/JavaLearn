@@ -1,4 +1,4 @@
-package study;
+package musicPlay;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -11,7 +11,7 @@ import javax.sound.sampled.SourceDataLine;
  * @author MixJade
  * @since 2024-5-29 17:59:39
  */
-public class TestSound {
+public class CodeSound {
     public static void main(String[] args) {
         final int SAMPLE_RATE = 16 * 1024; // ~16KHz
         final int HZ = 440;
