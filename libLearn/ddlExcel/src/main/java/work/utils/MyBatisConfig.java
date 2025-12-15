@@ -21,7 +21,7 @@ public class MyBatisConfig {
     private static DataSource buildDataSource() {
         PooledDataSource dataSource = new PooledDataSource();
         switch (DogConfig.dbType) {
-            case MySQL -> dataSource.setDriver("com.mysql.cj.jdbc.Driver");
+            case MySql -> dataSource.setDriver("com.mysql.cj.jdbc.Driver");
             case Oracle -> dataSource.setDriver("oracle.jdbc.driver.OracleDriver");
         }
         dataSource.setUrl(DogConfig.url);
@@ -33,7 +33,7 @@ public class MyBatisConfig {
     private static void loadMapperXml(Configuration configuration) {
         // 按数据库类型拼接 XML 路径
         String xmlPath = switch (DogConfig.dbType) {
-            case MySQL -> "mysql/DogMapper.xml"; // MySQL 专属 XML
+            case MySql -> "mysql/DogMapper.xml"; // MySql 专属 XML
             case Oracle -> "oracle/DogMapper.xml"; // Oracle 专属 XML
         };
         try (InputStream inputStream = Resources.getResourceAsStream(xmlPath)) {

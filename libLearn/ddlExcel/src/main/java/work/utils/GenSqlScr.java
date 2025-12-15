@@ -1,5 +1,6 @@
 package work.utils;
 
+import work.enums.DbType;
 import work.model.dto.TabXmlDo;
 import work.model.entity.TableDDL;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class GenSqlScr {
 
-    // Oracle → MySQL 字段类型映射表（可根据实际需求扩展）
+    // Oracle → MySql 字段类型映射表（可根据实际需求扩展）
     private static String mapOracleTypeToMysql(String oracleDataType) {
         String type = oracleDataType.trim().toUpperCase();
 
@@ -79,14 +80,15 @@ public class GenSqlScr {
     }
 
     /**
-     * 使用Oracle字段生成MySQL建表语句
+     * 使用Oracle或MySql字段生成MySql建表语句
      *
      * @param tabXmlDos  生成所需表字段参数
      * @param sqlName    生成的sql文件名称
+     * @param sourceDb   源数据库类型
      * @param addDropSql 是否添加删表语句
-     * @return MySQL 建表 SQL
+     * @return MySql 建表 SQL
      */
-    public static void tranOracleToMySql(List<TabXmlDo> tabXmlDos, String sqlName, boolean addDropSql) {
+    public static void tranTabToMySql(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
         // 默认值处理
         String actualEngine = "InnoDB";
         StringBuilder result = new StringBuilder();
@@ -95,7 +97,7 @@ public class GenSqlScr {
             String tableName = tabXmlDo.tableName().tableName().trim().toLowerCase();
             // 生成字段定义部分
             String columnsSql = tabXmlDo.tableDDLList().stream()
-                    .map(GenSqlScr::buildColOracleToMysql)
+                    .map(i -> GenSqlScr.buildColToMysql(i, sourceDb))
                     .collect(Collectors.joining(",\n  "));
 
             // 生成主键约束部分
@@ -116,13 +118,20 @@ public class GenSqlScr {
     }
 
     /**
-     * 构建单个字段的 SQL 片段
+     * MySql版：构建单个字段的SQL片段
      */
-    private static String buildColOracleToMysql(TableDDL ddl) {
+    private static String buildColToMysql(TableDDL ddl, DbType sourceDb) {
         // 字段名转小写
         String columnName = ddl.columnName().trim().toLowerCase();
-        // 字段类型（Oracle → MySQL 映射）
-        String mysqlType = mapOracleTypeToMysql(ddl.dataType());
+        // 字段类型（Oracle → MySql 映射）
+        String mysqlType;
+        if (sourceDb == DbType.MySql) {
+            // 本来是MySql就无需转换
+            mysqlType = ddl.dataType().trim().toLowerCase();
+        } else {
+            // Oracle需转为MySql类型
+            mysqlType = mapOracleTypeToMysql(ddl.dataType());
+        }
         // 非空约束
         String notNull = "Y".equalsIgnoreCase(ddl.isNotNull()) ? " not null" : "";
         // 字段注释（为空则不添加）
@@ -130,12 +139,12 @@ public class GenSqlScr {
                 ? " comment '" + ddl.comments().trim() + "'"
                 : "";
         // 默认值
-        String defaultValue = buildDefaultValueSql(ddl.defaultVal(), mysqlType);
+        String defaultValue = buildDefaultValMySql(ddl.defaultVal(), mysqlType);
         return columnName + " " + mysqlType + defaultValue + notNull + comment;
     }
 
     /**
-     * MySql版：构建主键约束 SQL 片段
+     * MySql版：构建主键约束SQL片段
      */
     private static String buildPrimaryKeySql(List<TableDDL> ddlList) {
         // 筛选所有主键字段
@@ -153,7 +162,7 @@ public class GenSqlScr {
     /**
      * MySql版：解析默认值，生成DEFAULT语法片段
      */
-    private static String buildDefaultValueSql(String defaultValue, String mysqlType) {
+    private static String buildDefaultValMySql(String defaultValue, String mysqlType) {
         // 1. 无默认值（null/空字符串），直接返回空
         if (defaultValue == null || defaultValue.isBlank()) {
             return "";
@@ -192,7 +201,7 @@ public class GenSqlScr {
         return " default '" + trimmedDefault.replace("'", "''") + "'";
     }
 
-    // MySQL → Oracle 字段类型映射表
+    // MySql → Oracle 字段类型映射表
     private static String mapMysqlTypeToOracle(String mysqlDataType) {
         String type = mysqlDataType.trim().toUpperCase();
         // 字符串类型
@@ -239,21 +248,22 @@ public class GenSqlScr {
     }
 
     /**
-     * 使用MySQL字段生成Oracle建表语句
+     * 使用MySql或Oracle字段生成Oracle建表语句
      *
      * @param tabXmlDos  生成所需表字段参数
      * @param sqlName    生成的sql文件名称
+     * @param sourceDb   源数据库类型
      * @param addDropSql 是否添加删表语句
      * @return Oracle 建表 SQL
      */
-    public static void tranMysqlToOracle(List<TabXmlDo> tabXmlDos, String sqlName, boolean addDropSql) {
+    public static void tranTabToOracle(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
         StringBuilder result = new StringBuilder();
         for (TabXmlDo tabXmlDo : tabXmlDos) {
             // 表名保持大写（Oracle习惯）
             String tableName = tabXmlDo.tableName().tableName().trim().toUpperCase();
             // 生成字段定义部分
             String columnsSql = tabXmlDo.tableDDLList().stream()
-                    .map(GenSqlScr::buildColMysqlToOracle)
+                    .map(i -> GenSqlScr.buildColToOracle(i, sourceDb))
                     .collect(Collectors.joining(",\n  "));
             // 生成主键约束部分
             String primaryKeySql = buildPrimaryKeySqlOracle(tabXmlDo.tableDDLList());
@@ -289,22 +299,29 @@ public class GenSqlScr {
     }
 
     /**
-     * 构建单个字段的 SQL 片段
+     * Oracle版：构建单个字段的SQL片段
      */
-    private static String buildColMysqlToOracle(TableDDL ddl) {
+    private static String buildColToOracle(TableDDL ddl, DbType sourceDb) {
         // 字段名保持大写（Oracle习惯）
         String columnName = ddl.columnName().trim().toUpperCase();
-        // 字段类型（MySQL → Oracle 映射）
-        String oracleType = mapMysqlTypeToOracle(ddl.dataType());
+        // 字段类型（MySql → Oracle 映射）
+        String oracleType;
+        if (sourceDb == DbType.Oracle) {
+            // 本来是Oracle就无需转换
+            oracleType = ddl.dataType().trim().toUpperCase();
+        } else {
+            // MySql需转为Oracle类型
+            oracleType = mapMysqlTypeToOracle(ddl.dataType());
+        }
         // 非空约束
         String notNull = "Y".equalsIgnoreCase(ddl.isNotNull()) ? " NOT NULL" : "";
         // 默认值
-        String defaultValue = buildDefaultValSqlOracle(ddl.defaultVal(), oracleType);
+        String defaultValue = buildDefaultValOracle(ddl.defaultVal(), oracleType);
         return columnName + " " + oracleType + defaultValue + notNull;
     }
 
     /**
-     * Oracle版：构建主键约束 SQL 片段
+     * Oracle版：构建主键约束SQL片段
      */
     private static String buildPrimaryKeySqlOracle(List<TableDDL> ddlList) {
         List<String> primaryColumns = ddlList.stream()
@@ -321,7 +338,7 @@ public class GenSqlScr {
     /**
      * Oracle版：解析默认值，生成DEFAULT语法片段
      */
-    private static String buildDefaultValSqlOracle(String defaultValue, String oracleType) {
+    private static String buildDefaultValOracle(String defaultValue, String oracleType) {
         if (defaultValue == null || defaultValue.isBlank()) {
             return "";
         }

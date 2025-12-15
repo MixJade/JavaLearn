@@ -11,8 +11,8 @@ import java.util.List;
  * @since 2025-12-02 11:20:27
  */
 public interface DogConfig {
-    // 此处数据库类型可以选择MySQL、Oracle
-    DbType dbType = DbType.MySQL;
+    // 此处数据库类型可以选择MySql、Oracle
+    DbType dbType = DbType.MySql;
 
     // 数据库链接、账号、密码
     String url = "jdbc:mysql://localhost:3306/play?useSSL=true",

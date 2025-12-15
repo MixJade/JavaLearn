@@ -36,12 +36,13 @@ public class DogMain {
             // 输出表结构的SQL
             String sqlName = DogConfig.outFileName + ".sql";
 
+            System.out.println("当前源数据库类型：" + DogConfig.dbType);
             // 创建键盘输入扫描器
             Scanner scanner = new Scanner(System.in);
             // 1. 输入目标数据库类型
-            System.out.println("请输入目标数据库类型（1=MySQL，0=Oracle）：");
+            System.out.println("请输入目标数据库类型（1=MySql，0=Oracle）：");
             String dbInput = scanner.nextLine().trim();
-            DbType targetDb = DbType.MySQL;
+            DbType targetDb = DbType.MySql;
             // 校验并转换数据库类型输入
             if ("0".equals(dbInput)) {
                 targetDb = DbType.Oracle;
