@@ -1,37 +1,22 @@
 package example;
 
-import config.FtlConfig;
 import entiy.User;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
+import utils.FtlUtil;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class FtlDemo1 {
-
     public static void main(String[] args) {
-        try {
-            // 创建配置类(顺便指定默认版本)
-            Configuration cfa = FtlConfig.cfa;
-            // 创建数据模型
-            Map<String, Object> dataModel = new HashMap<>();
+        // 创建数据模型
+        Map<String, Object> dataModel = new HashMap<>();
+        dataModel.put("userList", getUsers());
 
-            dataModel.put("userList", getUsers());
-
-            // 加载模板
-            Template template = cfa.getTemplate("list_template.ftl");
-
-            // 输出文本
-            StringWriter writer = new StringWriter();
-            template.process(dataModel, writer);
-            System.out.println(writer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 加载模板，输出文本
+        String resStr = FtlUtil.fillTempStr(dataModel, "list_template.ftl");
+        System.out.println(resStr);
     }
 
     private static List<User> getUsers() {
