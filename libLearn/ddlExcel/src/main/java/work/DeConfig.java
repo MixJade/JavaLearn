@@ -22,6 +22,10 @@ public interface DeConfig {
     // 需要输出的文件名，无后缀
     String outFileName = "PLAY数据库";
 
+    // 代码生成器相关配置
+    String parentPack = "com.demo",
+            author = "MixJade";
+
     // 需要输出的表名
     List<TableName> needOutTab = List.of(
             new TableName("students", "学生表"),

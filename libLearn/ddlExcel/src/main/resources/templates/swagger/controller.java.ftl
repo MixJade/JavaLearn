@@ -12,12 +12,18 @@
 <#-- @formatter:off -->
 package ${pack}.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import ${pack}.common.Result;
 import ${pack}.${tab.lJNm()};
 import ${pack}.service.${serviceName};
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * ${tab.tb().comments()} 前端控制器
@@ -27,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/${tab.sJNm()}")
+@Tag(name = "${tab.tb().comments()}操作接口")
 public class ${tab.lJNm()}Controller {
     private final ${serviceName} ${serviceNameLower};
 
@@ -35,26 +42,16 @@ public class ${tab.lJNm()}Controller {
         this.${serviceNameLower} = ${serviceNameLower};
     }
 
-    @PostMapping
-    public Result add(@RequestBody ${tab.lJNm()} ${tab.sJNm()}) {
-        boolean addRes = ${serviceNameLower}.save(${tab.sJNm()});
-        return Result.choice("添加", addRes);
-    }
-
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Integer id) {
-        boolean deleteRes = ${serviceNameLower}.removeById(id);
-        return Result.choice("删除", deleteRes);
-    }
-
-    @PutMapping
-    public Result update(@RequestBody ${tab.lJNm()} ${tab.sJNm()}) {
-        boolean updateRes = ${serviceNameLower}.updateById(${tab.sJNm()});
-        return Result.choice("修改", updateRes);
-    }
-
-    @GetMapping("/page")
-    public IPage<${tab.lJNm()}> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
-        return ${serviceNameLower}.getByPage(pageNum, pageSize);
+    /**
+     * 按照编号查询
+     *
+     * @author: ${author}
+     * @date: ${date}
+     */
+    @Operation(summary = "按照编号查询")
+    @Parameter(name = "id", description = "ID", required = true, in = ParameterIn.QUERY)
+    @RequestMapping(value = "/detail-by-id", method = RequestMethod.GET, consumes = MediaType.ALL_VALUE)
+    public ${tab.lJNm()} detailById(@RequestParam String id){
+        return ${serviceNameLower}.detailById(id);
     }
 }

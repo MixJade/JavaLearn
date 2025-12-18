@@ -12,6 +12,8 @@ import ${pkg};
 </#list>
 import java.io.Serializable;
 import java.io.Serial;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 /**
  * ${tab.tb().comments()}
@@ -19,7 +21,9 @@ import java.io.Serial;
  * @author ${author}
  * @since ${date}
  */
-@SuppressWarnings("unused")
+@Data
+@TableName("${tab.tb().tableName()}")
+@Schema(description = "${tab.tb().comments()}")
 public class ${tab.lJNm()} implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,35 +31,16 @@ public class ${tab.lJNm()} implements Serializable {
 <#list tab.codeCols() as field>
 
     <#if field.comment()!?length gt 0>
-    /**
-     * ${field.comment()}
-     */
+    @Schema(description = "${field.comment()}")
     </#if>
-    <#-- 主键 -->
     <#if field.keyFlag()>
-    @TableId(value = "${field.colNm()}", type = IdType.AUTO)
+    <#-- 主键 -->
+    @TableId("${field.colNm()}")
+    <#else>
+    <#-- 普通字段 -->
+    @TableField("${field.colNm()}")
     </#if>
     private ${field.type()} ${field.jNm()};
 </#list>
 <#------------  END 字段循环遍历  ---------->
-
-<#-- ----------  BEGIN 字段方法循环遍历  ---------->
-<#list tab.codeCols() as field>
-    <#if field.type() == "boolean">
-        <#assign getprefix="is"/>
-    <#else>
-        <#assign getprefix="get"/>
-    </#if>
-    <#-- 定义变量：字段的首字母大写 -->
-    <#assign capitalName=field.jNm()?cap_first/>
-
-    public ${field.type()} ${getprefix}${capitalName}() {
-        return ${field.jNm()};
-    }
-
-    public void set${capitalName}(${field.type()} ${field.jNm()}) {
-        this.${field.jNm()} = ${field.jNm()};
-    }
-</#list>
-<#------------  END 字段方法循环遍历  ---------->
 }

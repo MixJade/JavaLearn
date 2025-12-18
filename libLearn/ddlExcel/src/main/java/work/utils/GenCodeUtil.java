@@ -138,18 +138,27 @@ public final class GenCodeUtil {
         dataModel.put("date", LocalDate.now().toString());
         dataModel.put("author", author);
         dataModel.put("pack", pack);
+        String rootDir = "生成结果";
         String useTemp = isNormal ? "normal/" : "swagger/";
         for (CodeTab codeTab : codeTabs) {
             dataModel.put("tab", codeTab);
             // 加载模板并渲染, 返回生成的代码,输出为文件
+            System.out.println("=".repeat(15) + " 开始生成 " + codeTab.lJNm() + " " + "=".repeat(15));
             // 生成controller
-            String controllerStr = FtlUtil.fillTempStr(dataModel, useTemp + "controller.java.ftl");
-            Path controllerNm = Path.of("生成结果", outDir, "controller", codeTab.lJNm() + "Controller.java");
-            StrToFile.toFilePath(controllerStr, controllerNm);
+            StrToFile.toFilePath(
+                    FtlUtil.fillTempStr(dataModel, useTemp + "controller.java.ftl"),
+                    Path.of(rootDir, outDir, "controller", codeTab.lJNm() + "Controller.java")
+            );
             // 生成实体类
-            String entityStr = FtlUtil.fillTempStr(dataModel, useTemp + "entity.java.ftl");
-            Path entityNm = Path.of("生成结果", outDir, "entity", codeTab.lJNm() + ".java");
-            StrToFile.toFilePath(entityStr, entityNm);
+            StrToFile.toFilePath(
+                    FtlUtil.fillTempStr(dataModel, useTemp + "entity.java.ftl"),
+                    Path.of(rootDir, outDir, "entity", codeTab.lJNm() + ".java")
+            );
+            // 生成Ts实体类
+            StrToFile.toFilePath(
+                    FtlUtil.fillTempStr(dataModel, useTemp + "tsEntity.ts.ftl"),
+                    Path.of(rootDir, outDir, "tsEntity", codeTab.lJNm() + ".ts")
+            );
         }
     }
 }

@@ -138,19 +138,7 @@ public class DeServiceImpl implements DeService {
     public void genCodeTableDDL() {
         // 创建键盘输入扫描器
         Scanner scanner = new Scanner(System.in);
-        // 1. 输入作者名
-        System.out.println("请输入作者名（默认MixJade）：");
-        String authorName = scanner.nextLine().trim();
-        if ("".equals(authorName)) {
-            authorName = "MixJade";
-        }
-        // 2. 输入父级包路径
-        System.out.println("请输入父级包路径（默认com.demo）：");
-        String pkgPath = scanner.nextLine().trim();
-        if ("".equals(pkgPath)) {
-            pkgPath = "com.demo";
-        }
-        // 3. 输入生成类型
+        // 输入生成类型
         System.out.println("请输入生成类型（1-normal 2-swagger）：");
         String inNormal = scanner.nextLine().trim();
         boolean isNormal = !"2".equals(inNormal); // 仅输入2时为false，其余为true
@@ -175,6 +163,6 @@ public class DeServiceImpl implements DeService {
         }
         session.close();
         // 调用生成器方法
-        GenCodeUtil.genCodeFile(DeConfig.outFileName, authorName, pkgPath, isNormal, codeTabList);
+        GenCodeUtil.genCodeFile(DeConfig.outFileName, DeConfig.author, DeConfig.parentPack, isNormal, codeTabList);
     }
 }
