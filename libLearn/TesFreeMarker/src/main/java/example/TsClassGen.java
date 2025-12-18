@@ -19,10 +19,10 @@ public class TsClassGen {
         // 1. 准备模板数据
         Map<String, Object> dataModel = new HashMap<>();
         // 表名转驼峰（类名）
-        dataModel.put("className", ConvertCase.lSnakeToLCamel(tableName));
+        dataModel.put("className", ConvertCase.snakeToLCamel(tableName));
         // 读取字段列表
         for (ColumnDo columnDo : columnDos) {
-            columnDo.setColumnName(ConvertCase.lSnakeToSCamel(columnDo.getColumnName()));
+            columnDo.setColumnName(ConvertCase.snakeToSCamel(columnDo.getColumnName()));
         }
         dataModel.put("columns", columnDos);
 

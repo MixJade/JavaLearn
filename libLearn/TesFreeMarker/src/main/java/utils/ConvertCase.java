@@ -7,12 +7,12 @@ package utils;
  */
 public final class ConvertCase {
     /**
-     * 将大蛇形转为大驼峰
+     * 将蛇形转为大驼峰
      *
-     * @param input 大蛇形，如:DOG_PLAN
+     * @param input 蛇形，如:DOG_PLAN、dog_plan
      * @return 大驼峰，如:DogPlan
      */
-    public static String lSnakeToLCamel(String input) {
+    public static String snakeToLCamel(String input) {
         StringBuilder sb = new StringBuilder();
         String[] words = input.toLowerCase().split("_");
         for (String word : words) {
@@ -25,11 +25,11 @@ public final class ConvertCase {
     /**
      * 将大蛇形转为小驼峰
      *
-     * @param input 大蛇形，如:DOG_PLAN
+     * @param input 蛇形，如:DOG_PLAN、dog_plan
      * @return 小驼峰，如:dogPlan
      */
-    public static String lSnakeToSCamel(String input) {
-        String res = lSnakeToLCamel(input);
+    public static String snakeToSCamel(String input) {
+        String res = snakeToLCamel(input);
         // 首字母需要小写
         return res.substring(0, 1).toLowerCase() + res.substring(1);
     }
