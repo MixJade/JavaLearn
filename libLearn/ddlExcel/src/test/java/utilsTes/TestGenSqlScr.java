@@ -19,7 +19,7 @@ public class TestGenSqlScr {
     @Test
     public void testOracleToMysql() {
         // 测试Oracle到MySql建表语句
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), testOracleDDL());
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_ORACLE", "表注释"), testOracleDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         tabXmlDos.add(tabXmlDo);
@@ -30,7 +30,7 @@ public class TestGenSqlScr {
     @Test
     public void testMysqlToOracle() {
         // 测试MySql到Oracle建表语句
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_info", "用户信息表"), testMySqlDDL());
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_mysql", "用户信息表"), testMySqlDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         // 生成Oracle建表语句
@@ -40,7 +40,7 @@ public class TestGenSqlScr {
     @Test
     public void testMysqlToMysql() {
         // 测试MySql到MySql建表语句
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_info", "用户信息表"), testMySqlDDL());
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_mysql", "用户信息表"), testMySqlDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         // 生成MySql建表语句
@@ -50,7 +50,7 @@ public class TestGenSqlScr {
     @Test
     public void testOracleToOracle() {
         // 测试Oracle到Oracle建表语句
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), testOracleDDL());
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_ORACLE", "表注释"), testOracleDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         // 生成Oracle建表语句

@@ -285,7 +285,7 @@ public final class GenSqlScr {
             // 生成主键约束部分
             String primaryKeySql = buildPrimaryKeySqlOracle(tabXmlDo.tableDDLList());
             // 生成删表语句（存在即删）
-            String dropTableSql = addDropSql ? String.format("DROP TABLE %s PURGE;\n", tableName) : "";
+            String dropTableSql = addDropSql ? String.format("DROP TABLE %s;\n", tableName) : "";
             // 拼接完整建表语句（Oracle不指定engine，使用COMMENT ON语句）
             result.append(String.format("\n%sCREATE TABLE %s (\n  %s%s\n);\n",
                     dropTableSql,
