@@ -1,6 +1,8 @@
 <#-- 声明变量，消除IDEA警告 -->
 <#-- @ftlvariable name="className" type="java.lang.String" -->
 <#-- @ftlvariable name="columns" type="java.util.List<entiy.ColumnDo>" -->
+<#-- IDEA 识别：从此处开始，禁用格式化（包括缩进） -->
+<#-- @formatter:off -->
 <#-- 生成TS类定义 -->
 export class ${className} {
 <#-- 遍历字段：生成带注释的属性定义 -->
