@@ -15,17 +15,18 @@ import work.utils.TableXmlGen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class DeServiceImpl implements DeService {
-
     /**
      * 输出表的结构为xlsx
-     *
-     * @param xlsxName 输出xlsx的文件名
      */
     @Override
-    public void genXlsxTableDDL(String xlsxName) {
+    public void genXlsxTableDDL() {
+        // xlsxName 输出xlsx的文件名
+        String xlsxName = DeConfig.outFileName + ".xlsx";
+        // 逻辑正式开始
         SqlSession session = MyBatisConfig.getFactory().openSession();
         DeMapper deMapper = session.getMapper(DeMapper.class);
         // 第一个sheet页开头：表名目录
@@ -93,26 +94,42 @@ public class DeServiceImpl implements DeService {
 
     /**
      * 输出表的结构为xml
-     *
-     * @param xmlName 输出xml的文件名
      */
     @Override
-    public void genXmlTableDDL(String xmlName) {
+    public void genXmlTableDDL() {
         List<TabXmlDo> tabXmlDoList = getTabXmlDoList();
-
+        // xmlName 输出xml的文件名
+        String xmlName = DeConfig.outFileName + ".xml";
         // 生成xml
         TableXmlGen.creatXml(tabXmlDoList, xmlName);
     }
 
     /**
      * 输出表的结构为建表语句SQL
-     *
-     * @param sqlName      输出的文件名
-     * @param targetDb     目标数据库类型
-     * @param addDropSql 是否添加删表语句
      */
     @Override
-    public void genSqlTableDDL(String sqlName, DbType targetDb, boolean addDropSql) {
+    public void genSqlTableDDL() {
+        // 输出表结构的SQL
+        String sqlName = DeConfig.outFileName + ".sql";
+
+        System.out.println("当前源数据库类型：" + DeConfig.dbType);
+        // 创建键盘输入扫描器
+        Scanner scanner = new Scanner(System.in);
+        // 1. 输入目标数据库类型
+        System.out.println("请输入目标数据库类型（1=MySql，0=Oracle）：");
+        String dbInput = scanner.nextLine().trim();
+        DbType targetDb = DbType.MySql;
+        // 校验并转换数据库类型输入
+        if ("0".equals(dbInput)) {
+            targetDb = DbType.Oracle;
+        }
+        // 2. 输入是否生成删表语句
+        System.out.println("请输入是否生成删表语句（1=是，0=否）：");
+        String dropInput = scanner.nextLine().trim();
+        boolean addDropSql = "1".equals(dropInput); // 仅输入1时为true，其余为false
+        // 关闭扫描器
+        scanner.close();
+
         List<TabXmlDo> tabXmlDoList = getTabXmlDoList();
         // 开始生成建表语句
         GenSqlScr.tranTabDDL(tabXmlDoList, sqlName, DeConfig.dbType, targetDb, addDropSql);
