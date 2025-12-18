@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  *
  * @since 2025-11-26 09:13:12
  */
-public class GenSqlScr {
+public final class GenSqlScr {
     /**
      * 使用数据库字段生成建表语句（支持不同数据库迁移）
      *
@@ -21,7 +21,6 @@ public class GenSqlScr {
      * @param sourceDb   源数据库类型
      * @param targetDb   目标数据库类型
      * @param addDropSql 是否添加删表语句
-     * @return Oracle 建表 SQL
      */
     public static void tranTabDDL(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, DbType targetDb, boolean addDropSql) {
         System.out.printf("\n开始生成建表语句，从【%s】到【%s】%n", sourceDb, targetDb);
@@ -106,7 +105,6 @@ public class GenSqlScr {
      * @param sqlName    生成的sql文件名称
      * @param sourceDb   源数据库类型
      * @param addDropSql 是否添加删表语句
-     * @return MySql 建表 SQL
      */
     private static void tranTabToMySql(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
         // 默认值处理
@@ -274,7 +272,6 @@ public class GenSqlScr {
      * @param sqlName    生成的sql文件名称
      * @param sourceDb   源数据库类型
      * @param addDropSql 是否添加删表语句
-     * @return Oracle 建表 SQL
      */
     private static void tranTabToOracle(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
         StringBuilder result = new StringBuilder();

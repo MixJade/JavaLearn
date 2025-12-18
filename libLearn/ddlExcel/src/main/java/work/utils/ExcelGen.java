@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @since 2025-07-19 18:36:59
  */
-public class ExcelGen {
+public final class ExcelGen {
     public static void creatExcel(String excelName, List<SheetDo> sheetDos) {
         // 创建新的工作簿
         try (Workbook workbook = new XSSFWorkbook()) {

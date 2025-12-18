@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @since 2025-08-25 20:42:52
  */
-public class TableXmlGen {
+public final class TableXmlGen {
     public static void creatXml(List<TabXmlDo> tabXmlDoList, String xmlName) {
         try {
             // 创建文档构建器工厂

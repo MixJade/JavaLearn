@@ -21,7 +21,7 @@ import java.io.InputStream;
  *
  * @since 2025-12-2 14:46
  */
-public class MyBatisConfig {
+public final class MyBatisConfig {
     // 构建池化数据源
     private static DataSource buildDataSource() {
         PooledDataSource dataSource = new PooledDataSource();

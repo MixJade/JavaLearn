@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 /**
  * 将String生成为文件
  */
-public class StrToFile {
+public final class StrToFile {
     /**
      * Files工具类生成文件
      *
