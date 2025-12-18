@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Mapper
-public interface DogMapper {
+public interface DeMapper {
 
     // 查询表的DDL
     List<TableDDL> queryTableDDL(String tableName);

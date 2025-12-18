@@ -1,8 +1,8 @@
 package work;
 
 import work.enums.DbType;
-import work.service.DogService;
-import work.service.DogServiceImpl;
+import work.service.DeService;
+import work.service.DeServiceImpl;
 
 import java.util.Scanner;
 
@@ -12,31 +12,31 @@ import java.util.Scanner;
  * @author MixJade
  * @since 2025-07-19
  */
-public class DogMain {
-    private static final DogService dogService = new DogServiceImpl();
+public class DeMain {
+    private static final DeService DE_SERVICE = new DeServiceImpl();
 
     static class GenXlsx {
         public static void main(String[] args) {
             // 输出表结构的excel
-            String xlsxName = DogConfig.outFileName + ".xlsx";
-            dogService.genXlsxTableDDL(xlsxName);
+            String xlsxName = DeConfig.outFileName + ".xlsx";
+            DE_SERVICE.genXlsxTableDDL(xlsxName);
         }
     }
 
     static class GenXml {
         public static void main(String[] args) {
             // 输出表结构的xml
-            String xmlName = DogConfig.outFileName + ".xml";
-            dogService.genXmlTableDDL(xmlName);
+            String xmlName = DeConfig.outFileName + ".xml";
+            DE_SERVICE.genXmlTableDDL(xmlName);
         }
     }
 
     static class GenSql {
         public static void main(String[] args) {
             // 输出表结构的SQL
-            String sqlName = DogConfig.outFileName + ".sql";
+            String sqlName = DeConfig.outFileName + ".sql";
 
-            System.out.println("当前源数据库类型：" + DogConfig.dbType);
+            System.out.println("当前源数据库类型：" + DeConfig.dbType);
             // 创建键盘输入扫描器
             Scanner scanner = new Scanner(System.in);
             // 1. 输入目标数据库类型
@@ -54,7 +54,7 @@ public class DogMain {
             // 关闭扫描器
             scanner.close();
 
-            dogService.genSqlTableDDL(sqlName, targetDb, addDropSql);
+            DE_SERVICE.genSqlTableDDL(sqlName, targetDb, addDropSql);
         }
     }
 }

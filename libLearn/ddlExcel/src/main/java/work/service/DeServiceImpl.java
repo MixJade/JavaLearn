@@ -1,9 +1,9 @@
 package work.service;
 
 import org.apache.ibatis.session.SqlSession;
-import work.DogConfig;
+import work.DeConfig;
 import work.enums.DbType;
-import work.mapper.DogMapper;
+import work.mapper.DeMapper;
 import work.model.dto.SheetDo;
 import work.model.dto.TabXmlDo;
 import work.model.entity.TableDDL;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DogServiceImpl implements DogService {
+public class DeServiceImpl implements DeService {
 
     /**
      * 输出表的结构为xlsx
@@ -27,7 +27,7 @@ public class DogServiceImpl implements DogService {
     @Override
     public void genXlsxTableDDL(String xlsxName) {
         SqlSession session = MyBatisConfig.getFactory().openSession();
-        DogMapper dogMapper = session.getMapper(DogMapper.class);
+        DeMapper deMapper = session.getMapper(DeMapper.class);
         // 第一个sheet页开头：表名目录
         String[] tableHeader = {"序号", "表名", "注释"};
         List<String[]> tableListData = new ArrayList<>();
@@ -36,11 +36,11 @@ public class DogServiceImpl implements DogService {
         String[] header = {"序号", "字段名", "注释", "字段类型及精度", "是否主键", "是否非空", "默认值"};
         // 生成的sheet页数据
         List<SheetDo> sheetDoList = new ArrayList<>();
-        for (TableName tabN : DogConfig.needOutTab) {
+        for (TableName tabN : DeConfig.needOutTab) {
             // 表名称
-            TableName tableName = dogMapper.queryTableName(tabN.tableName());
+            TableName tableName = deMapper.queryTableName(tabN.tableName());
             // 表字段
-            List<TableDDL> ddlList = dogMapper.queryTableDDL(tabN.tableName());
+            List<TableDDL> ddlList = deMapper.queryTableDDL(tabN.tableName());
 
             // 填入Sheet
             String comments = tableName.comments();
@@ -70,14 +70,14 @@ public class DogServiceImpl implements DogService {
     // 从数据库中获取生成文件所需参数
     private List<TabXmlDo> getTabXmlDoList() {
         SqlSession session = MyBatisConfig.getFactory().openSession();
-        DogMapper dogMapper = session.getMapper(DogMapper.class);
+        DeMapper deMapper = session.getMapper(DeMapper.class);
 
         List<TabXmlDo> tabXmlDoList = new ArrayList<>();
-        for (TableName tabN : DogConfig.needOutTab) {
+        for (TableName tabN : DeConfig.needOutTab) {
             // 表名称
-            TableName tableName = dogMapper.queryTableName(tabN.tableName());
+            TableName tableName = deMapper.queryTableName(tabN.tableName());
             // 表字段
-            List<TableDDL> ddlList = dogMapper.queryTableDDL(tabN.tableName());
+            List<TableDDL> ddlList = deMapper.queryTableDDL(tabN.tableName());
 
             // xml传参
             if (tableName.comments() == null || tableName.comments().isEmpty()) {
@@ -115,6 +115,6 @@ public class DogServiceImpl implements DogService {
     public void genSqlTableDDL(String sqlName, DbType targetDb, boolean addDropSql) {
         List<TabXmlDo> tabXmlDoList = getTabXmlDoList();
         // 开始生成建表语句
-        GenSqlScr.tranTabDDL(tabXmlDoList, sqlName, DogConfig.dbType, targetDb, addDropSql);
+        GenSqlScr.tranTabDDL(tabXmlDoList, sqlName, DeConfig.dbType, targetDb, addDropSql);
     }
 }

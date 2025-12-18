@@ -2,7 +2,7 @@ package work.service;
 
 import work.enums.DbType;
 
-public interface DogService {
+public interface DeService {
     /**
      * 输出表的结构为xlsx
      *

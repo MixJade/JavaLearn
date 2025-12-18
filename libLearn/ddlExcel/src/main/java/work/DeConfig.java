@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @since 2025-12-02 11:20:27
  */
-public interface DogConfig {
+public interface DeConfig {
     // 此处数据库类型可以选择MySql、Oracle
     DbType dbType = DbType.MySql;
 

@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import work.DogConfig;
+import work.DeConfig;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -25,21 +25,21 @@ public class MyBatisConfig {
     // 构建池化数据源
     private static DataSource buildDataSource() {
         PooledDataSource dataSource = new PooledDataSource();
-        switch (DogConfig.dbType) {
+        switch (DeConfig.dbType) {
             case MySql -> dataSource.setDriver("com.mysql.cj.jdbc.Driver");
             case Oracle -> dataSource.setDriver("oracle.jdbc.driver.OracleDriver");
         }
-        dataSource.setUrl(DogConfig.url);
-        dataSource.setUsername(DogConfig.username);
-        dataSource.setPassword(DogConfig.password);
+        dataSource.setUrl(DeConfig.url);
+        dataSource.setUsername(DeConfig.username);
+        dataSource.setPassword(DeConfig.password);
         return dataSource;
     }
 
     private static void loadMapperXml(Configuration configuration) {
         // 按数据库类型拼接 XML 路径
-        String xmlPath = switch (DogConfig.dbType) {
-            case MySql -> "mysql/DogMapper.xml"; // MySql 专属 XML
-            case Oracle -> "oracle/DogMapper.xml"; // Oracle 专属 XML
+        String xmlPath = switch (DeConfig.dbType) {
+            case MySql -> "mysql/DeMapper.xml"; // MySql 专属 XML
+            case Oracle -> "oracle/DeMapper.xml"; // Oracle 专属 XML
         };
         try (InputStream inputStream = Resources.getResourceAsStream(xmlPath)) {
             XMLMapperBuilder mapperBuilder = new XMLMapperBuilder(
