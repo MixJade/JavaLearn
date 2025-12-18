@@ -32,4 +32,11 @@ public class DeMain {
             DE_SERVICE.genSqlTableDDL();
         }
     }
+
+    static class GenCode {
+        public static void main(String[] args) {
+            // 代码生成器
+            DE_SERVICE.genCodeTableDDL();
+        }
+    }
 }

@@ -15,4 +15,10 @@ public interface DeService {
      * 输出表的结构为建表语句SQL
      */
     void genSqlTableDDL();
+
+
+    /**
+     * 输出表的结构为Java、Ts代码文件
+     */
+    void genCodeTableDDL();
 }

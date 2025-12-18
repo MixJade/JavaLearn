@@ -4,14 +4,13 @@ import org.apache.ibatis.session.SqlSession;
 import work.DeConfig;
 import work.enums.DbType;
 import work.mapper.DeMapper;
+import work.model.dto.CodeTab;
 import work.model.dto.SheetDo;
 import work.model.dto.TabXmlDo;
+import work.model.entity.OriTabCol;
 import work.model.entity.TableDDL;
 import work.model.entity.TableName;
-import work.utils.ExcelGen;
-import work.utils.GenSqlScr;
-import work.utils.MyBatisConfig;
-import work.utils.TableXmlGen;
+import work.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,5 +132,49 @@ public class DeServiceImpl implements DeService {
         List<TabXmlDo> tabXmlDoList = getTabXmlDoList();
         // 开始生成建表语句
         GenSqlScr.tranTabDDL(tabXmlDoList, sqlName, DeConfig.dbType, targetDb, addDropSql);
+    }
+
+    @Override
+    public void genCodeTableDDL() {
+        // 创建键盘输入扫描器
+        Scanner scanner = new Scanner(System.in);
+        // 1. 输入作者名
+        System.out.println("请输入作者名（默认MixJade）：");
+        String authorName = scanner.nextLine().trim();
+        if ("".equals(authorName)) {
+            authorName = "MixJade";
+        }
+        // 2. 输入父级包路径
+        System.out.println("请输入父级包路径（默认com.demo）：");
+        String pkgPath = scanner.nextLine().trim();
+        if ("".equals(pkgPath)) {
+            pkgPath = "com.demo";
+        }
+        // 3. 输入生成类型
+        System.out.println("请输入生成类型（1-normal 2-swagger）：");
+        String inNormal = scanner.nextLine().trim();
+        boolean isNormal = !"2".equals(inNormal); // 仅输入2时为false，其余为true
+        // 关闭扫描器
+        scanner.close();
+
+        // 开始生成
+        SqlSession session = MyBatisConfig.getFactory().openSession();
+        DeMapper deMapper = session.getMapper(DeMapper.class);
+        List<CodeTab> codeTabList = new ArrayList<>();
+        for (TableName tabN : DeConfig.needOutTab) {
+            // 表名称
+            TableName tableName = deMapper.queryTableName(tabN.tableName());
+            // 表字段
+            List<OriTabCol> oriTabColList = deMapper.queryOriTabField(tabN.tableName());
+            // xml传参
+            if (tableName.comments() == null || tableName.comments().isEmpty()) {
+                tableName = tabN; // 若查出来的表注释为空,使用传参的注释
+            }
+            // 组装参数
+            codeTabList.add(GenCodeUtil.convertCodeCol(DeConfig.dbType, tableName, oriTabColList));
+        }
+        session.close();
+        // 调用生成器方法
+        GenCodeUtil.genCodeFile(DeConfig.outFileName, authorName, pkgPath, isNormal, codeTabList);
     }
 }
