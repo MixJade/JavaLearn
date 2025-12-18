@@ -13,8 +13,8 @@ import java.util.Map;
  * @since 2024-08-20 14:28:01
  */
 public final class FtlUtil {
-    // 创建配置类(顺便指定默认版本)
-    private static final Configuration cfa = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+    // 创建配置类(指定2.3.34版，支持record语法)
+    private static final Configuration cfa = new Configuration(Configuration.VERSION_2_3_34);
 
     static {
         // 设置模板路径，这里我们设置的是class路径下的templates文件夹

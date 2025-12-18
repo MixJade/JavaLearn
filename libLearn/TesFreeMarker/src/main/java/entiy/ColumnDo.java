@@ -1,8 +1,6 @@
 package entiy;
 
-import lombok.Getter;
 
-@Getter
 public class ColumnDo {
     String columnName;
     String comment;
@@ -14,5 +12,13 @@ public class ColumnDo {
 
     public void setColumnName(String columnName) {
         this.columnName = columnName;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public String getComment() {
+        return comment;
     }
 }
