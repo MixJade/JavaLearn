@@ -23,7 +23,7 @@ public final class ConvertCase {
     }
 
     /**
-     * 将大蛇形转为小驼峰
+     * 将蛇形转为小驼峰
      *
      * @param input 蛇形，如:DOG_PLAN、dog_plan
      * @return 小驼峰，如:dogPlan
