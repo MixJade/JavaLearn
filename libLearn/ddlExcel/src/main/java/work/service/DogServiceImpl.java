@@ -114,14 +114,7 @@ public class DogServiceImpl implements DogService {
     @Override
     public void genSqlTableDDL(String sqlName, DbType targetDb, boolean addDropSql) {
         List<TabXmlDo> tabXmlDoList = getTabXmlDoList();
-
-        System.out.printf("\n开始生成建表语句，从【%s】到【%s】%n", DogConfig.dbType, targetDb);
-        if (targetDb == DbType.MySql) {
-            // 生成建表语句: Oracle转MySql
-            GenSqlScr.tranTabToMySql(tabXmlDoList, sqlName, DogConfig.dbType, addDropSql);
-        } else if (targetDb == DbType.Oracle) {
-            // 生成建表语句: MySql转Oracle
-            GenSqlScr.tranTabToOracle(tabXmlDoList, sqlName, DogConfig.dbType, addDropSql);
-        }
+        // 开始生成建表语句
+        GenSqlScr.tranTabDDL(tabXmlDoList, sqlName, DogConfig.dbType, targetDb, addDropSql);
     }
 }

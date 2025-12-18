@@ -16,6 +16,11 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * 根据数据库类型不同，使用不同xml
+ *
+ * @since 2025-12-2 14:46
+ */
 public class MyBatisConfig {
     // 构建池化数据源
     private static DataSource buildDataSource() {

@@ -16,64 +16,48 @@ import java.util.List;
  * @since 2025-12-03 17:20:27
  */
 public class TestGenSqlScr {
-
     @Test
     public void testOracleToMysql() {
-        // 构建测试数据（Oracle类型）
-        List<TableDDL> ddlList = new ArrayList<>();
-        ddlList.add(new TableDDL("1", "ID", "NUMBER(19)", "主键ID", "Y", "Y", null));
-        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR2(50)", "用户姓名", "N", "Y", null));
-        ddlList.add(new TableDDL("3", "AGE", "NUMBER(3)", "年龄", "N", "N", "12"));
-        ddlList.add(new TableDDL("4", "BALANCE", "NUMBER(10,2)", "账户余额", "N", "N", null));
-        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATE", "创建时间", "N", "Y", "SYSDATE"));
-        ddlList.add(new TableDDL("6", "REMARK", "CLOB", "备注信息", "N", "N", null));
-
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), ddlList);
-        // 生成建表语句
+        // 测试Oracle到MySql建表语句
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), testOracleDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         tabXmlDos.add(tabXmlDo);
-        GenSqlScr.tranTabToMySql(tabXmlDos, "测试Oracle到MySql建表语句.sql", DbType.Oracle, false);
+        // 生成建表语句
+        GenSqlScr.tranTabDDL(tabXmlDos, "测试Oracle到MySql建表语句.sql", DbType.Oracle, DbType.MySql, false);
     }
 
     @Test
     public void testMysqlToOracle() {
-        // 构建测试数据（MySql类型）
-        List<TableDDL> ddlList = new ArrayList<>();
-        ddlList.add(new TableDDL("1", "ID", "BIGINT", "主键ID", "Y", "Y", null));
-        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR(50)", "用户姓名", "N", "Y", null));
-        ddlList.add(new TableDDL("3", "AGE", "INT", "年龄", "N", "N", "12"));
-        ddlList.add(new TableDDL("4", "BALANCE", "DECIMAL(10,2)", "账户余额", "N", "N", null));
-        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATETIME", "创建时间", "N", "Y", "CURRENT_TIMESTAMP"));
-        ddlList.add(new TableDDL("6", "REMARK", "TEXT", "备注信息", "N", "N", null));
-
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_info", "用户信息表"), ddlList);
+        // 测试MySql到Oracle建表语句
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_info", "用户信息表"), testMySqlDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         // 生成Oracle建表语句
-        GenSqlScr.tranTabToOracle(tabXmlDos, "测试MySql到Oracle建表语句.sql", DbType.MySql, true);
+        GenSqlScr.tranTabDDL(tabXmlDos, "测试MySql到Oracle建表语句.sql", DbType.MySql, DbType.Oracle, true);
     }
 
     @Test
     public void testMysqlToMysql() {
-        // 构建测试数据（MySql类型）
-        List<TableDDL> ddlList = new ArrayList<>();
-        ddlList.add(new TableDDL("1", "ID", "BIGINT", "主键ID", "Y", "Y", null));
-        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR(50)", "用户姓名", "N", "Y", null));
-        ddlList.add(new TableDDL("3", "AGE", "INT", "年龄", "N", "N", "12"));
-        ddlList.add(new TableDDL("4", "BALANCE", "DECIMAL(10,2)", "账户余额", "N", "N", null));
-        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATETIME", "创建时间", "N", "Y", "CURRENT_TIMESTAMP"));
-        ddlList.add(new TableDDL("6", "REMARK", "TEXT", "备注信息", "N", "N", null));
-
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_info", "用户信息表"), ddlList);
+        // 测试MySql到MySql建表语句
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("t_user_info", "用户信息表"), testMySqlDDL());
         List<TabXmlDo> tabXmlDos = new ArrayList<>();
         tabXmlDos.add(tabXmlDo);
         // 生成MySql建表语句
-        GenSqlScr.tranTabToMySql(tabXmlDos, "测试MySql到MySql建表语句.sql", DbType.MySql, true);
+        GenSqlScr.tranTabDDL(tabXmlDos, "测试MySql到MySql建表语句.sql", DbType.MySql, DbType.MySql, true);
     }
 
     @Test
     public void testOracleToOracle() {
+        // 测试Oracle到Oracle建表语句
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), testOracleDDL());
+        List<TabXmlDo> tabXmlDos = new ArrayList<>();
+        tabXmlDos.add(tabXmlDo);
+        // 生成Oracle建表语句
+        GenSqlScr.tranTabDDL(tabXmlDos, "测试Oracle到Oracle建表语句.sql", DbType.Oracle, DbType.Oracle, true);
+    }
+
+    private List<TableDDL> testOracleDDL() {
         // 构建测试数据（Oracle类型）
         List<TableDDL> ddlList = new ArrayList<>();
         ddlList.add(new TableDDL("1", "ID", "NUMBER(19)", "主键ID", "Y", "Y", null));
@@ -82,11 +66,18 @@ public class TestGenSqlScr {
         ddlList.add(new TableDDL("4", "BALANCE", "NUMBER(10,2)", "账户余额", "N", "N", null));
         ddlList.add(new TableDDL("5", "CREATE_TIME", "DATE", "创建时间", "N", "Y", "SYSDATE"));
         ddlList.add(new TableDDL("6", "REMARK", "CLOB", "备注信息", "N", "N", null));
+        return ddlList;
+    }
 
-        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_INFO", "表注释"), ddlList);
-        List<TabXmlDo> tabXmlDos = new ArrayList<>();
-        tabXmlDos.add(tabXmlDo);
-        // 生成Oracle建表语句
-        GenSqlScr.tranTabToOracle(tabXmlDos, "测试Oracle到Oracle建表语句.sql", DbType.Oracle, true);
+    private List<TableDDL> testMySqlDDL() {
+        // 构建测试数据（MySql类型）
+        List<TableDDL> ddlList = new ArrayList<>();
+        ddlList.add(new TableDDL("1", "ID", "BIGINT", "主键ID", "Y", "Y", null));
+        ddlList.add(new TableDDL("2", "USER_NAME", "VARCHAR(50)", "用户姓名", "N", "Y", null));
+        ddlList.add(new TableDDL("3", "AGE", "INT", "年龄", "N", "N", "12"));
+        ddlList.add(new TableDDL("4", "BALANCE", "DECIMAL(10,2)", "账户余额", "N", "N", null));
+        ddlList.add(new TableDDL("5", "CREATE_TIME", "DATETIME", "创建时间", "N", "Y", "CURRENT_TIMESTAMP"));
+        ddlList.add(new TableDDL("6", "REMARK", "TEXT", "备注信息", "N", "N", null));
+        return ddlList;
     }
 }

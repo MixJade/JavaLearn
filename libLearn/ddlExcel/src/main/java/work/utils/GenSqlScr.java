@@ -13,6 +13,26 @@ import java.util.stream.Collectors;
  * @since 2025-11-26 09:13:12
  */
 public class GenSqlScr {
+    /**
+     * 使用数据库字段生成建表语句（支持不同数据库迁移）
+     *
+     * @param tabXmlDos  生成所需表字段参数
+     * @param sqlName    生成的sql文件名称
+     * @param sourceDb   源数据库类型
+     * @param targetDb   目标数据库类型
+     * @param addDropSql 是否添加删表语句
+     * @return Oracle 建表 SQL
+     */
+    public static void tranTabDDL(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, DbType targetDb, boolean addDropSql) {
+        System.out.printf("\n开始生成建表语句，从【%s】到【%s】%n", sourceDb, targetDb);
+        if (targetDb == DbType.MySql) {
+            // 生成建表语句: Oracle转MySql
+            tranTabToMySql(tabXmlDos, sqlName, sourceDb, addDropSql);
+        } else if (targetDb == DbType.Oracle) {
+            // 生成建表语句: MySql转Oracle
+            tranTabToOracle(tabXmlDos, sqlName, sourceDb, addDropSql);
+        }
+    }
 
     // Oracle → MySql 字段类型映射表（可根据实际需求扩展）
     private static String mapOracleTypeToMysql(String oracleDataType) {
@@ -88,7 +108,7 @@ public class GenSqlScr {
      * @param addDropSql 是否添加删表语句
      * @return MySql 建表 SQL
      */
-    public static void tranTabToMySql(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
+    private static void tranTabToMySql(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
         // 默认值处理
         String actualEngine = "InnoDB";
         StringBuilder result = new StringBuilder();
@@ -256,7 +276,7 @@ public class GenSqlScr {
      * @param addDropSql 是否添加删表语句
      * @return Oracle 建表 SQL
      */
-    public static void tranTabToOracle(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
+    private static void tranTabToOracle(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
         StringBuilder result = new StringBuilder();
         for (TabXmlDo tabXmlDo : tabXmlDos) {
             // 表名保持大写（Oracle习惯）
