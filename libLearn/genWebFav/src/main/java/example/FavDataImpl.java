@@ -34,7 +34,8 @@ public class FavDataImpl implements IFavData {
                         new FavUrl("https://www.bootstrap.cn/doc/read/113.html", "bootstrap官网", IcoEnum.Bootstrap, "一些样式要从这里来", ""))),
                 new Lv2Dir("框架官网", List.of(
                         new FavUrl("https://www.axios-http.cn/docs/intro", "Axios官网", IcoEnum.axios, "前端请求", ""),
-                        new FavUrl("https://zh-hans.eslint.org/docs/latest/use/getting-started", "ESLint官网", IcoEnum.Eslint, "格式化工具", ""))))));
+                        new FavUrl("https://zh-hans.eslint.org/docs/latest/use/getting-started", "ESLint官网", IcoEnum.Eslint, "格式化工具", "")))
+        )));
         // 一级菜单：补充知识
         lv1DirList.add(new Lv1Dir("补充知识", "2024-6-11 17:52", List.of(
                 new Lv2Dir("前端知识", List.of(
@@ -49,7 +50,8 @@ public class FavDataImpl implements IFavData {
                         new FavUrl("https://zhuanlan.zhihu.com/p/96721026", "前端尺寸vw|vh|rem|em", IcoEnum.webPage, "了解即可", ""))),
                 new Lv2Dir("杂项", List.of(
                         new FavUrl("https://blog.csdn.net/hunt_er/article/details/81427804", "无Java环境下运行jar文件", IcoEnum.csdn, "感觉不如IDE", ""),
-                        new FavUrl("https://gitee.com/haojunchuan/web_every_day/tree/master/parallax_website", "别人的仓库", IcoEnum.webPage, "我会吸收一些东西", ""))))));
+                        new FavUrl("https://gitee.com/haojunchuan/web_every_day/tree/master/parallax_website", "别人的仓库", IcoEnum.webPage, "我会吸收一些东西", "")))
+        )));
         // 一级菜单：小小工具
         lv1DirList.add(new Lv1Dir("小小工具", "2024-6-11 21:26", List.of(
                 new Lv2Dir("配色", List.of(
@@ -59,7 +61,8 @@ public class FavDataImpl implements IFavData {
                         new FavUrl("https://uiverse.io/cards", "UI_Verse", IcoEnum.webPage, "不错的css样式库，但代码有冗余，记得清理", ""),
                         new FavUrl("https://cdn.bootcdn.net/ajax/libs/bootstrap/5.2.3/css/bootstrap.css", "BootStrap的css", IcoEnum.Bootstrap, "老大哥，直接copy", ""))),
                 new Lv2Dir("工具", List.of(
-                        new FavUrl("https://tooltt.com/json2typescript/", "Json转Ts接口", IcoEnum.webPage, "在线网站，JSON键要加双引号", ""))))));
+                        new FavUrl("https://tooltt.com/json2typescript/", "Json转Ts接口", IcoEnum.webPage, "在线网站，JSON键要加双引号", "")))
+        )));
 
         return lv1DirList;
     }
