@@ -12,10 +12,12 @@
 <#-- @formatter:off -->
 package ${pack}.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import ${pack}.${tab.lJNm()};
 import ${pack}.service.${serviceName};
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,22 @@ public class ${tab.lJNm()}Controller {
     @Autowired
     public ${controllerName}(${serviceName} ${serviceNameLower}) {
         this.${serviceNameLower} = ${serviceNameLower};
+    }
+
+    /**
+     * 分页条件查询信息
+     *
+     * @param pageNum  页码
+     * @param pageSize 每页显示数量
+     * @param ${tab.sJNm()} ${tab.tb().comments()}查询模型
+     * @author ${author}
+     * @date ${date}
+     */
+    @Operation(summary = "分页条件查询信息")
+    @Parameters({@Parameter(name = "pageNum", description = "页码", required = true, in = ParameterIn.QUERY), @Parameter(name = "pageSize", description = "每页显示数量", required = true, in = ParameterIn.QUERY)})
+    @RequestMapping(value = "/query-by-like", method = RequestMethod.POST)
+    public IPage<${tab.lJNm()}> queryByLike(@RequestParam @Min(1) Integer pageNum, @RequestParam @Min(1) Integer pageSize, @RequestBody ${tab.lJNm()} ${tab.sJNm()}) {
+        return ${serviceNameLower}.queryByLike(pageNum, pageSize, ${tab.sJNm()});
     }
 
     /**

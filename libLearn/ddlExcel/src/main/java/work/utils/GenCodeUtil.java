@@ -142,22 +142,35 @@ public final class GenCodeUtil {
         String useTemp = isNormal ? "normal/" : "swagger/";
         for (CodeTab codeTab : codeTabs) {
             dataModel.put("tab", codeTab);
+            String serviceName = codeTab.lJNm() + "Service";
+            if (isNormal) serviceName = "I" + serviceName;
+            dataModel.put("serviceName", serviceName);
             // 加载模板并渲染, 返回生成的代码,输出为文件
             System.out.println("=".repeat(15) + " 开始生成 " + codeTab.lJNm() + " " + "=".repeat(15));
             // 生成controller
             StrToFile.toFilePath(
                     FtlUtil.fillTempStr(dataModel, useTemp + "controller.java.ftl"),
-                    Path.of(rootDir, outDir, "controller", codeTab.lJNm() + "Controller.java")
+                    Path.of(rootDir, outDir, "controller", String.format("%sController.java", codeTab.lJNm()))
             );
             // 生成实体类
             StrToFile.toFilePath(
                     FtlUtil.fillTempStr(dataModel, useTemp + "entity.java.ftl"),
-                    Path.of(rootDir, outDir, "entity", codeTab.lJNm() + ".java")
+                    Path.of(rootDir, outDir, "model", "entity", String.format("%s.java", codeTab.lJNm()))
             );
             // 生成Ts实体类
             StrToFile.toFilePath(
                     FtlUtil.fillTempStr(dataModel, useTemp + "tsEntity.ts.ftl"),
-                    Path.of(rootDir, outDir, "tsEntity", codeTab.lJNm() + ".ts")
+                    Path.of(rootDir, outDir, "tsEntity", String.format("%s.ts", codeTab.lJNm()))
+            );
+            // 生成Service
+            StrToFile.toFilePath(
+                    FtlUtil.fillTempStr(dataModel, useTemp + "service.java.ftl"),
+                    Path.of(rootDir, outDir, "service", String.format("%s.java", serviceName))
+            );
+            // 生成ServiceImpl
+            StrToFile.toFilePath(
+                    FtlUtil.fillTempStr(dataModel, useTemp + "serviceImpl.java.ftl"),
+                    Path.of(rootDir, outDir, "service", "impl", String.format("%sServiceImpl.java", codeTab.lJNm()))
             );
         }
     }

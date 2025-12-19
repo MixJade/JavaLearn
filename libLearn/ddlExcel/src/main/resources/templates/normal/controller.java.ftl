@@ -2,9 +2,9 @@
 <#-- @ftlvariable name="date" type="java.lang.String" -->
 <#-- @ftlvariable name="author" type="java.lang.String" -->
 <#-- @ftlvariable name="pack" type="java.lang.String" -->
+<#-- @ftlvariable name="serviceName" type="java.lang.String" -->
 <#-- @ftlvariable name="tab" type="work.model.dto.CodeTab" -->
 <#-- 定义变量：Service名称 -->
-<#assign serviceName = "I${tab.lJNm()}Service">
 <#assign serviceNameLower = "${tab.sJNm()}Service">
 <#-- 定义变量：Controller名称 -->
 <#assign controllerName = tab.lJNm()+"Controller">
