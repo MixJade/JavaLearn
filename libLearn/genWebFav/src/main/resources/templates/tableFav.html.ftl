@@ -11,7 +11,7 @@
     <title>${htmlTit}</title>
 <#--    <link href="tableFav.min.css" rel="stylesheet">-->
     <style><#include "tableFav.min.css.ftl" /></style>
-    <link href='icoLogo/${mainIco.getIcoName()}' rel="icon" type="image/png"/>
+    <link href='logos/${mainIco.getIcoName()}' rel="icon" type="image/png"/>
 </head>
 <body>
 <nav id="headNav">
@@ -32,7 +32,7 @@
             <#list lv2Dir.favUrls() as j>
             <td>
                 <div title="${j.remark()}">
-                    <img src="icoLogo/${j.icoEnum().getIcoName()}" alt="ico">
+                    <img src="logos/${j.icoEnum().getIcoName()}" alt="ico">
                     <a href="${j.href()}">${j.name()}</a>
                     <#if j.remark()!=''>...</#if><#if j.pwd()!=''>
                     <button type="button" onclick="geCopy('${j.pwd()}')">复密</button><span class="btnDot"></span></#if>
