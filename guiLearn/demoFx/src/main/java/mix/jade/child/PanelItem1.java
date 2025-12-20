@@ -20,6 +20,8 @@ public class PanelItem1 implements Initializable {
     public Label checkText;
 
     private Person nowPerson;
+    // 保存数据源引用
+    private ObservableList<Person> personList;
 
 
     @Override
@@ -30,14 +32,14 @@ public class PanelItem1 implements Initializable {
         age.setCellValueFactory(new PropertyValueFactory<>("age"));
 
         // 创建并添加数据到表格中
-        ObservableList<Person> data = FXCollections.observableArrayList(
+        personList = FXCollections.observableArrayList(
                 new Person("张三", 23),
                 new Person("李四", 44),
                 new Person("王五", 25)
         );
-        tableView.setItems(data);
+        tableView.setItems(personList);
 
-        // 设置每行点击事件
+        // 设置每行点击事件（保持不变）
         tableView.setRowFactory(tv -> {
             TableRow<Person> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -70,9 +72,19 @@ public class PanelItem1 implements Initializable {
             Dialog<Person> dialog = new PanelItem1Dialog(nowPerson);
             // 显示对话框，并获取结果
             Person result = dialog.showAndWait().orElse(null);
-            // 输出结果
+            // 输出结果并更新数据源
             if (result != null) {
                 System.out.println("输入数值: " + result);
+                // 找到原对象在列表中的位置
+                int index = personList.indexOf(nowPerson);
+                if (index != -1) {
+                    // 替换原对象（会自动通知表格刷新）
+                    personList.set(index, result);
+                    // 更新当前选中对象的引用
+                    nowPerson = result;
+                    // 更新显示的选中文本
+                    checkText.setText("当前选中值:" + result.getName());
+                }
             }
         }
     }
@@ -82,9 +94,11 @@ public class PanelItem1 implements Initializable {
         Dialog<Person> dialog = new PanelItem1Dialog(new Person());
         // 显示对话框，并获取结果
         Person result = dialog.showAndWait().orElse(null);
-        // 输出结果
+        // 输出结果并添加到数据源
         if (result != null) {
             System.out.println("输入数值: " + result);
+            // 添加新对象到列表（会自动通知表格刷新）
+            personList.add(result);
         }
     }
 }
