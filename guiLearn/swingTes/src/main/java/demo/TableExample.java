@@ -4,6 +4,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.text.NumberFormat;
@@ -16,7 +17,12 @@ import java.util.List;
  * @since 2024-08-30 16:09:57
  */
 public class TableExample {
-    public static void main(String[] args) {
+    private final JTextField nameInput = new JTextField();
+    private final JFormattedTextField ageInput = new JFormattedTextField();
+    private int selectRow = 0;
+    private MyData selectData = new MyData("默认名称", 1, false);
+
+    public TableExample() {
         FlatMacLightLaf.setup();
         // 窗口属性
         JFrame frame = new JFrame();
@@ -43,17 +49,24 @@ public class TableExample {
             }
             int row = table.getSelectedRow();
             if (row != -1) {
+                selectRow = row;
+                MyData rowData = tableModel.getRowData(row);
+                selectData = rowData;
+                nameInput.setText(selectData.name());
+                ageInput.setText(String.valueOf(selectData.age()));
                 // 打印选中行的数据
-                System.out.println(tableModel.getRowData(row));
+                System.out.println(rowData);
             }
         });
 
         // 设置删除按钮
-        JButton delSixBtn = new JButton("删除老六");
-        delSixBtn.addActionListener(e -> tableModel.removeRowData(4));
+        JButton delSixBtn = new JButton("删除所选");
+        delSixBtn.addActionListener(e -> tableModel.removeRowData(selectRow));
         // 设置更新按钮
-        JButton updSixBtn = new JButton("更新星君");
-        updSixBtn.addActionListener(e -> tableModel.updateRowData(2));
+        JButton updSixBtn = new JButton("更新所选");
+        updSixBtn.addActionListener(e -> tableModel.updateRowData(selectRow, new MyData(
+                nameInput.getText(), Integer.parseInt(ageInput.getText()), selectData.sex()
+        )));
         // 按钮加入顶部面板
         JPanel topPanel = new JPanel();
         topPanel.add(delSixBtn);
@@ -68,19 +81,19 @@ public class TableExample {
         JPanel rightPanel = new JPanel(); // 布局GridLayout，每行有2列;
         // 姓名
         JLabel nameLabel = new JLabel("姓名");
-        JTextField nameInput = new JTextField();
+        nameInput.setText(selectData.name());
         rightPanel.add(nameLabel);
         rightPanel.add(nameInput);
         // 年龄(数字输入框)
         JLabel ageLabel = new JLabel("年龄");
-        NumberFormat format = NumberFormat.getInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0);
-        formatter.setMaximum(Integer.MAX_VALUE);
-        formatter.setAllowsInvalid(false);
-        // 如果你想要提交编辑，你也可以在这里调用 formatter.setCommitsOnValidEdit(true);
-        JFormattedTextField ageInput = new JFormattedTextField(formatter);
+        ageInput.setFormatterFactory(new DefaultFormatterFactory(
+                new NumberFormatter(NumberFormat.getInstance()) {{
+                    setValueClass(Integer.class);
+                    setMinimum(0);
+                    setMaximum(Integer.MAX_VALUE);
+                    setAllowsInvalid(false);
+                }}));
+        ageInput.setText(String.valueOf(selectData.age()));
         rightPanel.add(ageLabel);
         rightPanel.add(ageInput);
 
@@ -93,6 +106,10 @@ public class TableExample {
         // frame.pack(); // 调整框架的大小以适应其所有的子组件
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        new TableExample();
     }
 }
 
@@ -153,9 +170,9 @@ class MyTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public void updateRowData(int index) {
+    public void updateRowData(int index, MyData myData) {
         System.out.println("更新:" + getRowData(index).name());
-        data.set(index, new MyData("恶堕星君", 324, false));
+        data.set(index, myData);
         // 最后调用这个方法来刷新一行数据
         fireTableRowsUpdated(index, index);
     }
