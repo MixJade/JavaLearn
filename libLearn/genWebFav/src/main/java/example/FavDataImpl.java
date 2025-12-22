@@ -4,6 +4,7 @@ import entiy.FavUrl;
 import entiy.Lv1Dir;
 import entiy.Lv2Dir;
 import enums.IcoEnum;
+import utils.GenFavUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.List;
 public class FavDataImpl implements IFavData {
     @Override
     public String favDir() {
-        return "生成结果/";
+        // 在根目录创建文件夹
+        return "/genFav/demo";
     }
 
     @Override
@@ -105,5 +107,10 @@ public class FavDataImpl implements IFavData {
         }));
 
         return lv1DirList;
+    }
+
+    public static void main(String[] args) {
+        IFavData favData = new FavDataImpl();
+        GenFavUtil.genFav(favData);
     }
 }

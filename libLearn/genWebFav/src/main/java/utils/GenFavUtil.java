@@ -1,11 +1,10 @@
+package utils;
+
 import entiy.FavUrl;
 import entiy.Lv1Dir;
 import entiy.Lv2Dir;
 import enums.IcoEnum;
-import example.FavDataImpl;
 import example.IFavData;
-import utils.FtlUtil;
-import utils.ToFileUtil;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -13,9 +12,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class GenFavMain {
-    public static void main(String[] args) {
-        IFavData favData = new FavDataImpl();
+/**
+ * 生成收藏夹工具
+ *
+ * @since 2025-12-22 09:17:24
+ */
+public class GenFavUtil {
+    public static void genFav(IFavData favData) {
         // 创建数据模型
         Map<String, Object> dataModel = new HashMap<>();
         dataModel.put("lv1DirList", favData.lv1DirList());
