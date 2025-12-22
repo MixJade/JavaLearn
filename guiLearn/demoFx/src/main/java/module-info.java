@@ -7,5 +7,5 @@ module mix.jade {
     exports mix.jade;
     exports mix.jade.child;
     opens mix.jade.child to javafx.fxml;
-    exports mix.jade.entiy;
+    exports mix.entiy;
 }

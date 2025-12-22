@@ -26,12 +26,12 @@ public class WorldController implements Initializable {
 
     @FXML
     public void changeScene() {
-        HelloApplication.switchScene(1);
+        StartApp.switchScene(1);
     }
 
     @FXML
     public void changeScene3() {
-        HelloApplication.switchScene(3);
+        StartApp.switchScene(3);
     }
 
     /**
@@ -82,7 +82,7 @@ public class WorldController implements Initializable {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
         //显示打开文件对话框并获取选定的文件（将文件选择器对象传递给showOpenDialog方法以显示文件选择器对话桓）
-        File file = fileChooser.showOpenDialog(HelloApplication.getStage());
+        File file = fileChooser.showOpenDialog(StartApp.getStage());
         if (file != null) {
             output.setText("所选文件名称：" + file.getName() + "\n路径" + file.getPath());
         }

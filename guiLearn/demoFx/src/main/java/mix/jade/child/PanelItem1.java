@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import mix.jade.entiy.Person;
+import mix.entiy.Person;
 
 import java.net.URL;
 import java.util.ResourceBundle;

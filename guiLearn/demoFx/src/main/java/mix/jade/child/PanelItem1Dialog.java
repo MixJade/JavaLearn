@@ -5,7 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import mix.jade.entiy.Person;
+import mix.entiy.Person;
 
 import java.util.regex.Pattern;
 

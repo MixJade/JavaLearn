@@ -1,4 +1,4 @@
-package mix.jade.entiy;
+package mix.entiy;
 
 @SuppressWarnings({"unused"})
 public class Person {

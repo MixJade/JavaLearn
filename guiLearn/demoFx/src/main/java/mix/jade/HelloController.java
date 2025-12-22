@@ -53,6 +53,6 @@ public class HelloController {
 
     @FXML
     public void changeScene() {
-        HelloApplication.switchScene(2);
+        StartApp.switchScene(2);
     }
 }
