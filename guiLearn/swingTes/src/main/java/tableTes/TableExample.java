@@ -1,14 +1,10 @@
-package demo;
+package tableTes;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +13,10 @@ import java.util.List;
  * @since 2024-08-30 16:09:57
  */
 public class TableExample {
-    private final JTextField nameInput = new JTextField();
-    private final JFormattedTextField ageInput = new JFormattedTextField();
+    private final JTextField nameInput = new JTextField(),
+            ageInput = new JTextField();
     private int selectRow = 0;
-    private MyData selectData = new MyData("默认名称", 1, false);
+    private MyData selectData = new MyData("默认名称", "0", false);
 
     public TableExample() {
         FlatMacLightLaf.setup();
@@ -65,7 +61,7 @@ public class TableExample {
         // 设置更新按钮
         JButton updSixBtn = new JButton("更新所选");
         updSixBtn.addActionListener(e -> tableModel.updateRowData(selectRow, new MyData(
-                nameInput.getText(), Integer.parseInt(ageInput.getText()), selectData.sex()
+                nameInput.getText(), ageInput.getText(), selectData.sex()
         )));
         // 按钮加入顶部面板
         JPanel topPanel = new JPanel();
@@ -84,16 +80,9 @@ public class TableExample {
         nameInput.setText(selectData.name());
         rightPanel.add(nameLabel);
         rightPanel.add(nameInput);
-        // 年龄(数字输入框)
+        // 年龄
         JLabel ageLabel = new JLabel("年龄");
-        ageInput.setFormatterFactory(new DefaultFormatterFactory(
-                new NumberFormatter(NumberFormat.getInstance()) {{
-                    setValueClass(Integer.class);
-                    setMinimum(0);
-                    setMaximum(Integer.MAX_VALUE);
-                    setAllowsInvalid(false);
-                }}));
-        ageInput.setText(String.valueOf(selectData.age()));
+        ageInput.setText(selectData.age());
         rightPanel.add(ageLabel);
         rightPanel.add(ageInput);
 
@@ -110,18 +99,6 @@ public class TableExample {
 
     public static void main(String[] args) {
         new TableExample();
-    }
-}
-
-record MyData(String name, int age, boolean sex) {
-    static List<MyData> getMyDataList() {
-        ArrayList<MyData> myDataList = new ArrayList<>();
-        myDataList.add(new MyData("张三", 23, true));
-        myDataList.add(new MyData("李四", 34, true));
-        myDataList.add(new MyData("亢龙星君", 323, false));
-        myDataList.add(new MyData("王五", 55, true));
-        myDataList.add(new MyData("老六", 66, false));
-        return myDataList;
     }
 }
 
