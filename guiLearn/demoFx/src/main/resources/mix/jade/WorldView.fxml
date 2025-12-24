@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.VBox?>
 <VBox alignment="CENTER" spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="mix.jade.WorldController"
+      fx:controller="mix.jade.WorldView"
       prefHeight="400.0" prefWidth="600.0"
       stylesheets="@css/world.css">
     <Label text="这是一个新的页面"/>

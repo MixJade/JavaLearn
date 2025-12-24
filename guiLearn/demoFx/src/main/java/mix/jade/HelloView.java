@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class HelloController {
+public class HelloView {
     @FXML
     public TextField myTextField;
     @FXML

@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
-public class WorldController implements Initializable {
+public class WorldView implements Initializable {
     @FXML
     private TextArea output;
 

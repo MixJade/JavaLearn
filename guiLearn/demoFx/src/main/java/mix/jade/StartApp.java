@@ -45,7 +45,7 @@ public class StartApp extends Application {
                 case 1 -> {
                     if (scene_1 == null) {
                         System.out.println("场景1初始化");
-                        FXMLLoader firstFXML = new FXMLLoader(StartApp.class.getResource("hello-view.fxml"));
+                        FXMLLoader firstFXML = new FXMLLoader(StartApp.class.getResource("HelloView.fxml"));
                         scene_1 = new Scene(firstFXML.load(), 620, 240);
                     }
                     stage.setScene(scene_1);
@@ -54,7 +54,7 @@ public class StartApp extends Application {
                 case 2 -> {
                     if (scene_2 == null) {
                         System.out.println("场景2初始化");
-                        FXMLLoader secondFXML = new FXMLLoader(StartApp.class.getResource("world-view.fxml"));
+                        FXMLLoader secondFXML = new FXMLLoader(StartApp.class.getResource("worldView.fxml"));
                         scene_2 = new Scene(secondFXML.load(), 300, 275);
                     }
                     stage.setScene(scene_2);
@@ -63,7 +63,7 @@ public class StartApp extends Application {
                 case 3 -> {
                     if (scene_3 == null) {
                         System.out.println("场景3初始化");
-                        FXMLLoader secondFXML = new FXMLLoader(StartApp.class.getResource("panel-view.fxml"));
+                        FXMLLoader secondFXML = new FXMLLoader(StartApp.class.getResource("panelView.fxml"));
                         scene_3 = new Scene(secondFXML.load(), 600, 400);
                     }
                     stage.setScene(scene_3);
