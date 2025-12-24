@@ -9,10 +9,10 @@ import java.awt.*;
 public class FormDialog extends JDialog {
     // 表单组件
     private final JTextField nameField = new JTextField(20),
-            ageField = new JTextField(20),
-            emailField = new JTextField(20);
+            ageField = new JTextField(20);
+    private final JComboBox<String> sexSelect = new JComboBox<>();
     // 存储表单结果
-    private String[] formData;
+    private MyData formData;
     // 确认按钮状态标记
     private boolean confirmed = false;
 
@@ -65,7 +65,9 @@ public class FormDialog extends JDialog {
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        add(emailField, gbc);
+        sexSelect.addItem("男");
+        sexSelect.addItem("女");
+        add(sexSelect, gbc);
 
         // 按钮行
         gbc.gridx = 0;
@@ -80,11 +82,11 @@ public class FormDialog extends JDialog {
         // 确认按钮事件
         confirmBtn.addActionListener(e -> {
             // 收集表单数据
-            formData = new String[]{
+            formData = new MyData(
                     nameField.getText().trim(),
                     ageField.getText().trim(),
-                    emailField.getText().trim()
-            };
+                    sexSelect.getSelectedIndex() == 0
+            );
             confirmed = true;
             dispose(); // 关闭弹窗
         });
@@ -106,7 +108,7 @@ public class FormDialog extends JDialog {
     public void setInitialData(MyData myData) {
         nameField.setText(myData.name());
         ageField.setText(myData.age());
-        emailField.setText(myData.sex() ? "男" : "女");
+        sexSelect.setSelectedIndex(myData.sex() ? 0 : 1);
     }
 
     /**
@@ -114,7 +116,7 @@ public class FormDialog extends JDialog {
      *
      * @return 表单数据数组 [姓名, 年龄, 性别]
      */
-    public String[] getFormData() {
+    public MyData getFormData() {
         return formData;
     }
 
@@ -125,40 +127,5 @@ public class FormDialog extends JDialog {
      */
     public boolean isConfirmed() {
         return confirmed;
-    }
-
-    // 测试主方法
-    public static void main(String[] args) {
-        // 在事件调度线程中运行Swing组件
-        SwingUtilities.invokeLater(() -> {
-            // 创建主窗口
-            JFrame mainFrame = new JFrame("主窗口");
-            mainFrame.setSize(500, 400);
-            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainFrame.setLayout(new FlowLayout());
-
-            // 测试按钮 - 打开表单弹窗
-            JButton openDialogBtn = new JButton("打开表单弹窗");
-            openDialogBtn.addActionListener(e -> {
-                // 创建并显示弹窗
-                FormDialog dialog = new FormDialog(mainFrame, "用户信息编辑");
-                dialog.setInitialData(new MyData("张三", "25", true));
-                dialog.setVisible(true);
-
-                // 获取弹窗返回结果
-                if (dialog.isConfirmed()) {
-                    String[] result = dialog.getFormData();
-                    System.out.println(
-                            "你修改后的信息：\n" +
-                                    "姓名：" + result[0] + "\n" +
-                                    "年龄：" + result[1] + "\n" +
-                                    "性别：" + result[2]
-                    );
-                }
-            });
-            mainFrame.setLocationRelativeTo(null); //此语句将窗口定位在屏幕的中央
-            mainFrame.add(openDialogBtn);
-            mainFrame.setVisible(true);
-        });
     }
 }

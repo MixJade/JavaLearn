@@ -38,12 +38,14 @@ public class SelectDemo {
             getValueBtn.addActionListener(e -> {
                 KeyValueItem selectedCity = (KeyValueItem) cityComboBox.getSelectedItem(); // 获取选中的对象
                 String selectedGender = (String) genderComboBox.getSelectedItem();
+                // 获取选中索引
+                int selectedGenderIndex = genderComboBox.getSelectedIndex();
 
                 // 弹窗展示结果
                 assert selectedCity != null;
                 JOptionPane.showMessageDialog(frame,
                         "选中城市：" + selectedCity.key() + "_" + selectedCity.value() +
-                                "\n选中性别：" + selectedGender,
+                                "\n选中性别：" + selectedGender + "_索引:" + selectedGenderIndex,
                         "选中结果",
                         JOptionPane.INFORMATION_MESSAGE);
             });
