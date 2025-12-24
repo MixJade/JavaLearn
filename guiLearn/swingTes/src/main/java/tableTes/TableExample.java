@@ -12,8 +12,6 @@ import java.util.List;
  * @since 2024-08-30 16:09:57
  */
 public class TableExample extends JFrame {
-    private final JTextField nameInput = new JTextField(),
-            ageInput = new JTextField();
     private int selectRow = -1;
     private MyData selectData = new MyData("默认名称", "0", false);
     FormDialog dialog = new FormDialog(this, "用户信息编辑");
@@ -47,8 +45,6 @@ public class TableExample extends JFrame {
                 selectRow = row;
                 MyData rowData = tableModel.getRowData(row);
                 selectData = rowData;
-                nameInput.setText(selectData.name());
-                ageInput.setText(selectData.age());
                 // 打印选中行的数据
                 System.out.println(rowData);
             }
@@ -56,7 +52,10 @@ public class TableExample extends JFrame {
 
         // 设置删除按钮
         JButton delSixBtn = new JButton("删除所选");
-        delSixBtn.addActionListener(e -> tableModel.removeRowData(selectRow));
+        delSixBtn.addActionListener(e -> {
+            tableModel.removeRowData(selectRow);
+            selectRow = -1;
+        });
         // 设置更新按钮
         JButton updSixBtn = new JButton("更新所选");
         updSixBtn.addActionListener(e -> {
@@ -69,10 +68,22 @@ public class TableExample extends JFrame {
                 tableModel.updateRowData(selectRow, dialog.getFormData());
             }
         });
+        // 设置新增按钮
+        JButton addBtn = new JButton("新增");
+        addBtn.addActionListener(e -> {
+            // 创建并显示弹窗
+            dialog.setInitialData(new MyData("", "0", false));
+            dialog.setVisible(true);
+            // 获取弹窗返回结果
+            if (dialog.isConfirmed()) {
+                tableModel.addRowData(dialog.getFormData());
+            }
+        });
         // 按钮加入顶部面板
         JPanel topPanel = new JPanel();
         topPanel.add(delSixBtn);
         topPanel.add(updSixBtn);
+        topPanel.add(addBtn);
 
         // 底部分页条
         JPanel bottomPanel = new JPanel();

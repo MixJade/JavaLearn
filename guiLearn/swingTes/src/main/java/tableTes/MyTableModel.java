@@ -56,4 +56,11 @@ class MyTableModel extends AbstractTableModel {
         // 最后调用这个方法来刷新一行数据
         fireTableRowsUpdated(index, index);
     }
+
+    public void addRowData(MyData myData) {
+        System.out.println("新增:" + myData.name());
+        data.add(myData);
+        // 最后调用这个方法来刷新整个表格数据
+        fireTableDataChanged();
+    }
 }
