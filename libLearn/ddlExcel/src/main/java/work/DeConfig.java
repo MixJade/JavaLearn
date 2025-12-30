@@ -3,8 +3,6 @@ package work;
 import work.enums.DbType;
 import work.model.entity.TableName;
 
-import java.util.List;
-
 /**
  * 表结构生成器的全局配置
  *
@@ -27,9 +25,9 @@ public interface DeConfig {
             author = "MixJade";
 
     // 需要输出的表名
-    List<TableName> needOutTab = List.of(
+    TableName[] needOutTab = new TableName[]{
             new TableName("students", "学生表"),
             new TableName("societys", "社团表"),
-            new TableName("dog", "") // 若数据库有表注释，可以不写
-    );
+            new TableName("dog", ""), // 若数据库有表注释，可以不写
+    };
 }
