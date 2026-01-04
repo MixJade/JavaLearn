@@ -2,13 +2,13 @@ package enums;
 
 public enum IcoEnum {
     axios("axios.png"),
-    Bootstrap("Bootstrap.png"),
+    bootstrap("Bootstrap.png"),
     container("container.png"),
     crc("crc.png"),
     csdn("csdn.png"),
     dhc("dhc.png"),
     elementPlus("elementPlus.svg"),
-    Eslint("Eslint.png"),
+    eslint("Eslint.png"),
     excel("excel.png"),
     excelPlus("excelPlus.png"),
     fotic("fotic.png"),
@@ -26,7 +26,7 @@ public enum IcoEnum {
     vue("vue.svg"),
     web("web.png"),
     word("word.png"),
-    WuliHub("WuliHub.png"),
+    wuliHub("WuliHub.png"),
     xxlJob("xxlJob.png"),
     zentao("zentao.png");
 

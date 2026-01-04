@@ -44,11 +44,11 @@ public class FavDataImpl implements IFavData {
                 new Lv2Dir("样式参考", new FavUrl[]{
                         new FavUrl("Sass官网教程", "https://www.sass.hk/docs/", IcoEnum.sass, "但不建议看这个", ""),
                         new FavUrl("Sass菜鸟教程", "https://www.runoob.com/sass/sass-install.html", IcoEnum.sass, "这个写的不错", ""),
-                        new FavUrl("bootstrap官网", "https://www.bootstrap.cn/doc/read/113.html", IcoEnum.Bootstrap, "一些样式要从这里来", ""),
+                        new FavUrl("bootstrap官网", "https://www.bootstrap.cn/doc/read/113.html", IcoEnum.bootstrap, "一些样式要从这里来", ""),
                 }),
                 new Lv2Dir("框架官网", new FavUrl[]{
                         new FavUrl("Axios官网", "https://www.axios-http.cn/docs/intro", IcoEnum.axios, "前端请求", ""),
-                        new FavUrl("ESLint官网", "https://zh-hans.eslint.org/docs/latest/use/getting-started", IcoEnum.Eslint, "格式化工具", ""),
+                        new FavUrl("ESLint官网", "https://zh-hans.eslint.org/docs/latest/use/getting-started", IcoEnum.eslint, "格式化工具", ""),
                 }),
         }));
         // 一级菜单：补充知识
@@ -78,7 +78,7 @@ public class FavDataImpl implements IFavData {
                 }),
                 new Lv2Dir("样式", new FavUrl[]{
                         new FavUrl("UI_Verse", "https://uiverse.io/cards", IcoEnum.web, "不错的css样式库，但代码有冗余，记得清理", ""),
-                        new FavUrl("BootStrap的css", "https://cdn.bootcdn.net/ajax/libs/bootstrap/5.2.3/css/bootstrap.css", IcoEnum.Bootstrap, "老大哥，直接copy", ""),
+                        new FavUrl("BootStrap的css", "https://cdn.bootcdn.net/ajax/libs/bootstrap/5.2.3/css/bootstrap.css", IcoEnum.bootstrap, "老大哥，直接copy", ""),
                 }),
                 new Lv2Dir("工具", new FavUrl[]{
                         new FavUrl("Json转Ts接口", "https://tooltt.com/json2typescript/", IcoEnum.web, "在线网站，JSON键要加双引号", ""),
@@ -100,7 +100,7 @@ public class FavDataImpl implements IFavData {
                         new FavUrl("pdf", "#", IcoEnum.pdf, "", ""),
                         new FavUrl("swagger", "#", IcoEnum.swagger, "", ""),
                         new FavUrl("word", "#", IcoEnum.word, "", ""),
-                        new FavUrl("WuliHub", "#", IcoEnum.WuliHub, "", ""),
+                        new FavUrl("WuliHub", "#", IcoEnum.wuliHub, "", ""),
                         new FavUrl("xxlJob", "#", IcoEnum.xxlJob, "", ""),
                         new FavUrl("禅道", "#", IcoEnum.zentao, "", ""),
                 }),
