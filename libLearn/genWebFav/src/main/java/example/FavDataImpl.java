@@ -103,6 +103,7 @@ public class FavDataImpl implements IFavData {
                         new FavUrl("WuliHub", "#", IcoEnum.wuliHub, "", ""),
                         new FavUrl("xxlJob", "#", IcoEnum.xxlJob, "", ""),
                         new FavUrl("禅道", "#", IcoEnum.zentao, "", ""),
+                        new FavUrl("caitc", "#", IcoEnum.caitc, "", ""),
                 }),
         }));
 

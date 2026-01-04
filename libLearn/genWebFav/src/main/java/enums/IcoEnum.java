@@ -4,6 +4,7 @@ public enum IcoEnum {
     axios("axios.png"),
     bootstrap("Bootstrap.png"),
     container("container.png"),
+    caitc("caitc.jpg"),
     crc("crc.png"),
     csdn("csdn.png"),
     dhc("dhc.png"),
