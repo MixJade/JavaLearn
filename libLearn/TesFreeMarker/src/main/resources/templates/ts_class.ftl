@@ -7,7 +7,7 @@
 export class ${className} {
 <#-- 遍历字段：生成带注释的属性定义 -->
 <#list columns as column>
-    ${column.columnName}: string; // ${column.comment}
+    ${column.columnName}: string;<#if column.comment!?length gt 0> // ${column.comment}</#if>
 </#list>
 <#-- 构造函数-->
     constructor(

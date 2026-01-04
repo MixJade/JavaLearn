@@ -1,4 +1,4 @@
-package example;
+package tsClass;
 
 import entiy.ColumnDo;
 import utils.ConvertCase;
