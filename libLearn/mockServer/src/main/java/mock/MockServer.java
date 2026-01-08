@@ -23,7 +23,9 @@ public class MockServer {
     public void mountApi(ApiConf[] apiConfs) {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-            // 创建 /login 路由处理器
+            // 意外请求日志处理器
+            server.createContext("/", new GlobalReqHandler());
+            // 创建其它路由处理器
             for (ApiConf apiConf : apiConfs) {
                 server.createContext(apiConf.path(), new MockHandler("src/main/resources/" + mockDir + "/" + apiConf.jsonName()));
             }
