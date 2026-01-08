@@ -14,7 +14,7 @@ public class GlobalReqHandler implements HttpHandler {
         String requestPath = exchange.getRequestURI().getPath();
         String requestMethod = exchange.getRequestMethod();
         long timestamp = System.currentTimeMillis(); // 可选：添加时间戳
-        System.out.printf("[%d] 意外请求 -  请求方法: %s, 路径: %s%n",
+        System.out.printf("\n[%d] 意外请求 -  请求方法: %s, 路径: %s%n",
                 timestamp, requestMethod, requestPath);
         // 关闭当前exchange，交给对应处理器处理
         exchange.close();
