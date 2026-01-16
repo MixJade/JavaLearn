@@ -12,6 +12,7 @@ public class MockDemo {
         mockServer.mountApi(new ApiConf[]{
                 new ApiConf("/login", "user.json"),
                 new ApiConf("/xxx", "xxx.json"),
+                new ApiConf("/baidu", "https://www.baidu.com"),
         });
     }
 }

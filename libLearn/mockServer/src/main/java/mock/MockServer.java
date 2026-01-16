@@ -27,7 +27,13 @@ public class MockServer {
             server.createContext("/", new GlobalReqHandler());
             // 创建其它路由处理器
             for (ApiConf apiConf : apiConfs) {
-                server.createContext(apiConf.path(), new MockHandler("src/main/resources/" + mockDir + "/" + apiConf.jsonName()));
+                if (apiConf.jsonName().startsWith("http")) {
+                    // http开头的视为需重定向的请求
+                    server.createContext(apiConf.path(), new RedirectHandler(apiConf.jsonName()));
+                } else {
+                    // 否则视为json类型
+                    server.createContext(apiConf.path(), new MockHandler("src/main/resources/" + mockDir + "/" + apiConf.jsonName()));
+                }
             }
             // 设置线程池
             server.setExecutor(Executors.newFixedThreadPool(10));
