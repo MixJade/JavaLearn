@@ -11,6 +11,7 @@ public class MockDemo {
         MockServer mockServer = new MockServer(18021, "mock");
         mockServer.mountApi(new ApiConf[]{
                 new ApiConf("/login", "user.json"),
+                // 这里的path都是上下文，也就是说，访问/xxx/view也可获取xxx.json
                 new ApiConf("/xxx", "xxx.json"),
                 new ApiConf("/baidu", "https://www.baidu.com"),
         });
