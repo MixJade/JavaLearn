@@ -148,10 +148,17 @@ public final class GenCodeUtil {
             // 加载模板并渲染, 返回生成的代码,输出为文件
             System.out.println("=".repeat(15) + " 开始生成 " + codeTab.lJNm() + " " + "=".repeat(15));
             // 生成实体类
-            StrToFile.toFilePath(
-                    FtlUtil.fillTempStr(dataModel, useTemp + "entity.java.ftl"),
-                    Path.of(rootDir, outDir, "model", "entity", String.format("%s.java", codeTab.lJNm()))
-            );
+            if (isNormal) {
+                StrToFile.toFilePath(
+                        FtlUtil.fillTempStr(dataModel, useTemp + "entity.java.ftl"),
+                        Path.of(rootDir, outDir, "model", "entity", String.format("%s.java", codeTab.lJNm()))
+                );
+            } else {
+                StrToFile.toFilePath(
+                        FtlUtil.fillTempStr(dataModel, useTemp + "entity.java.ftl"),
+                        Path.of(rootDir, outDir, "entity", String.format("%s.java", codeTab.lJNm()))
+                );
+            }
             // 生成Ts实体类
             StrToFile.toFilePath(
                     FtlUtil.fillTempStr(dataModel, useTemp + "tsEntity.ts.ftl"),
@@ -173,10 +180,17 @@ public final class GenCodeUtil {
                     Path.of(rootDir, outDir, "service", "impl", String.format("%sServiceImpl.java", codeTab.lJNm()))
             );
             // 生成Mapper
-            StrToFile.toFilePath(
-                    FtlUtil.fillTempStr(dataModel, useTemp + "mapper.java.ftl"),
-                    Path.of(rootDir, outDir, "mapper", String.format("%sMapper.java", codeTab.lJNm()))
-            );
+            if (isNormal) {
+                StrToFile.toFilePath(
+                        FtlUtil.fillTempStr(dataModel, useTemp + "mapper.java.ftl"),
+                        Path.of(rootDir, outDir, "mapper", String.format("%sMapper.java", codeTab.lJNm()))
+                );
+            } else {
+                StrToFile.toFilePath(
+                        FtlUtil.fillTempStr(dataModel, useTemp + "mapper.java.ftl"),
+                        Path.of(rootDir, outDir, "dao", String.format("%sMapper.java", codeTab.lJNm()))
+                );
+            }
             // 生成MapperXml
             StrToFile.toFilePath(
                     FtlUtil.fillTempStr(dataModel, useTemp + "mapper.xml.ftl"),

@@ -11,8 +11,8 @@ package ${pack}.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import ${pack}.mapper.${tab.lJNm()}Mapper;
-import ${pack}.model.entity.${tab.lJNm()};
+import ${pack}.dao.${tab.lJNm()}Mapper;
+import ${pack}.entity.${tab.lJNm()};
 import ${pack}.service.${serviceName};
 import org.springframework.stereotype.Service;
 

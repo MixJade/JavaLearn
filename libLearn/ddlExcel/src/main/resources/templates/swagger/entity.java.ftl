@@ -5,7 +5,7 @@
 <#-- @ftlvariable name="tab" type="work.model.dto.CodeTab" -->
 <#-- IDEA 识别：从此处开始，禁用格式化（包括缩进） -->
 <#-- @formatter:off -->
-package ${pack}.model.entity;
+package ${pack}.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

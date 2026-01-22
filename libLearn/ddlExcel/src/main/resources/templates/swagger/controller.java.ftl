@@ -13,7 +13,7 @@
 package ${pack}.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import ${pack}.model.entity.${tab.lJNm()};
+import ${pack}.entity.${tab.lJNm()};
 import ${pack}.service.${serviceName};
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,10 +33,13 @@ import javax.validation.constraints.Min;
  * @since ${date}
  */
 @RestController
-@RequestMapping("/api/${tab.sJNm()}")
+@RequestMapping(value = "/api/v1" + ${tab.lJNm()}Controller.API_PREFIX)
 @Tag(name = "${tab.tb().comments()}操作接口")
 public class ${tab.lJNm()}Controller {
-    private final ${serviceName} ${serviceNameLower};
+    static final String API_PREFIX = "/${tab.tb().tableName()?lower_case}";
+
+    @Autowired
+    ${serviceName} ${serviceNameLower};
 
     @Autowired
     public ${controllerName}(${serviceName} ${serviceNameLower}) {

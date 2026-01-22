@@ -6,11 +6,11 @@
 <#-- @ftlvariable name="tab" type="work.model.dto.CodeTab" -->
 <#-- IDEA 识别：从此处开始，禁用格式化（包括缩进） -->
 <#-- @formatter:off -->
-package ${pack}.mapper;
+package ${pack}.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.dao.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import ${pack}.model.entity.${tab.lJNm()};
+import ${pack}.entity.${tab.lJNm()};
 import org.apache.ibatis.annotations.Mapper;
 
 /**

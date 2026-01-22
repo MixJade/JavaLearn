@@ -11,7 +11,7 @@ package ${pack}.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import ${pack}.model.entity.${tab.lJNm()};
+import ${pack}.entity.${tab.lJNm()};
 
 /**
  * ${tab.tb().comments()} 服务类

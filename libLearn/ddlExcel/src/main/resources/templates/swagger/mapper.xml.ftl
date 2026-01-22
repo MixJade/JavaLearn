@@ -9,10 +9,10 @@
 <#-- @formatter:off -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${pack}.mapper.${tab.lJNm()}Mapper">
+<mapper namespace="${pack}.dao.${tab.lJNm()}Mapper">
     <!-- 分页查询-->
     <#--noinspection HtmlFormInputWithoutLabel-->
-    <select id="queryByLike" resultType="${pack}.model.entity.${tab.lJNm()}">
+    <select id="queryByLike" resultType="${pack}.entity.${tab.lJNm()}">
         SELECT <#list tab.codeCols() as field>at.${field.colNm()}<#if !field?is_last>,</#if></#list>
         FROM ${tab.tb().tableName()} at
     </select>
