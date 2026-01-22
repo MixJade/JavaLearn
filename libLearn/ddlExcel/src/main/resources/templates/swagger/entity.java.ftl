@@ -7,13 +7,16 @@
 <#-- @formatter:off -->
 package ${pack}.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.io.Serializable;
 <#list tab.pkgList() as pkg>
 import ${pkg};
 </#list>
-import java.io.Serializable;
-import java.io.Serial;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
 
 /**
  * ${tab.tb().comments()}
@@ -25,7 +28,6 @@ import lombok.Data;
 @TableName("${tab.tb().tableName()}")
 @Schema(description = "${tab.tb().comments()}")
 public class ${tab.lJNm()} implements Serializable {
-    @Serial
     private static final long serialVersionUID = 1L;
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list tab.codeCols() as field>

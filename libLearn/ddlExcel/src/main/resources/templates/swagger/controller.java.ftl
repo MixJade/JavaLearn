@@ -4,7 +4,7 @@
 <#-- @ftlvariable name="pack" type="java.lang.String" -->
 <#-- @ftlvariable name="tab" type="work.model.dto.CodeTab" -->
 <#-- 定义变量：Service名称 -->
-<#assign serviceName = "I${tab.lJNm()}Service">
+<#assign serviceName = "${tab.lJNm()}Service">
 <#assign serviceNameLower = "${tab.sJNm()}Service">
 <#-- 定义变量：Controller名称 -->
 <#assign controllerName = tab.lJNm()+"Controller">
@@ -13,7 +13,7 @@
 package ${pack}.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import ${pack}.${tab.lJNm()};
+import ${pack}.model.entity.${tab.lJNm()};
 import ${pack}.service.${serviceName};
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,10 +22,9 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Min;
 
 /**
  * ${tab.tb().comments()} 前端控制器

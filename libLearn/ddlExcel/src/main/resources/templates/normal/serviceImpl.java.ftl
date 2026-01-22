@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @since ${date}
  */
 @Service
-public class ${tab.lJNm()}ServiceImpl extends ServiceImpl${r"<"}${tab.lJNm()}Mapper, ${tab.lJNm()}>implements ${serviceName} {
+public class ${tab.lJNm()}ServiceImpl extends ServiceImpl${r"<"}${tab.lJNm()}Mapper, ${tab.lJNm()}> implements ${serviceName} {
     @Override
     public IPage<${tab.lJNm()}> getByPage(int pageNum, int pageSize) {
         return baseMapper.getByPage(new Page<>(pageNum, pageSize));
