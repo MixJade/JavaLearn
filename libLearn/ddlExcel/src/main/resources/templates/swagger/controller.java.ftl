@@ -36,7 +36,7 @@ import javax.validation.constraints.Min;
 @RequestMapping(value = "/api/v1" + ${tab.lJNm()}Controller.API_PREFIX, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
 @Tag(name = "${tab.tb().comments()}操作接口")
 public class ${tab.lJNm()}Controller {
-    static final String API_PREFIX = "/${tab.tb().tableName()?lower_case}";
+    static final String API_PREFIX = "/${tab.sJNm()}";
 
     @Autowired
     ${serviceName} ${serviceNameLower};
