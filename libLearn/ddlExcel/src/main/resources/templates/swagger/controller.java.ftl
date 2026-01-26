@@ -41,11 +41,6 @@ public class ${tab.lJNm()}Controller {
     @Autowired
     ${serviceName} ${serviceNameLower};
 
-    @Autowired
-    public ${controllerName}(${serviceName} ${serviceNameLower}) {
-        this.${serviceNameLower} = ${serviceNameLower};
-    }
-
     /**
      * 分页条件查询信息
      *
