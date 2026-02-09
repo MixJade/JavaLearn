@@ -6,7 +6,7 @@
     "username": "admin",
     "email": "admin@example.com",
     "roles": ["admin", "user"],
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+    "token": "此处自动生成2",
     "createdAt": "2024-01-01T00:00:00Z"
   }
 }

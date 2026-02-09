@@ -64,6 +64,9 @@ public class MockHandler implements HttpHandler {
                 return;
             }
             String jsonContent = Files.readString(jsonPath, StandardCharsets.UTF_8);
+            if (jsonContent.contains("此处自动生成")) {
+                jsonContent = jsonContent.replaceAll("此处自动生成", GenIdUtil.genId());
+            }
             // 设置响应头
             exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
