@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 生成一个ID
+ * 生成一个ID，用于替换“此处自动生成”文本
  *
  * @since 2026-02-09 10:36:48
  */
