@@ -23,10 +23,12 @@ public final class ExcelGen {
             Font headerFont = workbook.createFont();
             headerFont.setBold(true);
             headerStyle.setFont(headerFont);
+            headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
             setBorderStyle(headerStyle);
 
             // 创建普通单元格样式（有边框）
             CellStyle normalStyle = workbook.createCellStyle();
+            normalStyle.setVerticalAlignment(VerticalAlignment.CENTER);
             setBorderStyle(normalStyle);
 
             for (SheetDo sheetDo : sheetDos) {
