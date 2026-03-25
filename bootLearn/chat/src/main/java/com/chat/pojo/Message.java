@@ -1,8 +1,7 @@
 package com.chat.pojo;
 
+import com.chat.utils.JsonUtil;
 import com.chat.utils.TimeUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 用户发送消息
@@ -21,17 +20,12 @@ public record Message(boolean isSystem, UserVo userVo, String message, String se
      * @return 序列化字符串
      */
     public static String getUserMsg(UserVo userVo, String message) {
-        try {
-            Message result = new Message(false,
-                    userVo,
-                    message,
-                    TimeUtil.nowTime());
-            //把字符串转成json格式的字符串
-            return new ObjectMapper().writeValueAsString(result);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        Message result = new Message(false,
+                userVo,
+                message,
+                TimeUtil.nowTime());
+        //把字符串转成json格式的字符串
+        return JsonUtil.objToStr(result);
     }
 
     /**
@@ -42,16 +36,11 @@ public record Message(boolean isSystem, UserVo userVo, String message, String se
      * @return 系统消息
      */
     public static String getSystemMsg(boolean isUP, String userName) {
-        try {
-            Message result = new Message(true,
-                    null,
-                    TimeUtil.nowTime() + " " + userName + " " + (isUP ? "上线" : "下线"),
-                    null);
-            //把字符串转成json格式的字符串
-            return new ObjectMapper().writeValueAsString(result);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        Message result = new Message(true,
+                null,
+                TimeUtil.nowTime() + " " + userName + " " + (isUP ? "上线" : "下线"),
+                null);
+        //把字符串转成json格式的字符串
+        return JsonUtil.objToStr(result);
     }
 }

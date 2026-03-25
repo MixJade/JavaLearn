@@ -1,0 +1,16 @@
+### 调用本地Qwen3模型
+POST http://127.0.0.1:18024/v1/chat/completions
+Content-Type: application/json
+
+{
+  "model": "qwen3",
+  "messages": [
+    {
+      "role": "user",
+      "content": "你好"
+    }
+  ],
+  "temperature": 0.7,
+  "max_tokens": 512,
+  "stream": false
+}

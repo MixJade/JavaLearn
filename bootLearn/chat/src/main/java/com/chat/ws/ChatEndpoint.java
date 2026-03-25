@@ -1,5 +1,6 @@
 package com.chat.ws;
 
+import com.chat.llama.LlamaService;
 import com.chat.pojo.Message;
 import com.chat.pojo.UserVo;
 import jakarta.servlet.http.HttpSession;
@@ -93,6 +94,16 @@ public class ChatEndpoint {
             Set<String> names = BASICS_MAP.keySet();
             for (String name : names)
                 BASICS_MAP.get(name).sendText(sendMsg);
+
+            // 2026-03-25更新：如果开启了ai对话
+            if (LlamaService.isAlive()){
+                // 发送用户名为千问的返回值
+                String aiMsg = LlamaService.chat(sendMsg);
+                MSG_LIST.add(aiMsg);
+                //将消息推送给所有的客户端
+                for (String name : names)
+                    BASICS_MAP.get(name).sendText(aiMsg);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.warn("信息发送失败");
