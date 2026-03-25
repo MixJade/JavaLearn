@@ -7,7 +7,6 @@ import com.chat.llama.resp.ChatResponse;
 import com.chat.pojo.Message;
 import com.chat.pojo.UserVo;
 import com.chat.utils.JsonUtil;
-import com.chat.utils.TimeUtil;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +91,7 @@ public class LlamaService {
 
     public static String chat(String userInput) {
         String chatAi = chatAi(userInput);
-        Message message = new Message(false, new UserVo("千问", "#2233fd", "千"), chatAi, TimeUtil.nowTime());
-        return JsonUtil.objToStr(message);
+        return Message.getUserMsg(new UserVo("千问", "#2233fd", "千"), chatAi);
     }
 
     /**
