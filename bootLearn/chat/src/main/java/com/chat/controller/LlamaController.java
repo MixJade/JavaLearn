@@ -12,22 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/llama")
 public class LlamaController {
-    // 启动AI
-    @GetMapping("/openAi")
-    public Result openAi() {
-        return new Result(true, LlamaService.start());
-    }
-
     // 检测是否存活
     @GetMapping("/isAlive")
     public Result isAlive() {
         return new Result(LlamaService.isAlive(), "alive");
-    }
-
-    // 停止AI
-    @GetMapping("/stopAi")
-    public Result stopAi() {
-        return new Result(true, LlamaService.stop());
     }
 }
 

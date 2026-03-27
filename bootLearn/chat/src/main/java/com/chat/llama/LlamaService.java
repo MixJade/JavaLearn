@@ -7,7 +7,6 @@ import com.chat.llama.resp.ChatResponse;
 import com.chat.pojo.Message;
 import com.chat.pojo.UserVo;
 import com.chat.utils.JsonUtil;
-import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 全静态化 Llama 服务
@@ -32,27 +31,16 @@ public class LlamaService {
     private static final Logger log = LoggerFactory.getLogger(LlamaService.class);
 
     // ===================== 静态配置 =====================
-    private static String llamaExePath;
-    private static String modelPath;
-    private static String llamaPort;
+    private static Integer llamaPort;
 
     // ===================== 静态全局对象 =====================
-    private static Process process;
     private static final RestTemplate restTemplate = new RestTemplate();
+    private static long lastCheckTime = 0;
+    private static boolean cachedStatus = false;
 
     // ===================== Spring 注入静态字段 =====================
-    @Value("${llama.exe-path}")
-    public void setStaticLlamaExePath(String path) {
-        llamaExePath = path;
-    }
-
-    @Value("${llama.model-path}")
-    public void setStaticModelPath(String path) {
-        modelPath = path;
-    }
-
     @Value("${llama.port}")
-    public void setStaticLlamaPort(String port) {
+    public void setStaticLlamaPort(Integer port) {
         llamaPort = port;
     }
 
@@ -62,31 +50,24 @@ public class LlamaService {
      * 检查服务是否存活
      */
     public static boolean isAlive() {
-        return process != null && process.isAlive();
-    }
-
-    /**
-     * 启动 llama-server
-     */
-    public static synchronized String start() {
-        if (isAlive()) {
-            return "LLama 已在运行中";
+        // 20秒过期
+        long now = System.currentTimeMillis();
+        if (now - lastCheckTime < 20_000) {
+            return cachedStatus;
         }
-
-        try {
-            process = new ProcessBuilder(
-                    llamaExePath,
-                    "-m", modelPath,
-                    "--host", "0.0.0.0",
-                    "--port", llamaPort
-            ).start();
-
-            log.info("Llama 服务启动成功，端口：{}", llamaPort);
-            return "启动成功";
-        } catch (IOException e) {
-            log.error("Llama 启动失败", e);
-            return "启动失败：" + e.getMessage();
+        // 尝试连接
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress("127.0.0.1", llamaPort), 300);
+            // 能连接成功 → 端口正在被监听 → 程序已启动
+            log.info("llama-server运行中");
+            cachedStatus = true;
+        } catch (Exception e) {
+            log.info("llama-server未启动");
+            // 连接失败 → 端口未监听 → 程序未启动
+            cachedStatus = false;
         }
+        lastCheckTime = now;
+        return cachedStatus;
     }
 
     public static String chat(String userInput) {
@@ -109,7 +90,7 @@ public class LlamaService {
             chatMessages.add(new ChatMessage("user", sendMsg));
             ChatRequest request = ChatRequest.buildReq(chatMessages);
 
-            String url = "http://localhost:" + llamaPort + "/v1/chat/completions";
+            String url = "http://127.0.0.1:" + llamaPort + "/v1/chat/completions";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<ChatRequest> entity = new HttpEntity<>(request, headers);
@@ -126,45 +107,6 @@ public class LlamaService {
         } catch (Exception e) {
             log.error("AI对话异常：{}", e.getMessage());
             return "服务异常，请稍后再试";
-        }
-    }
-
-    public static String stop() {
-        // 1. 检查进程是否存在且存活
-        if (process == null || !process.isAlive()) {
-            return "LLama 服务未运行，无需停止";
-        }
-        try {
-            // 2. 尝试优雅销毁进程
-            process.destroy();
-            log.info("已发送停止指令给 Llama 服务，等待进程退出...");
-            // 3. 等待进程退出（最多等待5秒）
-            boolean isTerminated = process.waitFor(5, TimeUnit.SECONDS);
-            if (isTerminated) {
-                // 清空process引用，避免后续isAlive判断异常
-                process = null;
-                return "LLama 服务已成功停止";
-            } else {
-                // 4. 若等待超时，强制销毁进程
-                process.destroyForcibly();
-                process = null;
-                return "Llama 服务强制停止成功";
-            }
-        } catch (Exception e) {
-            String msg = "停止Llama服务失败：" + e.getMessage();
-            log.error(msg, e);
-            return msg;
-        }
-    }
-
-    /**
-     * 关闭服务（Spring 容器关闭时自动执行）
-     */
-    @PreDestroy
-    public void destroy() {
-        if (isAlive()) {
-            process.destroy();
-            log.info("Llama 服务已关闭");
         }
     }
 }
