@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +88,7 @@ public class LlamaService {
             String sendMsg = userMsg.message();
             log.info("发送消息：{}", sendMsg);
             List<ChatMessage> chatMessages = new ArrayList<>();
+            chatMessages.add(new ChatMessage("system", buildSystemPrompt(sendMsg)));
             chatMessages.add(new ChatMessage("user", sendMsg));
             ChatRequest request = ChatRequest.buildReq(chatMessages);
 
@@ -107,6 +109,19 @@ public class LlamaService {
         } catch (Exception e) {
             log.error("AI对话异常：{}", e.getMessage());
             return "服务异常，请稍后再试";
+        }
+    }
+
+    /**
+     * 设定系统提示词
+     */
+    private static String buildSystemPrompt(String userQuestion) {
+        if (userQuestion.contains("吃的") || userQuestion.contains("吃什么")) {
+            return "推荐西瓜、炸鸡";
+        } else if (userQuestion.contains("时间") || userQuestion.contains("日期")) {
+            return "当前时间：" + LocalDateTime.now();
+        } else {
+            return "每句结尾加喵";
         }
     }
 }
