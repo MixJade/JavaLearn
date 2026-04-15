@@ -226,6 +226,9 @@ public final class GenSqlScr {
         if (type.startsWith("VARCHAR") || type.startsWith("CHAR")) {
             if (type.contains("(")) {
                 String fieldLen = type.substring(type.indexOf("(") + 1, type.indexOf(")"));
+                if (type.startsWith("CHAR")){
+                    return "CHAR(" + fieldLen + ")";
+                }
                 return "VARCHAR2(" + fieldLen + ")";
             }
             return "VARCHAR2(50)"; // 无长度时默认50
