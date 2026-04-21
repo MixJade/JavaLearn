@@ -21,8 +21,8 @@ public class GlobalReqHandler implements HttpHandler {
         // 处理 favicon.ico 请求，返回图标文件
         if ("/favicon.ico".equals(requestPath)) {
             try (exchange) {
-                byte[] icoData = Files.readAllBytes(Path.of("src/main/resources/favicon.ico"));
-                exchange.getResponseHeaders().set("Content-Type", "image/x-icon");
+                byte[] icoData = Files.readAllBytes(Path.of("src/main/resources/favicon.svg"));
+                exchange.getResponseHeaders().set("Content-Type", "image/svg+xml");
                 // 设置缓存头（浏览器缓存7天，避免重复请求）
                 exchange.getResponseHeaders().set("Cache-Control", "max-age=604800");
                 // 返回图标文件
