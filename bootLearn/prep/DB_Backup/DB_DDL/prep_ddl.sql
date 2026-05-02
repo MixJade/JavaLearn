@@ -34,17 +34,6 @@ ALTER TABLE source_image
 # 题目编辑 模块
 # ================================================================================
 
-# 科目备忘表 记录考试科目的信息，如：软件设计师 20250811报名 20251121考试
-create table exam_subject
-(
-    subject_id      int auto_increment comment '科目主键'
-        primary key,
-    subject_name    varchar(20) not null comment '科目名称',
-    exam_start_date date comment '正式考试日期',
-    register_date   date comment '报名日期',
-    create_date     date comment '创建日期'
-) comment '科目备忘表';
-
 # 试卷表
 create table exam_paper
 (
