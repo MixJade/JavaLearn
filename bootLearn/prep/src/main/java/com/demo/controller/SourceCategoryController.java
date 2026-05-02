@@ -1,6 +1,5 @@
 package com.demo.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.SourceCategory;
 import com.demo.model.vo.CateLabelVo;
@@ -49,9 +48,9 @@ public class SourceCategoryController {
         return Result.choice("修改", updateRes);
     }
 
-    @GetMapping("/page")
-    public IPage<SourceCateVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
-        return sourceCategoryService.getByPage(pageNum, pageSize);
+    @GetMapping("/list")
+    public List<SourceCateVo> getList() {
+        return sourceCategoryService.getList();
     }
 
     @GetMapping("/label")

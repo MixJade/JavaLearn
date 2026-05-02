@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.demo.model.entity.SourceCategory;
 import com.demo.model.vo.CateLabelVo;
@@ -17,7 +16,7 @@ import java.util.List;
  * @since 2025-08-29
  */
 public interface ISourceCategoryService extends IService<SourceCategory> {
-    IPage<SourceCateVo> getByPage(int pageNum, int pageSize);
+    List<SourceCateVo> getList();
 
     /**
      * 查询题源分类的下拉框

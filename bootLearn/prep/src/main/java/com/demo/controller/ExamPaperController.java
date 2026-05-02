@@ -1,6 +1,5 @@
 package com.demo.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
 import com.demo.model.entity.ExamPaper;
 import com.demo.model.vo.ExamPaperVo;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * <p>
@@ -47,8 +47,8 @@ public class ExamPaperController {
         return Result.choice("修改", updateRes);
     }
 
-    @GetMapping("/page")
-    public IPage<ExamPaperVo> getPage(@RequestParam int pageNum, @RequestParam int pageSize) {
-        return examPaperService.getByPage(pageNum, pageSize);
+    @GetMapping("/list")
+    public List<ExamPaperVo> getList() {
+        return examPaperService.getList();
     }
 }

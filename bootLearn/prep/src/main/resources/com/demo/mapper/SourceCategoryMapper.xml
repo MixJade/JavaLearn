@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.SourceCategoryMapper">
     <!-- 分页查询-->
-    <select id="getByPage" resultType="com.demo.model.vo.SourceCateVo">
+    <select id="getList" resultType="com.demo.model.vo.SourceCateVo">
         SELECT a.category_id,
                a.category_name,
                a.create_date,

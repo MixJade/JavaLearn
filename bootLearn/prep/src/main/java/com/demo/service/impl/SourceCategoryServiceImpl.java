@@ -1,7 +1,5 @@
 package com.demo.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.mapper.SourceCategoryMapper;
 import com.demo.model.entity.SourceCategory;
@@ -22,9 +20,10 @@ import java.util.List;
  */
 @Service
 public class SourceCategoryServiceImpl extends ServiceImpl<SourceCategoryMapper, SourceCategory> implements ISourceCategoryService {
+
     @Override
-    public IPage<SourceCateVo> getByPage(int pageNum, int pageSize) {
-        return baseMapper.getByPage(new Page<>(pageNum, pageSize));
+    public List<SourceCateVo> getList() {
+        return baseMapper.getList();
     }
 
     @Override

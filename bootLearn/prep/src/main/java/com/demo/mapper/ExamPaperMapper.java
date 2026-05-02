@@ -1,10 +1,11 @@
 package com.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.entity.ExamPaper;
 import com.demo.model.vo.ExamPaperVo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
-    IPage<ExamPaperVo> getByPage(IPage<ExamPaper> page);
+    List<ExamPaperVo> getList();
 }
