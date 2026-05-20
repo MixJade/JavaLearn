@@ -21,4 +21,9 @@ public interface DeService {
      * 输出表的结构为Java、Ts代码文件
      */
     void genCodeTableDDL();
+
+    /**
+     * 将数据导出为INSERT语句
+     */
+    void genInsertSql();
 }

@@ -10,8 +10,12 @@ import work.model.dto.TabXmlDo;
 import work.model.entity.OriTabCol;
 import work.model.entity.TableDDL;
 import work.model.entity.TableName;
+import work.model.dto.TableInsertData;
+import work.model.entity.TableRowData;
 import work.utils.*;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -164,5 +168,53 @@ public class DeServiceImpl implements DeService {
         session.close();
         // 调用生成器方法
         GenCodeUtil.genCodeFile(DeConfig.outFileName, DeConfig.author, DeConfig.parentPack, isNormal, codeTabList);
+    }
+
+    /**
+     * 将数据导出为INSERT语句
+     */
+    @Override
+    public void genInsertSql() {
+        // 输出文件名
+        String sqlName = DeConfig.outFileName + "_insert.sql";
+
+        System.out.println("当前源数据库类型：" + DeConfig.dbType);
+        // 创建键盘输入扫描器
+        Scanner scanner = new Scanner(System.in);
+        // 1. 输入目标数据库类型
+        System.out.println("请输入目标数据库类型（1=MySql，0=Oracle）：");
+        String dbInput = scanner.nextLine().trim();
+        DbType targetDb = "0".equals(dbInput) ? DbType.Oracle : DbType.MySql;
+        // 关闭扫描器
+        scanner.close();
+
+        // 2. 复用 MyBatis 连接，通过 JDBC 直接查询数据（获取原生字段类型）
+        SqlSession session = MyBatisConfig.getFactory().openSession();
+        DeMapper deMapper = session.getMapper(DeMapper.class);
+        Connection conn = session.getConnection();
+
+        List<TableInsertData> tableDataList = new ArrayList<>();
+
+        try {
+            for (TableName tabN : DeConfig.needOutTab) {
+                // 查询表名称（含注释）—— 仍走 MyBatis
+                TableName tableName = deMapper.queryTableName(tabN.tableName());
+                if (tableName == null || tableName.comments() == null || tableName.comments().isBlank()) {
+                    tableName = tabN;
+                }
+
+                // 用 JDBC ResultSetMetaData 直接获取：列名 + 数据库原生类型 + 值
+                List<List<TableRowData>> rows = JdbcQueryUtil.queryTableData(conn, tabN.tableName());
+
+                tableDataList.add(new TableInsertData(tableName, rows));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("查询表数据失败：" + e.getMessage(), e);
+        } finally {
+            session.close();
+        }
+
+        // 3. 生成INSERT语句
+        GenInsertScr.genInsertSql(tableDataList, sqlName, DeConfig.dbType, targetDb);
     }
 }

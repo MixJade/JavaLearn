@@ -22,6 +22,7 @@ public class DeMain {
         System.out.println("  2. 输出表结构的 XML");
         System.out.println("  3. 输出表结构的 SQL（可转数据库）");
         System.out.println("  4. 代码生成器");
+        System.out.println("  5. 数据导出为 INSERT 语句");
         System.out.println("  0. 退出");
         System.out.println("=============================");
         System.out.print("请输入选项: ");
@@ -31,6 +32,7 @@ public class DeMain {
             case "2" -> DE_SERVICE.genXmlTableDDL();
             case "3" -> DE_SERVICE.genSqlTableDDL();
             case "4" -> DE_SERVICE.genCodeTableDDL();
+            case "5" -> DE_SERVICE.genInsertSql();
             default -> System.out.println("已退出，拜拜~");
         }
         System.out.println();
