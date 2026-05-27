@@ -22,4 +22,10 @@ git format-patch df3c03e5 -o ./patches
 ```bash
 git am ./patches/*.patch
 ```
-* 注：如果 git am 中途因为冲突失败，需要手动解决冲突后，执行`git add .`然后`git am --continue`。
+* 注：如果 git am 中途因为冲突失败，需执行以下命令终止操作。
+
+```bash
+git am --abort
+```
+
+* 然后再排查失败的原因
