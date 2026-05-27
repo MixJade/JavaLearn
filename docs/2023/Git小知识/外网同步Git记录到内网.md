@@ -10,7 +10,7 @@
 git log --oneline
 ```
 
-* 生成从`df3c03e5`之后到当前最新的所有 commit 的补丁
+* 生成从`df3c03e5`之后到当前最新的所有 commit 的补丁。*（注：不包括`df3c03e5`本身）*
 * 这会在当前目录下生成一个 patches 文件夹，里面包含 0001-xxx.patch、0002-xxx.patch 等文件。把这些 .patch 文件拷到内网
 
 ```bash
