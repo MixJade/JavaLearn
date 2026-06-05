@@ -4,11 +4,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MockHandler implements HttpHandler {
     private final String jsonPath;
@@ -41,13 +39,16 @@ public class MockHandler implements HttpHandler {
                 timestamp, requestMethod, requestPath, queryParams, bodyParamsStr);
 
         try {
-            // 读取JSON文件
-            Path jsonPath = Paths.get(this.jsonPath);
-            if (!Files.exists(jsonPath)) {
-                sendResponse(exchange, 404, "{\"error\":\"JSON file not found\"}");
+            // 通过 ClassLoader 读取 classpath 下的资源文件（兼容 JAR 包运行）
+            InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(this.jsonPath);
+            if (resourceStream == null) {
+                sendResponse(exchange, 404, "{\"error\":\"JSON file not found: " + this.jsonPath + "\"}");
                 return;
             }
-            String jsonContent = Files.readString(jsonPath, StandardCharsets.UTF_8);
+            String jsonContent;
+            try (resourceStream) {
+                jsonContent = new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
             if (jsonContent.contains("此处自动生成")) {
                 jsonContent = jsonContent.replaceAll("此处自动生成", GenIdUtil.genId());
             }

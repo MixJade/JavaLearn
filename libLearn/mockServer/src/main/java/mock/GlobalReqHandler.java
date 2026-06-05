@@ -4,9 +4,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * 全局意外请求的url打印
@@ -21,7 +20,15 @@ public class GlobalReqHandler implements HttpHandler {
         // 处理 favicon.ico 请求，返回图标文件
         if ("/favicon.ico".equals(requestPath)) {
             try (exchange) {
-                byte[] icoData = Files.readAllBytes(Path.of("src/main/resources/favicon.svg"));
+                // 通过 ClassLoader 读取 classpath 下的 favicon（兼容 JAR 包运行）
+                byte[] icoData;
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream("favicon.svg")) {
+                    if (is == null) {
+                        exchange.sendResponseHeaders(404, -1);
+                        return;
+                    }
+                    icoData = is.readAllBytes();
+                }
                 exchange.getResponseHeaders().set("Content-Type", "image/svg+xml");
                 // 设置缓存头（浏览器缓存7天，避免重复请求）
                 exchange.getResponseHeaders().set("Cache-Control", "max-age=604800");

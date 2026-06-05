@@ -6,11 +6,10 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * 文件下载处理器
@@ -21,7 +20,7 @@ import java.nio.file.Paths;
  */
 public class FileDownHandler implements HttpHandler {
 
-    /** 要下载的文件的绝对路径 */
+    /** classpath 下的资源相对路径（如 mock/xxx.json） */
     private final String filePath;
 
     public FileDownHandler(String filePath) {
@@ -40,8 +39,9 @@ public class FileDownHandler implements HttpHandler {
                         """,
                 timestamp, requestMethod, requestPath, filePath);
 
-        Path file = Paths.get(filePath);
-        if (!Files.exists(file)) {
+        // 通过 ClassLoader 获取 classpath 下的资源 URL（兼容 JAR 包运行）
+        URL resourceUrl = getClass().getClassLoader().getResource(filePath);
+        if (resourceUrl == null) {
             byte[] err = ("{\"error\":\"Download file not found: " + filePath + "\"}").getBytes(StandardCharsets.UTF_8);
             exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
             exchange.sendResponseHeaders(404, err.length);
@@ -52,17 +52,26 @@ public class FileDownHandler implements HttpHandler {
         }
 
         // 取文件名，用于 Content-Disposition
-        String fileName = file.getFileName().toString();
+        String fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
         // RFC 5987 编码，支持中文文件名
         String encodedName = URLEncoder.encode(fileName, StandardCharsets.UTF_8).replace("+", "%20");
 
-        // 探测 MIME 类型，探测失败时回退到 application/octet-stream
-        String mimeType = Files.probeContentType(file);
+        // 探测 MIME 类型：优先用 URLConnection，回退到文件名猜测
+        URLConnection conn = resourceUrl.openConnection();
+        String mimeType = conn.getContentType();
+        if (mimeType == null || mimeType.isEmpty()) {
+            mimeType = URLConnection.guessContentTypeFromName(fileName);
+        }
         if (mimeType == null) {
             mimeType = "application/octet-stream";
         }
 
-        long fileSize = Files.size(file);
+        // 读取全部内容（mock 文件较小，一次性读入内存）
+        byte[] fileData;
+        try (InputStream is = conn.getInputStream()) {
+            fileData = is.readAllBytes();
+        }
+        long fileSize = fileData.length;
 
         exchange.getResponseHeaders().set("Content-Type", mimeType);
         // attachment 触发浏览器下载；filename* 支持非 ASCII 文件名（RFC 5987）
@@ -71,13 +80,8 @@ public class FileDownHandler implements HttpHandler {
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         exchange.sendResponseHeaders(200, fileSize);
 
-        try (OutputStream os = exchange.getResponseBody();
-             InputStream is = Files.newInputStream(file)) {
-            byte[] buf = new byte[8192];
-            int read;
-            while ((read = is.read(buf)) != -1) {
-                os.write(buf, 0, read);
-            }
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(fileData);
         }
     }
 }

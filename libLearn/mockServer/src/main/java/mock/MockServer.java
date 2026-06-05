@@ -31,14 +31,14 @@ public class MockServer {
                     // http/https 开头的视为需重定向的请求
                     server.createContext(apiConf.path(), new RedirectHandler(apiConf.jsonName()));
                 } else if (apiConf.jsonName().startsWith("file://")) {
-                    // file:// 开头的视为文件下载请求，去掉协议头后拼接资源目录
+                    // file:// 开头的视为文件下载请求，去掉协议头后拼接资源目录（classpath 相对路径）
                     String relPath = apiConf.jsonName().substring("file://".length());
                     server.createContext(apiConf.path(),
-                            new FileDownHandler("src/main/resources/" + mockDir + "/" + relPath));
+                            new FileDownHandler(mockDir + "/" + relPath));
                 } else {
-                    // 否则视为 JSON Mock 类型
+                    // 否则视为 JSON Mock 类型（classpath 相对路径）
                     server.createContext(apiConf.path(),
-                            new MockHandler("src/main/resources/" + mockDir + "/" + apiConf.jsonName()));
+                            new MockHandler(mockDir + "/" + apiConf.jsonName()));
                 }
             }
             // 设置线程池
