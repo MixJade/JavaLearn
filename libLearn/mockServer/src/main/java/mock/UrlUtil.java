@@ -33,7 +33,7 @@ public final class UrlUtil {
     /**
      * 解析表单格式参数（application/x-www-form-urlencoded）
      */
-    public static Map<String, String> parseFormParams(String formStr) {
+    private static Map<String, String> parseFormParams(String formStr) {
         Map<String, String> params = new LinkedHashMap<>();
         String[] pairs = formStr.split("&");
         for (String pair : pairs) {
@@ -45,10 +45,7 @@ public final class UrlUtil {
         return params;
     }
 
-    /**
-     * 读取请求体内容（核心方法）
-     */
-    public static String readRequestBody(HttpExchange exchange) throws IOException {
+    private static String readReqBodyStr(HttpExchange exchange) throws IOException {
         // 获取请求体输入流，按UTF-8读取
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8))) {
@@ -59,5 +56,38 @@ public final class UrlUtil {
             }
             return body.toString();
         }
+    }
+
+    /**
+     * 简单判断字符串是否为合法 JSON（对象或数组）
+     */
+    private static boolean isJson(String str) {
+        if (str == null || str.isEmpty()) return false;
+        String trimmed = str.trim();
+        return (trimmed.startsWith("{") && trimmed.endsWith("}"))
+                || (trimmed.startsWith("[") && trimmed.endsWith("]"));
+    }
+
+    /**
+     * 读取请求体内容（核心方法）
+     */
+    public static String readRequestBody(HttpExchange exchange) throws IOException {
+        String body = readReqBodyStr(exchange);
+        String contentType = exchange.getRequestHeaders().getFirst("Content-Type");
+        if (!body.isEmpty()) {
+            // 尝试解码为字符串
+            if (UrlUtil.isJson(body)) {
+                // JSON 格式：直接展示
+                return body;
+            } else if (contentType != null && contentType.contains("application/x-www-form-urlencoded")) {
+                // 表单格式（key=value&key2=value2）
+                Map<String, String> formParams = parseFormParams(body);
+                return formParams.toString();
+            } else {
+                // 非 JSON 非表单：可能是二进制或其他格式
+                return "[非JSON数据]";
+            }
+        }
+        return "NULL";
     }
 }

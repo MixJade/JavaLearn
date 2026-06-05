@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 public class MockHandler implements HttpHandler {
     private final String jsonPath;
@@ -29,30 +28,11 @@ public class MockHandler implements HttpHandler {
         // 解析POST/PUT请求体参数
         String bodyParamsStr = "无";
         if ("POST".equalsIgnoreCase(requestMethod) || "PUT".equalsIgnoreCase(requestMethod)) {
-            String body = UrlUtil.readRequestBody(exchange);
-            if (!body.isEmpty()) {
-                // 根据Content-Type解析不同格式的请求体
-                String contentType = exchange.getRequestHeaders().getFirst("Content-Type");
-                if (contentType != null && contentType.contains("application/x-www-form-urlencoded")) {
-                    // 表单格式（key=value&key2=value2）
-                    Map<String, String> formParams = UrlUtil.parseFormParams(body);
-                    bodyParamsStr = formParams.toString();
-                } else if (contentType != null && contentType.contains("application/json")) {
-                    // JSON格式（直接打印原始JSON）
-                    bodyParamsStr = body;
-                } else {
-                    // 其他格式（文本/纯字符串/二进制）
-                    if (isBinaryString(body)) {
-                        bodyParamsStr = "[二进制数据]";
-                    } else {
-                        bodyParamsStr = body;
-                    }
-                }
-            }
+            bodyParamsStr = UrlUtil.readRequestBody(exchange);
         }
 
         // 打印参数信息
-        long timestamp = System.currentTimeMillis(); // 可选：添加时间戳
+        long timestamp = System.currentTimeMillis();
         System.out.printf("""
                         \n[%d] 请求方法: %s, 路径: %s
                             GET参数: %s
@@ -88,29 +68,5 @@ public class MockHandler implements HttpHandler {
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(responseBytes);
         }
-    }
-
-    /**
-     * 判断一个字符串是否是【二进制数据转成的乱码】
-     *
-     * @param str 要判断的字符串
-     * @return true = 二进制乱码 | false = 正常文本
-     */
-    private static boolean isBinaryString(String str) {
-        if (str == null || str.isEmpty()) return false;
-        int nonAsciiCount = 0;
-        int checkLen = Math.min(str.length(), 500);
-        for (int i = 0; i < checkLen; i++) {
-            char c = str.charAt(i);
-            // 允许 ASCII 可打印字符、换行、制表符
-            if (c < 32 && c != '\n' && c != '\r' && c != '\t') {
-                return true; // 出现控制字符直接判定为二进制
-            }
-            if (c > 126) {
-                nonAsciiCount++;
-            }
-        }
-        // 如果非ASCII比例太高，可能是编码问题或二进制
-        return nonAsciiCount * 100 / checkLen > 30;
     }
 }

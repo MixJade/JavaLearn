@@ -14,6 +14,8 @@ public class MockDemo {
                 // 这里的path都是上下文，也就是说，访问/xxx/view也可获取xxx.json
                 new ApiConf("/xxx", "xxx.json"),
                 new ApiConf("/baidu", "https://www.baidu.com"),
+                // file:// 开头 → 访问 /sa 时触发下载 resources/mock/xxx.json
+                 new ApiConf("/file_xxx", "file://xxx.json"),
         });
     }
 }

@@ -28,11 +28,17 @@ public class MockServer {
             // 创建其它路由处理器
             for (ApiConf apiConf : apiConfs) {
                 if (apiConf.jsonName().startsWith("http")) {
-                    // http开头的视为需重定向的请求
+                    // http/https 开头的视为需重定向的请求
                     server.createContext(apiConf.path(), new RedirectHandler(apiConf.jsonName()));
+                } else if (apiConf.jsonName().startsWith("file://")) {
+                    // file:// 开头的视为文件下载请求，去掉协议头后拼接资源目录
+                    String relPath = apiConf.jsonName().substring("file://".length());
+                    server.createContext(apiConf.path(),
+                            new FileDownHandler("src/main/resources/" + mockDir + "/" + relPath));
                 } else {
-                    // 否则视为json类型
-                    server.createContext(apiConf.path(), new MockHandler("src/main/resources/" + mockDir + "/" + apiConf.jsonName()));
+                    // 否则视为 JSON Mock 类型
+                    server.createContext(apiConf.path(),
+                            new MockHandler("src/main/resources/" + mockDir + "/" + apiConf.jsonName()));
                 }
             }
             // 设置线程池
