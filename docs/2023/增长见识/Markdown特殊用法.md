@@ -20,10 +20,21 @@
 
 > 2025-07-31 09:25:48
 
+### sequenceDiagram时序图
+
 [Markdown如何画时序图-CSDN博客](https://blog.csdn.net/zhw21w/article/details/125749449)
 
 ```mermaid
-	sequenceDiagram
+sequenceDiagram
+	autonumber
 	Client->>Gateway : 发送JSON RPC请求
 	Gateway-->>Client : 把JSON RPC响应发送给客户端
+```
+
+### flowchart流程图
+
+```mermaid
+flowchart LR
+    A["预登记"] -->|"获取中信登编码"| B["初始登记"]
+    B --> C["账户开户"]
 ```
