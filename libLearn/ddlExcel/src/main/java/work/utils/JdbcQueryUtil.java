@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Clob;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +51,76 @@ public final class JdbcQueryUtil {
                 for (int i = 1; i <= colCount; i++) {
                     // getObject 尽量保留 Java 原生类型（LocalDate、LocalDateTime、BigDecimal 等）
                     Object val = rs.getObject(i);
+                    // 处理 CLOB 类型：转换为 String
+                    val = convertClobValue(val);
                     row.add(new TableRowData(colNames[i], colTypes[i], val));
                 }
                 result.add(row);
             }
         }
         return result;
+    }
+
+    /**
+     * 将 CLOB/BLOB 等大对象类型转换为 Java 原生类型
+     *
+     * @param val ResultSet 中取出的原始值
+     * @return 转换后的值，CLOB -> String，BLOB -> byte[]，其他类型原样返回
+     */
+    private static Object convertClobValue(Object val) {
+        if (val == null) {
+            return null;
+        }
+        // 处理 CLOB 类型
+        if (val instanceof Clob) {
+            try {
+                Clob clob = (Clob) val;
+                long length = clob.length();
+                if (length > 0 && length <= Integer.MAX_VALUE) {
+                    return clob.getSubString(1, (int) length);
+                }
+            } catch (SQLException e) {
+                // 转换失败，返回原始对象
+                System.err.println("CLOB 转换失败: " + e.getMessage());
+            }
+        }
+        // 处理 BLOB 类型
+        if (val instanceof Blob) {
+            try {
+                Blob blob = (Blob) val;
+                long length = blob.length();
+                if (length > 0 && length <= Integer.MAX_VALUE) {
+                    return blob.getBytes(1, (int) length);
+                }
+            } catch (SQLException e) {
+                System.err.println("BLOB 转换失败: " + e.getMessage());
+            }
+        }
+        // Oracle 专有的 CLOB/BLOB 类型处理
+        String className = val.getClass().getName();
+        if ("oracle.sql.CLOB".equals(className) || "oracle.jdbc.OracleClob".equals(className)) {
+            try {
+                // 使用反射调用 getString() 方法
+                java.lang.reflect.Method method = val.getClass().getMethod("getString");
+                String strVal = (String) method.invoke(val);
+                if (strVal != null && !strVal.isEmpty()) {
+                    return strVal;
+                }
+            } catch (Exception e) {
+                // 反射失败，尝试其他方式
+                try {
+                    // 尝试获取 length 和 getSubString
+                    java.lang.reflect.Method lengthMethod = val.getClass().getMethod("length");
+                    long length = (Long) lengthMethod.invoke(val);
+                    if (length > 0 && length <= Integer.MAX_VALUE) {
+                        java.lang.reflect.Method subStrMethod = val.getClass().getMethod("getSubString", long.class, int.class);
+                        return subStrMethod.invoke(val, 1L, (int) length);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Oracle CLOB 转换失败: " + ex.getMessage());
+                }
+            }
+        }
+        return val;
     }
 }
