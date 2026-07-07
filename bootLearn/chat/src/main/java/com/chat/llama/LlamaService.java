@@ -16,11 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 全静态化 Llama 服务
@@ -36,8 +35,13 @@ public class LlamaService {
 
     // ===================== 静态全局对象 =====================
     private static final RestTemplate restTemplate = new RestTemplate();
-    private static long lastCheckTime = 0;
-    private static boolean cachedStatus = false;
+
+    /**
+     * llama-server 存活状态（全局共享、多线程可见）
+     * 通过接口手动切换，不再通过端口探测
+     * 使用 AtomicBoolean 保证读-改-写操作的原子性
+     */
+    private static final AtomicBoolean llamaAlive = new AtomicBoolean(false);
 
     // ===================== Spring 注入静态字段 =====================
     @Value("${llama.port}")
@@ -48,27 +52,26 @@ public class LlamaService {
     // ===================== 静态工具方法 =====================
 
     /**
-     * 检查服务是否存活
+     * 检查服务是否存活（直接读取原子变量）
      */
     public static boolean isAlive() {
-        // 20秒过期
-        long now = System.currentTimeMillis();
-        if (now - lastCheckTime < 20_000) {
-            return cachedStatus;
-        }
-        // 尝试连接
-        try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress("127.0.0.1", llamaPort), 300);
-            // 能连接成功 → 端口正在被监听 → 程序已启动
-            log.info("llama-server运行中");
-            cachedStatus = true;
-        } catch (Exception e) {
-            log.info("llama-server未启动");
-            // 连接失败 → 端口未监听 → 程序未启动
-            cachedStatus = false;
-        }
-        lastCheckTime = now;
-        return cachedStatus;
+        return llamaAlive.get();
+    }
+
+    /**
+     * 切换存活状态（CAS 自旋保证原子性）
+     *
+     * @return 切换后的新状态
+     */
+    public static boolean toggleAlive() {
+        boolean current;
+        boolean next;
+        do {
+            current = llamaAlive.get();
+            next = !current;
+        } while (!llamaAlive.compareAndSet(current, next));
+        log.info("llama-server存活状态切换为：{}", next);
+        return next;
     }
 
     public static String chat(String userInput) {
