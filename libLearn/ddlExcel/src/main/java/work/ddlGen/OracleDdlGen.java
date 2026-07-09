@@ -151,6 +151,7 @@ public class OracleDdlGen implements DdlGen, TypeConvert {
         // 字符串类型：VARCHAR2 / NVARCHAR2 → varchar(len)
         if (type.startsWith("VARCHAR2") || type.startsWith("NVARCHAR2")) {
             if (type.contains("(")) {
+                @SuppressWarnings("DuplicateExpressions")
                 String fieldLen = type.substring(type.indexOf("(") + 1, type.indexOf(")"));
                 return "varchar(" + fieldLen + ")";
             }
@@ -159,6 +160,7 @@ public class OracleDdlGen implements DdlGen, TypeConvert {
         // 枚举类型：CHAR → char(len)
         if (type.startsWith("CHAR")) {
             if (type.contains("(")) {
+                @SuppressWarnings("DuplicateExpressions")
                 String fieldLen = type.substring(type.indexOf("(") + 1, type.indexOf(")"));
                 return "char(" + fieldLen + ")";
             }
@@ -167,6 +169,7 @@ public class OracleDdlGen implements DdlGen, TypeConvert {
         // 整数类型：NUMBER(p) → int(p≤10) / decimal(p)
         if (type.startsWith("NUMBER") && !type.contains(",")) {
             if (type.contains("(")) {
+                @SuppressWarnings("DuplicateExpressions")
                 String fieldLen = type.substring(type.indexOf("(") + 1, type.indexOf(")"));
                 try {
                     int len = Integer.parseInt(fieldLen);
