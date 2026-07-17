@@ -31,6 +31,13 @@
             <version>21.5.0.0</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- PostgreSQL数据库驱动-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
+            <scope>runtime</scope>
+        </dependency>
         <!-- 生成excel-->
         <dependency>
             <groupId>org.apache.poi</groupId>

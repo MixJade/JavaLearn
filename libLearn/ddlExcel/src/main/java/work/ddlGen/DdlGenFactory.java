@@ -15,12 +15,14 @@ import java.util.Map;
 public final class DdlGenFactory {
     private static final Map<DbType, DdlGen> GENERATORS = Map.of(
             DbType.MySql, new MySqlDdlGen(),
-            DbType.Oracle, new OracleDdlGen()
+            DbType.Oracle, new OracleDdlGen(),
+            DbType.PostgreSql, new PostgreSqlDdlGen()
     );
 
     private static final Map<DbType, TypeConvert> CONVERTERS = Map.of(
             DbType.MySql, new MySqlDdlGen(),
-            DbType.Oracle, new OracleDdlGen()
+            DbType.Oracle, new OracleDdlGen(),
+            DbType.PostgreSql, new PostgreSqlDdlGen()
     );
 
     private DdlGenFactory() {

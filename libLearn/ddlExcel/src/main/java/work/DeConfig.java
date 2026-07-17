@@ -9,7 +9,7 @@ import work.model.entity.TableName;
  * @since 2025-12-02 11:20:27
  */
 public interface DeConfig {
-    // 此处数据库类型可以选择MySql、Oracle
+    // 此处数据库类型可以选择MySql、Oracle、PostgreSql
     DbType dbType = DbType.MySql;
 
     // 数据库链接、账号、密码

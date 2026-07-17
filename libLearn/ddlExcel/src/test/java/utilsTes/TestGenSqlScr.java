@@ -57,6 +57,16 @@ public class TestGenSqlScr {
         GenSqlScr.tranTabDDL(tabXmlDos, "测试Oracle到Oracle建表语句.sql", DbType.Oracle, DbType.Oracle, true);
     }
 
+    @Test
+    public void testOracleToPostgreSql() {
+        // 测试Oracle到PostgreSql建表语句
+        TabXmlDo tabXmlDo = new TabXmlDo(new TableName("T_USER_ORACLE", "表注释"), testOracleDDL());
+        List<TabXmlDo> tabXmlDos = new ArrayList<>();
+        tabXmlDos.add(tabXmlDo);
+        // 生成Oracle建表语句
+        GenSqlScr.tranTabDDL(tabXmlDos, "测试Oracle到PostgreSql建表语句.sql", DbType.Oracle, DbType.PostgreSql, true);
+    }
+
     private List<TableDDL> testOracleDDL() {
         // 构建测试数据（Oracle类型）
         List<TableDDL> ddlList = new ArrayList<>();

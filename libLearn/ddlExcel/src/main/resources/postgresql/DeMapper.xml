@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="work.mapper.DeMapper">
+    <!--查询表的字段DDL-->
+    <select id="queryTableDDL" resultType="work.model.entity.TableDDL">
+        SELECT c.ordinal_position                                AS columnId,
+               c.column_name                                     AS columnName,
+               CASE
+                   WHEN c.data_type = 'character varying' THEN 'varchar(' || c.character_maximum_length || ')'
+                   WHEN c.data_type = 'character' THEN 'char(' || c.character_maximum_length || ')'
+                   WHEN c.data_type = 'numeric' THEN
+                       CASE
+                           WHEN c.numeric_scale = 0 AND c.numeric_precision IS NOT NULL THEN 'numeric(' || c.numeric_precision || ')'
+                           WHEN c.numeric_precision IS NOT NULL THEN 'numeric(' || c.numeric_precision || ',' || c.numeric_scale || ')'
+                           ELSE 'numeric'
+                       END
+                   WHEN c.data_type = 'timestamp without time zone' THEN 'timestamp'
+                   WHEN c.data_type = 'timestamp with time zone' THEN 'timestamptz'
+                   WHEN c.data_type = 'time without time zone' THEN 'time'
+                   WHEN c.data_type = 'time with time zone' THEN 'timetz'
+                   WHEN c.data_type = 'double precision' THEN 'double precision'
+                   WHEN c.data_type = 'real' THEN 'real'
+                   ELSE c.data_type
+                   END                                           AS dataType,
+               COALESCE(col_dsc.description::text, '')           AS comments,
+               CASE WHEN pk.column_name IS NOT NULL THEN 'Y' END AS isPri,
+               CASE WHEN c.is_nullable = 'NO' THEN 'Y' END       AS isNotNull,
+               c.column_default                                  AS defaultVal
+        FROM information_schema.columns c
+                 LEFT JOIN (
+                    SELECT kcu.table_name, kcu.column_name
+                    FROM information_schema.table_constraints tc
+                             JOIN information_schema.key_column_usage kcu
+                                  ON tc.constraint_name = kcu.constraint_name
+                                      AND tc.table_schema = kcu.table_schema
+                    WHERE tc.constraint_type = 'PRIMARY KEY'
+                ) pk ON c.table_name = pk.table_name AND c.column_name = pk.column_name
+                 LEFT JOIN pg_class cls ON cls.relname = c.table_name
+                 LEFT JOIN pg_description col_dsc
+                           ON col_dsc.objoid = cls.oid AND col_dsc.objsubid = c.ordinal_position
+        WHERE c.table_name = #{tableName}
+        ORDER BY c.ordinal_position
+    </select>
+    <!--查询表的名称-->
+    <select id="queryTableName" resultType="work.model.entity.TableName">
+        SELECT c.relname                     AS tableName,
+               COALESCE(dsc.description::text, '') AS comments
+        FROM pg_class c
+                 LEFT JOIN pg_description dsc ON dsc.objoid = c.oid AND dsc.objsubid = 0
+        WHERE c.relname = #{tableName}
+          AND c.relkind = 'r'
+    </select>
+    <!--查询表的原始字段DDL-->
+    <select id="queryOriTabField" resultType="work.model.entity.OriTabCol">
+        SELECT c.column_name                                     AS columnName,
+               c.data_type                                       AS dataType,
+               c.numeric_precision                               AS numPre,
+               c.numeric_scale                                   AS numSca,
+               COALESCE(col_dsc.description::text, '')           AS comments,
+               CASE WHEN pk.column_name IS NOT NULL THEN 1 ELSE 0 END AS isPri
+        FROM information_schema.columns c
+                 LEFT JOIN (
+                    SELECT kcu.table_name, kcu.column_name
+                    FROM information_schema.table_constraints tc
+                             JOIN information_schema.key_column_usage kcu
+                                  ON tc.constraint_name = kcu.constraint_name
+                                      AND tc.table_schema = kcu.table_schema
+                    WHERE tc.constraint_type = 'PRIMARY KEY'
+                ) pk ON c.table_name = pk.table_name AND c.column_name = pk.column_name
+                 LEFT JOIN pg_class cls ON cls.relname = c.table_name
+                 LEFT JOIN pg_description col_dsc
+                           ON col_dsc.objoid = cls.oid AND col_dsc.objsubid = c.ordinal_position
+        WHERE c.table_name = #{tableName}
+        ORDER BY c.ordinal_position
+    </select>
+</mapper>

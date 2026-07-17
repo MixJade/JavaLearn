@@ -28,6 +28,7 @@ public final class MyBatisConfig {
         switch (DeConfig.dbType) {
             case MySql -> dataSource.setDriver("com.mysql.cj.jdbc.Driver");
             case Oracle -> dataSource.setDriver("oracle.jdbc.driver.OracleDriver");
+            case PostgreSql -> dataSource.setDriver("org.postgresql.Driver");
         }
         dataSource.setUrl(DeConfig.url);
         dataSource.setUsername(DeConfig.username);
@@ -40,6 +41,7 @@ public final class MyBatisConfig {
         String xmlPath = switch (DeConfig.dbType) {
             case MySql -> "mysql/DeMapper.xml"; // MySql 专属 XML
             case Oracle -> "oracle/DeMapper.xml"; // Oracle 专属 XML
+            case PostgreSql -> "postgresql/DeMapper.xml"; // PostgreSQL 专属 XML
         };
         try (InputStream inputStream = Resources.getResourceAsStream(xmlPath)) {
             XMLMapperBuilder mapperBuilder = new XMLMapperBuilder(

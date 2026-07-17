@@ -16,18 +16,22 @@ import java.util.stream.Collectors;
 /**
  * INSERT语句生成工具
  * <ul>
- *     <li>目标MySQL：一张表输出一条批量INSERT语句</li>
+ *     <li>目标MySQL/PostgreSQL：一张表输出一条批量INSERT语句</li>
  *     <li>目标Oracle：每条数据输出一条INSERT语句</li>
- *     <li>Oracle→MySQL：自动转换日期格式</li>
+ *     <li>Oracle→MySQL/PostgreSQL：自动转换日期格式</li>
  * </ul>
  *
  * @since 2026-05-20
  */
 public final class GenInsertScr {
 
-    /** MySQL datetime格式化器 */
+    /**
+     * MySQL datetime格式化器
+     */
     private static final DateTimeFormatter MYSQL_DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    /** MySQL date格式化器 */
+    /**
+     * MySQL date格式化器
+     */
     private static final DateTimeFormatter MYSQL_D_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
@@ -60,8 +64,8 @@ public final class GenInsertScr {
                 continue;
             }
 
-            if (targetDb == DbType.MySql) {
-                result.append(buildMysqlBatchInsert(rawTableName, dataRows, sourceDb));
+            if (targetDb == DbType.MySql || targetDb == DbType.PostgreSql) {
+                result.append(buildBatchInsert(rawTableName, dataRows, sourceDb, targetDb));
             } else {
                 result.append(buildOracleInserts(rawTableName, dataRows, sourceDb));
             }
@@ -71,10 +75,10 @@ public final class GenInsertScr {
     }
 
     /**
-     * MySQL版：一张表输出一条批量INSERT
+     * 批量INSERT（MySQL/PostgreSQL通用）
      * INSERT INTO table_name (col1, col2, ...) VALUES (...), (...);
      */
-    private static String buildMysqlBatchInsert(String tableName, List<List<TableRowData>> dataRows, DbType sourceDb) {
+    private static String buildBatchInsert(String tableName, List<List<TableRowData>> dataRows, DbType sourceDb, DbType targetDb) {
         // 从第一行数据中取字段名列表
         List<TableRowData> firstRow = dataRows.get(0);
         String cols = firstRow.stream()
@@ -82,7 +86,7 @@ public final class GenInsertScr {
                 .collect(Collectors.joining(", "));
 
         String valuesPart = dataRows.stream()
-                .map(row -> buildRowValues(row, sourceDb, DbType.MySql))
+                .map(row -> buildRowValues(row, sourceDb, targetDb))
                 .collect(Collectors.joining(",\n       "));
 
         return String.format("INSERT INTO %s (%s) VALUES\n       %s;\n",
@@ -94,8 +98,8 @@ public final class GenInsertScr {
      * INSERT INTO TABLE_NAME (COL1, COL2, ...) VALUES (...);
      */
     private static String buildOracleInserts(String tableName,
-                                              List<List<TableRowData>> dataRows,
-                                              DbType sourceDb) {
+                                             List<List<TableRowData>> dataRows,
+                                             DbType sourceDb) {
         String tableNameUpper = tableName.toUpperCase();
         List<TableRowData> firstRow = dataRows.get(0);
         String cols = firstRow.stream()
@@ -144,18 +148,18 @@ public final class GenInsertScr {
         // -------- 日期/时间类型处理 --------
         boolean isDateType = isDateTimeType(typeUpper);
         if (isDateType) {
-            // Oracle→MySQL：Oracle的DATE/TIMESTAMP包含时分秒，转为MySQL datetime字符串
-            if (sourceDb == DbType.Oracle && targetDb == DbType.MySql) {
-                String mysqlDateStr = convertOracleDateToMysql(val, strVal);
-                return "'" + mysqlDateStr + "'";
+            // Oracle → MySQL/PostgreSQL：Oracle的DATE/TIMESTAMP包含时分秒，转为标准日期字符串
+            if (sourceDb == DbType.Oracle && (targetDb == DbType.MySql || targetDb == DbType.PostgreSql)) {
+                String dateStr = convertOracleDateToMysql(val, strVal);
+                return "'" + dateStr + "'";
             }
-            // MySQL→Oracle or Oracle→Oracle：用TO_DATE/TO_TIMESTAMP函数
+            // 目标Oracle：用TO_DATE/TO_TIMESTAMP函数
             if (targetDb == DbType.Oracle) {
                 return toOracleDateStr(val, strVal, typeUpper);
             }
-            // MySQL→MySQL or 其他：直接用字符串格式
-            String mysqlDateStr = toMysqlDateStr(val, strVal);
-            return "'" + mysqlDateStr + "'";
+            // MySQL/PostgreSQL：直接用字符串格式
+            String dateStr = toMysqlDateStr(val, strVal);
+            return "'" + dateStr + "'";
         }
 
         // -------- 数字类型处理 --------
@@ -177,14 +181,18 @@ public final class GenInsertScr {
 
     // ====== 类型判断辅助方法 ======
 
-    /** 判断是否为日期/时间类型 */
+    /**
+     * 判断是否为日期/时间类型
+     */
     private static boolean isDateTimeType(String dataType) {
         if (dataType == null || dataType.isBlank()) return false;
         return dataType.startsWith("DATE") || dataType.startsWith("TIMESTAMP")
                 || dataType.equals("DATETIME") || dataType.equals("TIME");
     }
 
-    /** 判断是否为数字类型 */
+    /**
+     * 判断是否为数字类型
+     */
     private static boolean isNumericType(String dataType) {
         if (dataType == null || dataType.isBlank()) return false;
         return dataType.startsWith("NUMBER") || dataType.startsWith("INT") || dataType.startsWith("BIGINT")

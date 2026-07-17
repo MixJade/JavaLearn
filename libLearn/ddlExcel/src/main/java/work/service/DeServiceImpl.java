@@ -119,13 +119,13 @@ public class DeServiceImpl implements DeService {
         // 创建键盘输入扫描器
         Scanner scanner = new Scanner(System.in);
         // 1. 输入目标数据库类型
-        System.out.println("请输入目标数据库类型（1=MySql，0=Oracle）：");
+        System.out.println("请输入目标数据库类型（1=MySql，2=PostgreSql，0=Oracle）：");
         String dbInput = scanner.nextLine().trim();
-        DbType targetDb = DbType.MySql;
-        // 校验并转换数据库类型输入
-        if ("0".equals(dbInput)) {
-            targetDb = DbType.Oracle;
-        }
+        DbType targetDb = switch (dbInput) {
+            case "0" -> DbType.Oracle;
+            case "2" -> DbType.PostgreSql;
+            default -> DbType.MySql;
+        };
         // 2. 输入是否生成删表语句
         System.out.println("请输入是否生成删表语句（1=是，0=否）：");
         String dropInput = scanner.nextLine().trim();
@@ -182,9 +182,13 @@ public class DeServiceImpl implements DeService {
         // 创建键盘输入扫描器
         Scanner scanner = new Scanner(System.in);
         // 1. 输入目标数据库类型
-        System.out.println("请输入目标数据库类型（1=MySql，0=Oracle）：");
+        System.out.println("请输入目标数据库类型（1=MySql，2=PostgreSql，0=Oracle）：");
         String dbInput = scanner.nextLine().trim();
-        DbType targetDb = "0".equals(dbInput) ? DbType.Oracle : DbType.MySql;
+        DbType targetDb = switch (dbInput) {
+            case "0" -> DbType.Oracle;
+            case "2" -> DbType.PostgreSql;
+            default -> DbType.MySql;
+        };
         // 关闭扫描器
         scanner.close();
 
