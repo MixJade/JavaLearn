@@ -1,8 +1,11 @@
 package work.ddlGen;
 
 import work.enums.DbType;
+import work.enums.JType;
 import work.model.dto.TabXmlDo;
+import work.model.entity.OriTabCol;
 import work.model.entity.TableDDL;
+import work.utils.SqlValUtil;
 import work.utils.StrToFile;
 
 import java.util.List;
@@ -16,11 +19,11 @@ import java.util.stream.Collectors;
  *
  * @since 2026-07-09
  */
-public class OracleDdlGen implements DdlGen, TypeConvert {
+public class OracleDdlGen implements DdlGen {
 
     @Override
     public void generate(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
-        TypeConvert sourceConverter = DdlGenFactory.getType(sourceDb);
+        DdlGen sourceConverter = DdlGenFactory.get(sourceDb);
         StringBuilder result = new StringBuilder();
 
         for (TabXmlDo tabXmlDo : tabXmlDos) {
@@ -66,7 +69,7 @@ public class OracleDdlGen implements DdlGen, TypeConvert {
     /**
      * 构建单个字段的SQL片段
      */
-    private String buildColumn(TableDDL ddl, DbType sourceDb, TypeConvert sourceConverter) {
+    private String buildColumn(TableDDL ddl, DbType sourceDb, DdlGen sourceConverter) {
         // 字段名保持大写（Oracle习惯）
         String columnName = ddl.columnName().trim().toUpperCase();
         // 字段类型转换
@@ -260,5 +263,85 @@ public class OracleDdlGen implements DdlGen, TypeConvert {
         // 未匹配到的类型默认 VARCHAR2(100)
         System.err.println("未匹配的类型：" + type);
         return "VARCHAR2(100)";
+    }
+
+    // ==================== Oracle → Java（toJavaType）====================
+
+    /**
+     * Oracle字段类型 → Java类型
+     * <p>
+     * 需特殊处理 NUMBER 类型的精度细分：
+     * <ul>
+     *     <li>NUMBER(10,0) → Integer</li>
+     *     <li>NUMBER(20,0) → Long</li>
+     *     <li>NUMBER(10,2) → BigDecimal</li>
+     * </ul>
+     */
+    @Override
+    public JType toJavaType(OriTabCol oriTabCol) {
+        String pureType = oriTabCol.dataType().toUpperCase().trim();
+        return switch (pureType) {
+            // 数字类型（重点处理NUMBER的不同长度）
+            case "NUMBER" -> handleOracleNumberType(oriTabCol.numPre(), oriTabCol.numSca());
+            // 字符串类型
+            case "VARCHAR2", "CHAR", "NVARCHAR2", "CLOB", "NCLOB" -> JType.STR;
+            // 日期时间类型
+            case "DATE", "TIMESTAMP" -> JType.DATE_TIME;
+            // 布尔类型（Oracle 12c+支持）
+            case "BOOLEAN" -> JType.BOOL;
+            // 二进制类型
+            case "BLOB" -> JType.BYTE;
+            // 兜底：未匹配的类型统一返回String
+            default -> JType.STR;
+        };
+    }
+
+    /**
+     * 处理Oracle NUMBER类型的细分映射
+     *
+     * <ul>
+     *     <li>有小数位 → BigDecimal</li>
+     *     <li>精度≤9 → Integer</li>
+     *     <li>精度≤18 → Long</li>
+     *     <li>超长或无参数 → BigDecimal</li>
+     * </ul>
+     */
+    private JType handleOracleNumberType(Integer numPre, Integer numSca) {
+        // 处理有小数位的情况（如NUMBER(10,2)）→ 直接用BigDecimal
+        if (numSca != null && numSca > 0) {
+            return JType.DECIMAL;
+        }
+        // 处理无小数位的情况（如NUMBER(10)）
+        if (numPre != null && numPre > 0) {
+            if (numPre <= 9) {
+                return JType.INT; // 精度≤9 → Integer
+            } else if (numPre <= 18) {
+                return JType.LONG; // 精度≤18 → Long
+            } else {
+                return JType.DECIMAL; // 超长长整型 → BigDecimal
+            }
+        }
+        // 无参数的NUMBER（默认精度）→ BigDecimal
+        return JType.DECIMAL;
+    }
+
+    // ==================== Oracle INSERT 风格声明 ====================
+    @Override
+    public boolean insertBatch() {
+        return false;
+    }
+
+    /**
+     * 目标Oracle：日期值用 TO_DATE/TO_TIMESTAMP 函数
+     * <p>
+     * 覆写默认的字符串格式，因为Oracle需要用函数包装日期字面量。
+     */
+    @Override
+    public String formatDateValue(Object val, String strVal, String typeUpper, DbType sourceDb) {
+        String dateStr = SqlValUtil.toDateTimeStr(val, strVal);
+        if (typeUpper.startsWith("TIMESTAMP")) {
+            return "TO_TIMESTAMP('" + dateStr + "', 'YYYY-MM-DD HH24:MI:SS')";
+        }
+        return "TO_DATE('" + dateStr + "', 'YYYY-MM-DD HH24:MI:SS')";
     }
 }

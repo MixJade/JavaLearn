@@ -1,5 +1,6 @@
 package work.utils;
 
+import work.ddlGen.DdlGenFactory;
 import work.enums.DbType;
 import work.enums.JType;
 import work.model.dto.CodeCol;
@@ -26,7 +27,7 @@ public final class GenCodeUtil {
         // 将数据库字段转为Java字段
         List<CodeCol> codeColList = new ArrayList<>();
         for (OriTabCol oriTabCol : oriTabCols) {
-            JType jType = convertJavaCol(dbType, oriTabCol);
+            JType jType = DdlGenFactory.get(dbType).toJavaType(oriTabCol);
             jTypeSet.add(jType);
             codeColList.add(new CodeCol(
                     ConvertCase.snakeToSCamel(oriTabCol.columnName()),
@@ -44,120 +45,6 @@ public final class GenCodeUtil {
         String lJNm = ConvertCase.snakeToLCamel(tableName.tableName());
         String sJNm = ConvertCase.snakeToSCamel(tableName.tableName());
         return new CodeTab(lJNm, sJNm, tableName, pkgList, codeColList);
-    }
-
-    private static JType convertJavaCol(DbType dbType, OriTabCol oriTabCol) {
-        // 统一转为大写，避免大小写问题（如varchar和VARCHAR统一处理）
-        String colType = oriTabCol.dataType().toUpperCase().trim();
-        return switch (dbType) {
-            case MySql -> convertMysqlType(colType);
-            case Oracle -> convertOracleType(colType, oriTabCol.numPre(), oriTabCol.numSca());
-            case PostgreSql -> convertPostgreSqlType(colType);
-        };
-    }
-
-    /**
-     * MySQL字段类型转换
-     */
-    private static JType convertMysqlType(String pureType) {
-        return switch (pureType) {
-            // 整数类型
-            case "INT", "INTEGER" -> JType.INT;
-            case "BIGINT" -> JType.LONG;
-            // 布尔类型
-            case "TINYINT", "BOOLEAN" -> JType.BOOL;
-            // 浮点/高精度类型
-            case "FLOAT", "DOUBLE" -> JType.DOUBLE;
-            case "DECIMAL", "NUMERIC" -> JType.DECIMAL;
-            // 字符串类型
-            case "VARCHAR", "CHAR", "TEXT", "LONGTEXT", "MEDIUMTEXT", "TINYTEXT" -> JType.STR;
-            // 日期时间类型
-            case "DATE" -> JType.DATE;
-            case "TIME" -> JType.TIME;
-            case "DATETIME", "TIMESTAMP" -> JType.DATE_TIME;
-            // 二进制类型
-            case "BLOB", "LONGBLOB", "MEDIUMBLOB", "TINYBLOB" -> JType.BYTE;
-            // 兜底：未匹配的类型统一返回String
-            default -> JType.STR;
-        };
-    }
-
-    /**
-     * Oracle字段类型转换（需处理NUMBER的参数）
-     */
-    private static JType convertOracleType(String pureType, Integer numPre, Integer numSca) {
-        return switch (pureType) {
-            // 数字类型（重点处理NUMBER的不同长度）
-            case "NUMBER" -> handleOracleNumberType(numPre, numSca);
-            // 字符串类型
-            case "VARCHAR2", "CHAR", "NVARCHAR2", "CLOB", "NCLOB" -> JType.STR;
-            // 日期时间类型
-            case "DATE", "TIMESTAMP" -> JType.DATE_TIME;
-            // 布尔类型（Oracle 12c+支持）
-            case "BOOLEAN" -> JType.BOOL;
-            // 二进制类型
-            case "BLOB" -> JType.BYTE;
-            // 兜底：未匹配的类型统一返回String
-            default -> JType.STR;
-        };
-    }
-
-    /**
-     * PostgreSQL字段类型转换
-     */
-    private static JType convertPostgreSqlType(String pureType) {
-        return switch (pureType) {
-            // 整数类型
-            case "INTEGER", "INT", "INT4", "SERIAL" -> JType.INT;
-            case "BIGINT", "INT8", "BIGSERIAL" -> JType.LONG;
-            case "SMALLINT", "INT2" -> JType.INT;
-            // 布尔类型
-            case "BOOLEAN", "BOOL" -> JType.BOOL;
-            // 浮点/高精度类型
-            case "REAL", "FLOAT4", "FLOAT" -> JType.DOUBLE;
-            case "DOUBLE PRECISION", "FLOAT8" -> JType.DOUBLE;
-            case "NUMERIC", "DECIMAL" -> JType.DECIMAL;
-            // 字符串类型
-            case "VARCHAR", "CHARACTER VARYING", "CHAR", "CHARACTER", "TEXT" -> JType.STR;
-            // 日期时间类型
-            case "DATE" -> JType.DATE;
-            case "TIME", "TIMETZ" -> JType.TIME;
-            case "TIMESTAMP", "TIMESTAMPTZ" -> JType.DATE_TIME;
-            // 二进制类型
-            case "BYTEA" -> JType.BYTE;
-            // 其他类型（UUID、JSON、JSONB、XML）→ String
-            case "UUID", "JSON", "JSONB", "XML" -> JType.STR;
-            // 兜底：未匹配的类型统一返回String
-            default -> JType.STR;
-        };
-    }
-
-    /**
-     * 处理Oracle NUMBER类型的细分映射
-     *
-     * <ul>
-     *     <li>10,0 → Integer</li>
-     *     <li>20,0 → Long</li>
-     *     <li>10,2 → BigDecimal</li>
-     * </ul>
-     */
-    private static JType handleOracleNumberType(Integer numPre, Integer numSca) {
-        // 处理有小数位的情况（如NUMBER(10,2)）→ 直接用BigDecimal
-        if (numSca != null && numSca > 0) {
-            return JType.DECIMAL;
-        }
-        // 处理无小数位的情况（如NUMBER(10)）
-        if (numPre != null && numPre > 0) {
-            if (numPre <= 9) {
-                return JType.INT; // 精度≤9 → Integer
-            } else if (numPre <= 18) {
-                return JType.LONG; // 精度≤18 → Long
-            } else {
-                return JType.DECIMAL; // 超长长整型 → BigDecimal
-            }
-        }
-        // 无参数的NUMBER（默认精度）→ BigDecimal
-        return JType.DECIMAL;
     }
 
     /**

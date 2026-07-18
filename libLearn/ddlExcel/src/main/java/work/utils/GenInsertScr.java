@@ -1,38 +1,24 @@
 package work.utils;
 
+import work.ddlGen.DdlGen;
+import work.ddlGen.DdlGenFactory;
 import work.enums.DbType;
 import work.model.dto.TableInsertData;
 import work.model.entity.TableName;
 import work.model.entity.TableRowData;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * INSERT语句生成工具
- * <ul>
- *     <li>目标MySQL/PostgreSQL：一张表输出一条批量INSERT语句</li>
- *     <li>目标Oracle：每条数据输出一条INSERT语句</li>
- *     <li>Oracle→MySQL/PostgreSQL：自动转换日期格式</li>
- * </ul>
+ * INSERT语句生成工具（调度器 + 统一生成逻辑）
+ * <p>
+ * 本类负责遍历表数据并统一生成 INSERT 语句。
+ * 日期值的格式化仍委托给 {@link DdlGen#formatDateValue}。
  *
  * @since 2026-05-20
  */
 public final class GenInsertScr {
-
-    /**
-     * MySQL datetime格式化器
-     */
-    private static final DateTimeFormatter MYSQL_DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    /**
-     * MySQL date格式化器
-     */
-    private static final DateTimeFormatter MYSQL_D_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * 将数据导出为INSERT语句
@@ -44,245 +30,68 @@ public final class GenInsertScr {
      */
     public static void genInsertSql(List<TableInsertData> tableDataList, String sqlName, DbType sourceDb, DbType targetDb) {
         System.out.printf("%n开始生成INSERT语句，从【%s】到【%s】%n", sourceDb, targetDb);
+        DdlGen targetGen = DdlGenFactory.get(targetDb);
         StringBuilder result = new StringBuilder();
 
         for (TableInsertData tabData : tableDataList) {
             TableName tableNameObj = tabData.tableName();
             String rawTableName = tableNameObj.tableName().trim();
-            List<List<TableRowData>> dataRows = tabData.rows();
-
-            // 每张表上方输出注释（表名 + 中文注释）
             String comment = tableNameObj.comments();
-            result.append("\n-- ").append(rawTableName);
-            if (comment != null && !comment.isBlank()) {
-                result.append("  ").append(comment.trim());
-            }
-            result.append("\n");
-
-            if (dataRows.isEmpty()) {
-                result.append("-- 表 ").append(rawTableName).append(" 无数据\n");
-                continue;
-            }
-
-            if (targetDb == DbType.MySql || targetDb == DbType.PostgreSql) {
-                result.append(buildBatchInsert(rawTableName, dataRows, sourceDb, targetDb));
-            } else {
-                result.append(buildOracleInserts(rawTableName, dataRows, sourceDb));
-            }
+            result.append(buildInsertSql(rawTableName, comment, tabData.rows(), sourceDb, targetGen));
         }
 
         StrToFile.toFile(result.toString(), sqlName);
     }
 
     /**
-     * 批量INSERT（MySQL/PostgreSQL通用）
-     * INSERT INTO table_name (col1, col2, ...) VALUES (...), (...);
+     * 生成单张表的INSERT语句（统一逻辑）
+     * <p>
+     * 根据 {@code targetGen.insertStyle()} 选择批量或单条INSERT格式，
+     * 表名/字段名的大小写也由风格决定。日期值格式化委托给 {@link DdlGen#formatDateValue}。
+     *
+     * @param tableName    表名（原始大小写）
+     * @param tableComment 表注释
+     * @param dataRows     数据行
+     * @param sourceDb     源数据库类型
+     * @param targetGen    目标数据库方言生成器
+     * @return INSERT语句字符串（含表注释行）
      */
-    private static String buildBatchInsert(String tableName, List<List<TableRowData>> dataRows, DbType sourceDb, DbType targetDb) {
-        // 从第一行数据中取字段名列表
-        List<TableRowData> firstRow = dataRows.get(0);
-        String cols = firstRow.stream()
-                .map(rd -> rd.fieldName().toLowerCase())
-                .collect(Collectors.joining(", "));
-
-        String valuesPart = dataRows.stream()
-                .map(row -> buildRowValues(row, sourceDb, targetDb))
-                .collect(Collectors.joining(",\n       "));
-
-        return String.format("INSERT INTO %s (%s) VALUES\n       %s;\n",
-                tableName.toLowerCase(), cols, valuesPart);
-    }
-
-    /**
-     * Oracle版：每条数据一条INSERT
-     * INSERT INTO TABLE_NAME (COL1, COL2, ...) VALUES (...);
-     */
-    private static String buildOracleInserts(String tableName,
-                                             List<List<TableRowData>> dataRows,
-                                             DbType sourceDb) {
-        String tableNameUpper = tableName.toUpperCase();
-        List<TableRowData> firstRow = dataRows.get(0);
-        String cols = firstRow.stream()
-                .map(rd -> rd.fieldName().toUpperCase())
-                .collect(Collectors.joining(", "));
-
+    static String buildInsertSql(String tableName, String tableComment,
+                                 List<List<TableRowData>> dataRows, DbType sourceDb, DdlGen targetGen) {
         StringBuilder sb = new StringBuilder();
-        for (List<TableRowData> row : dataRows) {
-            String values = buildRowValues(row, sourceDb, DbType.Oracle);
-            sb.append(String.format("INSERT INTO %s (%s) VALUES %s;\n",
-                    tableNameUpper, cols, values));
+
+        // 表头注释（批量/单条通用）
+        sb.append("\n-- ").append(tableName);
+        if (tableComment != null && !tableComment.isBlank()) {
+            sb.append("  ").append(tableComment.trim());
+        }
+        sb.append("\n");
+
+        if (dataRows.isEmpty()) {
+            sb.append("-- 表 ").append(tableName).append(" 无数据\n");
+            return sb.toString();
+        }
+
+        // 标识符大小写：BATCH → 小写，SINGLE → 大写
+        String displayTable = targetGen.insertBatch() ? tableName.toLowerCase() : tableName.toUpperCase();
+        List<TableRowData> firstRow = dataRows.get(0);
+        String cols = firstRow.stream()
+                .map(rd -> targetGen.insertBatch() ? rd.fieldName().toLowerCase() : rd.fieldName().toUpperCase())
+                .collect(Collectors.joining(", "));
+
+        if (targetGen.insertBatch()) {
+            // 批量INSERT：INSERT INTO table (cols) VALUES (...), (...), ...;
+            String valuesPart = dataRows.stream()
+                    .map(row -> SqlValUtil.buildRowValues(row, sourceDb, targetGen))
+                    .collect(Collectors.joining(",\n       "));
+            sb.append(String.format("INSERT INTO %s (%s) VALUES\n       %s;\n", displayTable, cols, valuesPart));
+        } else {
+            // 单条INSERT：每行一条 INSERT INTO TABLE (COLS) VALUES (...);
+            for (List<TableRowData> row : dataRows) {
+                String values = SqlValUtil.buildRowValues(row, sourceDb, targetGen);
+                sb.append(String.format("INSERT INTO %s (%s) VALUES %s;\n", displayTable, cols, values));
+            }
         }
         return sb.toString();
-    }
-
-    /**
-     * 构建单行VALUES的括号内容，如 ('张三', 18, NULL, TO_DATE(...))
-     * 直接从 TableRowData 中读取字段名、字段类型和值，无需额外传入 colTypeMap
-     */
-    private static String buildRowValues(List<TableRowData> row,
-                                         DbType sourceDb,
-                                         DbType targetDb) {
-        String values = row.stream()
-                .map(rd -> formatValue(rd.value(), rd.fieldType(), sourceDb, targetDb))
-                .collect(Collectors.joining(", "));
-        return "(" + values + ")";
-    }
-
-    /**
-     * 将Java对象格式化为SQL字面量
-     *
-     * @param val      字段值
-     * @param dataType 字段的数据库类型（如 DATE、VARCHAR2、NUMBER 等）
-     * @param sourceDb 源数据库类型
-     * @param targetDb 目标数据库类型
-     */
-    private static String formatValue(Object val, String dataType, DbType sourceDb, DbType targetDb) {
-        if (val == null) {
-            return "NULL";
-        }
-
-        String strVal = val.toString().trim();
-        // 统一大写便于判断
-        String typeUpper = dataType == null ? "" : dataType.trim().toUpperCase();
-
-        // -------- 日期/时间类型处理 --------
-        boolean isDateType = isDateTimeType(typeUpper);
-        if (isDateType) {
-            // Oracle → MySQL/PostgreSQL：Oracle的DATE/TIMESTAMP包含时分秒，转为标准日期字符串
-            if (sourceDb == DbType.Oracle && (targetDb == DbType.MySql || targetDb == DbType.PostgreSql)) {
-                String dateStr = convertOracleDateToMysql(val, strVal);
-                return "'" + dateStr + "'";
-            }
-            // 目标Oracle：用TO_DATE/TO_TIMESTAMP函数
-            if (targetDb == DbType.Oracle) {
-                return toOracleDateStr(val, strVal, typeUpper);
-            }
-            // MySQL/PostgreSQL：直接用字符串格式
-            String dateStr = toMysqlDateStr(val, strVal);
-            return "'" + dateStr + "'";
-        }
-
-        // -------- 数字类型处理 --------
-        if (isNumericType(typeUpper)) {
-            if (strVal.matches("^-?\\d+(\\.\\d+)?$")) {
-                return strVal;
-            }
-        }
-
-        // Java数字类型直接返回（无需引号）
-        if (val instanceof Number) {
-            return strVal;
-        }
-
-        // -------- 字符串类型处理：转义单引号 --------
-        String escaped = strVal.replace("'", "''");
-        return "'" + escaped + "'";
-    }
-
-    // ====== 类型判断辅助方法 ======
-
-    /**
-     * 判断是否为日期/时间类型
-     */
-    private static boolean isDateTimeType(String dataType) {
-        if (dataType == null || dataType.isBlank()) return false;
-        return dataType.startsWith("DATE") || dataType.startsWith("TIMESTAMP")
-                || dataType.equals("DATETIME") || dataType.equals("TIME");
-    }
-
-    /**
-     * 判断是否为数字类型
-     */
-    private static boolean isNumericType(String dataType) {
-        if (dataType == null || dataType.isBlank()) return false;
-        return dataType.startsWith("NUMBER") || dataType.startsWith("INT") || dataType.startsWith("BIGINT")
-                || dataType.startsWith("DECIMAL") || dataType.startsWith("NUMERIC")
-                || dataType.startsWith("FLOAT") || dataType.startsWith("DOUBLE")
-                || dataType.startsWith("TINYINT") || dataType.startsWith("SMALLINT");
-    }
-
-    // ====== 日期转换辅助方法 ======
-
-    /**
-     * Oracle DATE/TIMESTAMP → MySQL 日期字符串（yyyy-MM-dd HH:mm:ss）
-     */
-    private static String convertOracleDateToMysql(Object val, String strVal) {
-        if (val instanceof LocalDateTime ldt) {
-            return ldt.format(MYSQL_DT_FMT);
-        }
-        if (val instanceof LocalDate ld) {
-            return ld.atStartOfDay().format(MYSQL_DT_FMT);
-        }
-        if (val instanceof Timestamp ts) {
-            return ts.toLocalDateTime().format(MYSQL_DT_FMT);
-        }
-        if (val instanceof Date d) {
-            return new Timestamp(d.getTime()).toLocalDateTime().format(MYSQL_DT_FMT);
-        }
-        return normalizeDateStr(strVal);
-    }
-
-    /**
-     * 目标Oracle：返回 TO_DATE('...', 'YYYY-MM-DD HH24:MI:SS') 或 TO_TIMESTAMP(...)
-     */
-    private static String toOracleDateStr(Object val, String strVal, String dataType) {
-        String dateStr;
-        if (val instanceof LocalDateTime ldt) {
-            dateStr = ldt.format(MYSQL_DT_FMT);
-        } else if (val instanceof LocalDate ld) {
-            dateStr = ld.atStartOfDay().format(MYSQL_DT_FMT);
-        } else if (val instanceof Timestamp ts) {
-            dateStr = ts.toLocalDateTime().format(MYSQL_DT_FMT);
-        } else if (val instanceof Date d) {
-            dateStr = new Timestamp(d.getTime()).toLocalDateTime().format(MYSQL_DT_FMT);
-        } else {
-            dateStr = normalizeDateStr(strVal);
-        }
-        if (dataType.startsWith("TIMESTAMP")) {
-            return "TO_TIMESTAMP('" + dateStr + "', 'YYYY-MM-DD HH24:MI:SS')";
-        }
-        return "TO_DATE('" + dateStr + "', 'YYYY-MM-DD HH24:MI:SS')";
-    }
-
-    /**
-     * 目标MySQL：返回 'yyyy-MM-dd HH:mm:ss' 或 'yyyy-MM-dd' 格式字符串
-     */
-    private static String toMysqlDateStr(Object val, String strVal) {
-        if (val instanceof LocalDateTime ldt) {
-            return ldt.format(MYSQL_DT_FMT);
-        }
-        if (val instanceof LocalDate ld) {
-            return ld.format(MYSQL_D_FMT);
-        }
-        if (val instanceof Timestamp ts) {
-            return ts.toLocalDateTime().format(MYSQL_DT_FMT);
-        }
-        if (val instanceof Date d) {
-            return new Timestamp(d.getTime()).toLocalDateTime().format(MYSQL_DT_FMT);
-        }
-        return normalizeDateStr(strVal);
-    }
-
-    /**
-     * 将字符串日期标准化为指定格式（容错处理）
-     * 支持 Oracle/MySQL JDBC 常见输出格式：
-     * - "2025-01-01 00:00:00.0"
-     * - "2025-01-01 00:00:00"
-     * - "2025-01-01"
-     */
-    private static String normalizeDateStr(String strVal) {
-        if (strVal == null || strVal.isBlank()) return strVal;
-        // 去掉末尾 ".0" 或 ".xxx"（Oracle/MySQL JDBC 附加的纳秒部分）
-        String cleaned = strVal.replaceAll("\\.\\d+$", "").trim();
-        try {
-            if (cleaned.length() == 10) {
-                LocalDate ld = LocalDate.parse(cleaned, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                return ld.atStartOfDay().format(GenInsertScr.MYSQL_DT_FMT);
-            }
-            LocalDateTime ldt = LocalDateTime.parse(cleaned, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            return ldt.format(GenInsertScr.MYSQL_DT_FMT);
-        } catch (Exception e) {
-            return cleaned;
-        }
     }
 }

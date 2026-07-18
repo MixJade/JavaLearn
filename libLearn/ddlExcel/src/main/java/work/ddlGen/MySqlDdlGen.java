@@ -1,7 +1,9 @@
 package work.ddlGen;
 
 import work.enums.DbType;
+import work.enums.JType;
 import work.model.dto.TabXmlDo;
+import work.model.entity.OriTabCol;
 import work.model.entity.TableDDL;
 import work.utils.StrToFile;
 
@@ -16,13 +18,13 @@ import java.util.stream.Collectors;
  *
  * @since 2026-07-09
  */
-public class MySqlDdlGen implements DdlGen, TypeConvert {
+public class MySqlDdlGen implements DdlGen {
 
     private static final String DEFAULT_ENGINE = "InnoDB";
 
     @Override
     public void generate(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
-        TypeConvert sourceConverter = DdlGenFactory.getType(sourceDb);
+        DdlGen sourceConverter = DdlGenFactory.get(sourceDb);
         StringBuilder result = new StringBuilder();
 
         for (TabXmlDo tabXmlDo : tabXmlDos) {
@@ -52,7 +54,7 @@ public class MySqlDdlGen implements DdlGen, TypeConvert {
     /**
      * 构建单个字段的SQL片段
      */
-    private String buildColumn(TableDDL ddl, TypeConvert sourceConverter) {
+    private String buildColumn(TableDDL ddl, DdlGen sourceConverter) {
         // 字段名转小写
         String columnName = ddl.columnName().trim().toLowerCase();
         // 字段类型：源类型 → 中间类型(MySQL) → MySQL类型（MySQL即中间类型，恒等）
@@ -137,5 +139,40 @@ public class MySqlDdlGen implements DdlGen, TypeConvert {
     @Override
     public String fromMiddleType(String middleType) {
         return middleType;
+    }
+
+    // ==================== MySQL → Java（toJavaType）====================
+
+    /**
+     * MySQL字段类型 → Java类型
+     */
+    @Override
+    public JType toJavaType(OriTabCol oriTabCol) {
+        String pureType = oriTabCol.dataType().toUpperCase().trim();
+        return switch (pureType) {
+            // 整数类型
+            case "INT", "INTEGER" -> JType.INT;
+            case "BIGINT" -> JType.LONG;
+            // 布尔类型
+            case "TINYINT", "BOOLEAN" -> JType.BOOL;
+            // 浮点/高精度类型
+            case "FLOAT", "DOUBLE" -> JType.DOUBLE;
+            case "DECIMAL", "NUMERIC" -> JType.DECIMAL;
+            // 字符串类型
+            case "VARCHAR", "CHAR", "TEXT", "LONGTEXT", "MEDIUMTEXT", "TINYTEXT" -> JType.STR;
+            // 日期时间类型
+            case "DATE" -> JType.DATE;
+            case "TIME" -> JType.TIME;
+            case "DATETIME", "TIMESTAMP" -> JType.DATE_TIME;
+            // 二进制类型
+            case "BLOB", "LONGBLOB", "MEDIUMBLOB", "TINYBLOB" -> JType.BYTE;
+            // 兜底：未匹配的类型统一返回String
+            default -> JType.STR;
+        };
+    }
+
+    @Override
+    public boolean insertBatch() {
+        return true;
     }
 }

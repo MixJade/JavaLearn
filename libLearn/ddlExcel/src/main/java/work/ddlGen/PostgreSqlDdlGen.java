@@ -1,7 +1,9 @@
 package work.ddlGen;
 
 import work.enums.DbType;
+import work.enums.JType;
 import work.model.dto.TabXmlDo;
+import work.model.entity.OriTabCol;
 import work.model.entity.TableDDL;
 import work.utils.StrToFile;
 
@@ -25,11 +27,11 @@ import java.util.stream.Collectors;
  *
  * @since 2026-07-17
  */
-public class PostgreSqlDdlGen implements DdlGen, TypeConvert {
+public class PostgreSqlDdlGen implements DdlGen {
 
     @Override
     public void generate(List<TabXmlDo> tabXmlDos, String sqlName, DbType sourceDb, boolean addDropSql) {
-        TypeConvert sourceConverter = DdlGenFactory.getType(sourceDb);
+        DdlGen sourceConverter = DdlGenFactory.get(sourceDb);
         StringBuilder result = new StringBuilder();
 
         for (TabXmlDo tabXmlDo : tabXmlDos) {
@@ -75,7 +77,7 @@ public class PostgreSqlDdlGen implements DdlGen, TypeConvert {
     /**
      * 构建单个字段的SQL片段
      */
-    private String buildColumn(TableDDL ddl, DbType sourceDb, TypeConvert sourceConverter) {
+    private String buildColumn(TableDDL ddl, DbType sourceDb, DdlGen sourceConverter) {
         // 字段名保持小写（PostgreSQL习惯）
         String columnName = ddl.columnName().trim().toLowerCase();
         // 字段类型转换
@@ -337,5 +339,44 @@ public class PostgreSqlDdlGen implements DdlGen, TypeConvert {
         // 未匹配到的类型默认 VARCHAR(100)
         System.err.println("未匹配的类型：" + type);
         return "VARCHAR(100)";
+    }
+
+    // ==================== PostgreSQL → Java（toJavaType）====================
+
+    /**
+     * PostgreSQL字段类型 → Java类型
+     */
+    @Override
+    public JType toJavaType(OriTabCol oriTabCol) {
+        String pureType = oriTabCol.dataType().toUpperCase().trim();
+        return switch (pureType) {
+            // 整数类型
+            case "INTEGER", "INT", "INT4", "SERIAL" -> JType.INT;
+            case "BIGINT", "INT8", "BIGSERIAL" -> JType.LONG;
+            case "SMALLINT", "INT2" -> JType.INT;
+            // 布尔类型
+            case "BOOLEAN", "BOOL" -> JType.BOOL;
+            // 浮点/高精度类型
+            case "REAL", "FLOAT4", "FLOAT" -> JType.DOUBLE;
+            case "DOUBLE PRECISION", "FLOAT8" -> JType.DOUBLE;
+            case "NUMERIC", "DECIMAL" -> JType.DECIMAL;
+            // 字符串类型
+            case "VARCHAR", "CHARACTER VARYING", "CHAR", "CHARACTER", "TEXT" -> JType.STR;
+            // 日期时间类型
+            case "DATE" -> JType.DATE;
+            case "TIME", "TIMETZ" -> JType.TIME;
+            case "TIMESTAMP", "TIMESTAMPTZ" -> JType.DATE_TIME;
+            // 二进制类型
+            case "BYTEA" -> JType.BYTE;
+            // 其他类型（UUID、JSON、JSONB、XML）→ String
+            case "UUID", "JSON", "JSONB", "XML" -> JType.STR;
+            // 兜底：未匹配的类型统一返回String
+            default -> JType.STR;
+        };
+    }
+
+    @Override
+    public boolean insertBatch() {
+        return true;
     }
 }
