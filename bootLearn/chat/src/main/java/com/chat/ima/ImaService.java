@@ -128,50 +128,73 @@ public class ImaService {
     }
 
     /**
-     * 格式化搜索结果为用户可读的消息
+     * 格式化搜索结果为 HTML 列表
      */
     private static String formatSearchResult(String dataJson, String query) {
         try {
             JsonNode root = JsonUtil.strToObj(dataJson, JsonNode.class);
             if (root == null) {
-                return buildReply("结果解析失败，请稍后再试");
+                return buildHtmlReply("<p>结果解析失败，请稍后再试</p>");
             }
             JsonNode infoList = root.path("info_list");
             if (!infoList.isArray() || infoList.isEmpty()) {
-                return buildReply(String.format("未找到「%s」相关内容，试试换个关键词？", query));
+                return buildHtmlReply(String.format("<p>未找到「%s」相关内容，试试换个关键词？</p>", escapeHtml(query)));
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("知识库搜索「").append(query).append("」找到 ").append(infoList.size()).append(" 条结果：\n\n");
+            StringBuilder html = new StringBuilder();
+            html.append(String.format("<p>知识库搜索「<b>%s</b>」找到 <b>%d</b> 条结果：</p>",
+                    escapeHtml(query), infoList.size()));
+            html.append("<ul style=\"padding-left:18px;margin:6px 0;\">");
 
             int maxShow = Math.min(infoList.size(), 5);
             for (int i = 0; i < maxShow; i++) {
                 JsonNode item = infoList.get(i);
                 String title = item.path("title").asText("无标题");
                 String highlight = item.path("highlight_content").asText("");
-                sb.append("【").append(i + 1).append("】").append(title).append("\n");
+                html.append("<li style=\"margin-bottom:6px;\">");
+                html.append("<b>").append(escapeHtml(title)).append("</b>");
                 if (!highlight.isBlank()) {
                     String brief = highlight.length() > 150 ? highlight.substring(0, 150) + "…" : highlight;
-                    sb.append("    ").append(brief).append("\n");
+                    html.append("<br><span style=\"font-size:12px;color:#888;\">")
+                        .append(escapeHtml(brief)).append("</span>");
                 }
-                sb.append("\n");
+                html.append("</li>");
             }
 
+            html.append("</ul>");
+
             if (infoList.size() > maxShow) {
-                sb.append("… 还有 ").append(infoList.size() - maxShow).append(" 条结果");
+                html.append(String.format("<p style=\"font-size:12px;color:#999;\">… 还有 %d 条结果</p>",
+                        infoList.size() - maxShow));
             }
-            return buildReply(sb.toString().trim());
+            return buildHtmlReply(html.toString());
         } catch (Exception e) {
             log.error("格式化搜索结果失败：{}", e.getMessage());
-            return buildReply("结果解析失败，请稍后再试");
+            return buildHtmlReply("<p>结果解析失败，请稍后再试</p>");
         }
+    }
+
+    /** HTML 特殊字符转义，防止 XSS */
+    private static String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 
     // ===================== 消息构建工具 =====================
     private static final UserVo IMA_USER = new UserVo("IMA知识库", "#07c160", "库");
 
+    /** 构建纯文本消息 */
     private static String buildReply(String content) {
         return Message.getUserMsg(IMA_USER, content);
+    }
+
+    /** 构建 HTML 消息（前端 v-html 渲染） */
+    private static String buildHtmlReply(String html) {
+        return Message.getUserMsg(IMA_USER, html, true);
     }
 
     /**
@@ -206,7 +229,6 @@ public class ImaService {
      * @param body 请求体对象（会被序列化为 JSON）
      * @return 原始响应 JSON 字符串
      */
-    @SuppressWarnings("SameParameterValue")
     private static String doPost(String path, Object body) {
         log.debug("IMA POST {} - {}", path, JsonUtil.objToStr(body));
 
@@ -230,7 +252,6 @@ public class ImaService {
      * @return data 字段的 JSON 字符串
      * @throws RuntimeException 当 code != 0 时抛出
      */
-    @SuppressWarnings("SameParameterValue")
     private static String extractData(String rawJson, String apiName) {
         try {
             ImaResp resp = JsonUtil.strToObj(rawJson, ImaResp.class);
