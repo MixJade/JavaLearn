@@ -36,6 +36,7 @@
                     WHERE tc.constraint_type = 'PRIMARY KEY'
                 ) pk ON c.table_name = pk.table_name AND c.column_name = pk.column_name
                  LEFT JOIN pg_class cls ON cls.relname = c.table_name
+                 JOIN pg_namespace ns ON cls.relnamespace = ns.oid AND ns.nspname = current_schema()
                  LEFT JOIN pg_description col_dsc
                            ON col_dsc.objoid = cls.oid AND col_dsc.objsubid = c.ordinal_position
         WHERE c.table_name = #{tableName}
@@ -46,6 +47,7 @@
         SELECT c.relname                     AS tableName,
                COALESCE(dsc.description::text, '') AS comments
         FROM pg_class c
+                 JOIN pg_namespace ns ON c.relnamespace = ns.oid AND ns.nspname = current_schema()
                  LEFT JOIN pg_description dsc ON dsc.objoid = c.oid AND dsc.objsubid = 0
         WHERE c.relname = #{tableName}
           AND c.relkind = 'r'
@@ -68,6 +70,7 @@
                     WHERE tc.constraint_type = 'PRIMARY KEY'
                 ) pk ON c.table_name = pk.table_name AND c.column_name = pk.column_name
                  LEFT JOIN pg_class cls ON cls.relname = c.table_name
+                 JOIN pg_namespace ns ON cls.relnamespace = ns.oid AND ns.nspname = current_schema()
                  LEFT JOIN pg_description col_dsc
                            ON col_dsc.objoid = cls.oid AND col_dsc.objsubid = c.ordinal_position
         WHERE c.table_name = #{tableName}
