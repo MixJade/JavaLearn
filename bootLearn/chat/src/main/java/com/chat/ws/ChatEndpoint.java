@@ -1,5 +1,6 @@
 package com.chat.ws;
 
+import com.chat.ima.ImaService;
 import com.chat.llama.LlamaService;
 import com.chat.pojo.Message;
 import com.chat.pojo.UserVo;
@@ -103,6 +104,14 @@ public class ChatEndpoint {
                 //将消息推送给所有的客户端
                 for (String name : names)
                     BASICS_MAP.get(name).sendText(aiMsg);
+            }
+
+            // 2026-07-22：IMA 知识库对话（按钮控制，同 Llama 模式）
+            if (ImaService.isAlive()) {
+                String imaMsg = ImaService.chat(sendMsg);
+                MSG_LIST.add(imaMsg);
+                for (String name : names)
+                    BASICS_MAP.get(name).sendText(imaMsg);
             }
         } catch (Exception e) {
             e.printStackTrace();
