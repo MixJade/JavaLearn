@@ -1,5 +1,6 @@
 package com.chat.ima;
 
+import com.chat.ima.req.GetMediaInfoReq;
 import com.chat.ima.req.SearchKnowledgeReq;
 import com.chat.ima.resp.ImaResp;
 import com.chat.pojo.Message;
@@ -11,10 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -150,13 +155,23 @@ public class ImaService {
             for (int i = 0; i < maxShow; i++) {
                 JsonNode item = infoList.get(i);
                 String title = item.path("title").asText("无标题");
+                String mediaId = item.path("media_id").asText("");
                 String highlight = item.path("highlight_content").asText("");
                 html.append("<li style=\"margin-bottom:6px;\">");
-                html.append("<b>").append(escapeHtml(title)).append("</b>");
+
+                // 有 media_id 的文件名做成可点击链接
+                if (!mediaId.isBlank()) {
+                    String href = "/api/ima/getMedia?mediaId=" + URLEncoder.encode(mediaId, StandardCharsets.UTF_8);
+                    html.append("<a href=\"").append(href).append("\" target=\"_blank\">");
+                    html.append("<b>").append(escapeHtml(title)).append("</b>");
+                    html.append("</a>");
+                } else {
+                    html.append("<b>").append(escapeHtml(title)).append("</b>");
+                }
                 if (!highlight.isBlank()) {
                     String brief = highlight.length() > 150 ? highlight.substring(0, 150) + "…" : highlight;
                     html.append("<br><span style=\"font-size:12px;color:#888;\">")
-                        .append(escapeHtml(brief)).append("</span>");
+                            .append(escapeHtml(brief)).append("</span>");
                 }
                 html.append("</li>");
             }
@@ -215,6 +230,39 @@ public class ImaService {
             return extractData(resp, "search_knowledge");
         } catch (Exception e) {
             log.error("搜索知识库内容失败：{}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 获取知识库文件的完整内容（两阶段：先拿下载 URL，再拉取内容）
+     *
+     * @param mediaId 文件 media_id
+     * @return 文件内容字符串，失败返回 null
+     */
+    public static String getMediaContent(String mediaId) {
+        try {
+            // 阶段 1：调用 get_media_info 获取下载 URL 和鉴权 headers
+            String resp = doPost("/openapi/wiki/v1/get_media_info", new GetMediaInfoReq(mediaId));
+            String dataJson = extractData(resp, "get_media_info");
+            JsonNode data = JsonUtil.strToObj(dataJson, JsonNode.class);
+            if (data == null) {
+                log.error("get_media_info data 解析为空");
+                return null;
+            }
+
+            String downloadUrl = data.path("url_info").path("url").asText();
+
+            if (downloadUrl.isBlank()) {
+                log.error("get_media_info 未返回下载 URL");
+                return null;
+            }
+            // 阶段 2：下载文件内容
+            log.info("下载 IMA 文件：mediaId={}", mediaId);
+            return restTemplate.execute(downloadUrl, HttpMethod.GET, null,
+                    response -> StreamUtils.copyToString(response.getBody(), StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            log.error("获取媒体内容失败：mediaId={}, err={}", mediaId, e.getMessage());
             return null;
         }
     }
