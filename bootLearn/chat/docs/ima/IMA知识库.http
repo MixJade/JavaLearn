@@ -9,3 +9,25 @@ ima-openapi-apikey: apikey
   "cursor": "",
   "limit": 20
 }
+
+### 查询笔记名称
+POST https://ima.qq.com/openapi/wiki/v1/search_knowledge
+Content-Type: application/json
+ima-openapi-clientid: clientid
+ima-openapi-apikey: apikey
+
+{
+  "query": "培训",
+  "cursor": "",
+  "knowledge_base_id": "this-is-kb-id"
+}
+
+### 查询笔记内容
+POST https://ima.qq.com/openapi/wiki/v1/get_media_info
+Content-Type: application/json
+ima-openapi-clientid: clientid
+ima-openapi-apikey: apikey
+
+{
+  "media_id": "markdown_xxx"
+}
