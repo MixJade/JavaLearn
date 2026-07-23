@@ -1,0 +1,11 @@
+### 查询知识库列表
+POST https://ima.qq.com/openapi/wiki/v1/search_knowledge_base
+Content-Type: application/json
+ima-openapi-clientid: clientid
+ima-openapi-apikey: apikey
+
+{
+  "query": "",
+  "cursor": "",
+  "limit": 20
+}
