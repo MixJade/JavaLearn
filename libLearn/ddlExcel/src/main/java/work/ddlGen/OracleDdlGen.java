@@ -302,7 +302,7 @@ public class OracleDdlGen implements DdlGen {
      * <ul>
      *     <li>有小数位 → BigDecimal</li>
      *     <li>精度≤9 → Integer</li>
-     *     <li>精度≤18 → Long</li>
+     *     <li>精度≤19 → Long</li>
      *     <li>超长或无参数 → BigDecimal</li>
      * </ul>
      */
@@ -315,7 +315,7 @@ public class OracleDdlGen implements DdlGen {
         if (numPre != null && numPre > 0) {
             if (numPre <= 9) {
                 return JType.INT; // 精度≤9 → Integer
-            } else if (numPre <= 18) {
+            } else if (numPre <= 19) {
                 return JType.LONG; // 精度≤18 → Long
             } else {
                 return JType.DECIMAL; // 超长长整型 → BigDecimal
