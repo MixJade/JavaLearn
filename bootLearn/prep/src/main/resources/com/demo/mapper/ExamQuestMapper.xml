@@ -19,8 +19,8 @@
         WHERE quest_id = #{questId}
     </select>
     <!--通过题源主键查询图片列表-->
-    <select id="queryImgListByCate" resultType="com.demo.model.vo.QuestImgVo">
-        SELECT image_id, file_name
+    <select id="queryImgListByCate" resultType="java.lang.Integer">
+        SELECT image_id
         FROM source_image
         WHERE category_id = #{cateId}
     </select>

@@ -7,5 +7,5 @@ import java.util.List;
  *
  * @since 2025-06-27 16:10:34
  */
-public record QuestImgListVo(Integer categoryId, List<QuestImgVo> questImgVoList) {
+public record QuestImgListVo(Integer categoryId, List<Integer> imageIds) {
 }

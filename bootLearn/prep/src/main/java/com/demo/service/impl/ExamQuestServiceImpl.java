@@ -7,7 +7,6 @@ import com.demo.mapper.ExamQuestMapper;
 import com.demo.model.dto.ExamQuestDto;
 import com.demo.model.entity.ExamQuest;
 import com.demo.model.vo.QuestImgListVo;
-import com.demo.model.vo.QuestImgVo;
 import com.demo.service.IExamQuestService;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ public class ExamQuestServiceImpl extends ServiceImpl<ExamQuestMapper, ExamQuest
     @Override
     public QuestImgListVo getCateImg(Integer questId) {
         Integer cateId = baseMapper.queryCateId(questId);
-        List<QuestImgVo> questImgVoList = baseMapper.queryImgListByCate(cateId);
-        return new QuestImgListVo(cateId, questImgVoList);
+        List<Integer> imageIds = baseMapper.queryImgListByCate(cateId);
+        return new QuestImgListVo(cateId, imageIds);
     }
 }

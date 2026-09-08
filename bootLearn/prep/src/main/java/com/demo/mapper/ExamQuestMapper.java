@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.model.dto.ExamQuestDto;
 import com.demo.model.entity.ExamQuest;
-import com.demo.model.vo.QuestImgVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,5 +25,5 @@ public interface ExamQuestMapper extends BaseMapper<ExamQuest> {
     Integer queryCateId(Integer questId);
 
     // 通过题源主键查询图片列表
-    List<QuestImgVo> queryImgListByCate(Integer cateId);
+    List<Integer> queryImgListByCate(Integer cateId);
 }
