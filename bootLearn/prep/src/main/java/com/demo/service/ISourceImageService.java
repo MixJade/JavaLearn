@@ -1,11 +1,11 @@
 package com.demo.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.demo.common.Result;
-import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 2025-06-12
  */
 public interface ISourceImageService extends IService<SourceImage> {
-    IPage<SourceImage> getByPage(int pageNum, int pageSize, SourceImgDto sourceImgDto);
+    List<SourceImage> getAll(Integer cateId);
 
     /**
      * 保存图片

@@ -1,8 +1,6 @@
 package com.demo.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
-import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
 import com.demo.service.ISourceImageService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
+import java.util.List;
 
 /**
  * <p>
@@ -46,9 +45,9 @@ public class SourceImageController {
         return Result.choice("修改", updateRes);
     }
 
-    @PostMapping("/page")
-    public IPage<SourceImage> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody SourceImgDto sourceImgDto) {
-        return sourceImageService.getByPage(pageNum, pageSize, sourceImgDto);
+    @GetMapping("/all")
+    public List<SourceImage> getAll(@RequestParam Integer cateId) {
+        return sourceImageService.getAll(cateId);
     }
 
     @GetMapping("/{id}")

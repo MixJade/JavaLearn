@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.SourceImageMapper">
     <!-- 分页查询-->
-    <select id="getByPage" resultType="com.demo.model.entity.SourceImage">
+    <select id="getAll" resultType="com.demo.model.entity.SourceImage">
         SELECT image_id,
                category_id,
                remark,
                ocr_time
         FROM source_image
-        WHERE category_id = #{dto.categoryId}
+        WHERE category_id = #{cateId}
     </select>
 
     <!--获取图片后缀-->

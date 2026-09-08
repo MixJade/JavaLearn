@@ -1,11 +1,8 @@
 package com.demo.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.demo.common.Result;
 import com.demo.mapper.SourceImageMapper;
-import com.demo.model.dto.SourceImgDto;
 import com.demo.model.entity.SourceImage;
 import com.demo.service.ISourceImageService;
 import com.demo.service.OcrService;
@@ -19,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -41,8 +39,8 @@ public class SourceImageServiceImpl extends ServiceImpl<SourceImageMapper, Sourc
     }
 
     @Override
-    public IPage<SourceImage> getByPage(int pageNum, int pageSize, SourceImgDto sourceImgDto) {
-        return baseMapper.getByPage(new Page<>(pageNum, pageSize), sourceImgDto);
+    public List<SourceImage> getAll(Integer cateId) {
+        return baseMapper.getAll(cateId);
     }
 
     @Override
