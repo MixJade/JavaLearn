@@ -1,11 +1,9 @@
 package com.demo.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.demo.model.entity.ExamQuestOpt;
-import com.demo.mapper.ExamQuestOptMapper;
-import com.demo.service.IExamQuestOptService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.demo.mapper.ExamQuestOptMapper;
+import com.demo.model.entity.ExamQuestOpt;
+import com.demo.service.IExamQuestOptService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,8 +16,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ExamQuestOptServiceImpl extends ServiceImpl<ExamQuestOptMapper, ExamQuestOpt> implements IExamQuestOptService {
-    @Override
-    public IPage<ExamQuestOpt> getByPage(int pageNum, int pageSize) {
-        return baseMapper.getByPage(new Page<>(pageNum, pageSize));
-    }
 }

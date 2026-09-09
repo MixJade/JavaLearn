@@ -1,13 +1,14 @@
 package com.demo.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.demo.common.Result;
-import com.demo.model.dto.ExamQuestDto;
 import com.demo.model.entity.ExamQuest;
+import com.demo.model.vo.QuestAndOptVo;
 import com.demo.model.vo.QuestImgListVo;
 import com.demo.service.IExamQuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -41,17 +42,22 @@ public class ExamQuestController {
 
     @PutMapping
     public Result update(@RequestBody ExamQuest examQuest) {
-        boolean updateRes = examQuestService.updateById(examQuest);
+        boolean updateRes = examQuestService.updQuest(examQuest);
         return Result.choice("修改", updateRes);
     }
 
-    @PostMapping("/page")
-    public IPage<ExamQuest> getPage(@RequestParam int pageNum, @RequestParam int pageSize, @RequestBody ExamQuestDto questDto) {
-        return examQuestService.getByPage(pageNum, pageSize, questDto);
+    @GetMapping("/all")
+    public List<ExamQuest> getAll(@RequestParam Integer paperId) {
+        return examQuestService.lambdaQuery().eq(ExamQuest::getPaperId, paperId).list();
     }
 
     @GetMapping("/cateImg")
     public QuestImgListVo getCateImg(@RequestParam Integer questId) {
         return examQuestService.getCateImg(questId);
+    }
+
+    @GetMapping("/{id}")
+    public QuestAndOptVo getView(@PathVariable Integer id) {
+        return examQuestService.getView(id);
     }
 }

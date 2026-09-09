@@ -1,8 +1,7 @@
 package com.demo.mapper;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.demo.model.entity.ExamQuestOpt;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.demo.model.entity.ExamQuestOpt;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,5 +14,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ExamQuestOptMapper extends BaseMapper<ExamQuestOpt> {
-    IPage<ExamQuestOpt> getByPage(IPage<ExamQuestOpt> page);
 }

@@ -1,9 +1,8 @@
 package com.demo.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.demo.model.dto.ExamQuestDto;
 import com.demo.model.entity.ExamQuest;
+import com.demo.model.vo.QuestAndOptVo;
 import com.demo.model.vo.QuestImgListVo;
 
 /**
@@ -15,12 +14,14 @@ import com.demo.model.vo.QuestImgListVo;
  * @since 2025-06-12
  */
 public interface IExamQuestService extends IService<ExamQuest> {
-    IPage<ExamQuest> getByPage(int pageNum, int pageSize, ExamQuestDto questDto);
-
     /**
      * 根据id查询图源文件夹ID
      * @param questId
      * @return
      */
     QuestImgListVo getCateImg(Integer questId);
+
+    boolean updQuest(ExamQuest examQuest);
+
+    QuestAndOptVo getView(Integer id);
 }

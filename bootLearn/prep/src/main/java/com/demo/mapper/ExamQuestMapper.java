@@ -1,11 +1,8 @@
 package com.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.demo.model.dto.ExamQuestDto;
 import com.demo.model.entity.ExamQuest;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,8 +16,6 @@ import java.util.List;
  */
 @Mapper
 public interface ExamQuestMapper extends BaseMapper<ExamQuest> {
-    IPage<ExamQuest> getByPage(IPage<ExamQuest> page, @Param("dto") ExamQuestDto questDto);
-
     // 通过题目id查询题源id
     Integer queryCateId(Integer questId);
 
