@@ -80,7 +80,6 @@ create table exam_quest_opt
         primary key,
     quest_id   int         not null comment '题目主键',
     opt_cont   text        not null comment '选项内容',
-    have_img   tinyint(1)  not null default 0 comment '存在图片',
     img_name   varchar(30) null comment '图片名称',
     is_correct tinyint(1)  not null default 0 comment '是否正确选项',
     opt_no     int         not null default 1 comment '选项排序(1,2,3)',

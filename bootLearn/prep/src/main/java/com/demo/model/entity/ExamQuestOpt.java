@@ -38,11 +38,6 @@ public class ExamQuestOpt implements Serializable {
     private String optCont;
 
     /**
-     * 存在图片
-     */
-    private Boolean haveImg;
-
-    /**
      * 图片名称
      */
     private String imgName;
@@ -84,14 +79,6 @@ public class ExamQuestOpt implements Serializable {
 
     public void setOptCont(String optCont) {
         this.optCont = optCont;
-    }
-
-    public Boolean getHaveImg() {
-        return haveImg;
-    }
-
-    public void setHaveImg(Boolean haveImg) {
-        this.haveImg = haveImg;
     }
 
     public String getImgName() {
