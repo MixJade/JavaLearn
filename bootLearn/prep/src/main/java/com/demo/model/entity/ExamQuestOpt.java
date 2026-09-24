@@ -47,16 +47,6 @@ public class ExamQuestOpt implements Serializable {
      */
     private Boolean isCorrect;
 
-    /**
-     * 选项排序(1,2,3)
-     */
-    private Integer optNo;
-
-    /**
-     * 选项名称(A,B,C)
-     */
-    private String optName;
-
     public Integer getOptId() {
         return optId;
     }
@@ -95,21 +85,5 @@ public class ExamQuestOpt implements Serializable {
 
     public void setIsCorrect(Boolean isCorrect) {
         this.isCorrect = isCorrect;
-    }
-
-    public Integer getOptNo() {
-        return optNo;
-    }
-
-    public void setOptNo(Integer optNo) {
-        this.optNo = optNo;
-    }
-
-    public String getOptName() {
-        return optName;
-    }
-
-    public void setOptName(String optName) {
-        this.optName = optName;
     }
 }

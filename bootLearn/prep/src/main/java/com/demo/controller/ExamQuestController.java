@@ -46,6 +46,15 @@ public class ExamQuestController {
         return Result.choice("修改", updateRes);
     }
 
+    /**
+     * 保存题目详情：题目主干 + 题目解析 + 选项（选项按页面顺序全量覆盖）
+     */
+    @PutMapping("/saveAll")
+    public Result saveAll(@RequestBody QuestAndOptVo questAndOptVo) {
+        boolean saveRes = examQuestService.saveQuestAll(questAndOptVo);
+        return Result.choice("保存", saveRes);
+    }
+
     @GetMapping("/all")
     public List<ExamQuest> getAll(@RequestParam Integer paperId) {
         return examQuestService.lambdaQuery().eq(ExamQuest::getPaperId, paperId).list();

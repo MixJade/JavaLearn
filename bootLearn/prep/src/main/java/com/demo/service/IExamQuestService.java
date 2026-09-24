@@ -16,6 +16,7 @@ import com.demo.model.vo.QuestImgListVo;
 public interface IExamQuestService extends IService<ExamQuest> {
     /**
      * 根据id查询图源文件夹ID
+     *
      * @param questId
      * @return
      */
@@ -24,4 +25,12 @@ public interface IExamQuestService extends IService<ExamQuest> {
     boolean updQuest(ExamQuest examQuest);
 
     QuestAndOptVo getView(Integer id);
+
+    /**
+     * 保存题目详情：题目主干 + 题目解析 + 选项（选项按页面顺序全量覆盖）
+     *
+     * @param questAndOptVo 题目详情，含题目实体与选项列表
+     * @return 题目主干/解析是否更新成功
+     */
+    boolean saveQuestAll(QuestAndOptVo questAndOptVo);
 }
