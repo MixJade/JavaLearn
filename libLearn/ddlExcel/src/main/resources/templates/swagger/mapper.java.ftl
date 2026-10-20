@@ -8,7 +8,7 @@
 <#-- @formatter:off -->
 package ${pack}.dao;
 
-import com.baomidou.mybatisplus.core.dao.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import ${pack}.entity.${tab.lJNm()};
 import org.apache.ibatis.annotations.Mapper;
