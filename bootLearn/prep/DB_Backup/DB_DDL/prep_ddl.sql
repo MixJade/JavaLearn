@@ -59,7 +59,7 @@ create table exam_quest
         primary key,
     paper_id       int         not null comment '试卷主键',
     quest_type     int         not null default 1 comment '题目类型,1选择,2填空,3大题',
-    opt_layout     int         not null default 1 comment '选项排序方式,1常规列表(多行一列),2两行两列',
+    opt_layout     int         not null default 1 comment '选项排序方式,1一列,2两列',
     quest_content  text        not null comment '题目内容',
     quest_analysis text comment '题目解析',
     quest_no       int         not null default 1 comment '题目序号',
