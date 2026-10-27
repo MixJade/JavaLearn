@@ -38,6 +38,11 @@ public class ExamQuest implements Serializable {
     private Integer questType;
 
     /**
+     * 选项排序方式,1一列 2两列
+     */
+    private Integer optLayout;
+
+    /**
      * 题目内容
      */
     private String questContent;
@@ -89,6 +94,14 @@ public class ExamQuest implements Serializable {
 
     public void setQuestType(Integer questType) {
         this.questType = questType;
+    }
+
+    public Integer getOptLayout() {
+        return optLayout;
+    }
+
+    public void setOptLayout(Integer optLayout) {
+        this.optLayout = optLayout;
     }
 
     public String getQuestContent() {

@@ -44,6 +44,11 @@ public class ExamQuestServiceImpl extends ServiceImpl<ExamQuestMapper, ExamQuest
         return lambdaUpdate().eq(ExamQuest::getQuestId, examQuest.getQuestId())
                 .set(StringUtils.isNotEmpty(examQuest.getQuestContent()), ExamQuest::getQuestContent, examQuest.getQuestContent())
                 .set(StringUtils.isNotEmpty(examQuest.getQuestAnalysis()), ExamQuest::getQuestAnalysis, examQuest.getQuestAnalysis())
+                // 序号 / 类型 / 分值 / 选项排序方式由试卷页的「修改」表单提交，未传的字段保持库里原值
+                .set(examQuest.getQuestNo() != null, ExamQuest::getQuestNo, examQuest.getQuestNo())
+                .set(examQuest.getQuestType() != null, ExamQuest::getQuestType, examQuest.getQuestType())
+                .set(examQuest.getScore() != null, ExamQuest::getScore, examQuest.getScore())
+                .set(examQuest.getOptLayout() != null, ExamQuest::getOptLayout, examQuest.getOptLayout())
                 .update();
     }
 
@@ -70,10 +75,13 @@ public class ExamQuestServiceImpl extends ServiceImpl<ExamQuestMapper, ExamQuest
         // 1.按页面内容保存题目主干与解析（quest_content 数据库非空，空值兜底成空串）
         String questContent = examQuest.getQuestContent() == null ? "" : examQuest.getQuestContent();
         String questAnalysis = examQuest.getQuestAnalysis() == null ? "" : examQuest.getQuestAnalysis();
+        // 选项排序方式：1一列 2两列，未传时不做覆盖（保留库里原值/默认值）
+        Integer optLayout = examQuest.getOptLayout();
         boolean questSaved = lambdaUpdate()
                 .eq(ExamQuest::getQuestId, questId)
                 .set(ExamQuest::getQuestContent, questContent)
                 .set(ExamQuest::getQuestAnalysis, questAnalysis)
+                .set(optLayout != null, ExamQuest::getOptLayout, optLayout)
                 .update();
 
         // 2.选项全量覆盖：页面支持增删选项，无法按主键逐个比对，故先按题目清空再按页面顺序重建

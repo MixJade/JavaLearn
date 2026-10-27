@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.common.Result;
 import com.demo.model.entity.ExamPaper;
 import com.demo.model.vo.ExamPaperVo;
+import com.demo.model.vo.PaperDetailVo;
 import com.demo.service.IExamPaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,5 +51,13 @@ public class ExamPaperController {
     @GetMapping("/list")
     public List<ExamPaperVo> getList() {
         return examPaperService.getList();
+    }
+
+    /**
+     * 按主键查询试卷详情：试卷本体 + 整卷题目（每题带选项）
+     */
+    @GetMapping("/{id}")
+    public PaperDetailVo getOne(@PathVariable Integer id) {
+        return examPaperService.getPaperDetail(id);
     }
 }

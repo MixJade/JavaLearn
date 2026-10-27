@@ -13,4 +13,33 @@
         FROM exam_paper a
                  LEFT JOIN source_category sc on sc.category_id = a.category_id
     </select>
+
+    <!-- 整卷题目：试卷页按「纸质试卷」样式铺开，顺序必须稳定 -->
+    <select id="getQuestsByPaper" resultType="com.demo.model.entity.ExamQuest">
+        SELECT quest_id,
+               paper_id,
+               quest_type,
+               opt_layout,
+               quest_content,
+               quest_no,
+               have_img,
+               img_name,
+               score
+        FROM exam_quest
+        WHERE paper_id = #{paperId}
+        ORDER BY quest_no, quest_id
+    </select>
+
+    <!-- 整卷选项：直接按试卷关联过滤，避免「先查题目主键再拼 in」的第二次往返 -->
+    <select id="getOptsByPaper" resultType="com.demo.model.entity.ExamQuestOpt">
+        SELECT o.opt_id,
+               o.quest_id,
+               o.opt_cont,
+               o.img_name,
+               o.is_correct
+        FROM exam_quest_opt o
+                 INNER JOIN exam_quest q ON q.quest_id = o.quest_id
+        WHERE q.paper_id = #{paperId}
+        ORDER BY o.opt_id
+    </select>
 </mapper>

@@ -8,8 +8,6 @@ import com.demo.service.IExamQuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * <p>
  * 题目表 前端控制器
@@ -53,11 +51,6 @@ public class ExamQuestController {
     public Result saveAll(@RequestBody QuestAndOptVo questAndOptVo) {
         boolean saveRes = examQuestService.saveQuestAll(questAndOptVo);
         return Result.choice("保存", saveRes);
-    }
-
-    @GetMapping("/all")
-    public List<ExamQuest> getAll(@RequestParam Integer paperId) {
-        return examQuestService.lambdaQuery().eq(ExamQuest::getPaperId, paperId).list();
     }
 
     @GetMapping("/cateImg")
